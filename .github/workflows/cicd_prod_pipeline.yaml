@@ -5,8 +5,12 @@ on:
     branches:
       - Frontend
 
+concurrency:
+  group: squdbnb-front-prod
+  cancel-in-progress: true
+
 jobs:
-  build-and-deploy:
+  front-build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,13 +23,19 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        cd ${{ github.workspace }}/FE
+        npm install
 
     - name: Build project
-      run: npm run build
+      run: |
+        cd ${{ github.workspace }}/FE
+        npm run build
 
     - name: Build Docker image
-      run: docker build -t kimjooyoung/squadbnb:front .
+      run: |
+        cd ${{ github.workspace }}/FE
+        docker build -t kimjooyoung/squadbnb-prod-front:latest .
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -34,14 +44,19 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push Docker image
-      run: docker push kimjooyoung/squadbnb:front
+      run: |
+        cd ${{ github.workspace }}/FE
+        docker push kimjooyoung/squadbnb-prod-front:latest
 
-    # - name: Deploy to EC2
-    #   uses: appleboy/ssh-action@v0.1.5
-    #   with:
-    #     host: ${{ secrets.EC2_HOST }}
-    #     username: ${{ secrets.EC2_USER }}
-    #     key: ${{ secrets.EC2_KEY }}
-    #     script: |
-    #       cd /home/ubuntu/your_project
-    #       ./deploy.sh
+    - name: Deploy to Prod Server
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.EC2_HOST_PROD }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd /home/ubuntu/front
+          sudo ./deploy.sh
+
+
+          
