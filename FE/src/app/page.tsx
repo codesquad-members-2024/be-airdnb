@@ -1,5 +1,3 @@
-import GithubProfile from "@/components/github_profile";
-import Notion from "@/components/notion";
 import Introduction from "@/container/introduction";
 
 export default function Home() {
