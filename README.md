@@ -2,18 +2,13 @@
 
 마스터즈 2024 BE 프로젝트 숙박앱
 
-| team | members | repository URL |
-| ---- | ------- | -------------- |
-| 1    |         |                |
-| 2    |         |                |
-| 3    |         |                |
-| 4    |         |                |
-| 5    |         |                |
-| 6    |         |                |
-| 7    |         |                |
-| 8    |         |                |
-| 9    |         |                |
-| 10   |         |                |
-| 11   |         |                |
+## 👫 Team1 소개 👫
 
-- 팀 정보를 업데이트해서 main 브랜치로 PR 보내 주세요.
+|                                      개발(BE)                                      |                                     개발(BE)                                      |
+|:--------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|
+| <img width="160px" src="https://avatars.githubusercontent.com/u/87180146?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/85686722?v=4"/> |
+|                     [@Miensoap](https://github.com/Miensoap)                    |                   [@soyesenna](https://github.com/soyesenna)                    |
+|                                       Soap                                       |                                      Senna                                       |
+
+## Notion
+[노션 페이지](https://fallacious-cadet-384.notion.site/AirBnB-fd3159ffb3714d4a953011849346278f?pvs=4)
