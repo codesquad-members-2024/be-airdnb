@@ -1,3 +1,5 @@
 spring:
   application:
     name: airbnb
+  config:
+    import: app_settings/dev-db-config.yml
