@@ -5,8 +5,8 @@
 | team | members | repository URL |
 | ---- | ------- | -------------- |
 | 1    |         |                |
-| 2    |         |                |
-| 3    |         |                |
+| 2    |  코리, 심바 |  [2팀 레포](https://github.com/codesquad-masters2024-airdnb-team02/be-airdnb)|
+| 3    |         |                | 
 | 4    |         |                |
 | 5    |         |                |
 | 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
