@@ -7,7 +7,7 @@
 | 1    | 미르, 에디, 데이| [1팀 레포](https://github.com/codesquad-masters2024-airbnb-team01/be-airdnb)                                                                 |
 | 2    |         |                |
 | 3    |         |                |
-| 4    |         |                |
+| 4    | yelly, gromit        | [4팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team04/be-airdnb)               |
 | 5    |웨이드, 알렉스         |[5팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team05/be-airdnb)                |
 | 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
 | 7    |   Soap , Senna      |       [7팀 레포](https://github.com/CodeSquad24-Study/be-airdnb)         |
