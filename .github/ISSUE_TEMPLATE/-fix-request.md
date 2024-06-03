@@ -1,6 +1,6 @@
 ---
-name: "\bFix Request"
-about: Describe this issue template's purpose here.
+name: "Fix Request"
+about: 기능, 에러 등을 수정합니다
 title: ''
 labels: ''
 assignees: ''
