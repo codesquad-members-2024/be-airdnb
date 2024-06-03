@@ -1,5 +1,6 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
+RUN apk add --no-cache python3 make g++
 
 # Set working directory
 WORKDIR /app
@@ -34,7 +35,5 @@ ENV NODE_ENV=production
 # Expose the port the app runs on
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "install"]
-
 # Command to run the Next.js app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
