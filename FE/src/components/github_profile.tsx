@@ -15,7 +15,7 @@ export default function GithubProfile() {
           <tr>
             <td>
               <Image
-                src="https://avatars.githubusercontent.com/u/87180146?v=4"
+                src="https://avatars.githubusercontent.com/u/87180146"
                 width={160}
                 height={160}
                 alt=""
@@ -23,7 +23,7 @@ export default function GithubProfile() {
             </td>
             <td>
               <Image
-                src="https://avatars.githubusercontent.com/u/85686722?v=4"
+                src="https://avatars.githubusercontent.com/u/85686722"
                 width={160}
                 height={160}
                 alt=""
