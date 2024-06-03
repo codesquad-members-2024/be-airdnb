@@ -38,6 +38,8 @@ dependencies {
 
     // Database
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.hibernate.orm:hibernate-core'
+    implementation 'org.hibernate.orm:hibernate-spatial'
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     //Querydsl
