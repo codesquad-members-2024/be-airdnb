@@ -34,5 +34,7 @@ ENV NODE_ENV=production
 # Expose the port the app runs on
 EXPOSE 3000
 
+ENTRYPOINT ["npm", "install"]
+
 # Command to run the Next.js app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
