@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 
 export default function GithubProfile() {
@@ -16,16 +17,12 @@ export default function GithubProfile() {
             <td>
               <Image
                 src="https://avatars.githubusercontent.com/u/87180146"
-                width={160}
-                height={160}
                 alt=""
               />
             </td>
             <td>
               <Image
                 src="https://avatars.githubusercontent.com/u/85686722"
-                width={160}
-                height={160}
                 alt=""
               />
             </td>
