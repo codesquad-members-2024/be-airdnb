@@ -1,19 +1,10 @@
 # be-airdnb
+* 마스터즈 2024 BE 프로젝트 숙박앱
 
-마스터즈 2024 BE 프로젝트 숙박앱
+## 😎팀원 소개
+|<img src="https://avatars.githubusercontent.com/u/136168660?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/87357932?v=4" width="150" height="150"/>|
+|:-:|:-:|
+|Ahn JongHyeok<br/>[@jonghyeok-97](https://github.com/jonghyeok-97)|yeriimii<br/>[@Yeriimii](https://github.com/Yeriimii)|
 
-| team | members | repository URL |
-| ---- | ------- | -------------- |
-| 1    | 미르, 에디, 데이| [1팀 레포](https://github.com/codesquad-masters2024-airbnb-team01/be-airdnb)                                                                 |
-| 2    |         |                |
-| 3    |         |                |
-| 4    | yelly, gromit        | [4팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team04/be-airdnb)               |
-| 5    |웨이드, 알렉스         |[5팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team05/be-airdnb)                |
-| 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
-| 7    |   Soap , Senna      |       [7팀 레포](https://github.com/CodeSquad24-Study/be-airdnb)         |
-| 8    |         |                |
-| 9    |  상추, Jayden       | [9팀 레포](https://github.com/codesquad-masters2024-team09-step2/be-airdnb)            |
-| 10   | Jin, Zoonmy | [10팀 레포](https://github.com/codesquad-masters2024-team10/be-airdnb) |
-| 11   |         |                |
-
-- 팀 정보를 업데이트해서 main 브랜치로 PR 보내 주세요.
+## Notion 페이지
+* [✍️Notion](https://almond-split-ab4.notion.site/567d4a178f654a429df4f8463ce29499?v=0bc45b79a1cb49108b72bfd2f3e1698d&pvs=4)
