@@ -6,7 +6,7 @@ on:
       - Frontend
 
 concurrency:
-  group: squadbnb-prod
+  group: squadbnb-prod-front
 
 jobs:
   front-build-and-deploy:
@@ -55,7 +55,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           cd /home/ubuntu/deploy
-          sudo ./deploy.sh
+          sudo ./deploy_front.sh
 
 
           
