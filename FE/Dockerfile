@@ -32,7 +32,7 @@ COPY --from=builder /app/public ./public
 ENV NODE_ENV=production
 
 # Expose the port the app runs on
-EXPOSE 4000
+EXPOSE 3000
 
 # Command to run the Next.js app
 CMD ["npm", "start"]
