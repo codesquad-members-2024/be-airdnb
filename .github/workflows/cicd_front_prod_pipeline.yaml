@@ -6,7 +6,7 @@ on:
       - Frontend
 
 concurrency:
-  group: squdbnb-front-prod
+  group: squadbnb-prod
   cancel-in-progress: true
 
 jobs:
