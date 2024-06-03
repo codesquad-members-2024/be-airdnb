@@ -1,19 +1,8 @@
-# be-airdnb
+# 🏡🛌 마스터즈 2024 BE 프로젝트 be-airdnb
 
-마스터즈 2024 BE 프로젝트 숙박앱
+## 🙋🏻‍♂️ 팀원소개
 
-| team | members | repository URL |
-| ---- | ------- | -------------- |
-| 1    |         |                |
-| 2    |         |                |
-| 3    |         |                |
-| 4    |         |                |
-| 5    |웨이드, 알렉스         |[5팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team05/be-airdnb)                |
-| 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
-| 7    |   Soap , Senna      |       [7팀 레포](https://github.com/CodeSquad24-Study/be-airdnb)         |
-| 8    |         |                |
-| 9    |  상추, Jayden       | [9팀 레포](https://github.com/codesquad-masters2024-team09-step2/be-airdnb)            |
-| 10   |         |                |
-| 11   |         |                |
-
-- 팀 정보를 업데이트해서 main 브랜치로 PR 보내 주세요.
+|백엔드| 백엔드 |
+|:-----:|:-----:|
+| ![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/95ecab66-c57a-4bff-b201-deb5d15b0344) |![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/cb11ba62-9b5c-40a9-818a-85b2b1f9dd79)    |
+|웨이드| 알렉스 |
