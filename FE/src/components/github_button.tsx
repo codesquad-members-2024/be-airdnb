@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const GithubButton = () => {
   const handleLogin = () => {
-    window.location.href = 'https://squadbnb.site/oauth2/authorization/github';
+    window.location.href = 'https://squadbnb.site/api/oauth2/authorization/github';
   };
 
 

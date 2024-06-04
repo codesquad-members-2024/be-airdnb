@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const GoogleButton = () => {
   const handleLogin = () => {
-    window.location.href = 'https://squadbnb.site/oauth2/authorization/google';
+    window.location.href = 'https://squadbnb.site/api/oauth2/authorization/google';
   };
 
   return (
