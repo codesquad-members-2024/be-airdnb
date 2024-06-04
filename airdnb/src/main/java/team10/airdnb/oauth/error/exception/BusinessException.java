@@ -1,4 +1,4 @@
-package team10.airdnb.oauth.exception;
+package team10.airdnb.oauth.error.exception;
 
 import lombok.Getter;
 import team10.airdnb.oauth.error.ErrorCode;
