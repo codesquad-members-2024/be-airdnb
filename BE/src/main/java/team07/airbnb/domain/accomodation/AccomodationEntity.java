@@ -11,7 +11,7 @@ import lombok.Getter;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accomodation.property.AccommodationLocation;
 import team07.airbnb.domain.accomodation.property.AccomodationType;
-import team07.airbnb.domain.user.UserEntity;
+import team07.airbnb.domain.user.entity.UserEntity;
 
 @Getter
 @Entity

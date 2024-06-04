@@ -1,4 +1,4 @@
-package team07.airbnb.domain.user;
+package team07.airbnb.domain.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

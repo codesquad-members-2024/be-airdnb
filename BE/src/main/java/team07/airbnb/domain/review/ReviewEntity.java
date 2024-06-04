@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.user.UserEntity;
+import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.booking.BookingEntity;
 
 @Entity

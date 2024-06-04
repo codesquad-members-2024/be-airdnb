@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.user.UserEntity;
+import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.product.ProductEntity;
 
 import java.time.LocalDate;

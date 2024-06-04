@@ -2,4 +2,4 @@ spring:
   application:
     name: airbnb
   config:
-    import: app_settings/dev-db-config.yml
+    import: app_settings/dev-db-config.yml, app_settings/oauth-config.yml
