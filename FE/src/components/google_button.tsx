@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const GithubButton = () => {
+const GoogleButton = () => {
   const handleLogin = () => {
     window.location.href = 'https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&scope=user';
   };
@@ -30,8 +30,8 @@ const GithubButton = () => {
     <button
       onClick={handleLogin}
       style={{
-        backgroundColor: '#333',
-        color: '#fff',
+        backgroundColor: '#fff',
+        color: '#000',
         padding: '10px 20px',
         border: 'none',
         borderRadius: '5px',
@@ -39,16 +39,16 @@ const GithubButton = () => {
         display: 'flex',
         alignItems: 'center',
         margin: '10px auto' 
-      }}
-    >
+      }}>
       <img
-        src="/images/github-logo.svg"
-        alt="GitHub 로고"
+        src="/images/google-logo.svg"
+        alt="Google 로고"
         style={{ marginRight: '10px', width: '24px', height: '24px' }}
       />
-      <span>Login with GitHub</span>
+      <span>Login with Google</span>
+      
     </button>
   );
 };
 
-export default GithubButton;
+export default GoogleButton;
