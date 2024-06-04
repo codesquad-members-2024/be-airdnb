@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ACCO_PHOTO")
-public class AccoPhoto {
+@Table(name = "ACCO_IMAGE")
+public class AccoImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

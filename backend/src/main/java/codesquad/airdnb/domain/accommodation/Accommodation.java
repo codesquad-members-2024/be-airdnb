@@ -1,6 +1,5 @@
 package codesquad.airdnb.domain.accommodation;
 
-import codesquad.airdnb.domain.accommodation.embedded.Amenities;
 import codesquad.airdnb.domain.accommodation.embedded.FloorPlan;
 import codesquad.airdnb.domain.accommodation.embedded.Location;
 import codesquad.airdnb.domain.member.Member;
@@ -45,7 +44,4 @@ public class Accommodation {
 
     @Embedded
     private Location location = new Location();
-
-    @Embedded
-    private Amenities amenities = new Amenities();
 }
