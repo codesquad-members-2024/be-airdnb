@@ -2,7 +2,6 @@
 import GithubButton from "@/components/github_button";
 import GoogleButton from "@/components/google_button";
 
-
 const LoginContainer = () => {
   return (
     <div>
