@@ -55,7 +55,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           cd /home/ubuntu/deploy
-          sudo ./deploy_front.sh
+          sudo ./deploy_front.sh -y
 
 
           
