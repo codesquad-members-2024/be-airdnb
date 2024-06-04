@@ -7,20 +7,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import team07.airbnb.domain.User;
+import lombok.Getter;
+import team07.airbnb.domain.BaseEntity;
+import team07.airbnb.domain.accomodation.property.AccommodationLocation;
+import team07.airbnb.domain.accomodation.property.AccomodationType;
+import team07.airbnb.domain.user.UserEntity;
 
+@Getter
 @Entity
 @Table(name = "ACCOMODATION")
-public class AccomodationEntity {
+public class AccomodationEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     @ManyToOne
-    private User host;
+    private UserEntity host;
     @Embedded
     private AccommodationLocation address;
-    @Embedded
-    private Amenity amenity;
     private AccomodationType type;
 }

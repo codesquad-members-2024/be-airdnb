@@ -1,4 +1,4 @@
-package team07.airbnb.domain.accomodation;
+package team07.airbnb.domain.accomodation.property;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Amenity {
+public class AccomodationAmenity {
     private int bed = 0;
+    private int bedroom = 0;
     private int bathroom = 0;
     private boolean kitchen = false;
     private boolean internet = false;

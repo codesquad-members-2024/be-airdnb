@@ -1,4 +1,4 @@
-package team07.airbnb.domain.accomodation;
+package team07.airbnb.domain.accomodation.property;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
