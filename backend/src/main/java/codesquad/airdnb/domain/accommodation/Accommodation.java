@@ -25,8 +25,8 @@ public class Accommodation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    @JoinColumn(name = "HOST_ID")
+    private Member host;
 
     private String title;
 

@@ -17,9 +17,9 @@ public class FloorPlan {
 
     private Integer maxInfant;
 
-    private Integer bedRoomNum;
+    private Integer bedroomNum;
 
     private Integer bedNum;
 
-    private Integer bathRoomNum;
+    private Integer bathroomNum;
 }
