@@ -42,7 +42,7 @@ dependencies {
     implementation 'org.hibernate.orm:hibernate-spatial'
     runtimeOnly 'com.mysql:mysql-connector-j'
     // Jackson
-    implementation 'com.bedatadriven:jackson-datatype-jts:2.4'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
 
 
     //Querydsl
