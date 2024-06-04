@@ -1,4 +1,4 @@
-package team10.airdnb.oauth.kakao;
+package team10.airdnb.oauth.kakao.dto;
 
 import lombok.Builder;
 import lombok.Getter;
