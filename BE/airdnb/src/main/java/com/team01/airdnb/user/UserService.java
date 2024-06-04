@@ -1,0 +1,5 @@
+package com.team01.airdnb.user;
+
+public class UserService {
+
+}
