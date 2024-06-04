@@ -52,4 +52,4 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ubuntu/deploy
-            sudo ./deploy_back.sh
+            sudo ./deploy_back.sh -y
