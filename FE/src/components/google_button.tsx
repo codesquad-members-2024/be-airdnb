@@ -2,29 +2,8 @@ import { useEffect } from 'react';
 
 const GoogleButton = () => {
   const handleLogin = () => {
-    window.location.href = 'https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&scope=user';
+    window.location.href = 'https://squadbnb.site/oauth2/authorization/google';
   };
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    if (code) {
-      fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          localStorage.setItem('token', data.token);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
-  }, []);
 
   return (
     <button
