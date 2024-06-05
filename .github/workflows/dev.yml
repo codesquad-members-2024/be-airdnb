@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "actions" ]
+    branches: [ "dev-be" ]
   pull_request:
-    branches: [ "actions" ]
+    branches: [ "dev-be" ]
 
 permissions:
   contents: read  # 이 설정은 워크플로우가 리포지토리의 콘텐츠를 읽을 수 있도록 허용합니다.
