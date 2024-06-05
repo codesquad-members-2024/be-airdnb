@@ -30,10 +30,8 @@ public class Member {
 
     private String memberName;
 
-    @Transient
     private String refreshToken;
 
-    @Transient
     private LocalDateTime tokenExpirationTime;
 
     @Builder
