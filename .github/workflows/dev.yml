@@ -49,8 +49,7 @@ jobs:
 =======
     
     steps:
-    - name: print current directory
-      run: pwd
+    - uses: actions/checkout@v2
       
     - name: Build with Gradle
       run: |
