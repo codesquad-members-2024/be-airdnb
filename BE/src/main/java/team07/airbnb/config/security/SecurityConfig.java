@@ -5,17 +5,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.CustomOAuthUserService;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final CustomOAuthUserService oAuth2UserService;
-    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,12 +47,13 @@ public class SecurityConfig {
                 .oauth2Login(
                         oAuth -> {
                             oAuth.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService));
-                            oAuth.successHandler(authenticationSuccessHandler);
+                            oAuth.successHandler(successHandler);
                         }
                 );
 
         return http.build();
     }
+
 
 //    @Bean
 //    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
