@@ -37,21 +37,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    
+
     steps:
-    - uses: actions/checkout@v2
-      
-    - name: Build with Gradle
-      run: |
-            chmod +x ./airdnb/gradlew
-            cd ./airdnb
-            ./gradlew clean build -x test
-    - name: Docker build & push to docker repo
-      run: |
-            echo ${{ secrets.CORI_DOCKER_TOKEN }} | docker login -u ${{ secrets.CORI_DOCKER_USERNAME }} --password-stdin
-            cd ./airdnb/
-            docker build -f ./Dockerfile -t ${{ secrets.CORI_DOCKER_REPO }} .
-            docker push ${{ secrets.CORI_DOCKER_REPO }}
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
