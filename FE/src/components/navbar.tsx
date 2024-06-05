@@ -5,7 +5,7 @@ export default function Navbar() {
     <div className="navbar">
       <Link href="/">Home</Link>
       <Link href="/login">Login</Link>
-      <Link href="/map_google">Map</Link>
+      <Link href="/map">Map</Link>
       <Link href="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb">
         Github
       </Link>

@@ -16,3 +16,14 @@ export interface AccommodationWithPrice {
   accomodation: Accommodation;
   price: number;
 }
+
+export interface AccommodationListCard {
+  id: number;
+  title: string;
+  price: string;
+  totalPrice: string;
+  rating?: string;
+  reviews?: string;
+  discount?: string;
+  image: string;
+}

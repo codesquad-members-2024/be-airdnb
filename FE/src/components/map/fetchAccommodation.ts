@@ -1,4 +1,4 @@
-import { AccommodationWithPrice } from "./types";
+import { AccommodationWithPrice } from "../types";
 
 async function fetchAccommodations(): Promise<AccommodationWithPrice[]> {
   try {

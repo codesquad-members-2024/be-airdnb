@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "title": "Spacious and Comfortable cozy house #4",
+    "price": "₩82,953 / 박",
+    "totalPrice": "총액 ₩1,493,159",
+    "rating": "4.80",
+    "reviews": "127",
+    "image": "/images/house1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "#가성가격 #룸#강남 #테라스# #삼성3호...",
+    "price": "₩96,095 / 박",
+    "totalPrice": "총액 ₩1,729,707",
+    "discount": "40% OFF",
+    "image": "/images/house2.jpg"
+  },
+  {
+    "id": 3,
+    "title": "#가성가격 #룸#강남1분 #럭셔리룸 #파티#삼성3...",
+    "price": "₩96,095 / 박",
+    "totalPrice": "총액 ₩1,729,707",
+    "discount": "40% OFF",
+    "image": "/images/house3.jpg"
+  },
+  {
+    "id": 4,
+    "title": "장기임대 할인 강남 양재천 침실수 30평 빵...",
+    "price": "₩24,956 / 박",
+    "totalPrice": "총액 ₩112,962",
+    "image": "/images/house4.jpg"
+  }
+]
