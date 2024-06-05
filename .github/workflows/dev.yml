@@ -44,7 +44,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
-        key: ${{ secrets.PRIVATE_KEY }}
+        key: ${{ secrets.CORI_PRIVATE_KEY }}
         script: |
           sudo docker rm -f $(sudo docker ps -qa)
           sudo docker pull ${{ secrets.CORI_DOCKER_REPO }}
