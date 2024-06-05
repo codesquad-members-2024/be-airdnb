@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class AccomodationAmenity {
+public class AccommodationAmenity {
     @Id
     private String name;
 }

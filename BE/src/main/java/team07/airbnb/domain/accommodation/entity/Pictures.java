@@ -11,14 +11,14 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Table(name="ACCOMODATION_PICTURE")
+@Table(name = "ACCOMMODATION_PICTURE")
 public class Pictures {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    private AccomodationEntity accomodation;
+    private AccommodationEntity accommodation;
 
     private String url;
 }

@@ -1,19 +1,19 @@
 package team07.airbnb.domain.accommodation.dto;
 
-import team07.airbnb.domain.accommodation.entity.AccomodationEntity;
+import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
-import team07.airbnb.domain.accommodation.property.AccomodationType;
+import team07.airbnb.domain.accommodation.property.AccommodationType;
 
-public record AccomodationListResponse (
+public record AccommodationListResponse(
         long id,
         String name,
         String imageUrl,
         AccommodationLocation location,
-        AccomodationType type
-){
+        AccommodationType type
+) {
 
-    public static AccomodationListResponse of(AccomodationEntity accomodation){
-        return new AccomodationListResponse(
+    public static AccommodationListResponse of(AccommodationEntity accomodation) {
+        return new AccommodationListResponse(
                 accomodation.getId(),
                 accomodation.getName(),
                 !accomodation.getImages().isEmpty() ? accomodation.getImages().get(0).getUrl() : null,

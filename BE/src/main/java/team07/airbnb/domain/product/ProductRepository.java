@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    List<ProductEntity> findAllByAccomodationIdInAndStatus(List<Long> accomodationIds, ProductStatus status);
+    List<ProductEntity> findAllByAccommodationIdInAndStatus(List<Long> accommodationIds, ProductStatus status);
 }

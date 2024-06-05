@@ -1,13 +1,13 @@
 package team07.airbnb.domain.accommodation.dto;
 
+import team07.airbnb.domain.accommodation.property.AccommodationType;
 import team07.airbnb.domain.accommodation.property.RoomInformation;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
-import team07.airbnb.domain.accommodation.property.AccomodationType;
 
 import java.util.List;
 
-public record AccomodationCreateRequest(
-        AccomodationType type,
+public record AccommodationCreateRequest(
+        AccommodationType type,
         RoomInformation roomInformation,
         AccommodationLocation address,
         String name,

@@ -1,9 +1,9 @@
 package team07.airbnb.domain.product.dto;
 
-import team07.airbnb.domain.accommodation.dto.AccomodationListResponse;
+import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 
 public record ProductListResponse (
-        AccomodationListResponse accomodation,
+        AccommodationListResponse accomodation,
         int price
 ){
 }

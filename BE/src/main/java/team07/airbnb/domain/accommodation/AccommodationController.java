@@ -7,38 +7,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.domain.accommodation.dto.AccomodationCreateRequest;
-import team07.airbnb.domain.accommodation.dto.AccomodationListResponse;
-import team07.airbnb.domain.accommodation.entity.AccomodationEntity;
+import team07.airbnb.domain.accommodation.dto.AccommodationCreateRequest;
+import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
+import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 
 import java.util.List;
 
-@RequestMapping("/accomodation")
+@RequestMapping("/accommodation")
 @RestController
 @RequiredArgsConstructor
-public class AccomodationController {
-    private final AccomodationService accomodationService;
+public class AccommodationController {
+    private final AccommodationService accommodationService;
 
 
     @GetMapping
-    public List<AccomodationEntity> findAll() {
-        return accomodationService.findAllAccommodations();
+    public List<AccommodationEntity> findAll() {
+        return accommodationService.findAllAccommodations();
     }
 
     @GetMapping("/location")
-    public List<AccomodationListResponse> findNeighbor(
+    public List<AccommodationListResponse> findNeighbor(
             @RequestParam double longitude,
             @RequestParam double latitude,
             @RequestParam double distance) {
 
-        return accomodationService.findNearbyAccommodations(longitude, latitude, distance)
+        return accommodationService.findNearbyAccommodations(longitude, latitude, distance)
                 .stream()
-                .map(AccomodationListResponse::of)
+                .map(AccommodationListResponse::of)
                 .toList();
     }
 
     @PostMapping
-    public void createAccomodation(@RequestBody AccomodationCreateRequest createRequest){
+    public void createAccomodation(@RequestBody AccommodationCreateRequest createRequest) {
 
     }
 

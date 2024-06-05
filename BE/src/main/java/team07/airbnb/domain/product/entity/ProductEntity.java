@@ -8,21 +8,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.accommodation.entity.AccomodationEntity;
-import team07.airbnb.domain.booking.DiscountPolicy;
+import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 
 import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "ACCOMODATION_PRODUCT")
+@Table(name = "ACCOMMODATION_PRODUCT")
 public class ProductEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    private AccomodationEntity accomodation;
+    private AccommodationEntity accommodation;
     private LocalDate date;
     private int price;
     private ProductStatus status;
