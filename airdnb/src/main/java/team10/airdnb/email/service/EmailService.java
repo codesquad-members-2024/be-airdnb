@@ -24,8 +24,8 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public int joinEmail(String email) {
-        int authNumber = makeRandomNumber();    // 인증번호를 생성
+    public String joinEmail(String email) {
+        String authNumber = makeRandomNumber();    // 인증번호를 생성
 
         String setFrom = mailUsername; // email-config에 설정한 자신의 이메일 주소를 입력
         String toMail = email;
@@ -41,7 +41,7 @@ public class EmailService {
         return authNumber;
     }
 
-    public boolean mailAuthCheck(String email, int authNumber) {
+    public boolean mailAuthCheck(String email, String authNumber) {
         // 1) redis에서 email에 해당하는 auth number 찾기 -> true
 
         // 2) 아닐경우 false
@@ -49,14 +49,14 @@ public class EmailService {
         return false;
     }
 
-    private int makeRandomNumber() {    // 6자리의 auth number 를 만드는 코드
+    private String makeRandomNumber() {    // 6자리의 auth number 를 만드는 코드
         Random random = new Random();
         StringBuilder randomNumber = new StringBuilder();
         for (int idx = 0; idx < MAX_AUTH_NUMBER_LIMIT; idx++) {
             randomNumber.append(random.nextInt(MAX_RANDOM_NUMBER_LIMIT));
         }
 
-        return Integer.parseInt(randomNumber.toString());
+        return randomNumber.toString();
     }
 
     private void mailSend(String setFrom, String toMail, String title, String content) {

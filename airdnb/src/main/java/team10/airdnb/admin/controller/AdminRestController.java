@@ -17,15 +17,15 @@ public class AdminRestController {
 
     private final EmailService emailService;
 
-    @PostMapping("/sendMail")
+    @PostMapping("/send-mail")
     public ResponseEntity<?> sendMail(@RequestBody @Valid AdminEmailRequest request) {
-        log.debug("request {}", request.getAdminId());
-        return ResponseEntity.ok(emailService.joinEmail(request.getAdminId()));
+        log.debug("request {}", request.adminId());
+        return ResponseEntity.ok(emailService.joinEmail(request.adminId()));
     }
 
-    @PostMapping("/mailauthCheck")
+    @PostMapping("/auth-check")
     public ResponseEntity<?> mailAuthCheck(@RequestBody @Valid AdminEmailCheckRequest request) {
-        emailService.mailAuthCheck(request.getAdminId(), request.getAuthNum());
+        emailService.mailAuthCheck(request.adminId(), request.authNumber());
         return ResponseEntity.ok("ok");
     }
 }
