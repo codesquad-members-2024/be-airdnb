@@ -31,8 +31,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
 //                        .requestMatchers("/posts/new", "/comments/save").hasRole(Role.USER.name())
 //                        .requestMatchers("/", "/css/**", "images/**", "/js/**", "/login/*", "/logout/*", "/posts/**", "/comments/**").permitAll()
-                        .anyRequest().permitAll()
+//                        .anyRequest().permitAll()
                         .requestMatchers("/review/**", "/payment/**").authenticated()
+                        .anyRequest().permitAll()
                 )
                 .logout(
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
@@ -44,7 +45,6 @@ public class SecurityConfig {
                             oAuth.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService));
                             oAuth.successHandler(authenticationSuccessHandler);
                         }
-
                 );
 
         return http.build();
