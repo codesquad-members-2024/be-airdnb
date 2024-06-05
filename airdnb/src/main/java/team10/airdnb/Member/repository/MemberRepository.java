@@ -5,7 +5,7 @@ import team10.airdnb.Member.entity.Member;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
 
     Optional<Member> findByEmail(String email);
 

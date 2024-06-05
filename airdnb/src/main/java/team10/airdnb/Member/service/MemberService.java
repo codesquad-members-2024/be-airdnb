@@ -48,8 +48,8 @@ public class MemberService {
         return member;
     }
 
-    public Member findMemberByMemberId(Long memberId) {
-        return memberRepository.findById(memberId)
+    public Member findMemberByMemberId(String id) {
+        return memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_EXISTS));
     }
 }
