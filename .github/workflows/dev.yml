@@ -49,6 +49,9 @@ jobs:
 =======
     
     steps:
+    - name: print current directory
+      run: pwd
+      
     - name: Build with Gradle
       run: |
             chmod +x ./airdnb/gradlew
