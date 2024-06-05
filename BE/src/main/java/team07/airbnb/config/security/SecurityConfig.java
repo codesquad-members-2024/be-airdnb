@@ -1,4 +1,4 @@
-package team07.airbnb.config;
+package team07.airbnb.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import team07.airbnb.domain.user.service.CustomOAuthUserService;
 public class SecurityConfig {
 
     private final CustomOAuthUserService oAuth2UserService;
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,7 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
 //                        .requestMatchers("/posts/new", "/comments/save").hasRole(Role.USER.name())
 //                        .requestMatchers("/", "/css/**", "images/**", "/js/**", "/login/*", "/logout/*", "/posts/**", "/comments/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+                        .requestMatchers("/review/**", "/payment/**").authenticated()
                 )
                 .logout(
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
@@ -38,8 +40,11 @@ public class SecurityConfig {
                 // OAuth2 로그인 기능에 대한 여러 설정
                 // oauth2 로그인 추가
                 .oauth2Login(
-                        oAuth -> oAuth
-                                .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                        oAuth -> {
+                            oAuth.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService));
+                            oAuth.successHandler(authenticationSuccessHandler);
+                        }
+
                 );
 
         return http.build();
