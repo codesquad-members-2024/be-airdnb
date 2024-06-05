@@ -41,6 +41,14 @@ public class EmailService {
         return authNumber;
     }
 
+    public boolean mailAuthCheck(String email, int authNumber) {
+        // 1) redis에서 email에 해당하는 auth number 찾기 -> true
+
+        // 2) 아닐경우 false
+
+        return false;
+    }
+
     private int makeRandomNumber() {    // 6자리의 auth number 를 만드는 코드
         Random random = new Random();
         StringBuilder randomNumber = new StringBuilder();
