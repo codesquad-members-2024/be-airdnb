@@ -29,6 +29,7 @@ jobs:
     - name: Build project
       run: |
         cd ${{ github.workspace }}/FE
+        echo "${{ secrets.FRONT_ENV }}" | base64 --decode > ./.env.production
         npm run build
 
     - name: Build Docker image

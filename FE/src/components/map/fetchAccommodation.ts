@@ -11,8 +11,8 @@ async function fetchAccommodations(): Promise<AccommodationWithPrice[]> {
         `Failed to fetch accommodations: ${response.status} ${response.statusText}`
       );
     }
-
-    return await response.json();
+    const responseData = await response.json(); // 한 번만 읽음
+    return responseData;
   } catch (error) {
     console.error("Error fetching accommodations:", error);
     throw error; // 이 부분을 선택적으로 처리할 수 있습니다.

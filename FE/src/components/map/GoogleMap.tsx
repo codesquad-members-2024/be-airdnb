@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from "react";
-import { darkMapStyle } from "@/styles/mapstyle";
-import useMapBoundsChanged from "./useMapBoundsChanged";
+import { useEffect, useState } from "react";
 import fetchAccommodations from "./fetchAccommodation";
 import { AccommodationWithPrice } from "./types";
 
@@ -23,7 +21,7 @@ function GoogleMap() {
         lng: 127.0,
       },
       zoom: 16,
-      mapId: "bc3c0232f45fc3c5",
+      // mapId: "bc3c0232f45fc3c5",
       disableDefaultUI: true,
       clickableIcons: false,
       minZoom: 10,
@@ -38,7 +36,6 @@ function GoogleMap() {
         },
         strictBounds: true,
       },
-      styles: darkMapStyle,
     });
 
     setGoogleMap(instance);
@@ -68,11 +65,16 @@ function GoogleMap() {
       const markerInstances: google.maps.Marker[] = [];
 
       accommodations.forEach((accommodation) => {
-        const { lat, lng } = accommodation.accomodation.location.point;
+        const [lat, lng] = accommodation.accomodation.location.point;
+
         const markerInstance = new google.maps.Marker({
           position: { lat, lng },
           map: googleMap,
           title: accommodation.accomodation.name,
+          icon: {
+            url: "/images/logo.png",
+            scaledSize: new google.maps.Size(100, 100),
+          },
         });
 
         markerInstance.addListener("click", () => {
@@ -82,7 +84,6 @@ function GoogleMap() {
         });
 
         markerInstances.push(markerInstance);
-        console.log(markerInstances);
       });
 
       return () => {
