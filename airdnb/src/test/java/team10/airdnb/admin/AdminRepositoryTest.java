@@ -1,8 +1,7 @@
 package team10.airdnb.admin;
 
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
@@ -12,10 +11,10 @@ import team10.airdnb.admin.entity.Admin;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(false)
+@AllArgsConstructor
 class AdminRepositoryTest {
 
-    @Autowired
-    AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
     @Test
     void saveAdmin() {
