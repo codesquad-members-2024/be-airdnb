@@ -20,17 +20,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20'
-
-    - name: Install dependencies
-      run: |
-        cd ${{ github.workspace }}/FE
-        npm install
-
-    - name: Build project
+        
+    - name: Add .env
       run: |
         cd ${{ github.workspace }}/FE
         echo "${{ secrets.FRONT_ENV }}" | base64 --decode > ./.env.production
-        npm run build
 
     - name: Build Docker image
       run: |
