@@ -16,16 +16,13 @@ public class AccomodationService {
     private final GeometryHelper geometryHelper;
     private final AccomodationRepository accomodationRepository;
 
-    public List<AccomodationListResponse> findNearbyAccomodations(double longitude, double latitude, double distance) {
+    public List<AccomodationEntity> findNearbyAccommodations(double longitude, double latitude, double distance) {
         Point center = geometryHelper.getPoint(longitude, latitude);
 
-        return accomodationRepository.findByLocationWithinDistance(center, distance)
-                .stream()
-                .map(AccomodationListResponse::of)
-                .toList();
+        return accomodationRepository.findByLocationWithinDistance(center, distance);
     }
 
-    public List<AccomodationEntity> findAllAccomodations() {
+    public List<AccomodationEntity> findAllAccommodations() {
         return accomodationRepository.findAll();
     }
 }

@@ -22,7 +22,7 @@ public class AccomodationController {
 
     @GetMapping
     public List<AccomodationEntity> findAll() {
-        return accomodationService.findAllAccomodations();
+        return accomodationService.findAllAccommodations();
     }
 
     @GetMapping("/location")
@@ -31,7 +31,10 @@ public class AccomodationController {
             @RequestParam double latitude,
             @RequestParam double distance) {
 
-        return accomodationService.findNearbyAccomodations(longitude, latitude, distance);
+        return accomodationService.findNearbyAccommodations(longitude, latitude, distance)
+                .stream()
+                .map(AccomodationListResponse::of)
+                .toList();
     }
 
     @PostMapping
