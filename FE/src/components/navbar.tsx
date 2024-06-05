@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <div className="navbar">
-      <Link href="/">home</Link>
-      <Link href="/login">login</Link>
-      <Link href="/map_google">map</Link>
+      <Link href="/">Home</Link>
+      <Link href="/login">Login</Link>
+      <Link href="/map_google">Map</Link>
       <Link href="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb">
         Github
       </Link>

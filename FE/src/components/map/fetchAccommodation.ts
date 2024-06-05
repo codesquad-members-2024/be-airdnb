@@ -3,7 +3,7 @@ import { AccommodationWithPrice } from "./types";
 async function fetchAccommodations(): Promise<AccommodationWithPrice[]> {
   try {
     const response = await fetch(
-      "https://squadbnb.site/api/products/available?checkIn=2024-07-01&checkOut=2024-07-02&longitude=77&latitude=13&distance=100000000&continue"
+      "https://squadbnb.site/api/products/available?checkIn=2024-07-01&checkOut=2024-07-02&longitude=127&latitude=37.5&distance=10000"
     );
 
     if (!response.ok) {

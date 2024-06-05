@@ -97,3 +97,50 @@ body {
   align-items: center;
   width: fit-content;
 }
+
+/* HTML marker styles */
+.price-tag {
+  background-color: #4285f4;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.price-tag::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #4285f4;
+}
+
+.marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 30px;
+  padding: 0 35px;
+  border: 1px solid #afafaf;
+  border-radius: 15px;
+  background-color: white;
+  cursor: pointer;
+
+  color: black;
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.marker:hover {
+  color: white;
+  background-color: #2f2f2f;
+}

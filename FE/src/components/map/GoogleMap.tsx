@@ -1,7 +1,7 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from "react";
 import fetchAccommodations from "./fetchAccommodation";
 import { AccommodationWithPrice } from "./types";
+import createMarker from "./GoogleMapMarker";
 
 function GoogleMap() {
   const [googleMap, setGoogleMap] = useState<google.maps.Map>();
@@ -17,11 +17,11 @@ function GoogleMap() {
 
     const instance = new window.google.maps.Map(mapContainer, {
       center: {
-        lat: 37.5,
-        lng: 127.0,
+        lat: 37.497942,
+        lng: 127.027621,
       },
-      zoom: 16,
-      // mapId: "bc3c0232f45fc3c5",
+      zoom: 14,
+      mapId: "bc3c0232f45fc3c5",
       disableDefaultUI: true,
       clickableIcons: false,
       minZoom: 10,
@@ -62,33 +62,35 @@ function GoogleMap() {
 
   useEffect(() => {
     if (googleMap) {
-      const markerInstances: google.maps.Marker[] = [];
+      const markerInstances: google.maps.marker.AdvancedMarkerElement[] = [];
+
+      const test = createMarker({
+        lat: 37.497942,
+        lng: 127.027621,
+        name: "테스트",
+        price: 10000,
+        map: googleMap,
+      });
+      markerInstances.push(test);
 
       accommodations.forEach((accommodation) => {
-        const [lat, lng] = accommodation.accomodation.location.point;
+        const coo: number[] = accommodation.accomodation.location.point;
+        console.log(accommodation.accomodation.name, coo[0], coo[1]);
 
-        const markerInstance = new google.maps.Marker({
-          position: { lat, lng },
+        const marker = createMarker({
+          lat: coo[1],
+          lng: coo[0],
+          name: accommodation.accomodation.name,
+          price: accommodation.price,
           map: googleMap,
-          title: accommodation.accomodation.name,
-          icon: {
-            url: "/images/logo.png",
-            scaledSize: new google.maps.Size(100, 100),
-          },
         });
 
-        markerInstance.addListener("click", () => {
-          alert(
-            `숙소: ${accommodation.accomodation.name}\n가격: ${accommodation.price}원`
-          );
-        });
-
-        markerInstances.push(markerInstance);
+        markerInstances.push(marker);
       });
 
       return () => {
         markerInstances.forEach((markerInstance) => {
-          markerInstance.setMap(null);
+          markerInstance.map = null;
         });
       };
     }
