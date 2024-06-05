@@ -35,13 +35,13 @@ public class OauthLoginService {
         Optional<Member> optionalMember = memberService.findMemberByEmail(userInfo.getEmail());
         Member oauthMember;
         if(optionalMember.isEmpty()) { // 신규 회원 가입
-            oauthMember = userInfo.toMemberEntity(memberType, Role.ADMIN);
+            oauthMember = userInfo.toMemberEntity(memberType);
             oauthMember = memberService.registerMember(oauthMember);
         } else { // 기존 회원일 경우
             oauthMember = optionalMember.get();
         }
         // 토큰 생성
-        jwtTokenDto = tokenManager.createJwtTokenDto(oauthMember.getId(), oauthMember.getRole());
+        jwtTokenDto = tokenManager.createJwtTokenDto(oauthMember.getId());
         oauthMember.updateRefreshToken(jwtTokenDto);
 
         return OauthLoginDto.Response.of(jwtTokenDto);

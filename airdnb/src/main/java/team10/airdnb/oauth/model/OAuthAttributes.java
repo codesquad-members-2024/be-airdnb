@@ -17,13 +17,12 @@ public class OAuthAttributes { // 회원 정보 가져올 때 통일
     private String profile;
     private MemberType memberType;
 
-    public Member toMemberEntity(MemberType memberType, Role role) {
+    public Member toMemberEntity(MemberType memberType) {
         return Member.builder()
                 .memberName(name)
                 .email(email)
                 .memberType(memberType)
                 .profile(profile)
-                .role(role)
                 .build();
     }
 
