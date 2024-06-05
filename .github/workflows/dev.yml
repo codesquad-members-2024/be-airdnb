@@ -2,9 +2,15 @@ name: CI
 
 on:
   push:
+<<<<<<< HEAD
     branches: [ "dev-be" ]
   pull_request:
     branches: [ "dev-be" ]
+=======
+    branches: [ "actions" ]
+  pull_request:
+    branches: [ "actions" ]
+>>>>>>> fb84213 (🐛 fix: github actions 디렉토리 이름 오타 수정)
 
 permissions:
   contents: read  # 이 설정은 워크플로우가 리포지토리의 콘텐츠를 읽을 수 있도록 허용합니다.
@@ -36,15 +42,35 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+<<<<<<< HEAD
     needs: build
 
     steps:
+=======
+    
+    steps:
+    - name: Build with Gradle
+      run: |
+            chmod +x ./airdnb/gradlew
+            cd ./airdnb
+            ./gradlew clean build -x test
+    - name: Docker build & push to docker repo
+      run: |
+            echo ${{ secrets.CORI_DOCKER_TOKEN }} | docker login -u ${{ secrets.CORI_DOCKER_USERNAME }} --password-stdin
+            cd ./airdnb/
+            docker build -f ./Dockerfile -t ${{ secrets.CORI_DOCKER_REPO }} .
+            docker push ${{ secrets.CORI_DOCKER_REPO }}
+>>>>>>> fb84213 (🐛 fix: github actions 디렉토리 이름 오타 수정)
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
+<<<<<<< HEAD
         key: ${{ secrets.CORI_PRIVATE_KEY }}
+=======
+        key: ${{ secrets.PRIVATE_KEY }}
+>>>>>>> fb84213 (🐛 fix: github actions 디렉토리 이름 오타 수정)
         script: |
           sudo docker rm -f $(sudo docker ps -qa)
           sudo docker pull ${{ secrets.CORI_DOCKER_REPO }}
