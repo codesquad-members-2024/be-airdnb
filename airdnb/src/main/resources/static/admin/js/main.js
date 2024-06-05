@@ -37,16 +37,14 @@ function handleSignupButtonClick() {
 
     // Disable the ID and password fields
     adminId.disabled = true;
-    password.disabled = true;
 
     // Prepare data to be sent
     var data = {
         adminId: adminId.value,
-        password: password.value
     };
 
     // Send data to the server
-    fetch('/admin/sendMail', {
+    fetch('/admin/send-mail', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
