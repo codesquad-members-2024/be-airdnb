@@ -1,9 +1,10 @@
-package team07.airbnb.domain.accomodation;
+package team07.airbnb.domain.accommodation;
 
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
-import team07.airbnb.domain.accomodation.dto.AccomodationListResponse;
+import team07.airbnb.domain.accommodation.dto.AccomodationListResponse;
+import team07.airbnb.domain.accommodation.entity.AccomodationEntity;
 import team07.airbnb.util.GeometryHelper;
 
 import java.util.List;

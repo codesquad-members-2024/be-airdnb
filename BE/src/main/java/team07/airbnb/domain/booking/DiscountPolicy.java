@@ -1,4 +1,4 @@
-package team07.airbnb.domain.product;
+package team07.airbnb.domain.booking;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
