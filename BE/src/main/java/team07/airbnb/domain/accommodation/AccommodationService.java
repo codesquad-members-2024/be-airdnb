@@ -46,4 +46,8 @@ public class AccommodationService {
     private AccommodationEntity getAccommodationById(long id) throws NoSuchElementException {
         return accommodationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 숙소 %d".formatted(id)));
     }
+
+    public boolean isAvailableOccupancy(AccommodationEntity accommodation, Integer headCount) {
+        return accommodation.getRoomInformation().getMaxOccupancy() >= headCount;
+    }
 }

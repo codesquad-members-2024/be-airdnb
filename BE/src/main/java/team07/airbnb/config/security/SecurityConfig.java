@@ -36,7 +36,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/posts/new", "/comments/save").hasRole(Role.USER.name())
 //                        .requestMatchers("/", "/css/**", "images/**", "/js/**", "/login/*", "/logout/*", "/posts/**", "/comments/**").permitAll()
 //                        .anyRequest().permitAll()
-                        .requestMatchers("/review/**", "/payment/**").authenticated()
+//                        .requestMatchers("/review/**", "/payment/**", "/booking/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .logout(

@@ -1,4 +1,4 @@
-package team07.airbnb.domain.booking;
+package team07.airbnb.domain.booking.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +9,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import team07.airbnb.domain.BaseEntity;
+import team07.airbnb.domain.booking.price_policy.discount.DiscountPolicyEntity;
+import team07.airbnb.domain.booking.property.BookingStatus;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.product.entity.ProductEntity;
 
@@ -34,8 +36,6 @@ public class BookingEntity extends BaseEntity {
     private LocalDate checkout;
     private BookingStatus status;
 
-//    @Transient
-//    private int totalPrice = products.stream()
-//            .mapToInt(ProductEntity::getPrice)
-//            .sum();
+    @ManyToOne
+    private DiscountPolicyEntity discountPolicyEntity;
 }

@@ -2,6 +2,7 @@ package team07.airbnb.domain.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.product.dto.ProductListResponse;
@@ -20,9 +21,10 @@ import static team07.airbnb.domain.product.entity.ProductStatus.OPEN;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final AccommodationService accommodationService;
 
     public List<ProductListResponse> findAvailableInDateRange(
-            List<AccommodationEntity> accommodations, LocalDate checkIn, LocalDate checkOut) {
+            List<AccommodationEntity> accommodations, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
 
         List<Long> accomodationIds = accommodations.stream().map(AccommodationEntity::getId).toList();
 
@@ -31,7 +33,7 @@ public class ProductService {
                 .collect(Collectors.groupingBy(p -> p.getAccommodation().getId()));
 
         Map<Long, List<ProductEntity>> availableProducts = products.entrySet().stream()
-                .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut))
+                .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut) && isAvailablePeopleCount(entry.getValue(), headCount))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         // Calculate average price per day and Make Response List
@@ -45,7 +47,17 @@ public class ProductService {
         ).toList();
     }
 
+    private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
+        //인원수를 설정하지 않았으면 무조건 true
+        if (headCount == null) return true;
+
+        return accommodationService.isAvailableOccupancy(products.getLast().getAccommodation(), headCount);
+    }
+
     private boolean isAvailableInDateRange(List<ProductEntity> products, LocalDate checkIn, LocalDate checkOut) {
+        //날짜를 설정하지 않았으면 모든 날짜가 가능한걸로 취급
+        if (checkIn == null && checkOut == null) return true;
+
         Set<LocalDate> dateSet = new HashSet<>();
         for (LocalDate date = checkIn; !date.isAfter(checkOut); date = date.plusDays(1)) {
             dateSet.add(date);

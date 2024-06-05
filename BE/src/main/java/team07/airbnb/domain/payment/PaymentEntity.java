@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.booking.BookingEntity;
+import team07.airbnb.domain.booking.entity.BookingEntity;
 
 @Entity
 @Table(name = "PAYMENT")

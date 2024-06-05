@@ -1,6 +1,8 @@
 package team07.airbnb.domain.product;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/products")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final AccommodationService accommodationService;
@@ -24,15 +27,17 @@ public class ProductController {
 
     @GetMapping("/available")
     public List<ProductListResponse> findNearByAvailableProducts(
-            @RequestParam LocalDate checkIn,
-            @RequestParam LocalDate checkOut,
+            @RequestParam @Nullable LocalDate checkIn,
+            @RequestParam @Nullable  LocalDate checkOut,
             @RequestParam double longitude,
             @RequestParam double latitude,
-            @RequestParam double distance) {
+            @RequestParam double distance,
+            @RequestParam @Nullable Integer headCount
+    ) {
 
         return productService.findAvailableInDateRange(
                 accommodationService.findNearbyAccommodations(longitude, latitude, distance),
-                checkIn, checkOut);
+                checkIn, checkOut, headCount);
     }
 
     @PostMapping()
