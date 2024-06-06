@@ -48,8 +48,15 @@ public class EmailService {
         return authNumber;
     }
 
-    public boolean checkAuthNum(String email, String authNumber) {
-        return redisUtil.getData(email).equals(authNumber);
+    public void checkAuthNum(String email, String authNumber) {
+        String savedAuthNum = redisUtil.getData(email);
+        if (savedAuthNum == null) {
+            throw new RuntimeException("AuthNumber 발행되지 않음!");
+        }
+        if (!savedAuthNum.equals(authNumber)){
+            throw new RuntimeException("AuthNumber 불일치!");
+        }
+
     }
 
     private void saveAuthNumberAtRedis(String email, String authNumber) {
