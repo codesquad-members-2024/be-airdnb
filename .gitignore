@@ -37,3 +37,6 @@ out/
 .vscode/
 
 src/main/resources/application.properties
+src/main/resources/schema.sql
+src/test/resources/application.properties
+src/test/resources/schema.sql

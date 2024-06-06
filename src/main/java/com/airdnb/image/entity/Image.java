@@ -1,4 +1,4 @@
-package com.airdnb.img.entity;
+package com.airdnb.image.entity;
 
 import com.airdnb.global.status.Status;
 import jakarta.persistence.Entity;
@@ -7,15 +7,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "image")
-@NoArgsConstructor
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Image {
     @Id
@@ -24,4 +22,10 @@ public class Image {
     private String url;
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Builder
+    public Image(String url, Status status) {
+        this.url = url;
+        this.status = status;
+    }
 }

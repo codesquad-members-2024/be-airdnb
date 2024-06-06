@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberJapRepository implements MemberRepository {
+public class MemberJpaRepository implements MemberRepository {
 
     private final EntityManager em;
 
