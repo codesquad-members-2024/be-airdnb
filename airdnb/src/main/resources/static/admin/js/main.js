@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleSignupButtonClick() {
         var adminId = document.getElementById('admin-id');
-        var authCode = document.getElementById('auth-code');
+        var authNumber = document.getElementById('auth-code');
         var password = document.getElementById('password');
 
         if (adminId.value.trim() === "" || password.value.trim() === "") {
@@ -83,20 +83,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if (!validateAuthCode(authCode.value)) {
+        if (!validateAuthCode(authNumber.value)) {
             alert("인증번호는 6자리 숫자여야 합니다.");
-            authCode.value = "";
-            authCode.focus();
+            authNumber.value = "";
+            authNumber.focus();
             return;
         }
 
         var data = {
             adminId: adminId.value,
-            authCode: authCode.value,
+            authNumber: authNumber.value,
             password: password.value,
         };
 
-        fetch('/admin/signup', {
+        fetch('/admin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
