@@ -16,11 +16,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
 
+    public Member findMemberById(String id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("id와 일치하는 유저가 존재하지 않습니다."));
+    }
+
     public void saveMember(MemberRegistration memberRegistration) {
         Member member = memberMapper.toMember(memberRegistration);
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
     }
-
 
 }
