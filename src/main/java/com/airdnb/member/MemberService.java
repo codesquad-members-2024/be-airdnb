@@ -1,7 +1,8 @@
 package com.airdnb.member;
 
-import com.airdnb.member.entity.Member;
+import com.airdnb.global.NotFoundException;
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.entity.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
