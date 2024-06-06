@@ -1,6 +1,7 @@
 package team07.airbnb.domain.accommodation;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,10 @@ public class AccommodationController {
     @GetMapping("/{id}")
     public AccommodationEntity accommodationDetail(@PathVariable long id){
         return accommodationService.findById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAccommodation(@PathVariable long id){
+        accommodationService.deleteById(id);
     }
 }

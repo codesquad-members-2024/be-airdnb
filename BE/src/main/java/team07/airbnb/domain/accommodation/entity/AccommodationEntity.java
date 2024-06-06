@@ -1,5 +1,6 @@
 package team07.airbnb.domain.accommodation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,8 +20,10 @@ import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
 import team07.airbnb.domain.accommodation.property.AccommodationType;
 import team07.airbnb.domain.accommodation.property.RoomInformation;
+import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -51,7 +54,18 @@ public class AccommodationEntity extends BaseEntity {
     private List<Pictures> pictures;
     private int basePricePerDay;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductEntity> products;
+
     public void addPicture(String url) {
         pictures.add(new Pictures(this.id, url));
+    }
+
+    public void addProduct(LocalDate date, int price){
+        products.add(ProductEntity.ofOpen(this, date, price));
+    }
+    public void addProduct(LocalDate date){
+        products.add(ProductEntity.ofOpen(this, date, basePricePerDay));
     }
 }
