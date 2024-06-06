@@ -6,11 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.booking.price_policy.discount.DiscountPolicyEntity;
 import team07.airbnb.domain.booking.property.BookingStatus;
+import team07.airbnb.domain.payment.PaymentEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.product.entity.ProductEntity;
 
@@ -38,4 +40,7 @@ public class BookingEntity extends BaseEntity {
 
     @ManyToOne
     private DiscountPolicyEntity discountPolicyEntity;
+
+    @OneToOne
+    private PaymentEntity payment;
 }

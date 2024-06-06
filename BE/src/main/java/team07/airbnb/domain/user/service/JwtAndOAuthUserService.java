@@ -1,9 +1,10 @@
 package team07.airbnb.domain.user.service;
 
-import jakarta.servlet.http.HttpSession;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -11,19 +12,22 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import team07.airbnb.domain.user.dto.SessionUser;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
+import team07.airbnb.domain.user.util.JwtAuthentication;
+import team07.airbnb.domain.user.util.JwtUserDetails;
 import team07.airbnb.domain.user.util.OAuthAttributes;
+import team07.airbnb.util.jwt.JwtUtil;
+
 import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
+    private final JwtUtil jwtUtil;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -46,14 +50,21 @@ public class CustomOAuthUserService implements OAuth2UserService<OAuth2UserReque
         // 사용자 저장 또는 업데이트
         UserEntity user = saveOrUpdate(attributes);
 
-        // 세션에 사용자 정보 저장
-        httpSession.setAttribute("user", new SessionUser(user));
+        JwtUserDetails userDetails = new JwtUserDetails(user, attributes.getAttributes());
 
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
+        String jwt = null;
+        try {
+            jwt = jwtUtil.generateToken(userDetails);
+        } catch (JsonProcessingException e) {
+            throw new OAuth2AuthenticationException("유저 정보 JSON 변환 실패");
+        }
+        log.info("create jwt : " + jwt);
+
+        userDetails.setPassword(jwt);
+
+        return userDetails;
     }
+
 
     private UserEntity saveOrUpdate(OAuthAttributes attributes) {
         UserEntity user = userRepository.findByRegistrationIdAndName(attributes.getRegistrationId(), attributes.getName())

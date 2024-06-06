@@ -16,8 +16,8 @@ public class PaymentEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
-    private BookingEntity booking;
+//    @OneToOne
+//    private BookingEntity booking;
     @Embedded
     private Fee fee;
 //    private int totalPrice = booking.getTotalPrice() + fee.getTotalFee();

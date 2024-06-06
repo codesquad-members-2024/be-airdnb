@@ -5,3 +5,4 @@ spring:
     import:
       - app_settings/dev-db-config.yml
       - app_settings/oauth-config.yml
+      - app_settings/jwt-config.yml
