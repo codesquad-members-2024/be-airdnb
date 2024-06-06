@@ -14,6 +14,7 @@ import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.service.UserService;
+import team07.airbnb.util.UserHelper;
 
 import java.util.List;
 
@@ -44,9 +45,8 @@ public class AccommodationController {
 
     @PostMapping
     public void createAccomodation(@RequestBody AccommodationCreateRequest createRequest) {
-        UserEntity host = userService.findAnyUser();
         accommodationService.addAccommodation(
-                createRequest.toEntity(host)
+                createRequest.toEntity(UserHelper.getCurrentUser())
         );
     }
 
