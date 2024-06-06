@@ -1,10 +1,15 @@
 package com.airdnb.member;
 
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.dto.MemberVerification;
 import com.airdnb.member.entity.Member;
 import com.airdnb.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +18,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final AuthenticationManager authenticationManager;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberMapper memberMapper;
+    private final JwtUtil jwtUtil;
 
     public void saveMember(Member member) {
         memberRepository.save(member);
@@ -27,5 +34,17 @@ public class MemberService {
         saveMember(member);
     }
 
-
+    public String verify(MemberVerification memberVerification) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                memberVerification.getId(),
+                memberVerification.getPassword()
+            )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Member member = memberRepository.findById(memberVerification.getId())
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        String token = jwtUtil.createToken(member.getId());
+        return token;
+    }
 }
