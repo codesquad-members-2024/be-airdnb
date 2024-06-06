@@ -23,19 +23,11 @@ public class StayJpaRepository implements StayRepository {
     @Override
     public Optional<Stay> findById(Long id) {
         String jpql = "SELECT s FROM Stay s WHERE s.id = :id AND s.status = :status";
-        Stay stay = em.createQuery(jpql, Stay.class)
+        return em.createQuery(jpql, Stay.class)
                 .setParameter("id", id)
                 .setParameter("status", Status.ACTIVE)
-                .getSingleResult();
-        return Optional.ofNullable(stay);
-    }
-
-    @Override
-    public void softDelete(Long id) {
-        String jpql = "UPDATE Stay i SET i.status = :status WHERE i.id = :id";
-        em.createQuery(jpql)
-                .setParameter("status", Status.DELETED)
-                .setParameter("id", id)
-                .executeUpdate();
+                .getResultList()
+                .stream()
+                .findFirst();
     }
 }

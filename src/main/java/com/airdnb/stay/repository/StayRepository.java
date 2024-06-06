@@ -7,6 +7,4 @@ public interface StayRepository {
     Stay save(Stay stay);
 
     Optional<Stay> findById(Long id);
-
-    void softDelete(Long id);
 }

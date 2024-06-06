@@ -65,6 +65,10 @@ public class Stay {
         this.type = type;
     }
 
+    public void softDelete() {
+        this.status = Status.DELETED;
+    }
+
     public enum StayType {
         APT, PENSION, HOTEL;
 

@@ -66,6 +66,12 @@ public class StayService {
         return stayRepository.findById(id).orElseThrow(() -> new NotFoundException("id와 일치하는 숙소를 찾을 수 없습니다."));
     }
 
+    @Transactional
+    public void softDeleteStay(Long id) {
+        Stay stay = findStayById(id);
+        stay.softDelete();
+    }
+
     private Stay buildStay(StayCreateRequest stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());
         Member host = getHost(stayCreateRequest.getHostId());

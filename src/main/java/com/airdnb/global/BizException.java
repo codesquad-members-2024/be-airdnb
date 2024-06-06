@@ -10,6 +10,11 @@ public class BizException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
+    public BizException(String message, HttpStatus httpStatus, Throwable cause) {
+        super(message, cause);
+        this.httpStatus = httpStatus;
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
