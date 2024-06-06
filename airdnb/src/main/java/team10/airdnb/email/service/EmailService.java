@@ -2,27 +2,31 @@ package team10.airdnb.email.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import team10.airdnb.utils.redis.RedisUtil;
 
 import java.util.Random;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EmailService {
     private static final int MAX_AUTH_NUMBER_LIMIT = 6;
     private static final int MAX_RANDOM_NUMBER_LIMIT = 10;
     private static final String ENCODING = "UTF-8";
+    private static final long AUTH_NUMBER_TTL = 60 * 5L; // 5분
 
     @Value("${spring.mail.username}")
     private String mailUsername;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+    private final RedisUtil redisUtil;
 
     public String joinEmail(String email) {
         String authNumber = makeRandomNumber();    // 인증번호를 생성
@@ -38,15 +42,18 @@ public class EmailService {
                         "인증번호를 입력해주세요"; //이메일 내용 삽입
 
         mailSend(setFrom, toMail, title, content);
+
+        saveAuthNumberAtRedis(toMail, authNumber);
+
         return authNumber;
     }
 
-    public boolean mailAuthCheck(String email, String authNumber) {
-        // 1) redis에서 email에 해당하는 auth number 찾기 -> true
+    public boolean checkAuthNum(String email, String authNumber) {
+        return redisUtil.getData(email).equals(authNumber);
+    }
 
-        // 2) 아닐경우 false
-
-        return false;
+    private void saveAuthNumberAtRedis(String email, String authNumber) {
+        redisUtil.setDataExpire(email, authNumber, AUTH_NUMBER_TTL);
     }
 
     private String makeRandomNumber() {    // 6자리의 auth number 를 만드는 코드
@@ -72,6 +79,7 @@ public class EmailService {
         } catch (MessagingException e) {//이메일 서버에 연결할 수 없거나, 잘못된 이메일 주소를 사용하거나, 인증 오류가 발생하는 등 오류
             log.error(e.getMessage());
         }
+
     }
 
 }
