@@ -51,7 +51,7 @@ public class ProductService {
         //인원수를 설정하지 않았으면 무조건 true
         if (headCount == null) return true;
 
-        return accommodationService.isAvailableOccupancy(products.getLast().getAccommodation(), headCount);
+        return accommodationService.isAvailableOccupancy(products.get(0).getAccommodation(), headCount);
     }
 
     private boolean isAvailableInDateRange(List<ProductEntity> products, LocalDate checkIn, LocalDate checkOut) {
