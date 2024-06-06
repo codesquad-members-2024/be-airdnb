@@ -1,76 +1,117 @@
-function validateEmail(email) {
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const emailVerifyBtn = document.getElementById('email-verify-btn');
+    const authCodeContainer = document.getElementById('auth-code-container');
+    const passwordContainer = document.getElementById('password-container');
+    const signupBtn = document.getElementById('signup-btn');
 
-function validatePassword(password) {
-    return password.trim().length >= 4;
-}
-
-function handleSignupButtonClick() {
-    var signupBtn = document.getElementById('signup-btn');
-    var authCodeContainer = document.getElementById('auth-code-container');
-    var nextBtn = document.getElementById('next-btn');
-    var adminId = document.getElementById('admin-id');
-    var password = document.getElementById('password');
-
-    // Check if ID and password are not empty
-    if (adminId.value.trim() === "" || password.value.trim() === "") {
-        alert("아이디, 비밀번호는 공백이 될 수 없습니다.");
-        return;
+    function validateEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
 
-    // Check if the ID is in email format
-    if (!validateEmail(adminId.value)) {
-        alert("유효한 이메일 주소를 입력하세요.");
-        adminId.value = "";
-        adminId.focus();
-        return;
+    function validatePassword(password) {
+        return password.trim().length >= 4;
     }
 
-    // Check if the password length is less than 4
-    if (!validatePassword(password.value)) {
-        alert("비밀번호는 4자 이상이어야 합니다.");
-        password.value = "";
-        return;
+    function validateAuthCode(authCode) {
+        var authCodeRegex = /^\d{6}$/;
+        return authCodeRegex.test(authCode);
     }
 
-    // Disable the ID and password fields
-    adminId.disabled = true;
+    function handleEmailVerifyButtonClick() {
+        var adminId = document.getElementById('admin-id');
 
-    // Prepare data to be sent
-    var data = {
-        adminId: adminId.value,
-    };
+        if (adminId.value.trim() === "") {
+            alert("아이디는 공백이 될 수 없습니다.");
+            return;
+        }
 
-    // Send data to the server
-    fetch('/admin/send-mail', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            // Handle response
-            // For example, show a success message or redirect to another page
-            console.log(response);
+        if (!validateEmail(adminId.value)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            adminId.value = "";
+            adminId.focus();
+            return;
+        }
+
+        adminId.disabled = true;
+        emailVerifyBtn.disabled = true;
+
+        var data = {
+            adminId: adminId.value,
+        };
+
+        fetch('/admin/send-mail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         })
-        .catch(error => {
-            console.error('Error:', error);
-            // Handle error
-        });
+            .then(response => {
+                console.log(response);
+                // You can add more actions based on the response if needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
-    // Hide the signup button and show the auth code input and next button
-    signupBtn.classList.add('hidden');
-    authCodeContainer.classList.remove('hidden');
-    nextBtn.classList.remove('hidden');
-}
+        authCodeContainer.classList.remove('hidden');
+        passwordContainer.classList.remove('hidden');
+        signupBtn.classList.remove('hidden');
+    }
 
-function handleNextButtonClick() {
-    // Add your logic for the next button here
-    // This function will be executed when the next button is clicked
-}
+    function handleSignupButtonClick() {
+        var adminId = document.getElementById('admin-id');
+        var authCode = document.getElementById('auth-code');
+        var password = document.getElementById('password');
 
-document.getElementById('signup-btn').addEventListener('click', handleSignupButtonClick);
-document.getElementById('next-btn').addEventListener('click', handleNextButtonClick);
+        if (adminId.value.trim() === "" || password.value.trim() === "") {
+            alert("아이디, 비밀번호는 공백이 될 수 없습니다.");
+            return;
+        }
+
+        if (!validateEmail(adminId.value)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            adminId.value = "";
+            adminId.focus();
+            return;
+        }
+
+        if (!validatePassword(password.value)) {
+            alert("비밀번호는 4자 이상이어야 합니다.");
+            password.value = "";
+            return;
+        }
+
+        if (!validateAuthCode(authCode.value)) {
+            alert("인증번호는 6자리 숫자여야 합니다.");
+            authCode.value = "";
+            authCode.focus();
+            return;
+        }
+
+        var data = {
+            adminId: adminId.value,
+            authCode: authCode.value,
+            password: password.value,
+        };
+
+        fetch('/admin/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response);
+                // Handle response, for example show a success message or redirect
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    emailVerifyBtn.addEventListener('click', handleEmailVerifyButtonClick);
+    signupBtn.addEventListener('click', handleSignupButtonClick);
+});
