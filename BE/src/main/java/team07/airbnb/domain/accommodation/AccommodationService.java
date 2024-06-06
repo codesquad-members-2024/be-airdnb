@@ -7,6 +7,7 @@ import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.util.GeometryHelper;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +28,13 @@ public class AccommodationService {
 
     public void addAccommodation(AccommodationEntity newAccommodation) {
         accommodationRepository.save(newAccommodation);
+    }
+
+    public AccommodationEntity findById(long id) {
+        return getAccommodationById(id);
+    }
+
+    private AccommodationEntity getAccommodationById(long id) throws NoSuchElementException {
+        return accommodationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 숙소"));
     }
 }

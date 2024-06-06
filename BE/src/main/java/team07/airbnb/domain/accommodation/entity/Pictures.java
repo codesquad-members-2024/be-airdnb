@@ -1,10 +1,10 @@
 package team07.airbnb.domain.accommodation.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +19,13 @@ public class Pictures {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    private AccommodationEntity accommodation;
+    @Column(name = "accommodation_id")
+    private Long accommodationId;
 
     private String url;
 
-    public Pictures(AccommodationEntity accommodation, String url) {
-        this.accommodation = accommodation;
+    public Pictures(Long accommodationId, String url) {
+        this.accommodationId = accommodationId;
         this.url = url;
     }
 }

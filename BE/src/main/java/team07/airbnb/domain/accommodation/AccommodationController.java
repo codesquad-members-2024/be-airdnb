@@ -2,6 +2,7 @@ package team07.airbnb.domain.accommodation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,5 +47,10 @@ public class AccommodationController {
         accommodationService.addAccommodation(
                 createRequest.toEntity(host)
         );
+    }
+
+    @GetMapping("/{id}")
+    public AccommodationEntity accommodationDetail(@PathVariable long id){
+        return accommodationService.findById(id);
     }
 }
