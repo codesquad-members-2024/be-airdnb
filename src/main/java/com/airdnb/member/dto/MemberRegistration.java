@@ -1,24 +1,22 @@
 package com.airdnb.member.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 @Builder
 public class MemberRegistration {
 
+    @Email(message = "올바른 이메일 형식이 아닙니다.")
     @NotBlank
-    private String id;
+    String id;
     @NotBlank
-    private String password;
+    String password;
     @NotBlank
-    private String name;
+    String name;
     @NotBlank
-    private String role;
+    String role;
 
 }

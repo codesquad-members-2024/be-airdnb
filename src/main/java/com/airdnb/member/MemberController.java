@@ -19,8 +19,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<MemberRegistration> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
-        memberService.saveMember(memberRegistration);
+    public ResponseEntity<?> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
+        memberService.register(memberRegistration);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(memberRegistration.getId())
