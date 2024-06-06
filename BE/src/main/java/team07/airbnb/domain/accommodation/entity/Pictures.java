@@ -7,9 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "ACCOMMODATION_PICTURE")
 public class Pictures {
@@ -21,4 +23,9 @@ public class Pictures {
     private AccommodationEntity accommodation;
 
     private String url;
+
+    public Pictures(AccommodationEntity accommodation, String url) {
+        this.accommodation = accommodation;
+        this.url = url;
+    }
 }

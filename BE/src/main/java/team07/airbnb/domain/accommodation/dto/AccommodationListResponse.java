@@ -16,7 +16,7 @@ public record AccommodationListResponse(
         return new AccommodationListResponse(
                 accomodation.getId(),
                 accomodation.getName(),
-                !accomodation.getImages().isEmpty() ? accomodation.getImages().get(0).getUrl() : null,
+                !accomodation.getPictures().isEmpty() ? accomodation.getPictures().get(0).getUrl() : null,
                 accomodation.getAddress(),
                 accomodation.getType()
         );

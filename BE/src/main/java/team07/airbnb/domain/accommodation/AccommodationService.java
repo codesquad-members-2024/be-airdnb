@@ -24,4 +24,8 @@ public class AccommodationService {
     public List<AccommodationEntity> findAllAccommodations() {
         return accommodationRepository.findAll();
     }
+
+    public void addAccommodation(AccommodationEntity newAccommodation) {
+        accommodationRepository.save(newAccommodation);
+    }
 }
