@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team10.airdnb.admin.controller.request.AdminSignupRequest;
 import team10.airdnb.admin.controller.request.AdminEmailRequest;
+import team10.airdnb.admin.controller.response.AdminSignupResponse;
 import team10.airdnb.admin.entity.Admin;
 import team10.airdnb.admin.service.AdminService;
 import team10.airdnb.email.service.EmailService;
@@ -24,18 +25,24 @@ public class AdminRestController {
     private final AdminService adminService;
 
     @PostMapping
-    public ResponseEntity<?> adminSignup(@RequestBody @Valid AdminSignupRequest request) {
+    public ResponseEntity<AdminSignupResponse> adminSignup(@RequestBody @Valid AdminSignupRequest request) {
         Admin admin = adminService.registerAdmin(request);
-        log.debug("admin : {}", admin.getAdminId());
-        return ResponseEntity.ok(admin);
+
+        log.debug("admin 회원가입 완료 : {}", admin.getAdminId());
+
+        AdminSignupResponse response = new AdminSignupResponse(admin.getAdminId());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/send-mail")
     public ResponseEntity<?> sendMail(@RequestBody @Valid AdminEmailRequest request) {
-        log.debug("request {}", request.adminId());
-        return ResponseEntity.ok(emailService.joinEmail(request.adminId()));
-    }
+        String authNumber = emailService.joinEmail(request);
 
+        log.debug("발급된 AuthCode : {}", authNumber);
+
+        return ResponseEntity.ok().build();
+    }
 
 }
 

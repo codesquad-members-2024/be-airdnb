@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import team10.airdnb.admin.controller.request.AdminEmailRequest;
 import team10.airdnb.utils.redis.RedisUtil;
 
 import java.util.Random;
@@ -28,11 +29,11 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final RedisUtil redisUtil;
 
-    public String joinEmail(String email) {
+    public String joinEmail(AdminEmailRequest request) {
         String authNumber = makeRandomNumber();    // 인증번호를 생성
 
         String setFrom = mailUsername; // email-config에 설정한 자신의 이메일 주소를 입력
-        String toMail = email;
+        String toMail = request.adminId();
         String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목
         String content =
                 "air-dnb 어드민 인증 페이지 인증번호 메일입니다." +    //html 형식으로 작성 !
