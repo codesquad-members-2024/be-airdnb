@@ -37,9 +37,9 @@ public class AdminRestController {
 
     @PostMapping("/send-mail")
     public ResponseEntity<?> sendMail(@RequestBody @Valid AdminEmailRequest request) {
-        String authNumber = emailService.joinEmail(request);
+        String authCode = emailService.joinEmail(request);
 
-        log.debug("발급된 AuthCode : {}", authNumber);
+        log.debug("발급된 AuthCode : {}", authCode);
 
         return ResponseEntity.ok().build();
     }

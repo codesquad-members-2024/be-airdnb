@@ -12,7 +12,7 @@ public record AdminSignupRequest(
 
         @Size(max = 6, min = 6, message = "인증번호는 6자로 입력해주세요.")
         @NotBlank(message = "인증 번호는 비워둘 수 없습니다.")
-        String authNumber,
+        String authCode,
 
         @NotBlank(message = "비밀번호는 비워둘 수 없습니다.")
         String password

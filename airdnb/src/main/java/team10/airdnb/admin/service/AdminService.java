@@ -16,13 +16,10 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     public Admin registerAdmin(AdminSignupRequest request) {
-        // 1) 회원가입 폼에 대한 검증
-        emailService.checkAuthNum(request.adminId(), request.authNumber());
+        emailService.validateAuthCode(request.adminId(), request.authCode());
 
-        // 2) Request Dto를 Entity로 변환
         Admin admin = request.toEntity();
 
-        // 3) admin Repository에 저장
         return adminRepository.save(admin);
     }
 }
