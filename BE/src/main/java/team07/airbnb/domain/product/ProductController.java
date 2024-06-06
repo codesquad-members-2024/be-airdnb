@@ -2,10 +2,13 @@ package team07.airbnb.domain.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.AccommodationService;
+import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.product.dto.ProductListResponse;
 
 import java.time.LocalDate;
@@ -30,5 +33,13 @@ public class ProductController {
         return productService.findAvailableInDateRange(
                 accommodationService.findNearbyAccommodations(longitude, latitude, distance),
                 checkIn, checkOut);
+    }
+
+    @PostMapping()
+    public void createProduct(@RequestBody ProductCreateRequest request) {
+        AccommodationEntity accommodation = accommodationService.findById(request.accommodationId());
+        int price = request.price() == null ? accommodation.getBasePricePerDay() : request.price();
+
+        accommodation.addProduct(request.date(), price);
     }
 }
