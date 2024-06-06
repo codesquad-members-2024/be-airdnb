@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @GetMapping
+    @GetMapping("/register")
     public String getAdminRegisterPage() {
         return "admin/main"; // "admin/main.html" 템플릿을 반환
+    }
+
+    @GetMapping("/login")
+    public String getAdminLoginPage() {
+        return "admin/login";
     }
 }

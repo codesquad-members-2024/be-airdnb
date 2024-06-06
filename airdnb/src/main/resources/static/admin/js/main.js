@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const emailVerifyBtn = document.getElementById('email-verify-btn');
     const authCodeContainer = document.getElementById('auth-code-container');
     const passwordContainer = document.getElementById('password-container');
@@ -104,6 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => {
                 console.log(response);
+                if (response.status === 200) {
+                    alert("회원가입 성공!");
+                    window.location.href = '/admin/login'; // 상태 코드가 200이면 /admin/login 페이지로 이동
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
