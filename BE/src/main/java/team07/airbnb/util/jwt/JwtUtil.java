@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     private long jwtExpirationMs;
@@ -51,6 +53,7 @@ public class JwtUtil {
         Claims claims = extractClaims(token);
 
         String userJson = claims.get("user", String.class);
+        log.info(userJson);
 
         return mapper.readValue(userJson, UserEntity.class);
     }

@@ -28,7 +28,7 @@ public class JwtUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey()));
+        return Collections.singleton(new SimpleGrantedAuthority(user.stringRole()));
     }
 
     @Override

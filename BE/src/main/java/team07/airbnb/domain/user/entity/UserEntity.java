@@ -44,7 +44,7 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public String getRoleKey() {
+    public String stringRole() {
         return this.role.getKey();
     }
 }

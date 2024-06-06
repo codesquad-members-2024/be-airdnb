@@ -20,10 +20,16 @@ public class JacksonConfig {
     public ObjectMapper objectMapper(GeometryHelper geometryHelper) {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
+
         module.addSerializer(LocalDateTime.class, new CustomLocalDateTimeSerializer());
-        module.addSerializer(Point.class, new CustomPointSerializer());
+        module.addDeserializer(LocalDateTime.class, new CustomLocalDateTimeDeserializer());
+
+        module.addSerializer(LocalDate.class, new CustomLocalDateSerializer());
         module.addDeserializer(LocalDate.class, new CustomLocalDateDeserializer());
+
+        module.addSerializer(Point.class, new CustomPointSerializer());
         module.addDeserializer(Point.class, new CustomPointDeserializer(geometryHelper));
+
         mapper.registerModule(module);
 
         return mapper;
