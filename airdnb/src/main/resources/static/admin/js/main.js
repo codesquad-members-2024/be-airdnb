@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => {
                 console.log(response);
-                // You can add more actions based on the response if needed
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleSignupButtonClick() {
         var adminId = document.getElementById('admin-id');
-        var authNumber = document.getElementById('auth-code');
+        var authCode = document.getElementById('auth-code');
         var password = document.getElementById('password');
 
         if (adminId.value.trim() === "" || password.value.trim() === "") {
@@ -83,16 +82,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if (!validateAuthCode(authNumber.value)) {
+        if (!validateAuthCode(authCode.value)) {
             alert("인증번호는 6자리 숫자여야 합니다.");
-            authNumber.value = "";
-            authNumber.focus();
+            authCode.value = "";
+            authCode.focus();
             return;
         }
 
         var data = {
             adminId: adminId.value,
-            authNumber: authNumber.value,
+            authCode: authCode.value,
             password: password.value,
         };
 
@@ -105,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
             .then(response => {
                 console.log(response);
-                // Handle response, for example show a success message or redirect
             })
             .catch(error => {
                 console.error('Error:', error);
