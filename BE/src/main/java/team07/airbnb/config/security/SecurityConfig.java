@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:3000", "https://squadbnb.site:443", "https://squadbnb.site:3000", "https://squadbnb.site:80"));
-                    config.setAllowedMethods(Collections.singletonList("*"));
+                    config.setAllowedMethods(List.of("POST", "GET", "PUT", "DELETE"));
                     config.setAllowCredentials(true);
                     config.setAllowedHeaders(Collections.singletonList("*"));
                     return config;
