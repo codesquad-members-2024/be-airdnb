@@ -1,5 +1,6 @@
 package team8.airbnb.user;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,16 +20,15 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "user_name")
+  @Column(name = "user_name", unique = true)
   private String username;
 
   @Column(name = "user_password")
   private String password;
 
-  @Column(name = "user_email")
+  @Column(name = "user_email", unique = true)
   private String email;
 
-  @Column(name = "user_phone_number")
+  @Column(name = "user_phone_number", unique = true)
   private String phoneNumber;
-
 }
