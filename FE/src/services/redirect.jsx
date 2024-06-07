@@ -9,7 +9,9 @@ const RedirectPage = (provider) => {
   const handleOAuth = async (code) => {
     try {
       const response = await axios.get(
-        `https://squadbnb.site/api/oauth/login/${provider}?code=${code}`
+        `https://squadbnb.site/api/login/oauth2/code/${String(
+          provider.provider
+        )}?code=${code}`
       );
       const data = response.data; // 응답 데이터
       console.log("로그인 성공: " + data);
@@ -17,10 +19,11 @@ const RedirectPage = (provider) => {
       localStorage.setItem("userId", data.userId);
       localStorage.setItem("username", data.username);
 
-      console.log(data);
-      navigate("/success");
+      alert("로그인 성공: " + data.username + "님 환영합니다!");
+      navigate("/");
     } catch (error) {
-      navigate("/fail");
+      alert("로그인 실패: " + error.response.data.message);
+      navigate("/");
     }
   };
 
