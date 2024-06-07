@@ -1,7 +1,7 @@
 package com.airdnb.stay.repository;
 
-import com.airdnb.global.status.Status;
 import com.airdnb.stay.entity.Stay;
+import com.airdnb.stay.entity.Stay.StayStatus;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class StayJpaRepository implements StayRepository {
         String jpql = "SELECT s FROM Stay s WHERE s.id = :id AND s.status = :status";
         return em.createQuery(jpql, Stay.class)
                 .setParameter("id", id)
-                .setParameter("status", Status.ACTIVE)
+                .setParameter("status", StayStatus.ACTIVE)
                 .getResultList()
                 .stream()
                 .findFirst();

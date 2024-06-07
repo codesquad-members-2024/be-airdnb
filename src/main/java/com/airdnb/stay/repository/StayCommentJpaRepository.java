@@ -1,7 +1,7 @@
 package com.airdnb.stay.repository;
 
-import com.airdnb.global.status.Status;
 import com.airdnb.stay.entity.StayComment;
+import com.airdnb.stay.entity.StayComment.CommentStatus;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class StayCommentJpaRepository implements StayCommentRepository {
         String jpql = "SELECT sc FROM StayComment sc WHERE sc.stay.id = :stayId AND sc.status = :status";
         return em.createQuery(jpql, StayComment.class)
                 .setParameter("stayId", stayId)
-                .setParameter("status", Status.ACTIVE)
+                .setParameter("status", CommentStatus.ACTIVE)
                 .getResultList();
     }
 
@@ -27,7 +27,7 @@ public class StayCommentJpaRepository implements StayCommentRepository {
 
         return (Double) em.createQuery(jpql)
                 .setParameter("stayId", stayId)
-                .setParameter("status", Status.ACTIVE)
+                .setParameter("status", CommentStatus.ACTIVE)
                 .getSingleResult();
     }
 

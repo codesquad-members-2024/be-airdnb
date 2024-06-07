@@ -1,7 +1,6 @@
 package com.airdnb.stay;
 
 import com.airdnb.global.NotFoundException;
-import com.airdnb.global.status.Status;
 import com.airdnb.image.ImageService;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.MemberService;
@@ -9,7 +8,9 @@ import com.airdnb.member.entity.Member;
 import com.airdnb.stay.dto.StayCommentQueryResponse;
 import com.airdnb.stay.dto.StayCreateRequest;
 import com.airdnb.stay.dto.StayDetailQueryResponse;
+import com.airdnb.stay.entity.Location;
 import com.airdnb.stay.entity.Stay;
+import com.airdnb.stay.entity.Stay.StayStatus;
 import com.airdnb.stay.entity.Stay.StayType;
 import com.airdnb.stay.entity.StayComment;
 import com.airdnb.stay.repository.StayCommentRepository;
@@ -51,7 +52,9 @@ public class StayService {
                 .imageUrl(stay.getImage().getUrl())
                 .price(stay.getPrice())
                 .maxGuests(stay.getMaxGuests())
-                .location(stay.getLocation())
+                .address(stay.getLocation().getAddress())
+                .latitude(stay.getLocation().getLatitude())
+                .longitude(stay.getLocation().getLongitude())
                 .startDate(stay.getStartDate())
                 .endDate(stay.getEndDate())
                 .type(stay.getType().name())
@@ -76,6 +79,8 @@ public class StayService {
         Image image = getImage(stayCreateRequest.getImageId());
         Member host = getHost(stayCreateRequest.getHostId());
         StayType stayType = StayType.of(stayCreateRequest.getType());
+        Location location = new Location(stayCreateRequest.getAddress(), stayCreateRequest.getLatitude(),
+                stayCreateRequest.getLongitude());
 
         return Stay.builder()
                 .name(stayCreateRequest.getName())
@@ -84,9 +89,9 @@ public class StayService {
                 .host(host)
                 .startDate(stayCreateRequest.getStartDate())
                 .endDate(stayCreateRequest.getEndDate())
-                .status(Status.ACTIVE)
+                .status(StayStatus.ACTIVE)
                 .maxGuests(stayCreateRequest.getMaxGuests())
-                .location(stayCreateRequest.getLocation())
+                .location(location)
                 .type(stayType)
                 .build();
     }

@@ -26,7 +26,11 @@ public class StayCreateRequest {
     @NotNull
     private final Integer maxGuests;
     @NotBlank
-    private final String location;
+    private final String address;
+    @NotNull
+    private final Double latitude;
+    @NotNull
+    private final Double longitude;
     @NotBlank
     private final String type;
 }
