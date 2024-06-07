@@ -1,6 +1,5 @@
 package com.airdnb.stay.entity;
 
-import com.airdnb.global.status.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,15 +30,20 @@ public class StayComment {
     private LocalDateTime createdAt;
     private Float rating;
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private CommentStatus status;
 
     @Builder
-    public StayComment(Stay stay, String writer, String content, LocalDateTime createdAt, Float rating, Status status) {
+    public StayComment(Stay stay, String writer, String content, LocalDateTime createdAt, Float rating,
+                       CommentStatus status) {
         this.stay = stay;
         this.writer = writer;
         this.content = content;
         this.createdAt = createdAt;
         this.rating = rating;
         this.status = status;
+    }
+
+    public enum CommentStatus {
+        ACTIVE, DELETED
     }
 }

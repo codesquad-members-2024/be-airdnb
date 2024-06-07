@@ -1,6 +1,5 @@
 package com.airdnb.member.entity;
 
-import com.airdnb.global.status.Status;
 import com.airdnb.image.entity.Image;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,7 +32,7 @@ public class Member {
     @JoinColumn(name = "img_id")
     private Image image;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private MemberStatus status;
 
     @Builder
     public Member(String id, String password, String name, String role) {
@@ -41,6 +40,10 @@ public class Member {
         this.password = password;
         this.name = name;
         this.role = role;
-        this.status = Status.ACTIVE;
+        this.status = MemberStatus.ACTIVE;
+    }
+
+    public enum MemberStatus {
+        ACTIVE, DELETED
     }
 }

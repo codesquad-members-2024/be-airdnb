@@ -1,10 +1,10 @@
 package com.airdnb.stay.entity;
 
 import com.airdnb.global.NotFoundException;
-import com.airdnb.global.status.Status;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.entity.Member;
 import com.airdnb.staytag.StayTag;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,11 +36,12 @@ public class Stay {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer maxGuests;
-    private String location;
+    @Embedded
+    private Location location;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StayStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "host")
+    @JoinColumn(name = "host_id")
     private Member host;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "img_id")
@@ -52,7 +53,7 @@ public class Stay {
 
     @Builder
     public Stay(String name, Integer price, LocalDateTime startDate, LocalDateTime endDate, Integer maxGuests,
-                String location, Status status, Member host, Image image, StayType type) {
+                Location location, StayStatus status, Member host, Image image, StayType type) {
         this.name = name;
         this.price = price;
         this.startDate = startDate;
@@ -66,7 +67,7 @@ public class Stay {
     }
 
     public void softDelete() {
-        this.status = Status.DELETED;
+        this.status = StayStatus.DELETED;
     }
 
     public enum StayType {
@@ -78,5 +79,9 @@ public class Stay {
                     .findAny()
                     .orElseThrow(() -> new NotFoundException("일치하는 숙소 타입을 찾을 수 없습니다."));
         }
+    }
+
+    public enum StayStatus {
+        ACTIVE, RESERVED, DELETED
     }
 }

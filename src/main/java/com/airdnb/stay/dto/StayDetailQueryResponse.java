@@ -15,7 +15,9 @@ public class StayDetailQueryResponse {
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
     private final Integer maxGuests;
-    private final String location;
+    private final String address;
+    private final Double latitude;
+    private final Double longitude;
     private final String hostName;
     private final String imageUrl;
     private final String type;

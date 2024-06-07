@@ -1,6 +1,5 @@
 package com.airdnb.image.entity;
 
-import com.airdnb.global.status.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,11 +20,15 @@ public class Image {
     private Long id;
     private String url;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ImageStatus status;
 
     @Builder
-    public Image(String url, Status status) {
+    public Image(String url, ImageStatus status) {
         this.url = url;
         this.status = status;
+    }
+
+    public enum ImageStatus {
+        ACTIVE, DELETED
     }
 }
