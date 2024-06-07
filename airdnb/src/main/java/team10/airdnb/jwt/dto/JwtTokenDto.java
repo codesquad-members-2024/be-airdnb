@@ -1,4 +1,4 @@
-package team10.airdnb.oauth.jwt.dto;
+package team10.airdnb.jwt.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

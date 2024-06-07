@@ -1,4 +1,4 @@
-package team10.airdnb.oauth.jwt.constant;
+package team10.airdnb.jwt.constant;
 
 public enum TokenType {
 

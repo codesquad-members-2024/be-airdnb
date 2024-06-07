@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team10.airdnb.member.constant.MemberType;
 import team10.airdnb.oauth.DateTimeUtils;
-import team10.airdnb.oauth.jwt.dto.JwtTokenDto;
+import team10.airdnb.jwt.dto.JwtTokenDto;
 
 import java.time.LocalDateTime;
 

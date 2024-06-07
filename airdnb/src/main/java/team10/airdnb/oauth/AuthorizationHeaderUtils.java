@@ -1,9 +1,9 @@
 package team10.airdnb.oauth;
 
 import org.springframework.util.StringUtils;
-import team10.airdnb.oauth.error.ErrorCode;
-import team10.airdnb.oauth.error.exception.AuthenticationException;
-import team10.airdnb.oauth.jwt.constant.GrantType;
+import team10.airdnb.error.ErrorCode;
+import team10.airdnb.oauth.exception.AuthenticationException;
+import team10.airdnb.jwt.constant.GrantType;
 
 public class AuthorizationHeaderUtils {
 

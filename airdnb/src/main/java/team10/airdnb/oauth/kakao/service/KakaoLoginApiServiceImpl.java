@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import team10.airdnb.member.constant.MemberType;
-import team10.airdnb.oauth.jwt.constant.GrantType;
+import team10.airdnb.jwt.constant.GrantType;
 import team10.airdnb.oauth.kakao.client.KakaoUserInfoClient;
 import team10.airdnb.oauth.kakao.dto.KakaoUserInfoResponseDto;
 import team10.airdnb.oauth.model.OAuthAttributes;
