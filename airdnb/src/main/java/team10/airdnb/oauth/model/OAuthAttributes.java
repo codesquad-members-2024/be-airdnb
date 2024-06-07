@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import team10.airdnb.Member.constant.MemberType;
-import team10.airdnb.Member.constant.Role;
 import team10.airdnb.Member.entity.Member;
 
 @ToString
