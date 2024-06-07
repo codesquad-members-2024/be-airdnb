@@ -230,5 +230,5 @@ gradle-app.setting
 
 # Application configuration
 /application.properties
-
+previous-compilation-data.bin
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,intellij,java,gradle
