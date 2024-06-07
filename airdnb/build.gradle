@@ -27,12 +27,21 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.32'                          // Lombok 의존성 추가
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign' //OpenFeign
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'                               //jwt
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'  // thymeleaf 의존성 추가
+//    implementation 'io.jsonwebtoken:jjwt:0.9.1'                               //jwt
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.32'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // json converter
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:3.0.1'
 }
 
 dependencyManagement {
