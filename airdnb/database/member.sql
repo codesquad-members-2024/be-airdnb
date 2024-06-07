@@ -5,5 +5,7 @@ CREATE TABLE member (
                         profile VARCHAR(255),
                         email VARCHAR(255),
                         member_name VARCHAR(255),
+                        refresh_token VARCHAR(255),
+                        token_expiration_time TIMESTAMP
 );
 
