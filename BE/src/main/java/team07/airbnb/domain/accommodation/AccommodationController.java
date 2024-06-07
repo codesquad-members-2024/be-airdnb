@@ -14,6 +14,7 @@ import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.auth.aop.Authenticated;
 import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;
 
 import java.util.List;
@@ -44,9 +45,9 @@ public class AccommodationController {
     }
 
     @PostMapping
-    @Authenticated
-    public AccommodationEntity createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
-        return accommodationService.addAccommodation(
+    @Authenticated(Role.HOST)
+    public void createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
+        accommodationService.addAccommodation(
                 createRequest.toEntity(user)
         );
     }

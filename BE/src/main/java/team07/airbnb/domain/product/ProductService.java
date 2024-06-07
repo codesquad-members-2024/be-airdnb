@@ -28,13 +28,7 @@ public class ProductService {
 
         List<Long> accomodationIds = accommodations.stream().map(AccommodationEntity::getId).toList();
 
-        Map<Long, List<ProductEntity>> products = productRepository.findAllByAccommodationIdInAndStatus(accomodationIds, OPEN)
-                .stream()
-                .collect(Collectors.groupingBy(p -> p.getAccommodation().getId()));
-
-        Map<Long, List<ProductEntity>> availableProducts = products.entrySet().stream()
-                .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut) && isAvailablePeopleCount(entry.getValue(), headCount))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Long, List<ProductEntity>> availableProducts = getAvailableProducts(checkIn, checkOut, headCount, accomodationIds);
 
         // Calculate average price per day and Make Response List
         return availableProducts.keySet().stream().map(key -> {
@@ -46,6 +40,17 @@ public class ProductService {
                 }
         ).toList();
     }
+
+    public Map<Long, List<ProductEntity>> getAvailableProducts(LocalDate checkIn, LocalDate checkOut, Integer headCount, List<Long> accomodationIds) {
+        Map<Long, List<ProductEntity>> products = productRepository.findAllByAccommodationIdInAndStatus(accomodationIds, OPEN)
+                .stream()
+                .collect(Collectors.groupingBy(p -> p.getAccommodation().getId()));
+
+        return products.entrySet().stream()
+                .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut) && isAvailablePeopleCount(entry.getValue(), headCount))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
 
     private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
         //인원수를 설정하지 않았으면 무조건 true

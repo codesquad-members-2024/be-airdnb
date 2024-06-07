@@ -4,11 +4,11 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
-public record BookingRequestInfo(
-        long accommodationId,
+public record BookingRequest(
+        Long accommodationId,
         @Nullable LocalDate checkIn,
         @Nullable LocalDate checkOut,
         @Nullable Integer headCount,
-        long avgPrice
+        Long avgPrice
 ) {
 }

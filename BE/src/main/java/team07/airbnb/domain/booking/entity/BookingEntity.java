@@ -8,9 +8,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.booking.price_policy.discount.DiscountPolicyEntity;
+import team07.airbnb.domain.discount.entity.DiscountPolicyEntity;
 import team07.airbnb.domain.booking.property.BookingStatus;
 import team07.airbnb.domain.payment.PaymentEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
@@ -22,24 +25,23 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "BOOKING")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BookingEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @OneToMany
     private List<ProductEntity> products;
     @ManyToOne
     private UserEntity booker;
-    private int adultHeadcount;
-    private int kidHeadcount;
+    private Integer headCount;
 
     private LocalDate checkin;
     private LocalDate checkout;
     private BookingStatus status;
-
-    @ManyToOne
-    private DiscountPolicyEntity discountPolicyEntity;
 
     @OneToOne
     private PaymentEntity payment;

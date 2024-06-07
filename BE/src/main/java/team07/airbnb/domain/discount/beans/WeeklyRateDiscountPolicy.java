@@ -1,10 +1,10 @@
-package team07.airbnb.domain.booking.price_policy.discount.beans;
+package team07.airbnb.domain.discount.beans;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import team07.airbnb.domain.booking.price_policy.RateCalculateUtil;
 
-@Component
+@Component("weeklyRateDiscountPolicy")
 @RequiredArgsConstructor
 public class WeeklyRateDiscountPolicy implements DiscountPolicy{
 

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.user.enums.Role;
 
+import java.io.Serializable;
+
 @Getter
 @Entity
 @Table(name = "USERS")

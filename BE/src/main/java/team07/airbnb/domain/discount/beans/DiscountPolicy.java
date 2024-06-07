@@ -1,4 +1,4 @@
-package team07.airbnb.domain.booking.price_policy.discount.beans;
+package team07.airbnb.domain.discount.beans;
 
 
 public interface DiscountPolicy {
