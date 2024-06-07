@@ -1,5 +1,6 @@
-package team07.airbnb.domain.user.util;
+package team07.airbnb.domain.auth;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,13 +23,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        validateJwt(request);
+        filterChain.doFilter(request, response);
+    }
+
+    public void validateJwt(HttpServletRequest request) throws JsonProcessingException {
         String jwt = resolveToken(request);
         if (jwt != null && jwtUtil.validateToken(jwt)) {
             UserEntity userEntity = jwtUtil.getUserEntity(jwt);
             Authentication authentication = new JwtAuthentication(jwt, userEntity, true);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {

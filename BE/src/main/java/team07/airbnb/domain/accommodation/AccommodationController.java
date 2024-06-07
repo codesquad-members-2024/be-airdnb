@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.dto.AccommodationCreateRequest;
 import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.domain.auth.aop.Authenticated;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.service.UserService;
-import team07.airbnb.util.UserHelper;
 
 import java.util.List;
 
@@ -44,9 +44,10 @@ public class AccommodationController {
     }
 
     @PostMapping
-    public void createAccomodation(@RequestBody AccommodationCreateRequest createRequest) {
+    @Authenticated
+    public void createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
         accommodationService.addAccommodation(
-                createRequest.toEntity(UserHelper.getCurrentUser())
+                createRequest.toEntity(user)
         );
     }
 

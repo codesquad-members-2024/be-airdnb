@@ -1,4 +1,4 @@
-package team07.airbnb.domain.user.util;
+package team07.airbnb.domain.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

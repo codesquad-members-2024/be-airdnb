@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.locationtech.jts.geom.Point;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import team07.airbnb.config.jackson.CustomLocalDateDeserializer;
-import team07.airbnb.config.jackson.CustomLocalDateTimeSerializer;
-import team07.airbnb.config.jackson.CustomPointSerializer;
+import team07.airbnb.config.jackson.deserializers.CustomLocalDateDeserializer;
+import team07.airbnb.config.jackson.deserializers.CustomLocalDateTimeDeserializer;
+import team07.airbnb.config.jackson.deserializers.CustomPointDeserializer;
+import team07.airbnb.config.jackson.serializers.CustomLocalDateSerializer;
+import team07.airbnb.config.jackson.serializers.CustomLocalDateTimeSerializer;
+import team07.airbnb.config.jackson.serializers.CustomPointSerializer;
 import team07.airbnb.util.GeometryHelper;
 
 import java.time.LocalDate;

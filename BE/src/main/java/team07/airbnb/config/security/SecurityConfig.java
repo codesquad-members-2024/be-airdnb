@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import team07.airbnb.domain.user.service.JwtAndOAuthUserService;
-import team07.airbnb.domain.user.util.JwtAuthenticationFilter;
+import team07.airbnb.domain.auth.JwtAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-                        .requestMatchers("/review/**", "/payment/**", "/booking/**").authenticated()
+//                        .requestMatchers("/review/**", "/payment/**", "/booking/**").authenticated()
 //                        .anyRequest().authenticated()
                             .anyRequest().permitAll()
                 )

@@ -3,23 +3,19 @@ package team07.airbnb.domain.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import team07.airbnb.domain.auth.JwtAuthentication;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
-import team07.airbnb.domain.user.util.JwtAuthentication;
-import team07.airbnb.domain.user.util.JwtUserDetails;
-import team07.airbnb.domain.user.util.OAuthAttributes;
+import team07.airbnb.domain.auth.JwtUserDetails;
+import team07.airbnb.domain.auth.OAuthAttributes;
 import team07.airbnb.util.jwt.JwtUtil;
-
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
@@ -61,6 +57,9 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
         log.info("create jwt : " + jwt);
 
         userDetails.setPassword(jwt);
+
+        JwtAuthentication authentication = new JwtAuthentication(jwt, user, true);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return userDetails;
     }

@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import team07.airbnb.domain.user.entity.UserEntity;
-import team07.airbnb.domain.user.util.JwtUserDetails;
+import team07.airbnb.domain.auth.JwtUserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @Slf4j

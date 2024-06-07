@@ -1,4 +1,4 @@
-package team07.airbnb.config.jackson;
+package team07.airbnb.config.jackson.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

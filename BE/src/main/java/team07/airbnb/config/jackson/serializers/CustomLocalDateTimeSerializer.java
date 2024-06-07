@@ -1,4 +1,4 @@
-package team07.airbnb.config.jackson;
+package team07.airbnb.config.jackson.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
