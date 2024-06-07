@@ -16,6 +16,10 @@ public enum ErrorCode {
     NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-007", "해당 토큰은 ACCESS TOKEN이 아닙니다."),
     FORBIDDEN_ADMIN(HttpStatus.FORBIDDEN, "A-008", "관리자 Role이 아닙니다."),
 
+    // 이메일
+    AUTH_CODE_NOT_EXISTS(HttpStatus.NOT_FOUND, "E-001", "인증 번호가 존재하지 않습니다."),
+    INVALID_AUTH_CODE(HttpStatus.UNAUTHORIZED, "E-002", "인증 번호가 일치하지 않습니다."),
+
     //회원
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(memberType : KAKAO)"),
     ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-002", "이미 가입된 회원 입니다."),
