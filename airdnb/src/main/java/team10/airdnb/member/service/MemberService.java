@@ -1,10 +1,10 @@
-package team10.airdnb.Member.service;
+package team10.airdnb.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team10.airdnb.Member.entity.Member;
-import team10.airdnb.Member.repository.MemberRepository;
+import team10.airdnb.member.entity.Member;
+import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.oauth.error.ErrorCode;
 import team10.airdnb.oauth.error.exception.AuthenticationException;
 import team10.airdnb.oauth.error.exception.BusinessException;

@@ -1,7 +1,7 @@
 package team10.airdnb.oauth.service;
 
 import org.springframework.stereotype.Service;
-import team10.airdnb.Member.constant.MemberType;
+import team10.airdnb.member.constant.MemberType;
 
 import java.util.Map;
 

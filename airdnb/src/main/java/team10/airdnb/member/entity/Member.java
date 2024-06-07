@@ -1,10 +1,10 @@
-package team10.airdnb.Member.entity;
+package team10.airdnb.member.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team10.airdnb.Member.constant.MemberType;
+import team10.airdnb.member.constant.MemberType;
 import team10.airdnb.oauth.DateTimeUtils;
 import team10.airdnb.oauth.jwt.dto.JwtTokenDto;
 
