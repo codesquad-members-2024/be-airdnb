@@ -7,16 +7,11 @@ import lombok.Value;
 
 @Value
 @Builder
-public class MemberRegistration {
+public class MemberVerification {
 
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     @NotBlank
     String id;
     @NotBlank
     String password;
-    @NotBlank
-    String name;
-    @NotBlank
-    String role;
-
 }

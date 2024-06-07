@@ -1,6 +1,7 @@
 package com.airdnb.member;
 
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.dto.MemberVerification;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,18 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<MemberRegistration> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
-        memberService.saveMember(memberRegistration);
+    public ResponseEntity<?> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
+        memberService.register(memberRegistration);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(memberRegistration.getId())
             .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyMember(@Valid @RequestBody MemberVerification memberVerification) {
+        return ResponseEntity.ok(memberService.verify(memberVerification));
     }
 
 }
