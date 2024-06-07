@@ -4,16 +4,17 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 @Slf4j
@@ -26,7 +27,8 @@ public class JwtUtil {
 
     @PostConstruct
     protected void init() {
-        this.key = Keys.hmacShaKeyFor(signatureSecretKey.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Decoders.BASE64.decode(signatureSecretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Value("${jwt.token-valid-time}")
@@ -44,14 +46,16 @@ public class JwtUtil {
 
     public String getToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        return token;
+        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return null;
     }
 
     public Boolean validateToken(String token) {
         try {
             log.info("token: {}", token);
-            log.info("secretKey: {}", key);
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             return true;
         } catch (SignatureException e) {
             log.info("유효하지않은 서명");
