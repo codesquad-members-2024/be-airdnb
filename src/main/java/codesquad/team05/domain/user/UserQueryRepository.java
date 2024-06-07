@@ -1,6 +1,8 @@
 package codesquad.team05.domain.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserQueryRepository extends JpaRepository<User, String> {
+// Querydsl 사용 Repository로 구현 예정
+@Repository
+public class UserQueryRepository {
 }
