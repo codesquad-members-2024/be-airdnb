@@ -26,31 +26,16 @@ jobs:
         cd ${{ github.workspace }}/FE
         echo "${{ secrets.FRONT_ENV }}" | base64 --decode > ./.env.production
 
-    - name: Build Docker image
-      run: |
+    - name: Build React App
+      run: | 
         cd ${{ github.workspace }}/FE
-        docker build -t kimjooyoung/squadbnb-prod-front:latest .
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Push Docker image
-      run: |
-        cd ${{ github.workspace }}/FE
-        docker push kimjooyoung/squadbnb-prod-front:latest
-
+        npm install
+        npm run build
     - name: Deploy to Prod Server
-      uses: appleboy/ssh-action@v0.1.5
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.EC2_HOST_PROD }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
-        script: |
-          cd /home/ubuntu/deploy
-          sudo ./deploy_front.sh -y
-
-
-          
+        source: "FE/dist/*"
+        target: "/home/ubuntu/deploy/nginx-vol/"
