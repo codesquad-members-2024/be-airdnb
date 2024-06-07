@@ -3,6 +3,7 @@ package com.team01.airdnb.reservation;
 import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,9 +23,6 @@ public class Reservation {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User userId;
   private Integer adults;
   private Integer children;
   private Integer infants;
@@ -33,7 +31,11 @@ public class Reservation {
   private LocalDate startDate;
   private LocalDate endDate;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
 }

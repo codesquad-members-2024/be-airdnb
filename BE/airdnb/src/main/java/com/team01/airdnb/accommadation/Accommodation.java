@@ -2,11 +2,12 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.comment.Comment;
+import com.team01.airdnb.host.Host;
 import com.team01.airdnb.image.Image;
 import com.team01.airdnb.reservation.Reservation;
-import com.team01.airdnb.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +16,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,19 +41,19 @@ public class Accommodation {
   private Integer maxInfants;
   private Integer maxPets;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "host_id")
+  private Host host;
 
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
 
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Image> images = new ArrayList<>();
+  private List<Image> images;
 
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Reservation> reservations;
 
-  @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private Amenity amenity;
 }
