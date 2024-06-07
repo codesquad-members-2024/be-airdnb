@@ -49,10 +49,7 @@ public class JwtUtil {
 
     public UserEntity getUserEntity(String token) throws JsonProcessingException {
         Claims claims = extractClaims(token);
-
         String userJson = claims.get("user", String.class);
-        log.info(userJson);
-
         return mapper.readValue(userJson, UserEntity.class);
     }
 
@@ -69,7 +66,7 @@ public class JwtUtil {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
         } catch (Exception e) {
-            // Log the exception or handle it as needed
+            log.error("Not Valid Token %s".formatted(token));
         }
         return false;
     }

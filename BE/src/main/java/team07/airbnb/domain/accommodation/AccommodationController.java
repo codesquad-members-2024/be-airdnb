@@ -45,8 +45,8 @@ public class AccommodationController {
 
     @PostMapping
     @Authenticated
-    public void createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
-        accommodationService.addAccommodation(
+    public AccommodationEntity createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
+        return accommodationService.addAccommodation(
                 createRequest.toEntity(user)
         );
     }

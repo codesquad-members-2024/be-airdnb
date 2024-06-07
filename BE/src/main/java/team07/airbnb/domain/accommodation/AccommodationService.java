@@ -26,8 +26,8 @@ public class AccommodationService {
         return accommodationRepository.findAll();
     }
 
-    public void addAccommodation(AccommodationEntity newAccommodation) {
-        accommodationRepository.save(newAccommodation);
+    public AccommodationEntity addAccommodation(AccommodationEntity newAccommodation) {
+        return accommodationRepository.save(newAccommodation);
     }
 
     public AccommodationEntity findById(long id) {
@@ -37,7 +37,7 @@ public class AccommodationService {
     public void deleteById(long id) {
         try {
             accommodationRepository.deleteById(id);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("존재하지 않는 숙소%d 를 삭제할 수 없습니다.".formatted(id));
         }
     }
