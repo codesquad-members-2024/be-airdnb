@@ -9,5 +9,4 @@ class AirDnbApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
