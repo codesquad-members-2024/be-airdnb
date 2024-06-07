@@ -1,29 +1,31 @@
-package com.team01.airdnb.accommadation;
+package com.team01.airdnb.wishlist;
 
+import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-public class Reservation {
+@Getter
+@Setter
+@Table(name = "wishlists")
+public class Wishlist {
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @ManyToOne
   @JoinColumn(name = "user_id")
-  private User userId;
+  private User user;
+
   @ManyToOne
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
-  private LocalDate startDate;
-  private LocalDate endDate;
-  private Integer adults;
-  private Integer children;
-  private Integer infants;
-  private Integer pets;
-  private Long price;
 }
