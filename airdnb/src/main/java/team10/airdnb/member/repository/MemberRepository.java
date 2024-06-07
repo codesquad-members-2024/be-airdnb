@@ -1,7 +1,7 @@
-package team10.airdnb.Member.repository;
+package team10.airdnb.member.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import team10.airdnb.Member.entity.Member;
+import team10.airdnb.member.entity.Member;
 
 import java.util.Optional;
 

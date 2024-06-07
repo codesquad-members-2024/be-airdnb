@@ -1,18 +1,20 @@
-package team10.airdnb.Member.service;
+package team10.airdnb.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team10.airdnb.Member.entity.Member;
-import team10.airdnb.Member.repository.MemberRepository;
-import team10.airdnb.oauth.error.ErrorCode;
-import team10.airdnb.oauth.error.exception.AuthenticationException;
-import team10.airdnb.oauth.error.exception.BusinessException;
-import team10.airdnb.oauth.error.exception.EntityNotFoundException;
+import team10.airdnb.member.entity.Member;
+import team10.airdnb.member.exception.MemberIdNotFoundException;
+import team10.airdnb.member.repository.MemberRepository;
+import team10.airdnb.error.ErrorCode;
+import team10.airdnb.oauth.exception.AuthenticationException;
+import team10.airdnb.exception.BusinessException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -50,7 +52,7 @@ public class MemberService {
 
     public Member findMemberByMemberId(String id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_EXISTS));
+                .orElseThrow(() -> new MemberIdNotFoundException(ErrorCode.MEMBER_NOT_EXISTS));
     }
 }
 

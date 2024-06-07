@@ -1,4 +1,4 @@
-package team10.airdnb.oauth.config;
+package team10.airdnb.config.feign;
 
 import feign.Logger;
 import feign.Retryer;

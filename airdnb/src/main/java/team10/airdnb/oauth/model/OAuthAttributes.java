@@ -3,8 +3,8 @@ package team10.airdnb.oauth.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import team10.airdnb.Member.constant.MemberType;
-import team10.airdnb.Member.entity.Member;
+import team10.airdnb.member.constant.MemberType;
+import team10.airdnb.member.entity.Member;
 
 @ToString
 @Getter

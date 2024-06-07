@@ -1,12 +1,12 @@
-package team10.airdnb.oauth.jwt.service;
+package team10.airdnb.jwt.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import team10.airdnb.oauth.error.ErrorCode;
-import team10.airdnb.oauth.error.exception.AuthenticationException;
-import team10.airdnb.oauth.jwt.constant.GrantType;
-import team10.airdnb.oauth.jwt.constant.TokenType;
-import team10.airdnb.oauth.jwt.dto.JwtTokenDto;
+import team10.airdnb.error.ErrorCode;
+import team10.airdnb.jwt.constant.GrantType;
+import team10.airdnb.jwt.dto.JwtTokenDto;
+import team10.airdnb.oauth.exception.AuthenticationException;
+import team10.airdnb.jwt.constant.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

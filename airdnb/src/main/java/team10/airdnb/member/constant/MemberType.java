@@ -1,4 +1,4 @@
-package team10.airdnb.Member.constant;
+package team10.airdnb.member.constant;
 
 import java.util.Arrays;
 import java.util.List;

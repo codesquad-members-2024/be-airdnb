@@ -2,12 +2,10 @@ package team10.airdnb.oauth.kakao.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import team10.airdnb.Member.constant.MemberType;
+import team10.airdnb.member.constant.MemberType;
 import team10.airdnb.oauth.kakao.dto.KakaoTokenDto;
 import team10.airdnb.oauth.kakao.client.KakaoTokenClient;
 import team10.airdnb.oauth.login.dto.OauthLoginDto;

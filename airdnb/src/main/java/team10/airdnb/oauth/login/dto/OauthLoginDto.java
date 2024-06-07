@@ -2,7 +2,7 @@ package team10.airdnb.oauth.login.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import team10.airdnb.oauth.jwt.dto.JwtTokenDto;
+import team10.airdnb.jwt.dto.JwtTokenDto;
 
 import java.util.Date;
 

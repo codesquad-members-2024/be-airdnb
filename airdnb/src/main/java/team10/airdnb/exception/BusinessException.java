@@ -1,15 +1,14 @@
-package team10.airdnb.oauth.error.exception;
+package team10.airdnb.exception;
 
 import lombok.Getter;
-import team10.airdnb.oauth.error.ErrorCode;
+import team10.airdnb.error.ErrorCode;
 
 @Getter
 public class BusinessException extends RuntimeException{
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public BusinessException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }
