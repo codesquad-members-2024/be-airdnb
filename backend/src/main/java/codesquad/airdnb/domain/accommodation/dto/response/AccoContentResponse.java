@@ -34,9 +34,11 @@ public class AccoContentResponse {
 
     private FloorPlanData floorPlanData;
 
+    private List<Long> amenities;
+
     private List<String> imageUrls;
 
-    public static AccoContentResponse of(Accommodation accommodation, List<AccoImage> accoImages) {
+    public static AccoContentResponse of(Accommodation accommodation) {
         return AccoContentResponse.builder()
                 .id(accommodation.getId())
                 .hostId(accommodation.getHost().getId())
@@ -48,7 +50,8 @@ public class AccoContentResponse {
                 .checkOutTime(accommodation.getCheckOutTime())
                 .locationData(LocationData.toResponseEmbedded(accommodation.getLocation()))
                 .floorPlanData(FloorPlanData.toResponseEmbedded(accommodation.getFloorPlan()))
-                .imageUrls(accoImages.stream().map(AccoImage::getUrl).toList())
+                .amenities(accommodation.getAmenities().stream().map(a -> a.getAmenity().getId()).toList())
+                .imageUrls(accommodation.getImages().stream().map(AccoImage::getUrl).toList())
                 .build();
     }
 }

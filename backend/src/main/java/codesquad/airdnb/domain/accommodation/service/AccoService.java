@@ -1,7 +1,8 @@
 package codesquad.airdnb.domain.accommodation.service;
 
 import codesquad.airdnb.domain.accommodation.controller.AccoListResponse;
-import codesquad.airdnb.domain.accommodation.controller.SimpleAccommodation;
+import codesquad.airdnb.domain.accommodation.dto.request.AccoCreateRequest;
+import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
 import codesquad.airdnb.domain.accommodation.entity.AccoAmen;
 import codesquad.airdnb.domain.accommodation.entity.AccoImage;
 import codesquad.airdnb.domain.accommodation.entity.Accommodation;
@@ -9,10 +10,9 @@ import codesquad.airdnb.domain.accommodation.entity.Amenity;
 import codesquad.airdnb.domain.accommodation.repository.AccoImageRepository;
 import codesquad.airdnb.domain.accommodation.repository.AccoRepository;
 import codesquad.airdnb.domain.accommodation.repository.AmenityRepository;
-import codesquad.airdnb.domain.accommodation.request.AccoCreateRequest;
-import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
 import codesquad.airdnb.domain.member.Member;
 import codesquad.airdnb.domain.member.MemberRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class AccoService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public AccoContentResponse create(AccoCreateRequest request) {
+    public AccoContentResponse create(@Valid AccoCreateRequest request) {
         Member host = memberRepository.findById(request.getHostId()).orElseThrow(NoSuchElementException::new);
         Accommodation accommodation = request.buildAccommodation(host);
 
@@ -44,7 +44,14 @@ public class AccoService {
         accommodation.addImages(accoImages);
 
         Accommodation savedAcco = accoRepository.save(accommodation);
-        return AccoContentResponse.of(savedAcco, accoImages);
+        return AccoContentResponse.of(savedAcco);
+    }
+
+    public AccoContentResponse get(Long accoId) {
+        Accommodation accommodation = accoRepository.findById(accoId)
+                .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 숙소가 없습니다."));
+
+        return AccoContentResponse.of(accommodation);
     }
 
     public AccoListResponse getList(Long hostId) {

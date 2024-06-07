@@ -1,4 +1,4 @@
-package codesquad.airdnb.domain.accommodation.request;
+package codesquad.airdnb.domain.accommodation.dto.request;
 
 import codesquad.airdnb.domain.accommodation.entity.AccoImage;
 import codesquad.airdnb.domain.accommodation.entity.Accommodation;
