@@ -9,6 +9,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import team10.airdnb.admin.controller.request.AdminEmailRequest;
+import team10.airdnb.email.exception.AuthCodeNullException;
+import team10.airdnb.email.exception.AuthCodeValidateException;
+import team10.airdnb.error.ErrorCode;
 import team10.airdnb.utils.redis.RedisUtil;
 
 import java.util.Random;
@@ -49,11 +52,11 @@ public class EmailService {
         String authCode = redisUtil.getData(email);
 
         if (authCode == null) {
-            throw new RuntimeException("AuthNumber 발행되지 않음!");
+            throw new AuthCodeNullException(ErrorCode.AUTH_CODE_NOT_EXISTS);
         }
 
         if (!authCode.equals(inputAuthCode)) {
-            throw new RuntimeException("AuthNumber 불일치!");
+            throw new AuthCodeValidateException(ErrorCode.INVALID_AUTH_CODE);
         }
     }
 

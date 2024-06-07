@@ -28,7 +28,7 @@ public class AdminRestController {
     public ResponseEntity<AdminSignupResponse> adminSignup(@RequestBody @Valid AdminSignupRequest request) {
         Admin admin = adminService.registerAdmin(request);
 
-        log.debug("admin 회원가입 완료 : {}", admin.getAdminId());
+        log.info("admin 회원가입 완료 : {}", admin.getAdminId());
 
         AdminSignupResponse response = new AdminSignupResponse(admin.getAdminId());
 
@@ -39,7 +39,7 @@ public class AdminRestController {
     public ResponseEntity<?> sendMail(@RequestBody @Valid AdminEmailRequest request) {
         String authCode = emailService.joinEmail(request);
 
-        log.debug("발급된 AuthCode : {}", authCode);
+        log.info("발급된 AuthCode : {}", authCode);
 
         return ResponseEntity.ok().build();
     }
