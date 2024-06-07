@@ -4,6 +4,8 @@ import codesquad.airdnb.domain.accommodation.dto.additionals.FloorPlanData;
 import codesquad.airdnb.domain.accommodation.dto.additionals.LocationData;
 import codesquad.airdnb.domain.accommodation.dto.request.AccoCreateRequest;
 import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
+import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
+import codesquad.airdnb.domain.accommodation.dto.response.SimpleAccommodationResponse;
 import codesquad.airdnb.domain.accommodation.service.AccoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -104,7 +106,7 @@ class AccoControllerTest {
         String requestParam = "?hostId=";
         String url = urlPrefix + "/accommodations" + requestParam + hostId;
 
-        SimpleAccommodation exSimpleAccommodation = new SimpleAccommodation(1L, "test", "test.com");
+        SimpleAccommodationResponse exSimpleAccommodation = new SimpleAccommodationResponse(1L, "test", "test.com");
         AccoListResponse response = new AccoListResponse(List.of(exSimpleAccommodation));
         given(accoService.getList(hostId)).willReturn(response);
 

@@ -1,6 +1,6 @@
 package codesquad.airdnb.domain.accommodation.service;
 
-import codesquad.airdnb.domain.accommodation.controller.AccoListResponse;
+import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.accommodation.dto.request.AccoCreateRequest;
 import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
 import codesquad.airdnb.domain.accommodation.entity.AccoAmen;

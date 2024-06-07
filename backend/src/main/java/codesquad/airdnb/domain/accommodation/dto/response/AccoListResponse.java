@@ -1,4 +1,4 @@
-package codesquad.airdnb.domain.accommodation.controller;
+package codesquad.airdnb.domain.accommodation.dto.response;
 
 import codesquad.airdnb.domain.accommodation.entity.Accommodation;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 public class AccoListResponse {
 
-    private List<SimpleAccommodation> accommodationList;
+    private List<SimpleAccommodationResponse> accommodationList;
 
     public static AccoListResponse of(List<Accommodation> accommodations) {
-        List<SimpleAccommodation> simpleAccoList = accommodations.stream().map(SimpleAccommodation::of).toList();
+        List<SimpleAccommodationResponse> simpleAccoList = accommodations.stream().map(SimpleAccommodationResponse::of).toList();
         return new AccoListResponse(simpleAccoList);
     }
 }

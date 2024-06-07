@@ -1,12 +1,14 @@
-package codesquad.airdnb.domain.accommodation.controller;
+package codesquad.airdnb.domain.accommodation.dto.response;
 
 import codesquad.airdnb.domain.accommodation.entity.Accommodation;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-public class SimpleAccommodation {
+@AllArgsConstructor
+public class SimpleAccommodationResponse {
 
     private Long id;
 
@@ -14,8 +16,8 @@ public class SimpleAccommodation {
 
     private String thumbnailUrl;
 
-    public static SimpleAccommodation of(Accommodation accommodation) {
-        return SimpleAccommodation.builder()
+    public static SimpleAccommodationResponse of(Accommodation accommodation) {
+        return SimpleAccommodationResponse.builder()
                 .id(accommodation.getId())
                 .title(accommodation.getTitle())
                 .thumbnailUrl(accommodation.getImages().get(0).getUrl())
