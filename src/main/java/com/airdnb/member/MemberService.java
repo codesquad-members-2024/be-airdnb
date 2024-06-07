@@ -57,6 +57,10 @@ public class MemberService {
         return token;
     }
 
+    public String getCurrentMemberId() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
 
 }
 
