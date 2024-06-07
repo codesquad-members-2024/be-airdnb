@@ -2,14 +2,14 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const RedirectPage = (type) => {
+const RedirectPage = (provider) => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleOAuth = async (code) => {
     try {
       const response = await axios.get(
-        `https://squadbnb.site/api/oauth/login/${type}?code=${code}/`
+        `https://squadbnb.site/api/oauth/login/${provider}?code=${code}`
       );
       const data = response.data; // 응답 데이터
       console.log("로그인 성공: " + data);
