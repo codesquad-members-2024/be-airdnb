@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team10.airdnb.Member.constant.MemberType;
-import team10.airdnb.Member.constant.Role;
 import team10.airdnb.Member.entity.Member;
 import team10.airdnb.Member.service.MemberService;
 import team10.airdnb.oauth.jwt.dto.JwtTokenDto;

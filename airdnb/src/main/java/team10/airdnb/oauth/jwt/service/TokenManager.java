@@ -2,7 +2,6 @@ package team10.airdnb.oauth.jwt.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import team10.airdnb.Member.constant.Role;
 import team10.airdnb.oauth.error.ErrorCode;
 import team10.airdnb.oauth.error.exception.AuthenticationException;
 import team10.airdnb.oauth.jwt.constant.GrantType;
