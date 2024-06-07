@@ -19,6 +19,7 @@ public class OAuthAttributes { // 회원 정보 가져올 때 통일
 
     public Member toMemberEntity(MemberType memberType) {
         return Member.builder()
+                .id(email)
                 .memberName(name)
                 .email(email)
                 .memberType(memberType)
