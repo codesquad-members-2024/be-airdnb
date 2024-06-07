@@ -1,8 +1,10 @@
 package com.airdnb.reservation;
 
+import com.airdnb.global.NotFoundException;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
+import com.airdnb.reservation.dto.ReservationQueryResponse;
 import com.airdnb.reservation.entity.Reservation;
 import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.stay.StayService;
@@ -35,6 +37,27 @@ public class ReservationService {
         reservationRepository.save(reservation);
 
         return reservation.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public ReservationQueryResponse queryReservationDetail(Long id) {
+        Reservation reservation = findReservationById(id);
+        return ReservationQueryResponse.builder()
+                .id(reservation.getId())
+                .customerName(reservation.getCustomer().getName())
+                .createdAt(reservation.getCreatedAt())
+                .status(reservation.getStatus())
+                .hostName(reservation.getStay().getHost().getName())
+                .stayName(reservation.getStay().getName())
+                .checkinAt(reservation.getReservationPeriod().getCheckinAt())
+                .checkoutAt(reservation.getReservationPeriod().getCheckoutAt())
+                .paymentAmount(reservation.getPaymentAmount())
+                .guestCount(reservation.getGuestCount())
+                .build();
+    }
+
+    public Reservation findReservationById(Long id) {
+        return reservationRepository.findById(id).orElseThrow(() -> new NotFoundException("id와 일치하는 예약을 찾을 수 없습니다."));
     }
 
     private void validateGuestsCount(Integer maxGuests, Integer guestCount) {

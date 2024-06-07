@@ -1,10 +1,13 @@
 package com.airdnb.reservation;
 
 import com.airdnb.reservation.dto.ReservationCreateRequest;
+import com.airdnb.reservation.dto.ReservationQueryResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +30,11 @@ public class ReservationController {
                 .buildAndExpand(reservationId)
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationQueryResponse> queryReservationDetail(@PathVariable Long id) {
+        ReservationQueryResponse reservationQueryResponse = reservationService.queryReservationDetail(id);
+        return ResponseEntity.ok(reservationQueryResponse);
     }
 }
