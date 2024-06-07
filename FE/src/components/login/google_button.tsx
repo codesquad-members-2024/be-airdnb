@@ -1,9 +1,15 @@
-import { useEffect } from "react";
-
 const GoogleButton = () => {
   const handleLogin = () => {
-    window.location.href =
-      "https://squadbnb.site/api/oauth2/authorization/google";
+    fetch("https://squadbnb.site/api/oauth2/authorization/google", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data: LoginResponse) => {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId.toString());
+        localStorage.setItem("userName", data.userName);
+        window.location.href = "/"; // Redirect to the home page
+      });
   };
 
   return (

@@ -34,7 +34,7 @@ const Home: React.FC = () => {
           render={render}
           libraries={["marker"]}
         >
-          <GoogleMap mapRef={mapRef} />
+          <GoogleMap />
         </Wrapper>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import fetchAccommodations from "./fetchAccommodation";
-import { AccommodationWithPrice } from "./types";
+import { AccommodationWithPrice } from "../types";
 import createMarker from "./GoogleMapMarker";
 
 function GoogleMap() {

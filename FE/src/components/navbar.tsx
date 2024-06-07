@@ -1,10 +1,31 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { logout } from "./login/auth";
 
 export default function Navbar() {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const name = localStorage.getItem("userName");
+      if (name) {
+        setUserName(name);
+      }
+    }
+  }, []);
+
   return (
     <div className="navbar">
       <Link href="/">Home</Link>
-      <Link href="/login">Login</Link>
+      {userName ? (
+        <span>
+          {userName} <button onClick={logout}>Logout</button>
+        </span>
+      ) : (
+        <Link href="/login">Login</Link>
+      )}
       <Link href="/map">Map</Link>
       <Link href="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb">
         Github
