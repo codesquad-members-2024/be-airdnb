@@ -6,6 +6,8 @@ import com.airdnb.member.entity.Member;
 import com.airdnb.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
     private final AuthenticationManager authenticationManager;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +48,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberVerification.getId())
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         String token = jwtUtil.createToken(member.getId());
+        log.info("token: {}", token);
         return token;
     }
 }
