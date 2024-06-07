@@ -70,6 +70,10 @@ public class Stay {
         this.status = StayStatus.DELETED;
     }
 
+    public boolean hasSameHostId(String hostId) {
+        return this.host.getId().equals(hostId);
+    }
+
     public enum StayType {
         APT, PENSION, HOTEL;
 

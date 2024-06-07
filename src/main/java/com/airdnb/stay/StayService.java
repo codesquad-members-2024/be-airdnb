@@ -1,5 +1,6 @@
 package com.airdnb.stay;
 
+import com.airdnb.global.ForbiddenException;
 import com.airdnb.global.NotFoundException;
 import com.airdnb.image.ImageService;
 import com.airdnb.image.entity.Image;
@@ -72,12 +73,16 @@ public class StayService {
     @Transactional
     public void softDeleteStay(Long id) {
         Stay stay = findStayById(id);
+        String currentMemberId = memberService.getCurrentMemberId();
+        if (!stay.hasSameHostId(currentMemberId)) {
+            throw new ForbiddenException("숙소 삭제 권한이 없습니다.");
+        }
         stay.softDelete();
     }
 
     private Stay buildStay(StayCreateRequest stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());
-        Member host = getHost(stayCreateRequest.getHostId());
+        Member host = getHost();
         StayType stayType = StayType.of(stayCreateRequest.getType());
         Location location = new Location(stayCreateRequest.getAddress(), stayCreateRequest.getLatitude(),
                 stayCreateRequest.getLongitude());
@@ -96,8 +101,9 @@ public class StayService {
                 .build();
     }
 
-    private Member getHost(String hostId) {
-        return memberService.findMemberById(hostId);
+    private Member getHost() {
+        String currentMemberId = memberService.getCurrentMemberId();
+        return memberService.findMemberById(currentMemberId);
     }
 
     private Image getImage(Long imageId) {

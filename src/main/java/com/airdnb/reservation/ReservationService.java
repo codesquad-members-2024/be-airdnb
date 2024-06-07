@@ -26,7 +26,7 @@ public class ReservationService {
         ReservationPeriod reservationPeriod = getReservationPeriod(stay, reservationCreateRequest.getCheckinAt(),
                 reservationCreateRequest.getCheckoutAt());
         validateGuestsCount(stay.getMaxGuests(), reservationCreateRequest.getGuestCount());
-        Member customer = memberService.findMemberById(reservationCreateRequest.getCustomerId());
+        Member customer = getCustomer(stay);
         Double paymentAmount = getPaymentAmount(stay.getPrice(),
                 Objects.requireNonNull(reservationPeriod).getDaysOfStay());
 
@@ -43,9 +43,9 @@ public class ReservationService {
         }
     }
 
-    private static Reservation buildReservation(ReservationCreateRequest reservationCreateRequest, Stay stay,
-                                                Member customer, ReservationPeriod reservationPeriod,
-                                                Double paymentAmount) {
+    private Reservation buildReservation(ReservationCreateRequest reservationCreateRequest, Stay stay,
+                                         Member customer, ReservationPeriod reservationPeriod,
+                                         Double paymentAmount) {
         return Reservation.builder()
                 .stay(stay)
                 .customer(customer)
@@ -67,5 +67,13 @@ public class ReservationService {
     private Double getPaymentAmount(int price, long reservationDay) {
         // 할인 정책 로직 생기면 적용 가능;
         return (double) (price * reservationDay);
+    }
+
+    private Member getCustomer(Stay stay) {
+        String currentMemberId = memberService.getCurrentMemberId();
+        if (stay.hasSameHostId(currentMemberId)) {
+            throw new InvalidReservationException("예약자와 호스트는 동일할 수 없습니다.");
+        }
+        return memberService.findMemberById(currentMemberId);
     }
 }
