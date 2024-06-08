@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { logout } from "../../services/auth";
 import "../../styles/App.css";
 
@@ -14,7 +14,7 @@ const Navbar = () => {
         setUserName(name);
       }
     }
-  }, []);
+  }, [token]);
 
   return (
     <div className="navbar">
@@ -30,20 +30,13 @@ const Navbar = () => {
         <Link to="/login">Login</Link>
       )}
       <Link to="/map">Map</Link>
-      <Link
-        to="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link to="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb">
         Github
       </Link>
-      <Link
-        to="https://www.figma.com/proto/T2ASU9JPHsYS0ocQjDrL1g/BE_%EC%88%99%EC%86%8C%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4?node-id=80-358&t=x7GURSVndUvXuErC-0&scaling=contain&page-id=80%3A317"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <Link to="https://www.figma.com/proto/T2ASU9JPHsYS0ocQjDrL1g/BE_%EC%88%99%EC%86%8C%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4?node-id=80-358&t=x7GURSVndUvXuErC-0&scaling=contain&page-id=80%3A317">
         Figma
       </Link>
+      <Link to="/api/swagger-ui/index.html#/">API</Link>
     </div>
   );
 };
