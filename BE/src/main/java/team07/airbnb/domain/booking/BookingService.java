@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.domain.booking.dto.request.BookingRequest;
-import team07.airbnb.domain.booking.dto.response.BookingInfo;
+import team07.airbnb.domain.booking.dto.BookingInfo;
 import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.domain.booking.exception.BookingNotFoundException;
 import team07.airbnb.domain.booking.exception.InvalidDateException;
 import team07.airbnb.domain.booking.property.BookingStatus;
 import team07.airbnb.domain.discount.DiscountPolicyService;
-import team07.airbnb.domain.discount.beans.DiscountPolicy;
 import team07.airbnb.domain.booking.price_policy.fee.AccommodationFee;
 import team07.airbnb.domain.booking.price_policy.fee.ServiceFee;
 import team07.airbnb.domain.payment.PaymentEntity;
@@ -18,10 +18,12 @@ import team07.airbnb.domain.product.ProductService;
 import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,37 @@ public class BookingService {
 
     private final ServiceFee serviceFee;
     private final AccommodationFee accommodationFee;
+
+    public BookingEntity findByBookingId(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException(id));
+    }
+
+    @Transactional
+    public BookingEntity confirmBooking(BookingEntity booking, UserEntity requestedHost) {
+        if (!booking.getStatus().equals(BookingStatus.REQUESTED)) {
+            throw new IllegalStateException("확정할 수 없는 예약입니다");
+        }
+
+        if (!booking.getHost().equals(requestedHost)) {
+            throw new IllegalStateException("예약의 호스트가 아닙니다");
+        }
+
+        booking.setStatus(BookingStatus.CONFIRM);
+
+        return bookingRepository.save(booking);
+    }
+
+    @Transactional
+    public BookingEntity cancelBooking(BookingEntity booking, UserEntity booker) {
+        if (!booking.getBooker().equals(booker)) {
+            throw new IllegalStateException("예약한 본인만 취소할 수 있습니다");
+        }
+
+        booking.setStatus(BookingStatus.CANCEL);
+
+        return bookingRepository.save(booking);
+    }
 
     public long getRoughTotalPrice(long avgPrice, LocalDate checkIn, LocalDate checkOut) {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
@@ -75,16 +108,9 @@ public class BookingService {
     @Transactional
     public BookingEntity createBooking(BookingInfo bookingInfo, BookingRequest request, UserEntity booker) {
         PaymentEntity payment = paymentService.createNewPayment(bookingInfo);
-        Long requestedAccId = request.accommodationId();
         LocalDate checkIn = request.checkIn();
         LocalDate checkOut = request.checkOut();
         Integer headCount = request.headCount();
-
-        List<ProductEntity> products = productService.getAvailableProducts(
-                request.checkIn(),
-                request.checkOut(),
-                request.headCount(),
-                Collections.singletonList(requestedAccId)).get(requestedAccId);
 
 
         BookingEntity booking = BookingEntity.builder()
@@ -94,7 +120,6 @@ public class BookingService {
                 .headCount(headCount)
                 .payment(payment)
                 .status(BookingStatus.REQUESTED)
-                .products(products)
                 .build();
 
         return bookingRepository.save(booking);

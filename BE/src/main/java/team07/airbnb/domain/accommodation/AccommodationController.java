@@ -15,7 +15,6 @@ import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.auth.aop.Authenticated;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
-import team07.airbnb.domain.user.service.UserService;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
-    private final UserService userService;
 
 
     @GetMapping
@@ -58,7 +56,8 @@ public class AccommodationController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAccommodation(@PathVariable long id){
+    @Authenticated(Role.HOST)
+    public void deleteAccommodation(@PathVariable long id, UserEntity user){
         accommodationService.deleteById(id);
     }
 }

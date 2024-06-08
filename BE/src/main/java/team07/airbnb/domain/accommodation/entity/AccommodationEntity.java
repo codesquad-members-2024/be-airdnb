@@ -36,8 +36,10 @@ public class AccommodationEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     private UserEntity host;
+
     private AccommodationType type;
 
     @Embedded
@@ -48,10 +50,13 @@ public class AccommodationEntity extends BaseEntity {
 
     // Description
     private String name;
+
     private String description;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "accommodation_id")
     private List<Pictures> pictures;
+
     private int basePricePerDay;
 
     @JsonIgnore

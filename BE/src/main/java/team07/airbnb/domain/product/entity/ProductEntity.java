@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.domain.booking.entity.BookingEntity;
 
 import java.time.LocalDate;
 
@@ -26,10 +27,17 @@ public class ProductEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     private AccommodationEntity accommodation;
+
+    @ManyToOne
+    private BookingEntity booking;
+
     private LocalDate date;
+
     private int price;
+
     private ProductStatus status;
 
     public static ProductEntity ofOpen(AccommodationEntity accommodation, LocalDate date, int price){

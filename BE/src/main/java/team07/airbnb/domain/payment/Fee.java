@@ -4,8 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import team07.airbnb.domain.booking.dto.response.BookingInfo;
+import team07.airbnb.domain.booking.dto.BookingInfo;
 
 @Getter
 @Embeddable

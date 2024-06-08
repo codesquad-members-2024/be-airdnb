@@ -1,9 +1,8 @@
-package team07.airbnb.domain.booking.dto.response;
+package team07.airbnb.domain.booking.dto;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
 @Getter
