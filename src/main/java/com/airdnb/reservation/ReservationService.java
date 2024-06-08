@@ -45,6 +45,9 @@ public class ReservationService {
     @Transactional(readOnly = true)
     public ReservationQueryResponse queryReservationDetail(Long id) {
         Reservation reservation = findReservationById(id);
+        String currentMemberId = memberService.getCurrentMemberId();
+        reservation.validateQueryAuthority(currentMemberId);
+
         return ReservationQueryResponse.builder()
                 .id(reservation.getId())
                 .customerName(reservation.getCustomer().getName())

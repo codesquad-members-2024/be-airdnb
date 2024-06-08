@@ -84,6 +84,12 @@ public class Reservation {
         this.status = ReservationStatus.CANCELED;
     }
 
+    public void validateQueryAuthority(String currentMemberId) {
+        if (!isCustomer(currentMemberId) && !isHost(currentMemberId)) {
+            throw new ForbiddenException("예약 조회 권한이 없는 사용자입니다.");
+        }
+    }
+
     public enum ReservationStatus {
         PENDING, APPROVED, REJECTED, CANCELED;
 
