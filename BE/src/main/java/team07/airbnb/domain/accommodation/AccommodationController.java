@@ -1,5 +1,7 @@
 package team07.airbnb.domain.accommodation;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ public class AccommodationController {
 
 
     @GetMapping
+    @Tag(name = "User API")
+    @Operation(summary = "모든 숙소 조회", description = "스쿼드비엔비에 등록된 모든 숙소를 조회합니다.")
     public List<AccommodationEntity> findAll() {
         return accommodationService.findAllAccommodations();
     }

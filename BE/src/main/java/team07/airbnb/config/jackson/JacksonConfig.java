@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Configuration
 public class JacksonConfig {
 
-    @Bean
+    @Bean("customObjectMapper")
     public ObjectMapper objectMapper(GeometryHelper geometryHelper) {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
