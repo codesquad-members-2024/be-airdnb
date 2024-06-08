@@ -20,6 +20,9 @@ public enum ErrorCode {
     AUTH_CODE_NOT_EXISTS(HttpStatus.NOT_FOUND, "E-001", "인증 번호가 존재하지 않습니다."),
     INVALID_AUTH_CODE(HttpStatus.UNAUTHORIZED, "E-002", "인증 번호가 일치하지 않습니다."),
 
+    // 숙소 방 유형
+    ALREADY_SAVED_ROOM_TYPE(HttpStatus.BAD_REQUEST, "R-001", "이미 해당하는 이름의 방 정보가 존재합니다."),
+
     //회원
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(memberType : KAKAO)"),
     ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-002", "이미 가입된 회원 입니다."),
