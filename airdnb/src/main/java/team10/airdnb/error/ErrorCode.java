@@ -23,6 +23,9 @@ public enum ErrorCode {
     // 숙소 방 유형
     ALREADY_SAVED_ROOM_TYPE(HttpStatus.BAD_REQUEST, "R-001", "이미 해당하는 이름의 방 정보가 존재합니다."),
 
+    // 숙소 유형
+    ALREADY_SAVED_ACCOMMODATION_TYPE(HttpStatus.BAD_REQUEST, "T-001", "이미 해당하는 이름의 숙소 유형이 존재합니다."),
+
     //회원
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(memberType : KAKAO)"),
     ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-002", "이미 가입된 회원 입니다."),
