@@ -3,8 +3,8 @@ const GithubButton = ({ onClick }) => {
     <button
       onClick={onClick}
       style={{
-        backgroundColor: "#333",
-        color: "#fff",
+        backgroundColor: "#1B1F23",
+
         padding: "10px 20px",
         border: "none",
         borderRadius: "5px",
@@ -19,7 +19,7 @@ const GithubButton = ({ onClick }) => {
         alt="GitHub 로고"
         style={{ marginRight: "10px", width: "24px", height: "24px" }}
       />
-      <span>Login with GitHub</span>
+      <span style={{ color: "#fff" }}>Login with GitHub</span>
     </button>
   );
 };

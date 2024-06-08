@@ -26,16 +26,24 @@ body {
 .navbar {
   background: linear-gradient(to left, #b1ba5c, #ffffff);
   padding: 10px;
-  justify-content: flex-end;
+  justify-content: flex;
   text-align: center;
+  align-items: center;
+  gap: 15px;
 }
 
-.navbar a {
+.navbar a,
+span {
   color: #364b0a;
   font-weight: bolder;
-  margin-right: 15px;
   text-decoration: none;
   display: inline-block;
+  margin: 0 10px;
+}
+
+.navbar a:last-child,
+.navbar span:last-child {
+  margin-right: 0; /* Removes extra margin from the last element */
 }
 
 .introduction {

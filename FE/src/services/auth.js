@@ -1,3 +1,5 @@
+import { Navigate } from "react-router-dom";
+
 export function logout() {
   // 로컬 스토리지에서 사용자 정보 삭제
   localStorage.removeItem("token");
@@ -15,5 +17,6 @@ export function logout() {
       // 로그아웃 실패 시 처리 (필요한 경우)
       console.error("Error during logout:", error);
     }
+    Navigate("/");
   });
 }

@@ -21,26 +21,29 @@ const Navbar = () => {
       <Link to="/">Home</Link>
       {userName ? (
         <span>
-          {userName} <button onClick={logout}>Logout</button>
+          {userName}{" "}
+          <Link to="/" onClick={logout}>
+            Logout
+          </Link>
         </span>
       ) : (
         <Link to="/login">Login</Link>
       )}
       <Link to="/map">Map</Link>
-      <a
+      <Link
         href="https://github.com/CodeSquad-Airbnb-Team07/be-airbnb"
         target="_blank"
         rel="noopener noreferrer"
       >
         Github
-      </a>
-      <a
+      </Link>
+      <Link
         href="https://www.figma.com/proto/T2ASU9JPHsYS0ocQjDrL1g/BE_%EC%88%99%EC%86%8C%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4?node-id=80-358&t=x7GURSVndUvXuErC-0&scaling=contain&page-id=80%3A317"
         target="_blank"
         rel="noopener noreferrer"
       >
         Figma
-      </a>
+      </Link>
     </div>
   );
 };
