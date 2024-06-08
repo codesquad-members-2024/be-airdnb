@@ -62,6 +62,7 @@ public class StayService {
                 .tags(getTagResponses(stay))
                 .comments(getCommentResponses(stay))
                 .rating(getRating(stay))
+                .closedDates(stay.getClosedStayDates())
                 .build();
     }
 
@@ -79,6 +80,12 @@ public class StayService {
         }
         stay.softDelete();
     }
+//
+//    @Transactional
+//    public void addClosedStayDates(Stay stay, List<LocalDate> dates) {
+//        stay.addClosedDates(dates);
+////        stayRepository.save(stay);
+//    }
 
     private Stay buildStay(StayCreateRequest stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());

@@ -9,7 +9,9 @@ import com.airdnb.reservation.entity.Reservation;
 import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.stay.StayService;
 import com.airdnb.stay.entity.Stay;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,11 @@ public class ReservationService {
 
     public Long createReservation(ReservationCreateRequest reservationCreateRequest) {
         Stay stay = stayService.findStayById(reservationCreateRequest.getStayId());
-        ReservationPeriod reservationPeriod = getReservationPeriod(stay, reservationCreateRequest.getCheckinAt(),
+        ReservationPeriod reservationPeriod = confirmReservationPeriod(stay, reservationCreateRequest.getCheckinAt(),
                 reservationCreateRequest.getCheckoutAt());
         validateGuestsCount(stay.getMaxGuests(), reservationCreateRequest.getGuestCount());
         Member customer = getCustomer(stay);
-        Double paymentAmount = getPaymentAmount(stay.getPrice(),
+        Double paymentAmount = calculatePaymentAmount(stay.getPrice(),
                 Objects.requireNonNull(reservationPeriod).getDaysOfStay());
 
         Reservation reservation = buildReservation(reservationCreateRequest, stay, customer,
@@ -78,16 +80,17 @@ public class ReservationService {
                 .build();
     }
 
-    private ReservationPeriod getReservationPeriod(Stay stay, LocalDateTime checkinAt, LocalDateTime checkoutAt) {
-        LocalDateTime startDate = stay.getStartDate();
-        LocalDateTime endDate = stay.getEndDate();
-        if (checkinAt.isBefore(startDate) || checkoutAt.isAfter(endDate)) {
-            throw new InvalidReservationException("예약 가능한 날짜가 아닙니다.");
+    private ReservationPeriod confirmReservationPeriod(Stay stay, LocalDateTime checkinAt, LocalDateTime checkoutAt) {
+        ReservationPeriod reservationPeriod = new ReservationPeriod(checkinAt, checkoutAt);
+        if (!stay.isSatisfyingPeriod(reservationPeriod)) {
+            throw new InvalidReservationException("해당 날짜는 예약이 불가능합니다.");
         }
-        return new ReservationPeriod(checkinAt, checkoutAt);
+        List<LocalDate> reservationDates = reservationPeriod.getReservationDates();
+        stay.addClosedDates(reservationDates);
+        return reservationPeriod;
     }
 
-    private Double getPaymentAmount(int price, long reservationDay) {
+    private Double calculatePaymentAmount(int price, long reservationDay) {
         // 할인 정책 로직 생기면 적용 가능;
         return (double) (price * reservationDay);
     }
