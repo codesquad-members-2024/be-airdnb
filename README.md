@@ -9,7 +9,7 @@
 | 3    |         |                |
 | 4    |         |                |
 | 5    |         |                |
-| 6    |         |                |
+| 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
 | 7    |   Soap , Senna      |       [7팀 레포](https://github.com/CodeSquad24-Study/be-airdnb)         |
 | 8    |         |                |
 | 9    |         |                |
