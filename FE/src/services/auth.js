@@ -17,6 +17,7 @@ export function logout() {
       // 로그아웃 실패 시 처리 (필요한 경우)
       console.error("Error during logout:", error);
     }
-    Navigate("/");
+    window.location.reload();
+    window.location.replace("/");
   });
 }
