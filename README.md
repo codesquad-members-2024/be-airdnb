@@ -2,7 +2,11 @@
 
 ## 🙋🏻‍♂️ 팀원소개
 
-|백엔드| 백엔드 |
-|:-----:|:-----:|
-| ![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/95ecab66-c57a-4bff-b201-deb5d15b0344) |![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/cb11ba62-9b5c-40a9-818a-85b2b1f9dd79)    |
-|웨이드| 알렉스 |
+|                                                              백엔드                                                              |                                                              백엔드                                                              |
+|:-----------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|
+| ![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/95ecab66-c57a-4bff-b201-deb5d15b0344) | ![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/cb11ba62-9b5c-40a9-818a-85b2b1f9dd79) |
+|                                                              웨이드                                                              |                                                              알렉스                                                              |
+
+## ERD
+
+![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/ee4e4b19-cae9-4d2d-b660-4d3c67d97b6b)
