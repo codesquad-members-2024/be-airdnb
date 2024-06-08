@@ -1,5 +1,6 @@
 package codesquad.team05.domain.user;
 
+import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.reservation.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -27,4 +28,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Accommodation> accommodations = new ArrayList<>();
 }
