@@ -6,6 +6,7 @@ import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
 import com.airdnb.reservation.dto.ReservationQueryResponse;
 import com.airdnb.reservation.entity.Reservation;
+import com.airdnb.reservation.entity.Reservation.ReservationStatus;
 import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.stay.StayService;
 import com.airdnb.stay.entity.Stay;
@@ -58,8 +59,25 @@ public class ReservationService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public Reservation findReservationById(Long id) {
         return reservationRepository.findById(id).orElseThrow(() -> new NotFoundException("id와 일치하는 예약을 찾을 수 없습니다."));
+    }
+
+    public void updateReservationStatus(Long id, String status) {
+        Reservation reservation = findReservationById(id);
+        ReservationStatus requestStatus = ReservationStatus.of(status);
+        String currentMemberId = memberService.getCurrentMemberId();
+
+        if (requestStatus == ReservationStatus.APPROVED || requestStatus == ReservationStatus.REJECTED) {
+            reservation.handleReservation(currentMemberId, requestStatus);
+            return;
+        }
+        if (requestStatus == ReservationStatus.CANCELED) {
+            reservation.cancelReservation(currentMemberId);
+            return;
+        }
+        throw new InvalidReservationException("해당 상태로는 변경할 수 없습니다."); // PENDING으로 변경 요청시
     }
 
     private void validateGuestsCount(Integer maxGuests, Integer guestCount) {

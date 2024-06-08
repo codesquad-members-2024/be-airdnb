@@ -99,6 +99,10 @@ public class Stay {
         closedStayDates.addAll(dates);
     }
 
+    public void removeClosedDate(List<LocalDate> reservationDates) {
+        closedStayDates.removeAll(reservationDates);
+    }
+
     private boolean hasClosedDate(List<LocalDate> reservationDates) {
         return closedStayDates.stream()
                 .anyMatch(reservationDates::contains);
