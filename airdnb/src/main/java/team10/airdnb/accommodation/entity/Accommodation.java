@@ -1,15 +1,12 @@
 package team10.airdnb.accommodation.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 
 @Entity
 @Table(name = "accommodation")
@@ -32,11 +29,13 @@ public class Accommodation {
     @Column(name = "max_capacity", nullable = false)
     private long maxCapacity;
 
-    @Column(name = "accommodation_type", nullable = false)
-    private long accommodationType;
+    @ManyToOne
+    @JoinColumn(name = "accommodation_type", nullable = true)
+    private AccommodationType accommodationType;
 
-    @Column(name = "room_type", nullable = false)
-    private long roomType;
+    @ManyToOne
+    @JoinColumn(name = "accommodation_room_type", nullable = true)
+    private AccommodationRoomType accommodationRoomType;
 
     @Column(name = "bedroom_count", nullable = false)
     private long bedroomCount;
