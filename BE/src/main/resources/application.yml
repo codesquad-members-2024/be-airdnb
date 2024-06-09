@@ -7,10 +7,19 @@ spring:
       - app_settings/oauth-config.yml
       - app_settings/jwt-config.yml
 
+server:
+  forward-headers-strategy: FRAMEWORK
+
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: error
+
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
-    path: /api-ui.html
-  api-docs:
     path: /docs
+  api-docs:
+    path: /bnb
   default-produces-media-type: application/json
