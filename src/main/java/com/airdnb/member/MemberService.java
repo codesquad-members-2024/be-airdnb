@@ -4,8 +4,9 @@ import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.dto.MemberRegistration;
 import com.airdnb.member.dto.MemberVerification;
 import com.airdnb.member.entity.Member;
-import com.airdnb.security.JwtUtil;
+import com.airdnb.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final AuthenticationManager authenticationManager;
@@ -27,7 +29,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findMemberById(String id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("id와 일치하는 유저가 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException("id와 일치하는 유저가 존재하지 않습니다."));
     }
 
     @Transactional
@@ -45,15 +47,16 @@ public class MemberService {
     @Transactional
     public String verify(MemberVerification memberVerification) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        memberVerification.getId(),
-                        memberVerification.getPassword()
-                )
+            new UsernamePasswordAuthenticationToken(
+                memberVerification.getId(),
+                memberVerification.getPassword()
+            )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Member member = memberRepository.findById(memberVerification.getId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
         String token = jwtUtil.createToken(member.getId());
+        log.info("토큰 발급 완료: {}", token);
         return token;
     }
 

@@ -1,5 +1,6 @@
-package com.airdnb.security;
+package com.airdnb.security.jwt;
 
+import com.airdnb.global.constants.SecurityConstants;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -45,8 +46,8 @@ public class JwtUtil {
     }
 
     public String getToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+        String token = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(token) && token.startsWith(SecurityConstants.BEARER_PREFIX)) {
             return token.substring(7);
         }
         return null;
@@ -54,7 +55,6 @@ public class JwtUtil {
 
     public Boolean validateToken(String token) {
         try {
-            log.info("token: {}", token);
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             return true;
         } catch (SignatureException e) {
@@ -73,5 +73,10 @@ public class JwtUtil {
 
     public String getId(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("id", String.class);
+    }
+
+    public Long getRemainingTime(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getExpiration().getTime()
+            - System.currentTimeMillis();
     }
 }
