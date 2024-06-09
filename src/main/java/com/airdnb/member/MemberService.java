@@ -33,15 +33,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void saveMember(Member member) {
-        memberRepository.save(member);
-    }
-
-    @Transactional
     public void register(MemberRegistration memberRegistration) {
         Member member = memberMapper.toMember(memberRegistration);
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        saveMember(member);
+        memberRepository.save(member);
     }
 
     @Transactional
@@ -53,8 +48,7 @@ public class MemberService {
             )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Member member = memberRepository.findById(memberVerification.getId())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        Member member = findMemberById(memberVerification.getId());
         String token = jwtUtil.createToken(member.getId());
         log.info("토큰 발급 완료: {}", token);
         return token;
