@@ -1,6 +1,6 @@
 package com.airdnb.reservation.dto;
 
-import com.airdnb.reservation.entity.Reservation.ReservationStatus;
+import com.airdnb.reservation.entity.ReservationStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
