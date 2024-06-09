@@ -19,7 +19,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
         memberService.register(memberRegistration);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
