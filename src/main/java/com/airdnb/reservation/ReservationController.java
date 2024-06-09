@@ -1,5 +1,7 @@
 package com.airdnb.reservation;
 
+import com.airdnb.global.UriMaker;
+import com.airdnb.reservation.dto.ReservationCreate;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
 import com.airdnb.reservation.dto.ReservationQueryResponse;
 import jakarta.validation.Valid;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,12 +26,12 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<Void> createReservation(
             @Valid @RequestBody ReservationCreateRequest reservationCreateRequest) {
-        Long reservationId = reservationService.createReservation(reservationCreateRequest);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(reservationId)
-                .toUri();
+        ReservationCreate reservationCreate = toReservationCreate(reservationCreateRequest);
+
+        Long reservationId = reservationService.createReservation(reservationCreate);
+
+        URI location = UriMaker.makeUri(reservationId);
         return ResponseEntity.created(location).build();
     }
 
@@ -44,5 +45,12 @@ public class ReservationController {
     public ResponseEntity<Void> updateReservationStatus(@PathVariable Long id, @RequestParam String status) {
         reservationService.updateReservationStatus(id, status);
         return ResponseEntity.ok().build();
+    }
+
+    private ReservationCreate toReservationCreate(ReservationCreateRequest reservationCreateRequest) {
+        return new ReservationCreate(reservationCreateRequest.getStayId()
+                , reservationCreateRequest.getCheckinAt(),
+                reservationCreateRequest.getCheckoutAt(),
+                reservationCreateRequest.getGuestCount());
     }
 }

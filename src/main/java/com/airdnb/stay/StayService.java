@@ -7,7 +7,7 @@ import com.airdnb.image.entity.Image;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.stay.dto.StayCommentDetail;
-import com.airdnb.stay.dto.StayCreateRequest;
+import com.airdnb.stay.dto.StayCreate;
 import com.airdnb.stay.dto.StayDetailQueryResponse;
 import com.airdnb.stay.entity.CommentStatus;
 import com.airdnb.stay.entity.Location;
@@ -35,11 +35,11 @@ public class StayService {
     private final MemberService memberService;
 
     @Transactional
-    public Long createStay(StayCreateRequest stayCreateRequest) {
-        Stay stay = buildStay(stayCreateRequest);
+    public Long createStay(StayCreate stayCreate) {
+        Stay stay = buildStay(stayCreate);
         stayRepository.save(stay);
 
-        stayTagService.createStayTags(stay, stayCreateRequest.getTagIds());
+        stayTagService.createStayTags(stay, stayCreate.getTagIds());
         return stay.getId();
     }
 
@@ -83,7 +83,7 @@ public class StayService {
         stay.softDelete();
     }
 
-    private Stay buildStay(StayCreateRequest stayCreateRequest) {
+    private Stay buildStay(StayCreate stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());
         Member host = getHost();
         StayType stayType = StayType.of(stayCreateRequest.getType());

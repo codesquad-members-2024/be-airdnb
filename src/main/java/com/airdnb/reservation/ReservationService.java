@@ -4,7 +4,7 @@ import com.airdnb.global.exception.InvalidRequestException;
 import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
-import com.airdnb.reservation.dto.ReservationCreateRequest;
+import com.airdnb.reservation.dto.ReservationCreate;
 import com.airdnb.reservation.dto.ReservationQueryResponse;
 import com.airdnb.reservation.entity.Reservation;
 import com.airdnb.reservation.entity.ReservationPeriod;
@@ -27,16 +27,16 @@ public class ReservationService {
     private final StayService stayService;
     private final MemberService memberService;
 
-    public Long createReservation(ReservationCreateRequest reservationCreateRequest) {
-        Stay stay = stayService.findActiveStayById(reservationCreateRequest.getStayId());
-        ReservationPeriod reservationPeriod = confirmReservationPeriod(stay, reservationCreateRequest.getCheckinAt(),
-                reservationCreateRequest.getCheckoutAt());
-        validateGuestsCount(stay.getMaxGuests(), reservationCreateRequest.getGuestCount());
+    public Long createReservation(ReservationCreate reservationCreate) {
+        Stay stay = stayService.findActiveStayById(reservationCreate.getStayId());
+        ReservationPeriod reservationPeriod = confirmReservationPeriod(stay, reservationCreate.getCheckinAt(),
+                reservationCreate.getCheckoutAt());
+        validateGuestsCount(stay.getMaxGuests(), reservationCreate.getGuestCount());
         Member customer = getCustomer(stay);
         Double paymentAmount = calculatePaymentAmount(stay.getPrice(),
                 Objects.requireNonNull(reservationPeriod).getDaysOfStay());
 
-        Reservation reservation = buildReservation(reservationCreateRequest, stay, customer,
+        Reservation reservation = buildReservation(reservationCreate, stay, customer,
                 reservationPeriod, paymentAmount);
         reservationRepository.save(reservation);
 
@@ -90,7 +90,7 @@ public class ReservationService {
         }
     }
 
-    private Reservation buildReservation(ReservationCreateRequest reservationCreateRequest, Stay stay,
+    private Reservation buildReservation(ReservationCreate reservationCreate, Stay stay,
                                          Member customer, ReservationPeriod reservationPeriod,
                                          Double paymentAmount) {
         return Reservation.builder()
@@ -98,7 +98,7 @@ public class ReservationService {
                 .customer(customer)
                 .reservationPeriod(reservationPeriod)
                 .paymentAmount(paymentAmount)
-                .guestCount(reservationCreateRequest.getGuestCount())
+                .guestCount(reservationCreate.getGuestCount())
                 .build();
     }
 
