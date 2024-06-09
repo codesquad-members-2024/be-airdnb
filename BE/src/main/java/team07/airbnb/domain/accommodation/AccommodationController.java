@@ -20,16 +20,15 @@ import team07.airbnb.domain.user.enums.Role;
 
 import java.util.List;
 
+@Tag(name = "숙소")
 @RequestMapping("/accommodation")
 @RestController
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
 
-
-    @GetMapping
-    @Tag(name = "User API")
     @Operation(summary = "모든 숙소 조회", description = "스쿼드비엔비에 등록된 모든 숙소를 조회합니다.")
+    @GetMapping
     public List<AccommodationEntity> findAll() {
         return accommodationService.findAllAccommodations();
     }
@@ -48,8 +47,8 @@ public class AccommodationController {
 
     @PostMapping
     @Authenticated(Role.HOST)
-    public void createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
-        accommodationService.addAccommodation(
+    public AccommodationEntity createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
+        return accommodationService.addAccommodation(
                 createRequest.toEntity(user)
         );
     }

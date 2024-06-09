@@ -1,5 +1,6 @@
 package team07.airbnb.domain.product;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -16,6 +17,7 @@ import team07.airbnb.domain.product.dto.ProductListResponse;
 import java.time.LocalDate;
 import java.util.List;
 
+@Tag(name = "상품")
 @RequestMapping("/products")
 @RestController
 @RequiredArgsConstructor

@@ -9,11 +9,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
+import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.enums.Role;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Entity
@@ -49,11 +52,25 @@ public class UserEntity extends BaseEntity {
     @JsonIgnore
     private List<BookingEntity> bookingByHost;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<LikeEntity> favorites;
 
     public UserEntity update(String name, String email, String picture) {
         this.name = name;
         this.email = email;
         this.picture = picture;
+
+        return this;
+    }
+
+    public UserEntity addFavorite(ProductEntity product){
+        favorites.add(LikeEntity.from(this, product));
+
+        return this;
+    }
+    public UserEntity removeFavorite(ProductEntity product) {
+        favorites.remove(LikeEntity.from(this, product));
 
         return this;
     }

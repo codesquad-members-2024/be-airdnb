@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,13 @@ public class ProductService {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    public ProductEntity findById(long id){
+        return getProductById(id);
+    }
+
+    private ProductEntity getProductById(long id) throws NoSuchElementException {
+        return productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품 %d".formatted(id)));
+    }
 
     private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
         //인원수를 설정하지 않았으면 무조건 true

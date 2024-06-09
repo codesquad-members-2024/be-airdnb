@@ -61,10 +61,10 @@ VALUES (1, 'city_center_apartment_1.jpg'),
 
 -- accommodation_product 데이터 삽입
 INSERT INTO accommodation_product (date, price, status, accommodation_id, created_at, last_modified_at)
-VALUES ('2024-06-01', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-02', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-03', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-04', 100, 0, 1, NOW(), NOW()),
+VALUES ('2024-06-01', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-02', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-03', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-04', 100, 0, 2, NOW(), NOW()),
        ('2024-06-01', 150, 0, 2, NOW(), NOW()),
        ('2024-06-02', 150, 0, 2, NOW(), NOW()),
        ('2024-06-03', 150, 0, 2, NOW(), NOW()),

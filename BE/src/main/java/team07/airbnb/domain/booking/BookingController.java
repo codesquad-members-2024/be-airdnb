@@ -1,5 +1,6 @@
 package team07.airbnb.domain.booking;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -19,6 +20,7 @@ import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
 
+@Tag(name = "예약")
 @RestController
 @RequestMapping("/booking")
 @RequiredArgsConstructor
