@@ -1,6 +1,5 @@
 package com.airdnb.stay.dto;
 
-import com.airdnb.tag.dto.TagQueryResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +22,7 @@ public class StayDetailQueryResponse {
     private final String imageUrl;
     private final String type;
     private final Double rating;
-    private final List<TagQueryResponse> tags;
-    private final List<StayCommentQueryResponse> comments;
+    private final List<String> tagNames;
+    private final List<StayCommentDetail> comments;
     private final List<LocalDate> closedDates;
 }

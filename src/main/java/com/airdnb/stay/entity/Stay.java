@@ -1,6 +1,6 @@
 package com.airdnb.stay.entity;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.entity.ReservationPeriod;
@@ -117,9 +117,5 @@ public class Stay {
                     .findAny()
                     .orElseThrow(() -> new NotFoundException("일치하는 숙소 타입을 찾을 수 없습니다."));
         }
-    }
-
-    public enum StayStatus {
-        ACTIVE, RESERVED, DELETED
     }
 }

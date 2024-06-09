@@ -1,5 +1,7 @@
 package com.airdnb.stay;
 
+import com.airdnb.global.UriMaker;
+import com.airdnb.stay.dto.StayCreate;
 import com.airdnb.stay.dto.StayCreateRequest;
 import com.airdnb.stay.dto.StayDetailQueryResponse;
 import jakarta.validation.Valid;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,11 +24,11 @@ public class StayController {
 
     @PostMapping
     public ResponseEntity<Void> createStay(@Valid @RequestBody StayCreateRequest stayCreateRequest) {
-        Long stayId = stayService.createStay(stayCreateRequest);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(stayId)
-                .toUri();
+        StayCreate stayCreate = StayCreate.of(stayCreateRequest);
+
+        Long stayId = stayService.createStay(stayCreate);
+
+        URI location = UriMaker.makeUri(stayId);
         return ResponseEntity.created(location).build();
     }
 
