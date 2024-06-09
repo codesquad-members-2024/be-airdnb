@@ -3,27 +3,24 @@ package team07.airbnb.domain.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.BookingInfo;
+import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.booking.exception.BookingNotFoundException;
 import team07.airbnb.domain.booking.exception.InvalidDateException;
-import team07.airbnb.domain.booking.property.BookingStatus;
-import team07.airbnb.domain.discount.DiscountPolicyService;
 import team07.airbnb.domain.booking.price_policy.fee.AccommodationFee;
 import team07.airbnb.domain.booking.price_policy.fee.ServiceFee;
+import team07.airbnb.domain.booking.property.BookingStatus;
+import team07.airbnb.domain.discount.DiscountPolicyService;
 import team07.airbnb.domain.payment.PaymentEntity;
 import team07.airbnb.domain.payment.PaymentService;
 import team07.airbnb.domain.product.ProductService;
-import team07.airbnb.domain.product.entity.ProductEntity;
+import team07.airbnb.domain.review.ReviewEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -123,5 +120,18 @@ public class BookingService {
                 .build();
 
         return bookingRepository.save(booking);
+    }
+
+    public void addReview(long bookingId, long writerId, ReviewEntity review) {
+        BookingEntity booking = getById(bookingId);
+        System.out.println(booking.getBooker().getId());
+        System.out.println(writerId);
+        if (booking.getBooker().getId() != writerId) throw new IllegalArgumentException("%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+
+        bookingRepository.save(booking.addReview(review));
+    }
+
+    private BookingEntity getById(long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("%d 번 예약이 존재하지 않습니다!".formatted(bookingId)));
     }
 }
