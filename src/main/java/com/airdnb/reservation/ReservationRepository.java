@@ -1,10 +1,7 @@
 package com.airdnb.reservation;
 
 import com.airdnb.reservation.entity.Reservation;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReservationRepository {
-    Reservation save(Reservation reservation);
-
-    Optional<Reservation> findById(Long id);
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 }

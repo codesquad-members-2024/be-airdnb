@@ -6,19 +6,20 @@ import com.airdnb.image.ImageService;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
-import com.airdnb.stay.dto.StayCommentQueryResponse;
+import com.airdnb.stay.dto.StayCommentDetail;
 import com.airdnb.stay.dto.StayCreateRequest;
 import com.airdnb.stay.dto.StayDetailQueryResponse;
+import com.airdnb.stay.entity.CommentStatus;
 import com.airdnb.stay.entity.Location;
 import com.airdnb.stay.entity.Stay;
-import com.airdnb.stay.entity.Stay.StayStatus;
 import com.airdnb.stay.entity.Stay.StayType;
 import com.airdnb.stay.entity.StayComment;
+import com.airdnb.stay.entity.StayStatus;
 import com.airdnb.stay.repository.StayCommentRepository;
 import com.airdnb.stay.repository.StayRepository;
 import com.airdnb.staytag.StayTag;
 import com.airdnb.staytag.StayTagService;
-import com.airdnb.tag.dto.TagQueryResponse;
+import com.airdnb.tag.entity.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class StayService {
 
     @Transactional(readOnly = true)
     public StayDetailQueryResponse queryStayDetailById(Long id) {
-        Stay stay = findStayById(id);
+        Stay stay = findActiveStayById(id);
 
         return StayDetailQueryResponse.builder()
                 .id(stay.getId())
@@ -59,33 +60,28 @@ public class StayService {
                 .startDate(stay.getStartDate())
                 .endDate(stay.getEndDate())
                 .type(stay.getType().name())
-                .tags(getTagResponses(stay))
-                .comments(getCommentResponses(stay))
-                .rating(getRating(stay))
+                .tagNames(getTagNames(stay))
+                .comments(getActiveCommentDetails(stay))
+                .rating(getActiveRating(stay))
                 .closedDates(stay.getClosedStayDates())
                 .build();
     }
 
     @Transactional(readOnly = true)
-    public Stay findStayById(Long id) {
-        return stayRepository.findById(id).orElseThrow(() -> new NotFoundException("id와 일치하는 숙소를 찾을 수 없습니다."));
+    public Stay findActiveStayById(Long id) {
+        return stayRepository.findByIdAndStatus(id, StayStatus.ACTIVE)
+                .orElseThrow(() -> new NotFoundException("id와 일치하는 숙소를 찾을 수 없습니다."));
     }
 
     @Transactional
     public void softDeleteStay(Long id) {
-        Stay stay = findStayById(id);
+        Stay stay = findActiveStayById(id);
         String currentMemberId = memberService.getCurrentMemberId();
         if (!stay.hasSameHostId(currentMemberId)) {
             throw new ForbiddenException("숙소 삭제 권한이 없습니다.");
         }
         stay.softDelete();
     }
-//
-//    @Transactional
-//    public void addClosedStayDates(Stay stay, List<LocalDate> dates) {
-//        stay.addClosedDates(dates);
-////        stayRepository.save(stay);
-//    }
 
     private Stay buildStay(StayCreateRequest stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());
@@ -120,18 +116,19 @@ public class StayService {
         return imageService.findImageById(imageId);
     }
 
-    private List<TagQueryResponse> getTagResponses(Stay stay) {
+    private List<String> getTagNames(Stay stay) {
         return stay.getStayTags().stream()
                 .map(StayTag::getTag)
-                .map(tag -> new TagQueryResponse(tag.getId(), tag.getName()))
+                .map(Tag::getName)
                 .toList();
     }
 
-    private List<StayCommentQueryResponse> getCommentResponses(Stay stay) {
-        List<StayComment> comments = stayCommentRepository.findCommentsByStayId(stay.getId());
+    private List<StayCommentDetail> getActiveCommentDetails(Stay stay) {
+        List<StayComment> comments = stayCommentRepository.findCommentsByStayIdAndStatus(stay.getId(),
+                CommentStatus.ACTIVE);
 
         return comments.stream()
-                .map(comment -> StayCommentQueryResponse.builder()
+                .map(comment -> StayCommentDetail.builder()
                         .id(comment.getId())
                         .content(comment.getContent())
                         .writer(comment.getWriter())
@@ -141,7 +138,7 @@ public class StayService {
                 .toList();
     }
 
-    private Double getRating(Stay stay) {
-        return stayCommentRepository.findCommentRatingAvgByStayId(stay.getId());
+    private Double getActiveRating(Stay stay) {
+        return stayCommentRepository.findCommentRatingAvg(stay.getId(), CommentStatus.ACTIVE);
     }
 }

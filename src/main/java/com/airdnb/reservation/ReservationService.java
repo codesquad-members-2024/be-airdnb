@@ -28,7 +28,7 @@ public class ReservationService {
     private final MemberService memberService;
 
     public Long createReservation(ReservationCreateRequest reservationCreateRequest) {
-        Stay stay = stayService.findStayById(reservationCreateRequest.getStayId());
+        Stay stay = stayService.findActiveStayById(reservationCreateRequest.getStayId());
         ReservationPeriod reservationPeriod = confirmReservationPeriod(stay, reservationCreateRequest.getCheckinAt(),
                 reservationCreateRequest.getCheckoutAt());
         validateGuestsCount(stay.getMaxGuests(), reservationCreateRequest.getGuestCount());

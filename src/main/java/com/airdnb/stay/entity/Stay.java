@@ -118,8 +118,4 @@ public class Stay {
                     .orElseThrow(() -> new NotFoundException("일치하는 숙소 타입을 찾을 수 없습니다."));
         }
     }
-
-    public enum StayStatus {
-        ACTIVE, RESERVED, DELETED
-    }
 }

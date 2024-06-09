@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @Builder
-public class StayCommentQueryResponse {
+public class StayCommentDetail {
     private final Long id;
     private final String writer;
     private final String content;
