@@ -59,7 +59,6 @@ public class BookingEntity extends BaseEntity {
     private PaymentEntity payment;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "booking_id")
     private ReviewEntity review;
 
     public BookingEntity addReview(ReviewEntity review) {
