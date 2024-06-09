@@ -47,7 +47,7 @@ public class AccommodationController {
     }
 
     @PostMapping
-    @Authenticated(Role.HOST)
+    @Authenticated(Role.USER)
     public void createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
         accommodationService.addAccommodation(
                 createRequest.toEntity(user)
@@ -62,6 +62,6 @@ public class AccommodationController {
     @DeleteMapping("/{id}")
     @Authenticated(Role.HOST)
     public void deleteAccommodation(@PathVariable long id, UserEntity user){
-        accommodationService.deleteById(id);
+        accommodationService.deleteById(id, user);
     }
 }
