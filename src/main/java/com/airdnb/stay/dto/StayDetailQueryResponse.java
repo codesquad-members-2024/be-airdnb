@@ -1,6 +1,7 @@
 package com.airdnb.stay.dto;
 
 import com.airdnb.tag.dto.TagQueryResponse;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -24,4 +25,5 @@ public class StayDetailQueryResponse {
     private final Double rating;
     private final List<TagQueryResponse> tags;
     private final List<StayCommentQueryResponse> comments;
+    private final List<LocalDate> closedDates;
 }

@@ -18,8 +18,6 @@ public class StayCreateRequest {
     private final LocalDateTime startDate;
     @NotNull
     private final LocalDateTime endDate;
-    @NotBlank
-    private final String hostId;
     @NotNull
     private final Long imageId;
     private final List<Long> tagIds;
