@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
 import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
 

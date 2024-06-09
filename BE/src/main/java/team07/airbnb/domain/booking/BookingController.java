@@ -2,9 +2,9 @@ package team07.airbnb.domain.booking;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.auth.aop.Authenticated;
-import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.BookingInfo;
+import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.response.BookingCancelResponse;
+import team07.airbnb.domain.booking.dto.response.BookingDetailResponse;
+import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/booking")
@@ -48,6 +52,10 @@ public class BookingController {
     @PostMapping("/confirm/{bookingId}")
     @Authenticated(Role.HOST)
     public ResponseEntity<Long> confirmBooking(@PathVariable Long bookingId, UserEntity host) {
+        if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
+            throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
+        }
+
         BookingEntity nowBooking = bookingService.findByBookingId(bookingId);
 
         BookingEntity confirmedBooking = bookingService.confirmBooking(nowBooking, host);
@@ -58,6 +66,10 @@ public class BookingController {
     @PostMapping("/cancel/{bookingId}")
     @Authenticated(Role.USER)
     public ResponseEntity<BookingCancelResponse> cancelBooking(@PathVariable Long bookingId, UserEntity booker) {
+        if (!bookingService.isRequestedUserSameInBooking(bookingId, booker)) {
+            throw new OAuth2AuthenticationException("해당 예약의 예약자가 아닙니다");
+        }
+
         BookingEntity toCancel = bookingService.findByBookingId(bookingId);
 
         BookingEntity canceledBooking = bookingService.cancelBooking(toCancel, booker);
@@ -67,5 +79,20 @@ public class BookingController {
         return ResponseEntity.ok(
                 BookingCancelResponse.of(canceledBooking.getId(), cancelFee)
         );
+    }
+
+    @GetMapping("/management")
+    @Authenticated(Role.HOST)
+    public ResponseEntity<List<BookingManageInfoResponse>> getBookingInfoList(UserEntity host) {
+        return ResponseEntity.ok(bookingService.getBookingInfoListByHostId(host));
+    }
+
+    @GetMapping("/management/{bookingId}")
+    @Authenticated(Role.HOST)
+    public ResponseEntity<BookingDetailResponse> getBookingDetail(@PathVariable Long bookingId, UserEntity host) {
+        if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
+            throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
+        }
+        return ResponseEntity.ok(BookingDetailResponse.of(bookingService.findByBookingId(bookingId)));
     }
 }

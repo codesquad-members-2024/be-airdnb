@@ -12,6 +12,7 @@ import team07.airbnb.util.GeometryHelper;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,5 +64,9 @@ public class AccommodationService {
 
     public boolean isAvailableOccupancy(AccommodationEntity accommodation, Integer headCount) {
         return accommodation.getRoomInformation().getMaxOccupancy() >= headCount;
+    }
+
+    public UserEntity getHostIdById(Long accId) {
+        return accommodationRepository.findById(accId).orElseThrow(() -> new NoSuchElementException("존재하지 않는 숙소입니다")).getHost();
     }
 }
