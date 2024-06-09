@@ -1,7 +1,7 @@
 package com.airdnb.stay;
 
-import com.airdnb.global.ForbiddenException;
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.ForbiddenException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.image.ImageService;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.MemberService;

@@ -1,6 +1,7 @@
 package com.airdnb.reservation;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.InvalidRequestException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
@@ -80,12 +81,12 @@ public class ReservationService {
             reservation.cancelReservation(currentMemberId);
             return;
         }
-        throw new InvalidReservationException("해당 상태로는 변경할 수 없습니다."); // PENDING으로 변경 요청시
+        throw new InvalidRequestException("해당 상태로는 변경할 수 없습니다."); // PENDING으로 변경 요청시
     }
 
     private void validateGuestsCount(Integer maxGuests, Integer guestCount) {
         if (guestCount > maxGuests) {
-            throw new InvalidReservationException("예약 신청 인원이 수용 가능 인원을 초과하였습니다.");
+            throw new InvalidRequestException("예약 신청 인원이 수용 가능 인원을 초과하였습니다.");
         }
     }
 
@@ -104,7 +105,7 @@ public class ReservationService {
     private ReservationPeriod confirmReservationPeriod(Stay stay, LocalDateTime checkinAt, LocalDateTime checkoutAt) {
         ReservationPeriod reservationPeriod = new ReservationPeriod(checkinAt, checkoutAt);
         if (!stay.isSatisfyingPeriod(reservationPeriod)) {
-            throw new InvalidReservationException("해당 날짜는 예약이 불가능합니다.");
+            throw new InvalidRequestException("해당 날짜는 예약이 불가능합니다.");
         }
         List<LocalDate> reservationDates = reservationPeriod.getReservationDates();
         stay.addClosedDates(reservationDates);
@@ -119,7 +120,7 @@ public class ReservationService {
     private Member getCustomer(Stay stay) {
         String currentMemberId = memberService.getCurrentMemberId();
         if (stay.hasSameHostId(currentMemberId)) {
-            throw new InvalidReservationException("예약자와 호스트는 동일할 수 없습니다.");
+            throw new InvalidRequestException("예약자와 호스트는 동일할 수 없습니다.");
         }
         return memberService.findMemberById(currentMemberId);
     }

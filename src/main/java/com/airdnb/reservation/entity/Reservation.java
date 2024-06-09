@@ -1,9 +1,9 @@
 package com.airdnb.reservation.entity;
 
-import com.airdnb.global.ForbiddenException;
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.ForbiddenException;
+import com.airdnb.global.exception.InvalidRequestException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.entity.Member;
-import com.airdnb.reservation.InvalidReservationException;
 import com.airdnb.stay.entity.Stay;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -65,7 +65,7 @@ public class Reservation {
 
     public void handleReservation(String currentMemberId, ReservationStatus requestStatus) {
         if (this.status != ReservationStatus.PENDING) {
-            throw new InvalidReservationException("예약 심사가 가능한 상태가 아닙니다.");
+            throw new InvalidRequestException("예약 심사가 가능한 상태가 아닙니다.");
         }
         if (!isHost(currentMemberId)) {
             throw new ForbiddenException("예약 심사 권한이 없는 사용자입니다.");
@@ -78,7 +78,7 @@ public class Reservation {
             throw new ForbiddenException("예약 취소 권한이 없는 사용자입니다.");
         }
         if (this.status != ReservationStatus.APPROVED && this.status != ReservationStatus.PENDING) {
-            throw new InvalidReservationException("취소 가능한 예약 상태가 아닙니다.");
+            throw new InvalidRequestException("취소 가능한 예약 상태가 아닙니다.");
         }
         stay.removeClosedDate(reservationPeriod.getReservationDates());
         this.status = ReservationStatus.CANCELED;

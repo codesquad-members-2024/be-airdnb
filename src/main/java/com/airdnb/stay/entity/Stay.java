@@ -1,6 +1,6 @@
 package com.airdnb.stay.entity;
 
-import com.airdnb.global.NotFoundException;
+import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.entity.ReservationPeriod;

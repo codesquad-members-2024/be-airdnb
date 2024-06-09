@@ -1,13 +1,11 @@
-package com.airdnb.global;
-
-import org.springframework.http.HttpStatus;
+package com.airdnb.global.exception;
 
 public class ForbiddenException extends BizException {
     public ForbiddenException(String message) {
-        super(message, HttpStatus.FORBIDDEN);
+        super(message);
     }
 
     public ForbiddenException(String message, Throwable cause) {
-        super(message, HttpStatus.FORBIDDEN, cause);
+        super(message, cause);
     }
 }
