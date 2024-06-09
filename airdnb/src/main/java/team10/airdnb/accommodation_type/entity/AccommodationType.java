@@ -25,4 +25,8 @@ public class AccommodationType {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    public void updateName(String newName) {
+        this.name = newName;
+    }
 }
