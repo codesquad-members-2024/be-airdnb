@@ -2,6 +2,7 @@ package team07.airbnb.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
@@ -20,15 +21,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void userGrantToHost(UserEntity user) {
-
-    }
-
     public void addFavorite(UserEntity user, ProductEntity product){
         userRepository.save(getCompleteUser(user).addFavorite(product));
     }
 
     public void removeFavorite(UserEntity user, ProductEntity product) {
         userRepository.save(getCompleteUser(user).removeFavorite(product));
+    }
+
+    @Transactional
+    public void userGrantToHost(UserEntity user) {
+        user.setRoleToHost();
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void userGrantToUser(UserEntity user) {
+        user.setRoleToUser();
+        userRepository.save(user);
     }
 }

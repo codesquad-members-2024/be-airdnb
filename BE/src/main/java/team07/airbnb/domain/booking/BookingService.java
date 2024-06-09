@@ -3,8 +3,10 @@ package team07.airbnb.domain.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.domain.booking.dto.BookingInfo;
+import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.booking.dto.request.BookingRequest;
+import team07.airbnb.domain.booking.dto.BookingInfo;
+import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.booking.exception.BookingNotFoundException;
 import team07.airbnb.domain.booking.exception.InvalidDateException;
@@ -20,6 +22,8 @@ import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
 
 @Service
@@ -29,7 +33,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final DiscountPolicyService discountPolicyService;
     private final PaymentService paymentService;
-    private final ProductService productService;
+    private final AccommodationService accommodationService;
 
     private final ServiceFee serviceFee;
     private final AccommodationFee accommodationFee;
@@ -37,6 +41,14 @@ public class BookingService {
     public BookingEntity findByBookingId(Long id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new BookingNotFoundException(id));
+    }
+
+    public boolean isRequestedUserSameInBooking(Long bookingId, UserEntity user) {
+        return bookingRepository.existsByIdAndBooker(bookingId, user);
+    }
+
+    public boolean isRequestedHostSameInBooking(Long bookingId, UserEntity host) {
+        return bookingRepository.existsByIdAndHost(bookingId, host);
     }
 
     @Transactional
@@ -109,8 +121,10 @@ public class BookingService {
         LocalDate checkOut = request.checkOut();
         Integer headCount = request.headCount();
 
+        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
 
         BookingEntity booking = BookingEntity.builder()
+                .host(host)
                 .booker(booker)
                 .checkin(checkIn)
                 .checkout(checkOut)
@@ -133,5 +147,11 @@ public class BookingService {
 
     private BookingEntity getById(long bookingId) {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("%d 번 예약이 존재하지 않습니다!".formatted(bookingId)));
+    }
+
+    public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
+        return bookingRepository.findAllByHost(host).stream()
+                        .map(BookingManageInfoResponse::of)
+                        .collect(Collectors.toList());
     }
 }

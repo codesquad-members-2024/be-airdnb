@@ -84,6 +84,14 @@ public class UserEntity extends BaseEntity {
         return this.role.getKey();
     }
 
+    public void setRoleToHost() {
+        this.role = Role.HOST;
+    }
+
+    public void setRoleToUser() {
+        this.role = Role.USER;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof UserEntity) {

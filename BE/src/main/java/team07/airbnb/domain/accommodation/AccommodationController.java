@@ -61,6 +61,6 @@ public class AccommodationController {
     @DeleteMapping("/{id}")
     @Authenticated(Role.HOST)
     public void deleteAccommodation(@PathVariable long id, UserEntity user){
-        accommodationService.deleteById(id);
+        accommodationService.deleteById(id, user);
     }
 }
