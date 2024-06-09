@@ -26,6 +26,8 @@ public class AccommodationTypeService {
     }
 
     public AccommodationType updateAccommodationType(long accommodationTypeId, AccommodationTypeUpdateRequest request) {
+        validateDuplicateAccommodationTypeName(request.name());
+
         AccommodationType accommodationType = getAccommodationTypeById(accommodationTypeId);
 
         accommodationType.updateName(request.name());
