@@ -58,15 +58,15 @@ public class JwtUtil {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             return true;
         } catch (SignatureException e) {
-            log.info("유효하지않은 서명");
+            log.error("유효하지않은 서명: {}", token, e);
         } catch (MalformedJwtException e) {
-            log.info("JWT 형식 오류");
+            log.error("JWT 형식 오류: {}", token, e);
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT");
+            log.error("만료된 JWT: {}", token, e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰의 문자열 이상");
+            log.error("JWT 토큰의 문자열 이상: {}", token, e);
         } catch (UnsupportedJwtException e) {
-            log.info("지원하지 않는 JWT");
+            log.error("지원하지 않는 JWT: {}", token, e);
         }
         return false;
     }
