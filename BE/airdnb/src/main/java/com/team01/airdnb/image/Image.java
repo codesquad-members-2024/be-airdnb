@@ -9,13 +9,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "images")
 public class Image {
   @Id
@@ -25,6 +29,7 @@ public class Image {
   @NotBlank(message = "사진을 추가해 주세요")
   private String imagePath;
 
+  @Setter
   @ManyToOne
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
