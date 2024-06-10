@@ -42,32 +42,43 @@ public class Accommodation {
   private String content;
   @NotNull(message = "가격을 입력하세요")
   private Long price;
+  @Builder.Default
   private Integer discount = 0;
   @NotBlank(message = "주소를 입력하세요")
   private String address;
   private Double latitude;
   private Double longitude;
+  @Builder.Default
   private Integer commentsNum = 0;
   @NotNull(message = "등록하기 위해서는 어른 한명이 필요합니다")
   @Min(value = 1, message = "등록하기 위해서는 어른 한명이 필요합니다")
+  @Builder.Default
   private Integer maxAdults = 1;
+  @Builder.Default
   private Integer maxChildren = 0;
+  @Builder.Default
   private Integer maxInfants = 0;
+  @Builder.Default
   private Integer maxPets = 0;
 
+  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
 
+  @Setter
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
 
+  @Setter
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Image> images;
 
+  @Setter
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Reservation> reservations;
 
+  @Setter
   @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private Amenity amenity;
 
