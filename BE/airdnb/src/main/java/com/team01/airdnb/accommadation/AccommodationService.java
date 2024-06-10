@@ -2,7 +2,9 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.amenity.Amenity;
+import com.team01.airdnb.amenity.AmenityService;
 import com.team01.airdnb.image.Image;
+import com.team01.airdnb.image.ImageService;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
 import java.util.List;
@@ -12,10 +14,15 @@ import org.springframework.stereotype.Service;
 public class AccommodationService {
   AccommodationRepository accommodationRepository;
   UserService userService;
+  AmenityService amenityService;
+  ImageService imageService;
 
-  public AccommodationService(AccommodationRepository accommodationRepository, UserService userService){
+  public AccommodationService(AccommodationRepository accommodationRepository, UserService userService,
+                              AmenityService amenityService, ImageService imageService){
     this.accommodationRepository = accommodationRepository;
     this.userService = userService;
+    this.amenityService = amenityService;
+    this.imageService = imageService;
   }
 
 
@@ -23,17 +30,19 @@ public class AccommodationService {
    * 숙소를 등록합니다
    */
   public void register(AccommodationRegisterRequest accommodationRegisterRequest) {
-    User user = userService.FindUserById(accommodationRegisterRequest.userId());
+    User user = userService.FindUserById(accommodationRegisterRequest.user_id());
 
     Accommodation accommodation = accommodationRegisterRequest.toAccommodationEntity();
     Amenity amenity = accommodationRegisterRequest.toAmenityEntity();
-    List<Image> image = accommodationRegisterRequest.toImageEntity();
+    List<Image> images = accommodationRegisterRequest.toImageEntity();
 
     accommodation.setUser(user);
     accommodation.setAmenityMapping(amenity);
-    accommodation.setImageMapping(image);
+    accommodation.setImageMapping(images);
 
     accommodationRepository.save(accommodation);
+    amenityService.save(amenity);
+    images.forEach(imageService::save);
   }
 
   /**
