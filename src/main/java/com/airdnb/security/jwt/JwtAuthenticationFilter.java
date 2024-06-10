@@ -1,5 +1,6 @@
 package com.airdnb.security.jwt;
 
+import com.airdnb.global.constants.SecurityConstants;
 import com.airdnb.security.MemberSecurityService;
 import com.airdnb.security.SecurityMember;
 import jakarta.servlet.FilterChain;
@@ -27,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
 
-        String token = jwtUtil.getToken(request);
+        String token = jwtUtil.getToken(request.getHeader(SecurityConstants.AUTHORIZATION_HEADER));
 
         if (token != null && jwtBlacklistService.isTokenBlacklisted(token)) {
             log.info("블랙리스트 토큰입니다.");

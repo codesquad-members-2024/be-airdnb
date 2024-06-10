@@ -9,7 +9,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +44,7 @@ public class JwtUtil {
 
     }
 
-    public String getToken(HttpServletRequest request) {
-        String token = request.getHeader(SecurityConstants.AUTHORIZATION_HEADER);
+    public String getToken(String token) {
         if (StringUtils.hasText(token) && token.startsWith(SecurityConstants.BEARER_PREFIX)) {
             return token.substring(7);
         }
