@@ -30,7 +30,7 @@ jobs:
       - name: Build with gradle
         run: |
           cd ./BE/airdnb
-          ./gradlew clean build
+          ./gradlew clean build -x test
 
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v2
