@@ -3,7 +3,9 @@ package com.airdnb.member;
 import com.airdnb.global.ApiResponse;
 import com.airdnb.global.UriMaker;
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.dto.MemberRegistrationRequest;
 import com.airdnb.member.dto.MemberVerification;
+import com.airdnb.member.dto.MemberVerificationRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +23,15 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
-        memberService.register(memberRegistration);
-        URI location = UriMaker.makeUri(memberRegistration.getId());
+    public ResponseEntity<ApiResponse> registerMember(@Valid @RequestBody MemberRegistrationRequest memberRegistrationRequest) {
+        memberService.register(MemberRegistration.from(memberRegistrationRequest));
+        URI location = UriMaker.makeUri(memberRegistrationRequest.getId());
         return ResponseEntity.created(location).body(ApiResponse.success(null));
     }
 
     @PostMapping("/verify")
-    public ApiResponse verifyMember(@Valid @RequestBody MemberVerification memberVerification) {
-        String accessToken = memberService.verify(memberVerification);
+    public ApiResponse verifyMember(@Valid @RequestBody MemberVerificationRequest memberVerificationRequest) {
+        String accessToken = memberService.verify(MemberVerification.from(memberVerificationRequest));
         return ApiResponse.success(accessToken);
     }
 }
