@@ -1,5 +1,6 @@
 package com.airdnb.reservation;
 
+import com.airdnb.global.ApiResponse;
 import com.airdnb.global.UriMaker;
 import com.airdnb.reservation.dto.ReservationCreate;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
@@ -24,7 +25,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Void> createReservation(
+    public ResponseEntity<ApiResponse> createReservation(
             @Valid @RequestBody ReservationCreateRequest reservationCreateRequest) {
 
         ReservationCreate reservationCreate = toReservationCreate(reservationCreateRequest);
@@ -32,19 +33,19 @@ public class ReservationController {
         Long reservationId = reservationService.createReservation(reservationCreate);
 
         URI location = UriMaker.makeUri(reservationId);
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(ApiResponse.success(null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationQueryResponse> queryReservationDetail(@PathVariable Long id) {
+    public ApiResponse queryReservationDetail(@PathVariable Long id) {
         ReservationQueryResponse reservationQueryResponse = reservationService.queryReservationDetail(id);
-        return ResponseEntity.ok(reservationQueryResponse);
+        return ApiResponse.success(reservationQueryResponse);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateReservationStatus(@PathVariable Long id, @RequestParam String status) {
+    public ApiResponse updateReservationStatus(@PathVariable Long id, @RequestParam String status) {
         reservationService.updateReservationStatus(id, status);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     private ReservationCreate toReservationCreate(ReservationCreateRequest reservationCreateRequest) {

@@ -19,11 +19,11 @@ public class ApiResponse<T> {
         this.errorMessage = errorMessage;
     }
 
-    static <T> ApiResponse<T> success(T data) {
+    public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(ApiResult.SUCCESS, data);
     }
 
-    static <T> ApiResponse<T> error(String errorMessage) {
+    public static <T> ApiResponse<T> error(String errorMessage) {
         return new ApiResponse<>(ApiResult.ERROR, errorMessage);
     }
 

@@ -1,5 +1,6 @@
 package com.airdnb.stay;
 
+import com.airdnb.global.ApiResponse;
 import com.airdnb.global.UriMaker;
 import com.airdnb.stay.dto.StayCreate;
 import com.airdnb.stay.dto.StayCreateRequest;
@@ -23,24 +24,24 @@ public class StayController {
     private final StayService stayService;
 
     @PostMapping
-    public ResponseEntity<Void> createStay(@Valid @RequestBody StayCreateRequest stayCreateRequest) {
+    public ResponseEntity<ApiResponse> createStay(@Valid @RequestBody StayCreateRequest stayCreateRequest) {
         StayCreate stayCreate = StayCreate.of(stayCreateRequest);
 
         Long stayId = stayService.createStay(stayCreate);
 
         URI location = UriMaker.makeUri(stayId);
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(ApiResponse.success(null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StayDetailQueryResponse> queryStayDetail(@PathVariable Long id) {
+    public ApiResponse queryStayDetail(@PathVariable Long id) {
         StayDetailQueryResponse stayDetailQueryResponse = stayService.queryStayDetailById(id);
-        return ResponseEntity.ok(stayDetailQueryResponse);
+        return ApiResponse.success(stayDetailQueryResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStay(@PathVariable Long id) {
+    public ApiResponse deleteStay(@PathVariable Long id) {
         stayService.softDeleteStay(id);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 }
