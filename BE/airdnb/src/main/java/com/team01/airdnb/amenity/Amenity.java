@@ -27,24 +27,25 @@ public class Amenity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus tv;
+  private AmenityStatus tv = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus kitchen;
-  private Integer beds;
-  private Integer bathrooms;
+  private AmenityStatus kitchen = AmenityStatus.NOT_AVAILABLE;
+  private Integer beds = 1;
+  private Integer bathrooms = 0;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus wirelessInternet;
+  private AmenityStatus wirelessInternet = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus washingMachine;
+  private AmenityStatus washingMachine = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus freeParking;
+  private AmenityStatus freeParking = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus paidParking;
+  private AmenityStatus paidParking = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus airConditioner;
+  private AmenityStatus airConditioner = AmenityStatus.NOT_AVAILABLE;
   @Enumerated(EnumType.STRING)
-  private AmenityStatus dedicatedWorkspace;
+  private AmenityStatus dedicatedWorkspace = AmenityStatus.NOT_AVAILABLE;
 
+  @Setter
   @OneToOne
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
