@@ -2,7 +2,6 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.comment.Comment;
-import com.team01.airdnb.host.Host;
 import com.team01.airdnb.image.Image;
 import com.team01.airdnb.reservation.Reservation;
 import jakarta.persistence.CascadeType;
@@ -20,18 +19,23 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "accommodations")
 public class Accommodation {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   @NotBlank(message = "제목을 입력하세요")
   private String title;
   private String content;
