@@ -59,7 +59,6 @@ public class User {
     }
 
     public void addAccommodation(Accommodation accommodation) {
-        accommodation.setUser(this);
         accommodations.add(accommodation);
     }
 

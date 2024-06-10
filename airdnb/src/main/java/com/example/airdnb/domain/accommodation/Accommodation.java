@@ -1,6 +1,8 @@
 package com.example.airdnb.domain.accommodation;
 
 import com.example.airdnb.domain.user.User;
+import com.example.airdnb.domain.user.User.Role;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -51,14 +53,14 @@ public class Accommodation {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "accommodation")
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
     @Builder
     public Accommodation(Address address, User user, String name, String description,
         Long pricePerNight, Integer maxGuests, List<Image> images) {
         this.address = address;
-        this.user = user;
+        setUser(user);
         this.name = name;
         this.description = description;
         this.pricePerNight = pricePerNight;
@@ -73,7 +75,11 @@ public class Accommodation {
         this.images.add(image);
     }
 
-    public void setUser(User user) {
+    private void setUser(User user) {
+        if (!user.getRole().equals(Role.HOST)) {
+            throw new IllegalArgumentException();
+        }
         this.user = user;
+        user.addAccommodation(this);
     }
 }

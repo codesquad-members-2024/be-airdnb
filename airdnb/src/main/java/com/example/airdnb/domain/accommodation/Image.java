@@ -21,7 +21,9 @@ public class Image {
 
     @Column(nullable = false)
     private String url;
+
     private String description;
+
     @ManyToOne
     private Accommodation accommodation;
 
