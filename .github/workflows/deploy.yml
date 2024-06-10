@@ -30,7 +30,8 @@ jobs:
       - name: Build with gradle
         run: |
           cd ./BE/airdnb
-          ./gradlew clean build -x test
+          ./gradlew clean build
+          find build
 
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v2
@@ -43,7 +44,7 @@ jobs:
 
       - name: Docker image Processing
         run: |
-          cd ./BE/airdnb/src/main/resources
+          cd ./BE/airdnb
           docker build -t seondays/airdnb:latest .
           docker push seondays/airdnb:latest
 
