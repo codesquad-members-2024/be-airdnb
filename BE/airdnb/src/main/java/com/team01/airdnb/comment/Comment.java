@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank(message = "점수를 입력하세요")
+  @NotNull(message = "점수를 입력하세요")
   @Min(value = 0, message = "점수는 0 이상이어야 합니다")
   @Max(value = 5, message = "점수는 5 이하여야 합니다")
   private Double score;

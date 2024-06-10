@@ -15,6 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Getter;
@@ -41,7 +42,7 @@ public class User {
   @Enumerated(value = EnumType.STRING)
   public Role role;
 
-  @NotBlank(message = "나이를 입력하세요")
+  @NotNull(message = "나이를 입력하세요")
   @Max(value = 100, message = "나이는 100 이하여야 합니다")
   public Integer age;
 

@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,16 +25,16 @@ public class Reservation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @NotBlank(message = "예약하기 위해서는 어른 한명이 필요합니다")
+  @NotNull(message = "예약하기 위해서는 어른 한명이 필요합니다")
   @Min(value = 1, message = "예약하기 위해서는 어른 한명이 필요합니다")
   private Integer adults = 1;
   private Integer children = 0;
   private Integer infants = 0;
   private Integer pets = 0;
   private Long price;
-  @NotBlank(message = "시작 날짜가 필요합니다")
+  @NotNull(message = "시작 날짜가 필요합니다")
   private LocalDate startDate;
-  @NotBlank(message = "끝 날짜가 필요합니다")
+  @NotNull(message = "끝 날짜가 필요합니다")
   private LocalDate endDate;
 
   @ManyToOne(fetch = FetchType.LAZY)

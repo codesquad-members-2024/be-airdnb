@@ -18,6 +18,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class Accommodation {
   @NotBlank(message = "제목을 입력하세요")
   private String title;
   private String content;
-  @NotBlank(message = "가격을 입력하세요")
+  @NotNull(message = "가격을 입력하세요")
   private Long price;
   private Integer discount = 0;
   @NotBlank(message = "주소를 입력하세요")
@@ -42,7 +43,7 @@ public class Accommodation {
   private Double latitude;
   private Double longitude;
   private Integer commentsNum = 0;
-  @NotBlank(message = "등록하기 위해서는 어른 한명이 필요합니다")
+  @NotNull(message = "등록하기 위해서는 어른 한명이 필요합니다")
   @Min(value = 1, message = "등록하기 위해서는 어른 한명이 필요합니다")
   private Integer maxAdults = 1;
   private Integer maxChildren = 0;
