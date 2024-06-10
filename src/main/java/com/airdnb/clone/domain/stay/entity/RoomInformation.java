@@ -1,5 +1,6 @@
 package com.airdnb.clone.domain.stay.entity;
 
+import com.airdnb.clone.domain.common.Guest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class RoomInformation {
 
     @Builder.Default
-    private Integer guestCount = 1;
+    private Guest guest = Guest.builder().guestCount(1).build();
 
     @Builder.Default
     private Integer bedroomCount = 0;

@@ -1,6 +1,7 @@
 package com.airdnb.clone.domain.reservation.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
+import com.airdnb.clone.domain.common.Guest;
 import com.airdnb.clone.domain.member.Member;
 import com.airdnb.clone.domain.stay.entity.Stay;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class Reservation extends BaseTimeEntity {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private Long totalRate;
-    private Guest guests;
+    private Guest guest;
 
     @Builder.Default
     private Status status = Status.PENDING;
