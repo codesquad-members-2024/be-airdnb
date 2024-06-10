@@ -4,6 +4,7 @@ import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.comment.Comment;
 import com.team01.airdnb.image.Image;
 import com.team01.airdnb.reservation.Reservation;
+import com.team01.airdnb.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,8 +56,8 @@ public class Accommodation {
   private Integer maxPets = 0;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "host_id")
-  private Host host;
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
@@ -69,4 +70,19 @@ public class Accommodation {
 
   @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private Amenity amenity;
+
+  /**
+   * 숙소와 어메니티의 관계를 양쪽 모두 연결합니다.
+   *
+   * @param amenity
+   */
+  public void setAmenityMapping(Amenity amenity) {
+    this.amenity = amenity;
+    amenity.setAccommodation(this);
+  }
+
+  public void setImageMapping(List<Image> images) {
+    this.images = images;
+    images.forEach(image -> image.setAccommodation(this));
+  }
 }
