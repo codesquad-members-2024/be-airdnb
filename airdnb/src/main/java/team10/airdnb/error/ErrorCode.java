@@ -22,6 +22,7 @@ public enum ErrorCode {
 
     // 숙소 방 유형
     ALREADY_SAVED_ROOM_TYPE(HttpStatus.BAD_REQUEST, "R-001", "이미 해당하는 이름의 방 정보가 존재합니다."),
+    ACCOMMODATION_ROOM_TYPE_NOT_EXISTS(HttpStatus.BAD_REQUEST, "R-002", "해당하는 숙소 방 유형은 존재하지 않습니다."),
 
     // 숙소 유형
     ALREADY_SAVED_ACCOMMODATION_TYPE(HttpStatus.BAD_REQUEST, "T-001", "이미 해당하는 이름의 숙소 유형이 존재합니다."),

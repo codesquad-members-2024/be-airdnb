@@ -26,4 +26,7 @@ public class AccommodationRoomType {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    public void updateName(String name) {
+        this.name = name;
+    }
 }
