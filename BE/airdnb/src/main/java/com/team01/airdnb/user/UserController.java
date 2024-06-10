@@ -1,5 +1,8 @@
 package com.team01.airdnb.user;
 
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class UserController {
 
 }
