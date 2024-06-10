@@ -47,7 +47,7 @@ public class AccommodationTypeService {
         return accommodationType;
     }
 
-    private AccommodationType getAccommodationTypeById(long accommodationTypeId) {
+    public AccommodationType getAccommodationTypeById(long accommodationTypeId) {
         return accommodationTypeRepository.findById(accommodationTypeId)
                 .orElseThrow(() -> new AccommodationTypeNotFoundException(ErrorCode.ACCOMMODATION_TYPE_NOT_EXISTS));
     }
