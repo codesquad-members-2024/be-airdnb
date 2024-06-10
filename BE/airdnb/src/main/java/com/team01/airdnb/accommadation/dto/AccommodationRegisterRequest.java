@@ -25,9 +25,10 @@ public record AccommodationRegisterRequest(
     AmenityStatus paid_parking,
     AmenityStatus air_conditioning,
     AmenityStatus dedicated_workspace,
+    AmenityStatus wireless_internet,
     Integer beds,
     Integer bathrooms,
-    String userId
+    String user_id
 ) {
 
   public Accommodation toAccommodationEntity() {
@@ -61,6 +62,7 @@ public record AccommodationRegisterRequest(
         .paidParking(paid_parking)
         .airConditioner(air_conditioning)
         .dedicatedWorkspace(dedicated_workspace)
+        .wirelessInternet(wireless_internet)
         .beds(beds)
         .bathrooms(bathrooms)
         .build();
