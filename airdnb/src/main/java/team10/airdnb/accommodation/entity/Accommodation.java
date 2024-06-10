@@ -56,4 +56,32 @@ public class Accommodation {
 
     @Column(name = "per_price", nullable = false)
     private long perPrice;
+
+    @Override
+    public String toString() {
+        return String.format("""
+                        
+                        {
+                        memberId='%s'
+                        name='%s'
+                        maxCapacity=%d
+                        accommodationType=%s
+                        accommodationRoomType=%s
+                        bedroomCount=%d
+                        bathroomCount=%d
+                        bedCount=%d
+                        perPrice=%d
+                        }""",
+                memberId,
+                name,
+                maxCapacity,
+                accommodationType != null ? accommodationType.getId() : "null",
+                accommodationRoomType != null ? accommodationRoomType.getId() : "null",
+                bedroomCount,
+                bathroomCount,
+                bedCount,
+                perPrice);
+    }
+
+
 }
