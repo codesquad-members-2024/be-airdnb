@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk-slim
 WORKDIR /home/app
 
-ARG JAR_FILE=./build/libs/airdnb-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=./BE/airdnb/build/libs/airdnb-0.0.1-SNAPSHOT.jar
 
 COPY $JAR_FILE /home/app/airbnb.jar
 
