@@ -1,7 +1,7 @@
 package codesquad.team05.web.reservation;
 
-import codesquad.team05.domain.reservation.Reservation;
-import codesquad.team05.domain.reservation.ReservationRepository;
+import codesquad.team05.domain.accommodation.reservation.Reservation;
+import codesquad.team05.domain.accommodation.reservation.ReservationRepository;
 import codesquad.team05.domain.user.User;
 import codesquad.team05.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;

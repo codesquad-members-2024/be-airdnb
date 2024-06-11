@@ -1,17 +1,16 @@
-package codesquad.team05.domain.reservation;
+package codesquad.team05.domain.accommodation.reservation;
 
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
 
@@ -31,14 +30,4 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
-
-    @Builder
-    public Reservation(int amount, int personCount, LocalDate checkInDate, LocalDate checkOutDate, User user, Accommodation accommodation) {
-        this.amount = amount;
-        this.personCount = personCount;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-        this.user = user;
-        this.accommodation = accommodation;
-    }
 }
