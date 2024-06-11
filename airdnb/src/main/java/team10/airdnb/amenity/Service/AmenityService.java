@@ -1,40 +1,79 @@
 package team10.airdnb.amenity.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import team10.airdnb.accommodation.entity.Accommodation;
-import team10.airdnb.accommodation.repository.AccommodationRepository;
+import team10.airdnb.amenity.Controller.request.AmenityRequest;
 import team10.airdnb.amenity.entity.Amenity;
+import team10.airdnb.amenity.exception.AmenityIdNotFoundException;
+import team10.airdnb.amenity.exception.AmenityNameDuplicateException;
 import team10.airdnb.amenity.repository.AmenityRepository;
+import team10.airdnb.error.ErrorCode;
 
 import java.util.List;
 
 @Service
 public class AmenityService {
     private final AmenityRepository amenityRepository;
-    private final AccommodationRepository accommodationRepository;
 
     @Autowired
-    public AmenityService(AmenityRepository amenityRepository, AccommodationRepository accommodationRepository) {
+    public AmenityService(AmenityRepository amenityRepository) {
         this.amenityRepository = amenityRepository;
-        this.accommodationRepository = accommodationRepository;
     }
 
     // 새로운 어메니티 생성
-    public Amenity createAmenity(Amenity amenity) {
+    public Amenity saveAmenity(AmenityRequest request) {
+        validateDuplicateAmenity(request.name());
+        return amenityRepository.save(request.toEntity());
+    }
+
+    // 어메니티 수정
+    public Amenity updateAmenity(long amenityId, AmenityRequest request) {
+        validateDuplicateAmenity(request.name());
+        Amenity amenity = getAmenityById(amenityId);
+        amenity.updateName(request.name());
         return amenityRepository.save(amenity);
     }
 
-    // 특정 숙박 시설에 여러 어메니티 추가
-    public void addAmenitiesToAccommodation(Long accommodationId, List<Long> amenityIds) {
-        Accommodation accommodation = accommodationRepository.findById(accommodationId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid accommodation ID"));
-        List<Amenity> amenities = amenityRepository.findAllById(amenityIds);
-        if (amenities.size() != amenityIds.size()) {
-            throw new IllegalArgumentException("One or more invalid amenity IDs");
-        }
-
-        accommodation.getAmenities().addAll(amenities);
-        accommodationRepository.save(accommodation);
+    // 어메니티 삭제
+    public Amenity deleteAmenity(long amenityId) {
+        Amenity amenity = getAmenityById(amenityId);
+        amenityRepository.delete(amenity);
+        return amenity;
     }
+
+    public List<Amenity> getAllAmenity() {
+        return amenityRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    private Amenity getAmenityById(long amenityId) {
+        return amenityRepository.findById(amenityId)
+                .orElseThrow(() -> new AmenityIdNotFoundException(ErrorCode.AMENITY_TYPE_NOT_EXISTS));
+    }
+
+    private void validateDuplicateAmenity(String inputAmenity) {
+        amenityRepository.findByName(inputAmenity)
+                .ifPresent(amenity -> {
+                    throw new AmenityNameDuplicateException(ErrorCode.ALREADY_SAVED_AMENITY);
+                });
+    }
+
+    /* TODO
+
+    * CRUD
+
+    * 1) Amenity Update 서비스 만들기
+    *   -> updateAmenity() -> return : Amenity
+    * 2) Amenity Delete 서비스 만들기
+    *   -> deleteAmenity() -> return : Amenity
+    * 3) Amenity Read 서비스 만들기
+    *   -> getAmenities()   -> return : List
+    *   -> getAmenityById() -> return : Amenity
+    * */
+
+    // Exception
+    // - AmenityIdNotFoundException
+    // - AmenityNameDuplicateException
+        // -> findByName -->
+
 }

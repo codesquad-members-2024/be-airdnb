@@ -1,24 +1,33 @@
 package team10.airdnb.amenity.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToMany;
-import org.springframework.data.annotation.Id;
-import team10.airdnb.accommodation.entity.Accommodation;
-
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "amenity")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Amenity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "amenities")
-    private Set<Accommodation> accommodations = new HashSet<>();
+    public void updateName(String newName) {
+        this.name = newName;
+    }
 }
 
