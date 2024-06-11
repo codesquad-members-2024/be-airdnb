@@ -1,5 +1,6 @@
 package com.airdnb.clone.domain.common;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -14,8 +15,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseTimeEntity {
 
     @CreatedDate
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 }
