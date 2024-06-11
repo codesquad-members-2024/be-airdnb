@@ -6,13 +6,21 @@ import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
+import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
+import team10.airdnb.accommodation_amenity.repository.AccommodationAmenityRepository;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_room_type.exception.AccommodationRoomTypeNotFoundException;
 import team10.airdnb.accommodation_room_type.repository.AccommodationRoomTypeRepository;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 import team10.airdnb.accommodation_type.exception.AccommodationTypeNotFoundException;
 import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
+import team10.airdnb.amenity.entity.Amenity;
+import team10.airdnb.amenity.repository.AmenityRepository;
 import team10.airdnb.error.ErrorCode;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,6 +30,8 @@ public class AccommodationService {
     private final AccommodationTypeRepository accommodationTypeRepository;
     private final AccommodationRoomTypeRepository accommodationRoomTypeRepository;
     private final AccommodationRepository accommodationRepository;
+    private final AccommodationAmenityRepository accommodationAmenityRepository;
+    private final AmenityRepository amenityRepository;
 
     public Accommodation createAccommodation(AccommodationCreateRequest request) {
         AccommodationType accommodationType = getAccommodationTypeById(request.accommodationType());
@@ -30,9 +40,22 @@ public class AccommodationService {
 
         Accommodation accommodation = request.toEntity(accommodationType, accommodationRoomType);
 
-        log.info("생성된 숙소 정보 : {}", accommodation);
+        Accommodation savedAccommodation = accommodationRepository.save(accommodation);
 
-        return accommodationRepository.save(accommodation);
+        log.info("저장된 숙소 정보 : {}", accommodation);
+
+        List<Amenity> amenities = amenityRepository.findAllById(request.amenityIds());
+
+        Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
+                .map(amenity -> AccommodationAmenity.builder()
+                        .accommodation(accommodation)
+                        .amenity(amenity)
+                        .build())
+                .collect(Collectors.toSet());
+
+        accommodationAmenityRepository.saveAll(accommodationAmenities);
+
+        return savedAccommodation;
     }
 
     private AccommodationType getAccommodationTypeById(Long accommodationTypeId) {

@@ -6,8 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import team10.airdnb.accommodation.entity.Accommodation;
+import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
+
+import java.util.List;
 
 public record AccommodationCreateRequest(
         @NotBlank
@@ -34,8 +37,9 @@ public record AccommodationCreateRequest(
         long bedCount,
 
         @Min(value = 10000) @Max(value = 15000000)
-        long perPrice
+        long perPrice,
 
+        List<Long> amenityIds
 ) {
     public Accommodation toEntity(AccommodationType accommodationType, AccommodationRoomType accommodationRoomType) {
         return Accommodation.builder()
