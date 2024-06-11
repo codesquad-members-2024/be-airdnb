@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
+@ToString
+@Table(name = "USERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class User {
@@ -59,7 +63,14 @@ public class User {
     }
 
     public void addAccommodation(Accommodation accommodation) {
+        if (!role.equals(Role.HOST)) {
+            throw new IllegalArgumentException();
+        }
         accommodations.add(accommodation);
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 
     public enum Role {

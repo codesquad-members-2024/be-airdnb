@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,15 +21,11 @@ public class Image {
     @Column(nullable = false)
     private String url;
 
-    private String description;
-
     @ManyToOne
     private Accommodation accommodation;
 
-    @Builder
-    public Image(String url, String description, Accommodation accommodation) {
+    public Image(String url) {
         this.url = url;
-        this.description = description;
         this.accommodation = accommodation;
     }
 
@@ -38,4 +33,11 @@ public class Image {
         this.accommodation = accommodation;
     }
 
+    @Override
+    public String toString() {
+        return "Image{" +
+            "id=" + id +
+            ", url='" + url + '\'' +
+            '}';
+    }
 }

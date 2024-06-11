@@ -1,7 +1,6 @@
 package com.example.airdnb.domain.accommodation;
 
 import com.example.airdnb.domain.user.User;
-import com.example.airdnb.domain.user.User.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -65,9 +64,14 @@ public class Accommodation {
         this.description = description;
         this.pricePerNight = pricePerNight;
         this.maxGuests = maxGuests;
-        for (Image image : images) {
-            addImage(image);
+        addImages(images);
+    }
+
+    private void addImages(List<Image> images) {
+        if (images == null) {
+            return;
         }
+        images.forEach(this::addImage);
     }
 
     public void addImage(Image image) {
@@ -75,11 +79,26 @@ public class Accommodation {
         this.images.add(image);
     }
 
-    private void setUser(User user) {
-        if (!user.getRole().equals(Role.HOST)) {
-            throw new IllegalArgumentException();
+    public void setUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
         }
         this.user = user;
         user.addAccommodation(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Accommodation{" +
+            "id=" + id +
+            ", address=" + address +
+            ", user=" + user.getName() +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", pricePerNight=" + pricePerNight +
+            ", maxGuests=" + maxGuests +
+            ", createdAt=" + createdAt +
+            ", images=" + images +
+            '}';
     }
 }
