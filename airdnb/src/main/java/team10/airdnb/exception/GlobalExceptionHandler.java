@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<?> handleMemberIdNotFoundException(BusinessException e) {
+    public ResponseEntity<?> handleBusinessException(BusinessException e) {
         BusinessExceptionResponse response = BusinessExceptionResponse.from(e);
 
         log.error(response.toString());
