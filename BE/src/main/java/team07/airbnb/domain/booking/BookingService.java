@@ -17,6 +17,7 @@ import team07.airbnb.domain.discount.DiscountPolicyService;
 import team07.airbnb.domain.payment.PaymentEntity;
 import team07.airbnb.domain.payment.PaymentService;
 import team07.airbnb.domain.product.ProductService;
+import team07.airbnb.domain.product.entity.ProductStatus;
 import team07.airbnb.domain.review.ReviewEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
@@ -34,21 +35,34 @@ public class BookingService {
     private final DiscountPolicyService discountPolicyService;
     private final PaymentService paymentService;
     private final AccommodationService accommodationService;
+    private final ProductService productService;
 
     private final ServiceFee serviceFee;
     private final AccommodationFee accommodationFee;
 
-    public BookingEntity findByBookingId(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new BookingNotFoundException(id));
-    }
+    @Transactional
+    public BookingEntity createBooking(BookingInfo bookingInfo, BookingRequest request, UserEntity booker) throws IllegalStateException{
+        PaymentEntity payment = paymentService.createNewPayment(bookingInfo);
+        LocalDate checkIn = request.checkIn();
+        LocalDate checkOut = request.checkOut();
+        Integer headCount = request.headCount();
 
-    public boolean isRequestedUserSameInBooking(Long bookingId, UserEntity user) {
-        return bookingRepository.existsByIdAndBooker(bookingId, user);
-    }
+        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
 
-    public boolean isRequestedHostSameInBooking(Long bookingId, UserEntity host) {
-        return bookingRepository.existsByIdAndHost(bookingId, host);
+        BookingEntity booking = BookingEntity.builder()
+                .host(host)
+                .booker(booker)
+                .checkin(checkIn)
+                .checkout(checkOut)
+                .headCount(headCount)
+                .payment(payment)
+                .status(BookingStatus.REQUESTED)
+                .build();
+
+        productService.getInDateRangeOfAccommodation(request.accommodationId(), checkIn, checkOut)
+                .forEach(product -> product.book(booking));
+
+        return bookingRepository.save(booking);
     }
 
     @Transactional
@@ -63,7 +77,6 @@ public class BookingService {
 
         booking.setStatus(BookingStatus.CONFIRM);
 
-
         return bookingRepository.save(booking);
     }
 
@@ -74,27 +87,9 @@ public class BookingService {
         }
 
         booking.setStatus(BookingStatus.CANCEL);
+        booking.getProducts().forEach(product -> product.book(booking));
 
         return bookingRepository.save(booking);
-    }
-
-    public long getRoughTotalPrice(long avgPrice, LocalDate checkIn, LocalDate checkOut) {
-        long days = ChronoUnit.DAYS.between(checkIn, checkOut);
-        if (days <= 0) throw new InvalidDateException();
-
-        return avgPrice * days;
-    }
-
-    public long getDiscountPrice(long roughTotalPrice) {
-        return discountPolicyService.getDiscountPrice(roughTotalPrice);
-    }
-
-    public long getServiceFee(long roughTotalPrice, long discountPrice) {
-        return serviceFee.getFeePrice(roughTotalPrice - discountPrice);
-    }
-
-    public long getAccommodationFee(long serviceFeePrice) {
-        return accommodationFee.getAccommodationFeePrice(serviceFeePrice);
     }
 
     public BookingInfo getBookingInfo(BookingRequest requestInfo) {
@@ -115,30 +110,6 @@ public class BookingService {
         );
     }
 
-    @Transactional
-    public BookingEntity createBooking(BookingInfo bookingInfo, BookingRequest request, UserEntity booker) {
-        PaymentEntity payment = paymentService.createNewPayment(bookingInfo);
-        LocalDate checkIn = request.checkIn();
-        LocalDate checkOut = request.checkOut();
-        Integer headCount = request.headCount();
-
-        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
-
-        BookingEntity booking = BookingEntity.builder()
-                .host(host)
-                .booker(booker)
-                .checkin(checkIn)
-                .checkout(checkOut)
-                .headCount(headCount)
-                .payment(payment)
-                .status(BookingStatus.REQUESTED)
-                .build();
-
-
-
-        return bookingRepository.save(booking);
-    }
-
     public void addReview(long bookingId, long writerId, ReviewEntity review) {
         BookingEntity booking = getById(bookingId);
         System.out.println(booking.getBooker().getId());
@@ -148,13 +119,44 @@ public class BookingService {
         bookingRepository.save(booking.addReview(review));
     }
 
-    private BookingEntity getById(long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("%d 번 예약이 존재하지 않습니다!".formatted(bookingId)));
+    public BookingEntity findByBookingId(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException(id));
     }
 
     public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
         return bookingRepository.findAllByHost(host).stream()
                         .map(BookingManageInfoResponse::of)
                         .collect(Collectors.toList());
+    }
+
+    public boolean isRequestedUserSameInBooking(Long bookingId, UserEntity user) {
+        return bookingRepository.existsByIdAndBooker(bookingId, user);
+    }
+
+    public boolean isRequestedHostSameInBooking(Long bookingId, UserEntity host) {
+        return bookingRepository.existsByIdAndHost(bookingId, host);
+    }
+
+    public long getRoughTotalPrice(long avgPrice, LocalDate checkIn, LocalDate checkOut) {
+        long days = ChronoUnit.DAYS.between(checkIn, checkOut);
+        if (days <= 0) throw new InvalidDateException();
+
+        return avgPrice * days;
+    }
+    public long getDiscountPrice(long roughTotalPrice) {
+        return discountPolicyService.getDiscountPrice(roughTotalPrice);
+    }
+
+    public long getServiceFee(long roughTotalPrice, long discountPrice) {
+        return serviceFee.getFeePrice(roughTotalPrice - discountPrice);
+    }
+
+    public long getAccommodationFee(long serviceFeePrice) {
+        return accommodationFee.getAccommodationFeePrice(serviceFeePrice);
+    }
+
+    private BookingEntity getById(long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("%d 번 예약이 존재하지 않습니다!".formatted(bookingId)));
     }
 }

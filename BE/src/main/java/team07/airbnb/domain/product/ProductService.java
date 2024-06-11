@@ -53,10 +53,6 @@ public class ProductService {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public void bookAll(BookingEntity booking){
-
-    }
-
     public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId , LocalDate checkIn , LocalDate checkOut){
         return productRepository.findAllByAccommodationIdAndDateBetween(accommodationId, checkIn, checkOut);
     }

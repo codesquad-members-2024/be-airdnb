@@ -51,9 +51,15 @@ public class ProductEntity extends BaseEntity {
     }
 
     public ProductEntity book(BookingEntity booking){
+        if(!canBook()) throw new IllegalStateException("[ %d번 상품 예약 실패]예약 불가 상태 상품입니다.".formatted(this.id));
+
         this.booking = booking;
         this.status = ProductStatus.BOOKED;
 
         return this;
+    }
+
+    private boolean canBook() {
+        return this.booking != null || this.status != ProductStatus.OPEN;
     }
 }
