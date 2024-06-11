@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface AccommodationRepository extends JpaRepository<AccommodationEntity, Long> {
 
-    @Query(value = "SELECT * FROM accommodation WHERE ST_Distance_Sphere(point, :point) <= :distance", nativeQuery = true)
+    @Query(value = "SELECT * FROM ACCOMMODATION WHERE ST_Distance_Sphere(point, :point) <= :distance", nativeQuery = true)
     List<AccommodationEntity> findByLocationWithinDistance(@Param("point") Point point, @Param("distance") double distance);
 
     boolean findAccommodationEntityByHost(UserEntity host);
