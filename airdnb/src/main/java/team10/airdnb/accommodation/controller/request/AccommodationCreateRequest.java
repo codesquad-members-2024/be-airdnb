@@ -35,6 +35,8 @@ public record AccommodationCreateRequest(
 
         @Min(value = 10000) @Max(value = 15000000)
         long perPrice
+
+        ㅣㅑㄴ
 ) {
     public Accommodation toEntity(AccommodationType accommodationType, AccommodationRoomType accommodationRoomType) {
         return Accommodation.builder()
