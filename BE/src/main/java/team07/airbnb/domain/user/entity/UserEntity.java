@@ -48,19 +48,11 @@ public class UserEntity extends BaseEntity {
     @NotNull
     private String registrationId;
 
-    @OneToMany(mappedBy = "booker", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<BookingEntity> bookingByBooker;
-
-    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<BookingEntity> bookingByHost;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<LikeEntity> favorites;
 
-    public UserEntity update(String name, String email, String picture) {
+    public UserEntity updateInfo(String name, String email, String picture) {
         this.name = name;
         this.email = email;
         this.picture = picture;

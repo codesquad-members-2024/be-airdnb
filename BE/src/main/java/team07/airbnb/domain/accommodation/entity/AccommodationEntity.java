@@ -80,7 +80,7 @@ public class AccommodationEntity extends BaseEntity {
     }
 
     public void addPicture(String url) {
-        pictures.add(new Pictures(this.id, url));
+        pictures.add(new Pictures(this, url));
     }
 
     public void addProduct(LocalDate date, int price){

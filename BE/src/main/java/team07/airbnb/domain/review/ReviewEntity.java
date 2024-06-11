@@ -29,7 +29,7 @@ public class ReviewEntity extends BaseEntity {
     private String content;
     private int rating;
 
-    @OneToMany
+    @OneToMany(mappedBy = "review")
     private List<ReplyEntity> replies;
 
     public ReviewEntity(Long bookingId, String content, int rating) {

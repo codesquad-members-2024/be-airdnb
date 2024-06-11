@@ -68,7 +68,7 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
     private UserEntity saveOrUpdate(OAuthAttributes attributes) {
         UserEntity user = userRepository.findByRegistrationIdAndName(attributes.getRegistrationId(), attributes.getName())
                 // 가입된 사용자는 이름과 이미지, 사진만 업데이트
-                .map(entity -> entity.update(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
+                .map(entity -> entity.updateInfo(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
                 // 가입되지 않은 사용자 => User 엔티티 생성
                 .orElse(attributes.toEntity());
 
