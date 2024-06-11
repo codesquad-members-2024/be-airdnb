@@ -2,14 +2,22 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
+import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
+import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.amenity.AmenityService;
 import com.team01.airdnb.image.Image;
 import com.team01.airdnb.image.ImageService;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

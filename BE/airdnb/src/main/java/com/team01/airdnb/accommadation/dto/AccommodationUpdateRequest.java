@@ -4,15 +4,15 @@ import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.amenity.AmenityStatus;
 import com.team01.airdnb.image.Image;
-import com.team01.airdnb.user.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record AccommodationRegisterRequest(
+public record AccommodationUpdateRequest(
+    Long id,
     String title,
     String content,
     Long price,
-    Integer discount,
+    Integer discountRate,
     Integer maxAdults,
     Integer maxChildren,
     Integer maxInfants,
@@ -29,21 +29,20 @@ public record AccommodationRegisterRequest(
     AmenityStatus wireless_internet,
     Integer beds,
     Integer bathrooms,
-    String userId
+    String user_id
 ) {
-
-  public Accommodation toAccommodationEntity(User user) {
+  public Accommodation toAccommodationEntity() {
     return Accommodation.builder()
+        .id(id)
         .title(title)
         .content(content)
         .price(price)
-        .discountRate(discount)
+        .discountRate(discountRate)
         .maxAdults(maxAdults)
         .maxChildren(maxChildren)
         .maxInfants(maxInfants)
         .maxPets(maxPets)
         .address(address)
-        .user(user)
         .build();
   }
 
@@ -69,4 +68,5 @@ public record AccommodationRegisterRequest(
         .bathrooms(bathrooms)
         .build();
   }
+
 }
