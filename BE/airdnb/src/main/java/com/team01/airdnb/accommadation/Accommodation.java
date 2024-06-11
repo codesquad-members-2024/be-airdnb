@@ -1,5 +1,6 @@
 package com.team01.airdnb.accommadation;
 
+import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.comment.Comment;
 import com.team01.airdnb.image.Image;
@@ -43,7 +44,7 @@ public class Accommodation {
   @NotNull(message = "가격을 입력하세요")
   private Long price;
   @Builder.Default
-  private Integer discount = 0;
+  private Integer discountRate = 0;
   @NotBlank(message = "주소를 입력하세요")
   private String address;
   private Double latitude;
@@ -61,12 +62,10 @@ public class Accommodation {
   @Builder.Default
   private Integer maxPets = 0;
 
-  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
 
-  @Setter
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;
 
@@ -74,7 +73,6 @@ public class Accommodation {
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Image> images;
 
-  @Setter
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Reservation> reservations;
 
@@ -95,5 +93,17 @@ public class Accommodation {
   public void setImageMapping(List<Image> images) {
     this.images = images;
     images.forEach(image -> image.setAccommodation(this));
+  }
+
+  public void update(AccommodationUpdateRequest accommodationUpdateRequest) {
+    this.title = accommodationUpdateRequest.title();
+    this.content = accommodationUpdateRequest.content();
+    this.price = accommodationUpdateRequest.price();
+    this.discountRate = accommodationUpdateRequest.discountRate();
+    this.maxAdults = accommodationUpdateRequest.maxAdults();
+    this.maxChildren = accommodationUpdateRequest.maxChildren();
+    this.maxInfants = accommodationUpdateRequest.maxInfants();
+    this.maxPets = accommodationUpdateRequest.maxPets();
+    this.address = accommodationUpdateRequest.address();
   }
 }
