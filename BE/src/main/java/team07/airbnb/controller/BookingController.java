@@ -1,4 +1,4 @@
-package team07.airbnb.domain.booking;
+package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,15 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.domain.auth.aop.Authenticated;
+import team07.airbnb.common.auth.aop.Authenticated;
+import team07.airbnb.domain.booking.BookingService;
 import team07.airbnb.domain.booking.dto.BookingInfo;
 import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.response.BookingCancelResponse;
 import team07.airbnb.domain.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
+import team07.airbnb.domain.user.service.UserService;
+
 import java.util.List;
 
 @Tag(name = "예약")
@@ -31,6 +35,7 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final UserService userService;
 
     @GetMapping
     public BookingInfo getBookingInfo(@RequestBody @Valid BookingRequest requestInfo) {
@@ -39,20 +44,21 @@ public class BookingController {
 
     @PostMapping
     @Authenticated(Role.USER)
-    public ResponseEntity<Long> bookingRequest(@RequestBody @Valid BookingRequest request, UserEntity user) {
+    public ResponseEntity<Long> bookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
         BookingInfo bookingInfo = bookingService.getBookingInfo(request);
         if (bookingInfo.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
-        BookingEntity result = bookingService.createBooking(bookingInfo, request, user);
+        BookingEntity result = bookingService.createBooking(bookingInfo, request, userService.getCompleteUser(user));
 
         return ResponseEntity.ok(result.getId());
     }
 
     @PostMapping("/confirm/{bookingId}")
     @Authenticated(Role.HOST)
-    public ResponseEntity<Long> confirmBooking(@PathVariable Long bookingId, UserEntity host) {
+    public ResponseEntity<Long> confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+        UserEntity host = userService.getCompleteUser(user);
         if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
             throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
         }
@@ -66,7 +72,9 @@ public class BookingController {
 
     @PostMapping("/cancel/{bookingId}")
     @Authenticated(Role.USER)
-    public ResponseEntity<BookingCancelResponse> cancelBooking(@PathVariable Long bookingId, UserEntity booker) {
+    public ResponseEntity<BookingCancelResponse> cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+        UserEntity booker = userService.getCompleteUser(user);
+
         if (!bookingService.isRequestedUserSameInBooking(bookingId, booker)) {
             throw new OAuth2AuthenticationException("해당 예약의 예약자가 아닙니다");
         }
@@ -84,14 +92,14 @@ public class BookingController {
 
     @GetMapping("/management")
     @Authenticated(Role.HOST)
-    public ResponseEntity<List<BookingManageInfoResponse>> getBookingInfoList(UserEntity host) {
-        return ResponseEntity.ok(bookingService.getBookingInfoListByHostId(host));
+    public ResponseEntity<List<BookingManageInfoResponse>> getBookingInfoList(TokenUserInfo host) {
+        return ResponseEntity.ok(bookingService.getBookingInfoListByHostId(userService.getCompleteUser(host)));
     }
 
     @GetMapping("/management/{bookingId}")
     @Authenticated(Role.HOST)
-    public ResponseEntity<BookingDetailResponse> getBookingDetail(@PathVariable Long bookingId, UserEntity host) {
-        if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
+    public ResponseEntity<BookingDetailResponse> getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
+        if (!bookingService.isRequestedHostSameInBooking(bookingId, userService.getCompleteUser(host))) {
             throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
         }
         return ResponseEntity.ok(BookingDetailResponse.of(bookingService.findByBookingId(bookingId)));

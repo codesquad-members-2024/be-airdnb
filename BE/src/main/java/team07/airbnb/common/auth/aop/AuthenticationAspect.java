@@ -1,4 +1,4 @@
-package team07.airbnb.domain.auth.aop;
+package team07.airbnb.common.auth.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import team07.airbnb.domain.auth.JwtAuthenticationFilter;
+import team07.airbnb.common.auth.JwtAuthenticationFilter;
 import team07.airbnb.domain.user.enums.Role;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static team07.airbnb.domain.user.enums.Role.*;
 

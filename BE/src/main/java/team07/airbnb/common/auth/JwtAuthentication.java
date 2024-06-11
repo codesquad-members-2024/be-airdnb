@@ -1,11 +1,11 @@
-package team07.airbnb.domain.auth;
+package team07.airbnb.common.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,13 +15,13 @@ import java.util.Collections;
 public class JwtAuthentication implements Authentication {
 
     private final String jwtToken;
-    private final UserEntity userEntity;
+    private final TokenUserInfo userInfo;
 
     private boolean authenticated;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userEntity.stringRole()));
+        return Collections.singleton(new SimpleGrantedAuthority(userInfo.stringRole()));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return userEntity;
+        return userInfo;
     }
 
     @Override
@@ -51,6 +51,6 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return userEntity.getName();
+        return userInfo.name();
     }
 }

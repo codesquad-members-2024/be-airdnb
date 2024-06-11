@@ -1,4 +1,4 @@
-package team07.airbnb.domain.admin;
+package team07.airbnb.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

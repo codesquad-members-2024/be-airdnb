@@ -49,4 +49,11 @@ public class ProductEntity extends BaseEntity {
                 .status(ProductStatus.OPEN)
                 .build();
     }
+
+    public ProductEntity book(BookingEntity booking){
+        this.booking = booking;
+        this.status = ProductStatus.BOOKED;
+
+        return this;
+    }
 }

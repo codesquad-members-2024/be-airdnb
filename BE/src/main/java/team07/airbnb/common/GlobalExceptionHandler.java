@@ -1,4 +1,4 @@
-package team07.airbnb.util;
+package team07.airbnb.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

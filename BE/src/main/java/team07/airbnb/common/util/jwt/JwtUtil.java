@@ -1,4 +1,4 @@
-package team07.airbnb.util.jwt;
+package team07.airbnb.common.util.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import team07.airbnb.domain.user.entity.UserEntity;
-import team07.airbnb.domain.auth.JwtUserDetails;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
+import team07.airbnb.common.auth.JwtUserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -35,11 +35,10 @@ public class JwtUtil {
 
 
     public String generateToken(JwtUserDetails userDetails) throws JsonProcessingException {
-        UserEntity user = userDetails.getUser();
+        TokenUserInfo user = TokenUserInfo.of(userDetails.getUser());
         String userJson = mapper.writeValueAsString(user);
 
         return Jwts.builder()
-                .subject(user.getEmail())
                 .claim("user", userJson)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
@@ -47,10 +46,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    public UserEntity getUserEntity(String token) throws JsonProcessingException {
+    public TokenUserInfo getUserEntity(String token) throws JsonProcessingException {
         Claims claims = extractClaims(token);
         String userJson = claims.get("user", String.class);
-        return mapper.readValue(userJson, UserEntity.class);
+        return mapper.readValue(userJson, TokenUserInfo.class);
     }
 
     private Claims extractClaims(String token) {

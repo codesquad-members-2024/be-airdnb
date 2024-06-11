@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.domain.product.entity.ProductEntity;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
+
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -13,20 +16,20 @@ public class UserService {
     private final UserRepository userRepository;
 
     // JWT 토큰의 유저 정보로 부족할때 온전한 UserEntity 사용
-    public UserEntity getCompleteUser(UserEntity user){
-        return userRepository.findById(user.getId()).get();
+    public UserEntity getCompleteUser(TokenUserInfo user){
+        return userRepository.getReferenceById(user.id());
     }
 
     public void saveChanged(UserEntity user){
         userRepository.save(user);
     }
 
-    public void addFavorite(UserEntity user, ProductEntity product){
-        userRepository.save(getCompleteUser(user).addFavorite(product));
+    public void addFavorite(Long userId, ProductEntity product){
+        userRepository.save(getById(userId).addFavorite(product));
     }
 
-    public void removeFavorite(UserEntity user, ProductEntity product) {
-        userRepository.save(getCompleteUser(user).removeFavorite(product));
+    public void removeFavorite(Long userId, ProductEntity product) {
+        userRepository.save(getById(userId).removeFavorite(product));
     }
 
     @Transactional
@@ -39,5 +42,9 @@ public class UserService {
     public void userGrantToUser(UserEntity user) {
         user.setRoleToUser();
         userRepository.save(user);
+    }
+
+    private UserEntity getById(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저 " + id));
     }
 }

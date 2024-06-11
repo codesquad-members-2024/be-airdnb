@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.product.dto.ProductListResponse;
 import team07.airbnb.domain.product.entity.ProductEntity;
 
@@ -50,6 +51,14 @@ public class ProductService {
         return products.entrySet().stream()
                 .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut) && isAvailablePeopleCount(entry.getValue(), headCount))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public void bookAll(BookingEntity booking){
+
+    }
+
+    public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId , LocalDate checkIn , LocalDate checkOut){
+        return productRepository.findAllByAccommodationIdAndDateBetween(accommodationId, checkIn, checkOut);
     }
 
     public ProductEntity findById(long id){

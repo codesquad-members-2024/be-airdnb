@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
-import team07.airbnb.util.GeometryHelper;
+import team07.airbnb.common.util.GeometryHelper;
 
 import java.io.IOException;
 

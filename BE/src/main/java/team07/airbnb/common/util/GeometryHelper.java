@@ -1,4 +1,4 @@
-package team07.airbnb.util;
+package team07.airbnb.common.util;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

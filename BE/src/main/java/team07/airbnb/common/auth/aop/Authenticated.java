@@ -1,4 +1,4 @@
-package team07.airbnb.domain.auth.aop;
+package team07.airbnb.common.auth.aop;
 
 import team07.airbnb.domain.user.enums.Role;
 

@@ -1,4 +1,4 @@
-package team07.airbnb.domain.auth;
+package team07.airbnb.common.auth;
 
 import lombok.Builder;
 import lombok.Getter;

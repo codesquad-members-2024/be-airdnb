@@ -5,22 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import team07.airbnb.util.UserEntityArgumentResolver;
+import team07.airbnb.common.util.TokenArgumentResolver;
 
 import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final UserEntityArgumentResolver userEntityArgumentResolver;
+    private final TokenArgumentResolver tokenArgumentResolver;
 
-    public WebConfig(UserEntityArgumentResolver userEntityArgumentResolver) {
-        this.userEntityArgumentResolver = userEntityArgumentResolver;
+    public WebConfig(TokenArgumentResolver tokenArgumentResolver) {
+        this.tokenArgumentResolver = tokenArgumentResolver;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userEntityArgumentResolver);
+        resolvers.add(tokenArgumentResolver);
     }
 
     @Bean

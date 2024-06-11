@@ -1,4 +1,4 @@
-package team07.airbnb.util;
+package team07.airbnb.common.util;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 
 @Component
-public class UserEntityArgumentResolver implements HandlerMethodArgumentResolver {
+public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(UserEntity.class);
+        return parameter.getParameterType().equals(TokenUserInfo.class);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class UserEntityArgumentResolver implements HandlerMethodArgumentResolver
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return (UserEntity) authentication.getPrincipal();
+            return (TokenUserInfo) authentication.getPrincipal();
         }
         return null;
     }

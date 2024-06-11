@@ -5,14 +5,14 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.common.auth.exception.AuthorizeException;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;
-import team07.airbnb.util.GeometryHelper;
+import team07.airbnb.common.util.GeometryHelper;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +47,8 @@ public class AccommodationService {
 
     @Transactional
     public void deleteById(long id, UserEntity user) {
+        if(!getHostIdById(id).equals(user.getId())) throw new AuthorizeException();
+
         try {
             accommodationRepository.deleteById(id);
         } catch (IllegalArgumentException e) {
@@ -54,9 +56,8 @@ public class AccommodationService {
         }
 
         boolean hostHasAcc = accommodationRepository.findAccommodationEntityByHost(user);
-        if (!hostHasAcc) userService.userGrantToUser(user);
+        if (!hostHasAcc) userService.userGrantToUser(user); // 남은 숙소가 없다면 호스트에서 일반 유저로 변경
     }
-
 
     private AccommodationEntity getAccommodationById(long id) throws NoSuchElementException {
         return accommodationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 숙소 %d".formatted(id)));

@@ -63,6 +63,7 @@ public class BookingService {
 
         booking.setStatus(BookingStatus.CONFIRM);
 
+
         return bookingRepository.save(booking);
     }
 
@@ -132,6 +133,8 @@ public class BookingService {
                 .payment(payment)
                 .status(BookingStatus.REQUESTED)
                 .build();
+
+
 
         return bookingRepository.save(booking);
     }

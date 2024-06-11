@@ -1,4 +1,4 @@
-package team07.airbnb.domain.product;
+package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.domain.product.ProductCreateRequest;
+import team07.airbnb.domain.product.ProductService;
 import team07.airbnb.domain.product.dto.ProductListResponse;
 
 import java.time.LocalDate;
@@ -31,9 +33,9 @@ public class ProductController {
     public List<ProductListResponse> findNearByAvailableProducts(
             @RequestParam @Nullable LocalDate checkIn,
             @RequestParam @Nullable  LocalDate checkOut,
-            @RequestParam double longitude,
-            @RequestParam double latitude,
-            @RequestParam double distance,
+            @RequestParam Double longitude,
+            @RequestParam Double latitude,
+            @RequestParam Double distance,
             @RequestParam @Nullable Integer headCount
     ) {
 

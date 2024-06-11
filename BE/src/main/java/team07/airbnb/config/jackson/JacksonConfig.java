@@ -11,7 +11,7 @@ import team07.airbnb.config.jackson.deserializers.CustomPointDeserializer;
 import team07.airbnb.config.jackson.serializers.CustomLocalDateSerializer;
 import team07.airbnb.config.jackson.serializers.CustomLocalDateTimeSerializer;
 import team07.airbnb.config.jackson.serializers.CustomPointSerializer;
-import team07.airbnb.util.GeometryHelper;
+import team07.airbnb.common.util.GeometryHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
