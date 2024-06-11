@@ -1,19 +1,21 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.accommodation.accommodation_hashtag.AccommodationHashtag;
+import codesquad.team05.domain.accommodation.reservation.Reservation;
+import codesquad.team05.domain.host.Host;
+import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Accommodation {
 
@@ -33,19 +35,19 @@ public class Accommodation {
     @JoinColumn(name = "login_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host_id")
+    private Host host;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @Builder
-    public Accommodation(String name, int price, String address, int maxCapacity, int roomCount, int bedCount, String description, User user) {
-        this.name = name;
-        this.price = price;
-        this.address = address;
-        this.maxCapacity = maxCapacity;
-        this.roomCount = roomCount;
-        this.bedCount = bedCount;
-        this.description = description;
-        this.user = user;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Picture> pictures = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AccommodationHashtag> AccommodationHashtags = new ArrayList<>();
 }
