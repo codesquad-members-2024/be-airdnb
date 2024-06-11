@@ -4,6 +4,7 @@ import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.amenity.Amenity;
 import com.team01.airdnb.amenity.AmenityStatus;
 import com.team01.airdnb.image.Image;
+import com.team01.airdnb.user.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public record AccommodationRegisterRequest(
     String user_id
 ) {
 
-  public Accommodation toAccommodationEntity() {
+  public Accommodation toAccommodationEntity(User user) {
     return Accommodation.builder()
         .title(title)
         .content(content)
@@ -42,6 +43,7 @@ public record AccommodationRegisterRequest(
         .maxInfants(maxInfants)
         .maxPets(maxPets)
         .address(address)
+        .user(user)
         .build();
   }
 
