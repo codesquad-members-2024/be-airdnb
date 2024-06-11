@@ -87,6 +87,14 @@ public class Accommodation {
         user.addAccommodation(this);
     }
 
+    public Image getRepresentativeImage() {
+        // 임시 코드
+        if (images.isEmpty()) {
+            return null;
+        }
+        return images.getFirst();
+    }
+
     @Override
     public String toString() {
         return "Accommodation{" +

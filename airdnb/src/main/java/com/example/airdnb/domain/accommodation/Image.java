@@ -26,7 +26,6 @@ public class Image {
 
     public Image(String url) {
         this.url = url;
-        this.accommodation = accommodation;
     }
 
     public void setAccommodation(Accommodation accommodation) {
