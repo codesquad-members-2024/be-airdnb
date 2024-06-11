@@ -27,6 +27,7 @@ import team07.airbnb.domain.review.ReviewEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -58,13 +59,13 @@ public class AccommodationEntity extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "accommodation_id")
-    private List<Pictures> pictures;
+    private List<Pictures> pictures = new ArrayList<>();
 
     private int basePricePerDay;
 
     @JsonIgnore
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductEntity> products;
+    private List<ProductEntity> products = new ArrayList<>();
 
     @Transient
     public List<ReviewEntity> reviews() {

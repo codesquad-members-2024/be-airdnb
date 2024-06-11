@@ -6,6 +6,7 @@ import team07.airbnb.domain.accommodation.property.AccommodationType;
 import team07.airbnb.domain.accommodation.property.RoomInformation;
 import team07.airbnb.domain.user.entity.UserEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record AccommodationCreateRequest(
@@ -25,6 +26,8 @@ public record AccommodationCreateRequest(
                 .address(address)
                 .name(name)
                 .description(description)
+                .pictures(new ArrayList<>())
+                .products(new ArrayList<>())
                 .basePricePerDay(basePricePerDay)
                 .build();
 

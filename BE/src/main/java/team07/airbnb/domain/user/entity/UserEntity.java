@@ -20,6 +20,7 @@ import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.enums.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -45,12 +46,14 @@ public class UserEntity extends BaseEntity {
     @NotNull
     private Role role;
 
+
+
     @NotNull
     private String registrationId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<LikeEntity> favorites;
+    private List<LikeEntity> favorites = new ArrayList<>();
 
     public UserEntity updateInfo(String name, String email, String picture) {
         this.name = name;

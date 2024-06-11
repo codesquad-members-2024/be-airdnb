@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,7 +31,7 @@ public class ReviewEntity extends BaseEntity {
     private int rating;
 
     @OneToMany(mappedBy = "review")
-    private List<ReplyEntity> replies;
+    private List<ReplyEntity> replies = new ArrayList<>();
 
     public ReviewEntity(Long bookingId, String content, int rating) {
         this.bookingId = bookingId;

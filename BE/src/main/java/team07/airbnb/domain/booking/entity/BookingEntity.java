@@ -23,6 +23,7 @@ import team07.airbnb.domain.review.ReviewEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,7 +39,7 @@ public class BookingEntity extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductEntity> products;
+    private List<ProductEntity> products = new ArrayList<>();
 
     @ManyToOne
     private UserEntity booker;

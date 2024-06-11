@@ -49,11 +49,11 @@ public class AccommodationController {
     }
 
     @PostMapping
-    @Authenticated(Role.HOST)
-    public AccommodationEntity createAccommodation(@RequestBody AccommodationCreateRequest createRequest, TokenUserInfo user) {
-        return accommodationService.addAccommodation(
+    @Authenticated(Role.USER)
+    public AccommodationListResponse createAccommodation(@RequestBody AccommodationCreateRequest createRequest, TokenUserInfo user) {
+        return AccommodationListResponse.of(accommodationService.addAccommodation(
                 createRequest.toEntity(userService.getCompleteUser(user))
-        );
+        ));
     }
 
     @GetMapping("/{id}")
