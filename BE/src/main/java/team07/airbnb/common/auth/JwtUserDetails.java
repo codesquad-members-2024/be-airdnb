@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Getter
 public class JwtUserDetails implements UserDetails, OAuth2User {
 
-    private final UserEntity user;
+    private final TokenUserInfo user;
     private final Map<String, Object> attributes;
     private String jwt;
 
@@ -42,12 +43,12 @@ public class JwtUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.name();
     }
 
 
     @Override
     public String getName() {
-        return user.getName();
+        return user.name();
     }
 }

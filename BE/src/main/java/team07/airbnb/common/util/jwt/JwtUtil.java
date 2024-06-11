@@ -35,7 +35,7 @@ public class JwtUtil {
 
 
     public String generateToken(JwtUserDetails userDetails) throws JsonProcessingException {
-        TokenUserInfo user = TokenUserInfo.of(userDetails.getUser());
+        TokenUserInfo user = userDetails.getUser();
         String userJson = mapper.writeValueAsString(user);
 
         return Jwts.builder()

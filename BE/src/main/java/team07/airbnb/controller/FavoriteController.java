@@ -1,4 +1,4 @@
-package team07.airbnb.domain.user;
+package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

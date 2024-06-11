@@ -47,7 +47,7 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
         // 사용자 저장 또는 업데이트
         UserEntity user = saveOrUpdate(attributes);
 
-        JwtUserDetails userDetails = new JwtUserDetails(user, attributes.getAttributes());
+        JwtUserDetails userDetails = new JwtUserDetails(TokenUserInfo.of(user), attributes.getAttributes());
 
         String jwt = null;
         try {
