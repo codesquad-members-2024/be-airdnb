@@ -57,23 +57,4 @@ public class AmenityService {
                     throw new AmenityNameDuplicateException(ErrorCode.ALREADY_SAVED_AMENITY);
                 });
     }
-
-    /* TODO
-
-    * CRUD
-
-    * 1) Amenity Update 서비스 만들기
-    *   -> updateAmenity() -> return : Amenity
-    * 2) Amenity Delete 서비스 만들기
-    *   -> deleteAmenity() -> return : Amenity
-    * 3) Amenity Read 서비스 만들기
-    *   -> getAmenities()   -> return : List
-    *   -> getAmenityById() -> return : Amenity
-    * */
-
-    // Exception
-    // - AmenityIdNotFoundException
-    // - AmenityNameDuplicateException
-        // -> findByName -->
-
 }
