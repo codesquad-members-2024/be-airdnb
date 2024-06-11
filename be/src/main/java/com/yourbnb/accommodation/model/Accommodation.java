@@ -11,8 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -47,19 +45,14 @@ public class Accommodation {
     @JoinColumn(name = "accommodation_image_id", referencedColumnName = "id")
     private AccommodationImage accommodationImages;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "accommodation_amenity",
-            joinColumns = @JoinColumn(name = "accommodation_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "amenity_id", referencedColumnName = "id")
-    )
+    @OneToMany(mappedBy = "accommodations", cascade = CascadeType.ALL)
     private Set<AccommodationAmenity> accommodationAmenities;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id", referencedColumnName = "member_id")
     private Member host;
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true) // 숙소가 삭제되면 리뷰도 삭제?
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews;
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
