@@ -2,6 +2,7 @@ package com.team01.airdnb.accommadation;
 
 
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
+import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +40,14 @@ public class AccommodationController {
 
   //숙소 수정
   @PutMapping("/accommodations/{id}")
-  public void updateAccommodation(@PathVariable Long id) {
-
+  public void updateAccommodation(@PathVariable Long id,
+      @RequestBody AccommodationUpdateRequest accommodationUpdateRequest) {
+    accommodationService.update(id, accommodationUpdateRequest);
   }
 
   //숙소 삭제
   @DeleteMapping("accommodations/{id}")
   public void deleteAccommodation(@PathVariable Long id) {
-
+    accommodationService.delete(id);
   }
 }

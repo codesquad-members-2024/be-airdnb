@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class AccommodationService {
 
   AccommodationRepository accommodationRepository;
@@ -32,15 +33,8 @@ public class AccommodationService {
    * 숙소를 등록합니다
    */
   public void register(AccommodationRegisterRequest accommodationRegisterRequest) {
-    User user = userService.FindUserById(accommodationRegisterRequest.user_id());
-
-    Accommodation accommodation = accommodationRegisterRequest.toAccommodationEntity();
-    Amenity amenity = accommodationRegisterRequest.toAmenityEntity();
-    List<Image> images = accommodationRegisterRequest.toImageEntity();
-
-    accommodation.setUser(user);
-    accommodation.setAmenityMapping(amenity);
-    accommodation.setImageMapping(images);
+    Accommodation accommodation = getAccommodation(
+        accommodationRegisterRequest);
 
     accommodationRepository.save(accommodation);
   }
@@ -52,14 +46,23 @@ public class AccommodationService {
   /**
    * 숙소를 수정합니다.
    */
-  public void updateAccommodation() {
+  public void update(Long id, AccommodationUpdateRequest accommodationUpdateRequest) {
+    Accommodation find = accommodationRepository.findById(id).orElseThrow();
+
+    find.update(accommodationUpdateRequest);
   }
 
   /**
    * 숙소를 삭제합니다.
    */
-  public void deleteAccommodation(Long id) {
+  public void delete(Long id) {
+    findById(id);
     accommodationRepository.deleteById(id);
+  }
+
+  private Accommodation findById(Long id) {
+    return accommodationRepository.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("기존에 존재하는 숙소가 없어요"));
   }
 
   /**
