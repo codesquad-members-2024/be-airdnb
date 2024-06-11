@@ -4,7 +4,7 @@ import team10.airdnb.error.ErrorCode;
 import team10.airdnb.exception.BusinessException;
 
 public class AccommodationTypeNameDuplicateException extends BusinessException {
-    public AccommodationTypeNameDuplicateException(ErrorCode errorCode) {
-        super(errorCode);
+    public AccommodationTypeNameDuplicateException() {
+        super(ErrorCode.ALREADY_SAVED_ACCOMMODATION_TYPE);
     }
 }

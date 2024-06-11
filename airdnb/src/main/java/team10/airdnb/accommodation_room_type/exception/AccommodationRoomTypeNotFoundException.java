@@ -4,7 +4,7 @@ import team10.airdnb.error.ErrorCode;
 import team10.airdnb.exception.BusinessException;
 
 public class AccommodationRoomTypeNotFoundException extends BusinessException {
-    public AccommodationRoomTypeNotFoundException(ErrorCode errorCode) {
-        super(errorCode);
+    public AccommodationRoomTypeNotFoundException() {
+        super(ErrorCode.ACCOMMODATION_ROOM_TYPE_NOT_EXISTS);
     }
 }

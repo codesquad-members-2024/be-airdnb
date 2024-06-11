@@ -52,7 +52,7 @@ public class MemberService {
 
     public Member findMemberByMemberId(String id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberIdNotFoundException(ErrorCode.MEMBER_NOT_EXISTS));
+                .orElseThrow(MemberIdNotFoundException::new);
     }
 }
 

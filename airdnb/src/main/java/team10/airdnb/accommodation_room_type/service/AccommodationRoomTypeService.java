@@ -52,13 +52,13 @@ public class AccommodationRoomTypeService {
 
     private AccommodationRoomType getAccommodationRoomTypeById(long accommodationRoomTypeId) {
         return accommodationRoomTypeRepository.findById(accommodationRoomTypeId)
-                .orElseThrow(() -> new AccommodationRoomTypeNotFoundException(ErrorCode.ACCOMMODATION_ROOM_TYPE_NOT_EXISTS));
+                .orElseThrow(AccommodationRoomTypeNotFoundException::new);
     }
 
     private void validateDuplicateRoomTypeName(String inputRoomTypeName) {
         accommodationRoomTypeRepository.findByName(inputRoomTypeName)
                 .ifPresent(roomType -> {
-                    throw new AccommodationRoomTypeNameDuplicateException(ErrorCode.ALREADY_SAVED_ROOM_TYPE);
+                    throw new AccommodationRoomTypeNameDuplicateException();
                 });
     }
 }
