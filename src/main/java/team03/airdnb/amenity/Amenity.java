@@ -2,15 +2,15 @@ package team03.airdnb.amenity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import team03.airdnb.AccommodationAmenity.AccommodationAmenity;
+import team03.airdnb.accommodationAmenity.AccommodationAmenity;
 
 import java.util.ArrayList;
 import java.util.List;
+import team03.airdnb.common.BaseEntity;
 
 @Entity
-@Table(name = "AMENITYS")
 @Getter
-public class Amenity {
+public class Amenity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

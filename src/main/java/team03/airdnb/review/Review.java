@@ -1,17 +1,26 @@
 package team03.airdnb.review;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.NoArgsConstructor;
 import team03.airdnb.accommodation.Accommodation;
+import team03.airdnb.common.BaseEntity;
 import team03.airdnb.user.User;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "REVIEWS")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
-public class Review {
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +36,4 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
 }

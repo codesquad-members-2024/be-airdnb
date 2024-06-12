@@ -14,7 +14,7 @@ public class AccommodationSaveDto {
     private String profileImg;
     private Address address;
     private Long price;
-    private int headcount;
+    private int maxHeadCount;
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
@@ -26,7 +26,7 @@ public class AccommodationSaveDto {
                 .profileImg(this.profileImg)
                 .address(this.address)
                 .price(this.price)
-                .headCount(this.headcount)
+                .maxHeadCount(this.maxHeadCount)
                 .bedCount(this.bedCount)
                 .bedroomCount(this.bedroomCount)
                 .bathroomCount(this.bathroomCount)

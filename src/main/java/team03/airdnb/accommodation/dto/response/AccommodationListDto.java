@@ -2,7 +2,7 @@ package team03.airdnb.accommodation.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import team03.airdnb.AccommodationAmenity.AccommodationAmenity;
+import team03.airdnb.accommodationAmenity.AccommodationAmenity;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.Address;
 
@@ -18,7 +18,7 @@ public class AccommodationListDto {
     private String profileImg;
     private Address address;
     private Long price;
-    private int headcount;
+    private int maxHeadCount;
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
@@ -33,7 +33,7 @@ public class AccommodationListDto {
                 accommodation.getProfileImg(),
                 accommodation.getAddress(),
                 accommodation.getPrice(),
-                accommodation.getHeadCount(),
+                accommodation.getMaxHeadCount(),
                 accommodation.getBedCount(),
                 accommodation.getBedroomCount(),
                 accommodation.getBathroomCount(),

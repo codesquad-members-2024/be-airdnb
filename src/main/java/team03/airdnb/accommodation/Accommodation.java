@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team03.airdnb.AccommodationAmenity.AccommodationAmenity;
-import team03.airdnb.like.Like;
+import team03.airdnb.accommodationAmenity.AccommodationAmenity;
+import team03.airdnb.common.BaseEntity;
+import team03.airdnb.favorite.Favorite;
 import team03.airdnb.reservation.Reservation;
 import team03.airdnb.review.Review;
 import team03.airdnb.user.User;
@@ -15,12 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ACCOMMODATIONS")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class Accommodation {
+public class Accommodation extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Accommodation {
 
     private Long price;
     private double averageGrade;
-    private int headCount;
+    private int maxHeadCount;
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
@@ -46,7 +46,7 @@ public class Accommodation {
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
-    private List<Like> likes = new ArrayList<>();
+    private List<Favorite> favorites = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
