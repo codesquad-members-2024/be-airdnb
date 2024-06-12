@@ -6,9 +6,13 @@ import com.yourbnb.member.model.Member;
 import com.yourbnb.member.repository.MemberRepository;
 import com.yourbnb.review.model.Review;
 import com.yourbnb.review.model.dto.ReviewCreationRequest;
+import com.yourbnb.review.model.dto.ReviewResponse;
 import com.yourbnb.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +35,9 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-
+    public List<ReviewResponse> getReviewsByAccommodationId(Long accommodationId){
+        return reviewRepository.findByAccommodationId(accommodationId).stream()
+                .map(ReviewResponse::from)
+                .collect(Collectors.toList());
+    }
 }
