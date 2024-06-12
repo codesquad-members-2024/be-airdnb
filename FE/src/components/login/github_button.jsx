@@ -12,6 +12,9 @@ const GithubButton = ({ onClick }) => {
         display: "flex",
         alignItems: "center",
         margin: "10px auto",
+        boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.2)",
+        justifyContent: "center",
+        width: "100%" /* 버튼 너비 조정 */,
       }}
     >
       <img

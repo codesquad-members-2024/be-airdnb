@@ -3,6 +3,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: "Noto Sans KR";
 }
 
 body {
@@ -21,29 +22,6 @@ body {
 .link {
   text-decoration: none;
   color: #d69f05;
-}
-
-.navbar {
-  background: linear-gradient(to left, #b1ba5c, #ffffff);
-  padding: 10px;
-  justify-content: flex;
-  text-align: center;
-  align-items: center;
-  gap: 15px;
-}
-
-.navbar a,
-span {
-  color: #364b0a;
-  font-weight: bolder;
-  text-decoration: none;
-  display: inline-block;
-  margin: 0 10px;
-}
-
-.navbar a:last-child,
-.navbar span:last-child {
-  margin-right: 0; /* Removes extra margin from the last element */
 }
 
 .introduction {
@@ -97,35 +75,6 @@ span {
 
 .login-container button {
   margin: 0 auto;
-}
-
-.google-map {
-  margin-top: 100px;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-}
-
-.price-tag {
-  background-color: #4285f4;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 14px;
-  padding: 10px 15px;
-  position: relative;
-}
-
-.price-tag::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 0);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid #4285f4;
 }
 
 .marker {

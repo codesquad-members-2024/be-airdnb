@@ -11,6 +11,7 @@ export const handleOAuth = async (code, state, provider) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("userId", data.userId);
     localStorage.setItem("userName", data.userName);
+    localStorage.setItem("profileImage", data.profileImage);
 
     alert("로그인 성공: " + data.userName + "님 환영합니다!");
   } catch (error) {
