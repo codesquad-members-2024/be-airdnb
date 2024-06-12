@@ -140,8 +140,6 @@ public class BookingService {
 
     public long getRoughTotalPrice(long avgPrice, LocalDate checkIn, LocalDate checkOut) {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
-        if (days <= 0) throw new DateInversionException(checkIn, checkOut);
-
         return avgPrice * days;
     }
     public long getDiscountPrice(long roughTotalPrice) {
