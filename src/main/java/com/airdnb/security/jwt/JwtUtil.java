@@ -1,5 +1,6 @@
-package com.airdnb.security;
+package com.airdnb.security.jwt;
 
+import com.airdnb.global.constants.SecurityConstants;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -8,7 +9,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +44,8 @@ public class JwtUtil {
 
     }
 
-    public String getToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
+    public String getToken(String token) {
+        if (StringUtils.hasText(token) && token.startsWith(SecurityConstants.BEARER_PREFIX)) {
             return token.substring(7);
         }
         return null;
@@ -54,24 +53,28 @@ public class JwtUtil {
 
     public Boolean validateToken(String token) {
         try {
-            log.info("token: {}", token);
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             return true;
         } catch (SignatureException e) {
-            log.info("유효하지않은 서명");
+            log.error("유효하지않은 서명: {}", token, e);
         } catch (MalformedJwtException e) {
-            log.info("JWT 형식 오류");
+            log.error("JWT 형식 오류: {}", token, e);
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT");
+            log.error("만료된 JWT: {}", token, e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰의 문자열 이상");
+            log.error("JWT 토큰의 문자열 이상: {}", token, e);
         } catch (UnsupportedJwtException e) {
-            log.info("지원하지 않는 JWT");
+            log.error("지원하지 않는 JWT: {}", token, e);
         }
         return false;
     }
 
     public String getId(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().get("id", String.class);
+    }
+
+    public Long getRemainingTime(String token) {
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getExpiration().getTime()
+            - System.currentTimeMillis();
     }
 }

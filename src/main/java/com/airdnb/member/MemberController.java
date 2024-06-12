@@ -1,7 +1,11 @@
 package com.airdnb.member;
 
+import com.airdnb.global.ApiResponse;
+import com.airdnb.global.UriMaker;
 import com.airdnb.member.dto.MemberRegistration;
+import com.airdnb.member.dto.MemberRegistrationRequest;
 import com.airdnb.member.dto.MemberVerification;
+import com.airdnb.member.dto.MemberVerificationRequest;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,19 +22,16 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerMember(@Valid @RequestBody MemberRegistration memberRegistration) {
-        memberService.register(memberRegistration);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(memberRegistration.getId())
-            .toUri();
-        return ResponseEntity.created(location).build();
+    @PostMapping
+    public ResponseEntity<ApiResponse> registerMember(@Valid @RequestBody MemberRegistrationRequest memberRegistrationRequest) {
+        memberService.register(MemberRegistration.from(memberRegistrationRequest));
+        URI location = UriMaker.makeUri(memberRegistrationRequest.getId());
+        return ResponseEntity.created(location).body(ApiResponse.success(null));
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verifyMember(@Valid @RequestBody MemberVerification memberVerification) {
-        return ResponseEntity.ok(memberService.verify(memberVerification));
+    public ApiResponse verifyMember(@Valid @RequestBody MemberVerificationRequest memberVerificationRequest) {
+        String accessToken = memberService.verify(MemberVerification.from(memberVerificationRequest));
+        return ApiResponse.success(accessToken);
     }
-
 }

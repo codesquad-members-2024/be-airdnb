@@ -1,5 +1,8 @@
-package com.airdnb.security;
+package com.airdnb.security.jwt;
 
+import com.airdnb.global.constants.SecurityConstants;
+import com.airdnb.security.MemberSecurityService;
+import com.airdnb.security.SecurityMember;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,15 +21,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-
+    private final JwtBlacklistService jwtBlacklistService;
     private final MemberSecurityService memberSecurityService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
 
-        String token = jwtUtil.getToken(request);
-        if (token != null && jwtUtil.validateToken(token)) {
+        String token = jwtUtil.getToken(request.getHeader(SecurityConstants.AUTHORIZATION_HEADER));
+
+        if (token != null && jwtBlacklistService.isTokenBlacklisted(token)) {
+            log.info("블랙리스트 토큰입니다.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (jwtUtil.validateToken(token)) {
             log.info("토큰 검증 완료");
             String id = jwtUtil.getId(token);
             SecurityMember securityMember = memberSecurityService.loadUserByUsername(id);

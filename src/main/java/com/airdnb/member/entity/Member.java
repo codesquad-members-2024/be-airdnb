@@ -43,6 +43,10 @@ public class Member {
         this.status = MemberStatus.ACTIVE;
     }
 
+    public boolean hasSameId(String memberId) {
+        return id.equals(memberId);
+    }
+
     public enum MemberStatus {
         ACTIVE, DELETED
     }
