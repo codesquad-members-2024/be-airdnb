@@ -10,7 +10,10 @@ import team10.airdnb.member.entity.Member;
 import team10.airdnb.member.exception.MemberIdNotFoundException;
 import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.reservation.controller.request.ReservationCreateRequest;
+import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
+import team10.airdnb.reservation.dto.AccommodationInformationDto;
 import team10.airdnb.reservation.entity.Reservation;
+import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
 import team10.airdnb.reservation.repository.ReservationRepository;
 
 @Slf4j
@@ -22,6 +25,17 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     private final AccommodationRepository accommodationRepository;
 
+    public ReservationInformationResponse getReservation(long reservationId) {
+        Reservation reservation = getReservationById(reservationId);
+
+        AccommodationInformationDto accommodationInformation = AccommodationInformationDto.from(
+                reservation.getAccommodation().getId(),
+                reservation.getAccommodation().getName()
+        );
+
+        return ReservationInformationResponse.from(reservation, accommodationInformation);
+    }
+
     public Reservation createReservation(ReservationCreateRequest request) {
         Member member = getMemberById(request.memberId());
 
@@ -30,6 +44,11 @@ public class ReservationService {
         Reservation reservation = request.toEntity(member, accommodation);
 
         return reservationRepository.save(reservation);
+    }
+
+    private Reservation getReservationById(long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(ReservationIdNotFoundException::new);
     }
 
     private Member getMemberById(String memberId) {

@@ -37,10 +37,10 @@ public class Reservation {
     private Accommodation accommodation;
 
     @Column(name = "check_in_date")
-    private LocalDate checkInTime;
+    private LocalDate checkInDate;
 
     @Column(name = "check_out_date")
-    private LocalDate checkOutTime;
+    private LocalDate checkOutDate;
 
     @Column(name = "capacity")
     private long capacity;
