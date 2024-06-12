@@ -1,4 +1,4 @@
-package team07.airbnb.common.auth;
+package team07.airbnb.common.auth.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.FilterChain;
@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.common.util.jwt.JwtUtil;
 
 import java.io.IOException;
 
@@ -29,11 +28,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public void validateJwt(HttpServletRequest request) throws JsonProcessingException {
         String jwt = resolveToken(request);
-        if (jwt != null && jwtUtil.validateToken(jwt)) {
-            TokenUserInfo userEntity = jwtUtil.getUserEntity(jwt);
-            Authentication authentication = new JwtAuthentication(jwt, userEntity, true);
+        Authentication authentication = null;
+        TokenUserInfo userInfo = null;
+
+        if (jwt != null || !jwtUtil.validateToken(jwt)) {
+            authentication = new JwtAuthentication(jwt, userInfo, false);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            return;
         }
+
+        userInfo = jwtUtil.getTokenUserInfo(jwt);
+        authentication = new JwtAuthentication(jwt, userInfo, true);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private String resolveToken(HttpServletRequest request) {

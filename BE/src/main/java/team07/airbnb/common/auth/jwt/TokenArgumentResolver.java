@@ -1,4 +1,4 @@
-package team07.airbnb.common.util;
+package team07.airbnb.common.auth.jwt;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return (TokenUserInfo) authentication.getPrincipal();
+            return  authentication.getPrincipal();
         }
         return null;
     }

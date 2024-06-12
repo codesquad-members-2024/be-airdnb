@@ -1,4 +1,4 @@
-package team07.airbnb.common.util.jwt;
+package team07.airbnb.common.auth.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.common.auth.JwtUserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -45,8 +44,17 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+            return true;
+        } catch (Exception e) {
+            log.error("Not Valid Token %s".formatted(token));
+        }
+        return false;
+    }
 
-    public TokenUserInfo getUserEntity(String token) throws JsonProcessingException {
+    public TokenUserInfo getTokenUserInfo(String token) throws JsonProcessingException {
         Claims claims = extractClaims(token);
         String userJson = claims.get("user", String.class);
         return mapper.readValue(userJson, TokenUserInfo.class);
@@ -58,15 +66,5 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-            return true;
-        } catch (Exception e) {
-            log.error("Not Valid Token %s".formatted(token));
-        }
-        return false;
     }
 }

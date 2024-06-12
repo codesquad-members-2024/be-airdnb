@@ -10,7 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import team07.airbnb.common.auth.JwtAuthenticationFilter;
+import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
+import team07.airbnb.common.auth.exception.AuthenticateException;
+import team07.airbnb.common.auth.exception.UnAuthorizedException;
 import team07.airbnb.domain.user.enums.Role;
 
 import java.util.Collection;
@@ -30,11 +32,11 @@ public class AuthenticationAspect {
         jwtRequestFilter.validateJwt(request);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("인증과정에서 문제가 발생했습니다");
+            throw new AuthenticateException("인증과정에서 문제가 발생했습니다");
         }
 
         if (!userHasGrant(authenticated, authentication)) {
-            throw new SecurityException("허가되지 않은 접근입니다");
+            throw new UnAuthorizedException();
         }
 
         return joinPoint.proceed();

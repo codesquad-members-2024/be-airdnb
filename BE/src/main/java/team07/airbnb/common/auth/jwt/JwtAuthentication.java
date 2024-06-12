@@ -1,4 +1,4 @@
-package team07.airbnb.common.auth;
+package team07.airbnb.common.auth.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

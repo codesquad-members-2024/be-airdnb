@@ -5,7 +5,7 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
-import team07.airbnb.common.auth.exception.AuthorizeException;
+import team07.airbnb.common.auth.exception.UnAuthorizedException;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;
@@ -47,7 +47,7 @@ public class AccommodationService {
 
     @Transactional
     public void deleteById(long id, UserEntity user) {
-        if(!getHostIdById(id).equals(user.getId())) throw new AuthorizeException();
+        if(!getHostIdById(id).equals(user.getId())) throw new UnAuthorizedException();
 
         try {
             accommodationRepository.deleteById(id);
