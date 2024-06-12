@@ -38,6 +38,7 @@ public class JwtOAuthSuccessHandler implements AuthenticationSuccessHandler {
         responseMap.put("token", userDetails.getPassword());
         responseMap.put("userId", user.id().toString());
         responseMap.put("userName", user.name());
+        responseMap.put("profileImage", user.profileImg());
 
         PrintWriter writer = response.getWriter();
         writer.print(mapper.writeValueAsString(responseMap));
