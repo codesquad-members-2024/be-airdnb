@@ -1,8 +1,8 @@
 package team07.airbnb.data.accommodation.dto.response;
 
+import team07.airbnb.data.accommodation.enums.AccommodationType;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.embed.AccommodationLocation;
-import team07.airbnb.data.accommodation.enums.AccommodationType;
 
 public record AccommodationListResponse(
         long id,

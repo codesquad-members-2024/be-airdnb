@@ -17,20 +17,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
+import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.entity.embed.RoomInformation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "ACCOMMODATION")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class AccommodationEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,7 +71,7 @@ public class AccommodationEntity extends BaseEntity {
     }
 
     @Transient
-    public double rating(){
+    public double rating() {
         return reviews().stream().mapToDouble(ReviewEntity::getRating).average().orElseGet(() -> 0.0);
     }
 
@@ -79,10 +79,11 @@ public class AccommodationEntity extends BaseEntity {
         pictures.add(new Pictures(this, url));
     }
 
-    public void addProduct(LocalDate date, int price){
+    public void addProduct(LocalDate date, int price) {
         products.add(ProductEntity.ofOpen(this, date, price));
     }
-    public void addProduct(LocalDate date){
+
+    public void addProduct(LocalDate date) {
         products.add(ProductEntity.ofOpen(this, date, basePricePerDay));
     }
 }

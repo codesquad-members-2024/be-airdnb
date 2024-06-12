@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
 @Table(name = "BOOKING")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class BookingEntity extends BaseEntity {
 
     @Id

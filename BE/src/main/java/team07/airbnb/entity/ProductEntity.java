@@ -14,12 +14,12 @@ import team07.airbnb.data.product.ProductStatus;
 
 import java.time.LocalDate;
 
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "ACCOMMODATION_PRODUCT")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class ProductEntity extends BaseEntity {
 
     @Id
@@ -38,7 +38,7 @@ public class ProductEntity extends BaseEntity {
 
     private ProductStatus status;
 
-    public static ProductEntity ofOpen(AccommodationEntity accommodation, LocalDate date, int price){
+    public static ProductEntity ofOpen(AccommodationEntity accommodation, LocalDate date, int price) {
         return ProductEntity.builder()
                 .accommodation(accommodation)
                 .date(date)
@@ -47,8 +47,8 @@ public class ProductEntity extends BaseEntity {
                 .build();
     }
 
-    public ProductEntity book(BookingEntity booking){
-        if(!canBook()) throw new IllegalStateException("[ %d번 상품 예약 실패]예약 불가 상태 상품입니다.".formatted(this.id));
+    public ProductEntity book(BookingEntity booking) {
+        if (!canBook()) throw new IllegalStateException("[ %d번 상품 예약 실패]예약 불가 상태 상품입니다.".formatted(this.id));
 
         this.booking = booking;
         this.status = ProductStatus.BOOKED;

@@ -20,12 +20,12 @@ import team07.airbnb.data.user.enums.Role;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Entity
 @Table(name = "USERS")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Getter
 public class UserEntity extends BaseEntity {
 
     @Id
@@ -42,7 +42,6 @@ public class UserEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
-
 
 
     @NotNull

@@ -1,7 +1,7 @@
 package team07.airbnb.data.user.dto;
 
-import team07.airbnb.entity.UserEntity;
 import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.UserEntity;
 
 public record TokenUserInfo(Long id, String name, String profileImg, Role role) {
 

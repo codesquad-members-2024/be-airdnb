@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.service.accommodation.AccommodationService;
+import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.accommodation.dto.request.AccommodationCreateRequest;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
-import team07.airbnb.entity.AccommodationEntity;
-import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.user.dto.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.user.UserService;
 
 import java.util.List;
@@ -57,13 +57,13 @@ public class AccommodationController {
     }
 
     @GetMapping("/{id}")
-    public AccommodationEntity accommodationDetail(@PathVariable long id){
+    public AccommodationEntity accommodationDetail(@PathVariable long id) {
         return accommodationService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     @Authenticated(Role.HOST)
-    public void deleteAccommodation(@PathVariable long id, TokenUserInfo user){
+    public void deleteAccommodation(@PathVariable long id, TokenUserInfo user) {
         accommodationService.deleteById(id, userService.getCompleteUser(user));
     }
 }

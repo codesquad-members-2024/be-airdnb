@@ -6,10 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.data.booking.dto.PriceInfo;
 
-@Getter
+
 @Embeddable
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class Fee {
     private long serviceFee;
     private long accommodationFee;

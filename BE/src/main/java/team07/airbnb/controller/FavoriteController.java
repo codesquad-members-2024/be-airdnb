@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
-import team07.airbnb.service.product.ProductService;
-import team07.airbnb.data.product.dto.response.ProductListResponse;
-import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.data.product.ProductStatus;
-import team07.airbnb.data.user.dto.request.FavoritesResponse;
+import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.data.user.dto.TokenUserInfo;
-import team07.airbnb.entity.LikeEntity;
+import team07.airbnb.data.user.dto.request.FavoritesResponse;
 import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.LikeEntity;
+import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.service.product.ProductService;
 import team07.airbnb.service.user.UserService;
 
 import java.util.ArrayList;
@@ -33,26 +33,26 @@ public class FavoriteController {
 
     @Authenticated(Role.USER)
     @PostMapping("/{id}")
-    public void addFavorite(@PathVariable long id, TokenUserInfo user){
+    public void addFavorite(@PathVariable long id, TokenUserInfo user) {
         userService.addFavorite(user.id(), productService.findById(id));
     }
 
     @Authenticated(Role.USER)
     @DeleteMapping("/{id}")
-    public void removeFavorite(@PathVariable long id, TokenUserInfo user){
+    public void removeFavorite(@PathVariable long id, TokenUserInfo user) {
         userService.removeFavorite(user.id(), productService.findById(id));
 
     }
 
     @Authenticated(Role.USER)
     @GetMapping
-    public FavoritesResponse getMyWishList(TokenUserInfo user){
+    public FavoritesResponse getMyWishList(TokenUserInfo user) {
         List<ProductEntity> available = new ArrayList<>();
         List<ProductEntity> nonAvailable = new ArrayList<>();
 
-        for(LikeEntity like : userService.getCompleteUser(user).getFavorites()){
+        for (LikeEntity like : userService.getCompleteUser(user).getFavorites()) {
             ProductEntity product = like.getProduct();
-            if(product.getStatus() == ProductStatus.OPEN) available.add(product);
+            if (product.getStatus() == ProductStatus.OPEN) available.add(product);
             else nonAvailable.add(product);
         }
 

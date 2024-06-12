@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.common.auth.aop.Authenticated;
-import team07.airbnb.service.booking.BookingService;
-import team07.airbnb.entity.ReviewEntity;
-import team07.airbnb.service.review.ReviewService;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.data.user.dto.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.ReviewEntity;
+import team07.airbnb.service.accommodation.AccommodationService;
+import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.service.review.ReviewService;
 import team07.airbnb.service.user.UserService;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class ReviewController {
 
     @Authenticated(Role.HOST)
     @PostMapping("/{reviewId}/reply")
-    void replyToReview(@PathVariable Long reviewId, @RequestBody String content ,TokenUserInfo user){
+    void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
         reviewService.addReplyTo(reviewId, content, userService.getCompleteUser(user));
     }
 }

@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
 @Entity
 @Table(name = "REVIEW")
+@NoArgsConstructor
+@Getter
 public class ReviewEntity extends BaseEntity {
 
     @Id

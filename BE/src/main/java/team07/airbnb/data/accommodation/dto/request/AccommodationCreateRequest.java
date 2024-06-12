@@ -1,10 +1,10 @@
 package team07.airbnb.data.accommodation.dto.request;
 
-import team07.airbnb.entity.AccommodationEntity;
-import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
-import team07.airbnb.entity.embed.RoomInformation;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.UserEntity;
+import team07.airbnb.entity.embed.AccommodationLocation;
+import team07.airbnb.entity.embed.RoomInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public record AccommodationCreateRequest(
         List<String> pictures,
         int basePricePerDay
 ) {
-    public AccommodationEntity toEntity(UserEntity host){
+    public AccommodationEntity toEntity(UserEntity host) {
         AccommodationEntity newAccommodation = AccommodationEntity.builder()
                 .host(host)
                 .type(type)

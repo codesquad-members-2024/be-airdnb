@@ -1,7 +1,5 @@
 package team07.airbnb.exception.bad_request;
 
-import team07.airbnb.exception.bad_request.BadRequestException;
-
 import java.time.LocalDate;
 
 public class DateInversionException extends BadRequestException {

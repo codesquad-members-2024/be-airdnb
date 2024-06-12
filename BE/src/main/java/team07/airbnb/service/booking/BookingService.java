@@ -13,24 +13,25 @@ import team07.airbnb.repository.BookingRepository;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
-import team07.airbnb.entity.BookingEntity;
-import team07.airbnb.exception.not_found.BookingNotFoundException;
-import team07.airbnb.exception.bad_request.DateInversionException;
-import team07.airbnb.service.booking.price_policy.fee.AccommodationFee;
-import team07.airbnb.service.booking.price_policy.fee.ServiceFee;
 import team07.airbnb.data.booking.enums.BookingStatus;
-import team07.airbnb.service.discount.DiscountPolicyService;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.PaymentEntity;
-import team07.airbnb.service.payment.PaymentService;
-import team07.airbnb.service.product.ProductService;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
+import team07.airbnb.exception.not_found.BookingNotFoundException;
+import team07.airbnb.repository.BookingRepository;
+import team07.airbnb.service.accommodation.AccommodationService;
+import team07.airbnb.service.booking.price_policy.fee.AccommodationFee;
+import team07.airbnb.service.booking.price_policy.fee.ServiceFee;
+import team07.airbnb.service.discount.DiscountPolicyService;
+import team07.airbnb.service.payment.PaymentService;
+import team07.airbnb.service.product.ProductService;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,7 +132,8 @@ public class BookingService {
         BookingEntity booking = getById(bookingId);
         System.out.println(booking.getBooker().getId());
         System.out.println(writerId);
-        if (booking.getBooker().getId() != writerId) throw new IllegalArgumentException("%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+        if (booking.getBooker().getId() != writerId)
+            throw new IllegalArgumentException("%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
 
         bookingRepository.save(booking.addReview(review));
     }
@@ -143,8 +145,8 @@ public class BookingService {
 
     public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
         return bookingRepository.findAllByHost(host).stream()
-                        .map(BookingManageInfoResponse::of)
-                        .collect(Collectors.toList());
+                .map(BookingManageInfoResponse::of)
+                .collect(Collectors.toList());
     }
 
     public boolean isRequestedUserSameInBooking(Long bookingId, UserEntity user) {
@@ -159,6 +161,7 @@ public class BookingService {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
         return avgPrice * days;
     }
+
     public long getDiscountPrice(long roughTotalPrice) {
         return discountPolicyService.getDiscountPrice(roughTotalPrice);
     }

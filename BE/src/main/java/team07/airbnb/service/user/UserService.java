@@ -3,8 +3,8 @@ package team07.airbnb.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.repository.UserRepository;
 
@@ -16,15 +16,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     // JWT 토큰의 유저 정보로 부족할때 온전한 UserEntity 사용
-    public UserEntity getCompleteUser(TokenUserInfo user){
+    public UserEntity getCompleteUser(TokenUserInfo user) {
         return userRepository.getReferenceById(user.id());
     }
 
-    public void saveChanged(UserEntity user){
+    public void saveChanged(UserEntity user) {
         userRepository.save(user);
     }
 
-    public void addFavorite(Long userId, ProductEntity product){
+    public void addFavorite(Long userId, ProductEntity product) {
         userRepository.save(getById(userId).addFavorite(product));
     }
 
@@ -44,7 +44,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private UserEntity getById(Long id){
+    private UserEntity getById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 유저 " + id));
     }
 }

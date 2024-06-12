@@ -10,13 +10,13 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import team07.airbnb.common.auth.OAuthAttributes;
 import team07.airbnb.common.auth.jwt.JwtAuthentication;
+import team07.airbnb.common.auth.jwt.JwtUserDetails;
+import team07.airbnb.common.auth.jwt.JwtUtil;
 import team07.airbnb.data.user.dto.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.repository.UserRepository;
-import team07.airbnb.common.auth.jwt.JwtUserDetails;
-import team07.airbnb.common.auth.OAuthAttributes;
-import team07.airbnb.common.auth.jwt.JwtUtil;
 
 @RequiredArgsConstructor
 @Service

@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "USER_LIKES_PRODUCT")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class LikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class LikeEntity {
     @ManyToOne
     ProductEntity product;
 
-    public static LikeEntity from(UserEntity user , ProductEntity product){
+    public static LikeEntity from(UserEntity user, ProductEntity product) {
         return LikeEntity.builder()
                 .user(user)
                 .product(product)

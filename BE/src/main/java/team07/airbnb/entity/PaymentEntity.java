@@ -15,8 +15,8 @@ import team07.airbnb.data.booking.dto.PriceInfo;
 
 @Entity
 @Table(name = "PAYMENT")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class PaymentEntity extends BaseEntity {
 

@@ -1,7 +1,5 @@
 package team07.airbnb.exception.not_found;
 
-import team07.airbnb.exception.not_found.NotFoundException;
-
 public class BookingNotFoundException extends NotFoundException {
 
     public BookingNotFoundException(Long id) {

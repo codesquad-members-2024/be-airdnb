@@ -2,12 +2,12 @@ package team07.airbnb.service.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
-import team07.airbnb.repository.ProductRepository;
-import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.repository.ProductRepository;
+import team07.airbnb.service.accommodation.AccommodationService;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -53,11 +53,11 @@ public class ProductService {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId , LocalDate checkIn , LocalDate checkOut){
+    public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId, LocalDate checkIn, LocalDate checkOut) {
         return productRepository.findAllByAccommodationIdAndDateBetween(accommodationId, checkIn, checkOut);
     }
 
-    public ProductEntity findById(long id){
+    public ProductEntity findById(long id) {
         return getProductById(id);
     }
 

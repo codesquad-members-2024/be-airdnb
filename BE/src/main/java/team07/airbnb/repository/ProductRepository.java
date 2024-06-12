@@ -11,5 +11,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     List<ProductEntity> findAllByAccommodationIdInAndStatus(List<Long> accommodationIds, ProductStatus status);
 
-    List<ProductEntity> findAllByAccommodationIdAndDateBetween(Long accommodationId , LocalDate checkIn , LocalDate checkOut);
+    List<ProductEntity> findAllByAccommodationIdAndDateBetween(Long accommodationId, LocalDate checkIn, LocalDate checkOut);
 }

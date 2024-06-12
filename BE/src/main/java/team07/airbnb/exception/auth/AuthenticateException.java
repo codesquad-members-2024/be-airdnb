@@ -10,8 +10,8 @@ public class AuthenticateException extends ApplicationException {
     }
 
     @Override
-    public String getLog(){
-        if(log == null) return "인증 정보 토큰 미포함";
+    public String getLog() {
+        if (log == null) return "인증 정보 토큰 미포함";
 
         return "유효하지 않은 JWT 토큰\n" + log;
     }

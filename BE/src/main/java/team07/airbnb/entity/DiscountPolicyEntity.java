@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import team07.airbnb.entity.BaseEntity;
 
 @Entity
 @Table(name = "DISCOUNT_POLICY")

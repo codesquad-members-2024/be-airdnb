@@ -9,11 +9,10 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@Getter
-@NoArgsConstructor
 @Entity
 @Table(name = "ACCOMMODATION_PICTURE")
+@NoArgsConstructor
+@Getter
 public class Pictures {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

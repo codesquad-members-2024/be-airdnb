@@ -23,7 +23,7 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return  authentication.getPrincipal();
+            return authentication.getPrincipal();
         }
         return null;
     }

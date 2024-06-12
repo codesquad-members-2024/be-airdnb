@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.service.accommodation.AccommodationService;
-import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
-import team07.airbnb.service.product.ProductService;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
+import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.service.accommodation.AccommodationService;
+import team07.airbnb.service.product.ProductService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ProductController {
     @GetMapping("/available")
     public List<ProductListResponse> findNearByAvailableProducts(
             @RequestParam @Nullable LocalDate checkIn,
-            @RequestParam @Nullable  LocalDate checkOut,
+            @RequestParam @Nullable LocalDate checkOut,
             @RequestParam Double longitude,
             @RequestParam Double latitude,
             @RequestParam Double distance,

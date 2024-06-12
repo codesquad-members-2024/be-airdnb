@@ -26,7 +26,7 @@ public class JwtUtil {
     private final SecretKey key;
 
     public JwtUtil(
-            @Value("${jwt.secret}")String jwtSecret,
+            @Value("${jwt.secret}") String jwtSecret,
             @Value("${jwt.expiration_time}") long jwtExpirationMs) {
         this.jwtExpirationMs = jwtExpirationMs;
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
@@ -44,6 +44,7 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);

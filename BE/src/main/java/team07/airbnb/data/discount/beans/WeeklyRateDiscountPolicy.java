@@ -6,7 +6,7 @@ import team07.airbnb.service.booking.price_policy.RateCalculateUtil;
 
 @Component("weeklyRateDiscountPolicy")
 @RequiredArgsConstructor
-public class WeeklyRateDiscountPolicy implements DiscountPolicy{
+public class WeeklyRateDiscountPolicy implements DiscountPolicy {
 
     private final double discountRate;
 
