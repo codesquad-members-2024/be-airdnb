@@ -34,8 +34,14 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(RuntimeException.class)
+    public String handleAnyRunTimeException(RuntimeException e) {
+        log.warn("예상치 못한 예외 발생", e);
+        return "서버에 오류가 발생했습니다.😭\n잠시후 다시 시도해주세요.";
+    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public String handleAny(Exception e) {
+    public String handleAnyCheckedException(Exception e) {
         log.error("예상치 못한 예외 발생", e);
         return "서버에 오류가 발생했습니다.😭\n잠시후 다시 시도해주세요.";
     }
