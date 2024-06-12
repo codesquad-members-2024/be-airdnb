@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
 import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
 import team10.airdnb.accommodation.entity.Accommodation;
+import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
 import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
 import team10.airdnb.accommodation_amenity.repository.AccommodationAmenityRepository;
@@ -17,7 +18,6 @@ import team10.airdnb.accommodation_type.exception.AccommodationTypeNotFoundExcep
 import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
 import team10.airdnb.amenity.entity.Amenity;
 import team10.airdnb.amenity.repository.AmenityRepository;
-import team10.airdnb.accommodation.exception.AccommodationNotFoundException;
 
 import java.util.List;
 import java.util.Set;
@@ -107,7 +107,7 @@ public class AccommodationService {
 
     private Accommodation getAccommodationById(Long accommodationId) {
         return accommodationRepository.findById(accommodationId)
-                .orElseThrow(AccommodationNotFoundException::new);
+                .orElseThrow(AccommodationIdNotFoundException::new);
     }
 
     private AccommodationType getAccommodationTypeById(Long accommodationTypeId) {
