@@ -17,8 +17,8 @@ export const handleOAuth = async (code, state, provider) => {
   } catch (error) {
     alert("로그인 실패: " + error.response.data.message);
   }
-  // window.location.reload();
-  // window.location.replace("/");
+  window.location.reload();
+  window.location.replace("/");
 };
 
 export function logout() {
@@ -40,7 +40,7 @@ export function logout() {
     } else {
       console.error("Error during logout");
     }
-    // window.location.reload();
-    // window.location.replace("/");
+    window.location.reload();
+    window.location.replace("/");
   });
 }

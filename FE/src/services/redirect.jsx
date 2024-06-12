@@ -12,8 +12,8 @@ const RedirectPage = (provider) => {
     const state = searchParams.get("state");
 
     if (code) {
-      handleOAuth(code, state, provider);
-      navigate("/");
+      handleOAuth(code, state, provider, navigate);
+      // navigate("/");
     }
   }, [location, navigate, provider]);
 
