@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
+import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
 import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
@@ -16,7 +17,7 @@ import team10.airdnb.accommodation_type.exception.AccommodationTypeNotFoundExcep
 import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
 import team10.airdnb.amenity.entity.Amenity;
 import team10.airdnb.amenity.repository.AmenityRepository;
-import team10.airdnb.error.ErrorCode;
+import team10.airdnb.accommodation.exception.AccommodationNotFoundException;
 
 import java.util.List;
 import java.util.Set;
@@ -58,10 +59,61 @@ public class AccommodationService {
         return savedAccommodation;
     }
 
+    public Accommodation updateAccommodation(Long accommodationId, AccommodationUpdateRequest request) {
+        Accommodation accommodation = getAccommodationById(accommodationId);
+
+        Accommodation.AccommodationBuilder builder = Accommodation.builder();
+
+        builder.id(accommodation.getId());
+        request.memberId().ifPresent(builder::memberId);
+        request.name().ifPresent(builder::name);
+        request.maxCapacity().ifPresent(builder::maxCapacity);
+
+        request.accommodationType().ifPresent(accommodationTypeId -> {
+            builder.accommodationType(
+                    getAccommodationTypeById(accommodationTypeId)
+            );
+        });
+
+        request.accommodationRoomType().ifPresent(accommodationRoomTypeId -> {
+            builder.accommodationRoomType(
+                    getAccommodationRoomTypeById(accommodationRoomTypeId)
+            );
+        });
+
+        request.bedroomCount().ifPresent(builder::bedroomCount);
+        request.bathroomCount().ifPresent(builder::bathroomCount);
+        request.bedCount().ifPresent(builder::bedCount);
+        request.perPrice().ifPresent(builder::perPrice);
+
+        Accommodation updatedAccommodation = builder.build();
+
+        // Update amenities if amenityIds is provided
+        request.amenityIds().ifPresent(amenityIds -> {
+            List<Amenity> amenities = amenityRepository.findAllById(amenityIds);
+
+            Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
+                    .map(amenity -> AccommodationAmenity.builder()
+                            .accommodation(accommodation)
+                            .amenity(amenity)
+                            .build())
+                    .collect(Collectors.toSet());
+
+            accommodationAmenityRepository.saveAll(accommodationAmenities);
+        });
+
+        return accommodationRepository.save(updatedAccommodation);
+    }
+
+    private Accommodation getAccommodationById(Long accommodationId) {
+        return accommodationRepository.findById(accommodationId)
+                .orElseThrow(AccommodationNotFoundException::new);
+    }
+
     private AccommodationType getAccommodationTypeById(Long accommodationTypeId) {
         if (accommodationTypeId != null) {
             return accommodationTypeRepository.findById(accommodationTypeId)
-                    .orElseThrow(() -> new AccommodationTypeNotFoundException(ErrorCode.ACCOMMODATION_TYPE_NOT_EXISTS));
+                    .orElseThrow(AccommodationTypeNotFoundException::new);
         }
         return null;
     }
@@ -70,7 +122,7 @@ public class AccommodationService {
     private AccommodationRoomType getAccommodationRoomTypeById(Long accommodationRoomTypeId) {
         if (accommodationRoomTypeId != null) {
             return accommodationRoomTypeRepository.findById(accommodationRoomTypeId)
-                    .orElseThrow(() -> new AccommodationRoomTypeNotFoundException(ErrorCode.ACCOMMODATION_ROOM_TYPE_NOT_EXISTS));
+                    .orElseThrow(AccommodationRoomTypeNotFoundException::new);
         }
         return null;
     }
