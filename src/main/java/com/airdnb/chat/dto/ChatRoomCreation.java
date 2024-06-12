@@ -11,7 +11,7 @@ public class ChatRoomCreation {
     String guestId;
 
     public static ChatRoomCreation from(ChatRoomCreationRequest chatRoomCreationRequest) {
-        if (chatRoomCreationRequest.getRole().equals("HOST")) {
+        if (chatRoomCreationRequest.getRole().equals("host")) {
             return ChatRoomCreation.builder()
                 .hostId(chatRoomCreationRequest.getSenderId())
                 .guestId(chatRoomCreationRequest.getReceiverId())
