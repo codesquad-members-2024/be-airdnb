@@ -92,7 +92,7 @@ public class Accommodation {
         if (images.isEmpty()) {
             return null;
         }
-        return images.getFirst();
+        return images.get(0);
     }
 
     @Override
