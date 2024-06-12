@@ -28,4 +28,15 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "accommodation_id", referencedColumnName = "id")
     private Accommodation accommodation;
+
+    private Review(String content, Double rate, Member member, Accommodation accommodation) {
+        this.content = content;
+        this.rate = rate;
+        this.member = member;
+        this.accommodation = accommodation;
+    }
+
+    public static Review of(String content, Double rate, Member member, Accommodation accommodation) {
+        return new Review(content, rate, member, accommodation);
+    }
 }
