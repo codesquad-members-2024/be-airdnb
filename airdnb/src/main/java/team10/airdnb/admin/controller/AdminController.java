@@ -10,7 +10,7 @@ public class AdminController {
 
     @GetMapping("/register")
     public String getAdminRegisterPage() {
-        return "admin/main"; // "admin/main.html" 템플릿을 반환
+        return "admin/main"; // "admin/createForm.html" 템플릿을 반환
     }
 
     @GetMapping("/login")

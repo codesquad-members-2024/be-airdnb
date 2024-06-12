@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex;
+    justify-content: center; /* Center align the content horizontally */
+    align-items: center; /* Center align the content vertically */
+    flex-direction: column; /* Align items in a column */
+}
+
+h1 {
+    color: #333;
+    text-align: center; /* Center align the heading */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%; /* Take full width */
+    max-width: 600px; /* Limit the width */
+    margin: 0 auto; /* Center align the list */
+}
+
+.list-item {
+    background: #f9f9f9;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between; /* Space between text and buttons */
+    align-items: center; /* Center align items vertically */
+}
+
+.list-item:hover {
+    background: #f1f1f1;
+}
+
+button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.update-button {
+    background-color: #28a745; /* Green background */
+    color: white;
+}
+
+.update-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #dc3545; /* Red background */
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.button-container {
+    display: flex;
+    gap: 5px; /* Add gap between buttons */
+}
+
+.create-form {
+    border: 1px solid #ddd; /* Add border for separation */
+    padding: 10px; /* Add padding for spacing */
+    border-radius: 5px; /* Add rounded corners */
+    width: 100%;
+    max-width: 580px; /* Limit the width */
+    margin: 20px auto; /* Center align the list */
+    display: none;
+    align-items: center;
+}
+
+.create-form input[type="text"] {
+    width: calc(100% - 70px); /* Adjust input width */
+    padding: 5px; /* Add padding for spacing */
+    margin-right: 10px; /* Add right margin for spacing */
+}
+
+.create-form button {
+    padding: 5px 10px; /* Add padding for spacing */
+    border: none;
+    cursor: pointer;
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    border-radius: 3px; /* Add rounded corners */
+}
+
+.create-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.create-button {
+    margin-top: 20px;
+    margin-right: 20px; /* Add right margin for spacing */
+    float: right; /* Align to the right */
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    padding: 5px 10px; /* Add padding for spacing */
+    border: none;
+    cursor: pointer;
+    border-radius: 3px; /* Add rounded corners */
+}
+
+.create-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.save-button {
+    margin-top: 20px;
+    margin-right: 20px; /* Add right margin for spacing */
+    float: right; /* Align to the right */
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text color */
+    padding: 5px 10px; /* Add padding for spacing */
+    border: none;
+    cursor: pointer;
+    border-radius: 3px; /* Add rounded corners */
+}
