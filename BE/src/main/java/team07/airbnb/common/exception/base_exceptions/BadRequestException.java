@@ -1,4 +1,4 @@
-package team07.airbnb.common.exception;
+package team07.airbnb.common.exception.base_exceptions;
 
 import org.springframework.http.HttpStatus;
 

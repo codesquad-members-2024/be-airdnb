@@ -1,6 +1,6 @@
 package team07.airbnb.domain.booking.exception;
 
-import team07.airbnb.common.exception.NotFoundException;
+import team07.airbnb.common.exception.base_exceptions.NotFoundException;
 
 public class BookingNotFoundException extends NotFoundException {
 

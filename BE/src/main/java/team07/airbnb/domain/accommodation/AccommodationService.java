@@ -5,7 +5,7 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.entity.AccommodationEntity;
-import team07.airbnb.common.exception.UnAuthorizedException;
+import team07.airbnb.common.exception.base_exceptions.UnAuthorizedException;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;

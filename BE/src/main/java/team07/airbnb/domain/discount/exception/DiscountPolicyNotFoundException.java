@@ -1,6 +1,6 @@
 package team07.airbnb.domain.discount.exception;
 
-import team07.airbnb.common.exception.NotFoundException;
+import team07.airbnb.common.exception.base_exceptions.NotFoundException;
 
 public class DiscountPolicyNotFoundException extends NotFoundException {
     public DiscountPolicyNotFoundException() {

@@ -11,8 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
-import team07.airbnb.common.exception.AuthenticateException;
-import team07.airbnb.common.exception.UnAuthorizedException;
+import team07.airbnb.common.exception.base_exceptions.AuthenticateException;
+import team07.airbnb.common.exception.base_exceptions.UnAuthorizedException;
 import team07.airbnb.domain.user.enums.Role;
 
 import java.util.Collection;
