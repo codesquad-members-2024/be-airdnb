@@ -26,20 +26,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public void validateJwt(HttpServletRequest request) throws JsonProcessingException {
+    public String validateJwt(HttpServletRequest request) throws JsonProcessingException {
         String jwt = resolveToken(request);
         Authentication authentication = null;
         TokenUserInfo userInfo = null;
 
-        if (jwt != null || !jwtUtil.validateToken(jwt)) {
+        if (jwt == null || !jwtUtil.validateToken(jwt)) {
             authentication = new JwtAuthentication(jwt, userInfo, false);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return;
+            return jwt;
         }
 
         userInfo = jwtUtil.getTokenUserInfo(jwt);
         authentication = new JwtAuthentication(jwt, userInfo, true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwt;
     }
 
     private String resolveToken(HttpServletRequest request) {

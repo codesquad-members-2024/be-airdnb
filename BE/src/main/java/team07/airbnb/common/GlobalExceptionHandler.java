@@ -13,13 +13,15 @@ import team07.airbnb.common.exception.ApplicationException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<String> handleApplicationException(ApplicationException e) {
+        log.debug("Occurred By : {%s}\n{%s}".formatted(e.getClass(), e.getLog()));
+
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RuntimeException.class)
-    public String handleAny(RuntimeException e) {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public String handleAny(Exception e) {
         log.error("예상치 못한 예외 발생", e);
-        return e.getMessage();
+        return "서버에 오류가 발생했습니다.😭\n잠시후 다시 시도해주세요.";
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
-import team07.airbnb.common.auth.exception.AuthenticateException;
-import team07.airbnb.common.auth.exception.UnAuthorizedException;
+import team07.airbnb.common.exception.AuthenticateException;
+import team07.airbnb.common.exception.UnAuthorizedException;
 import team07.airbnb.domain.user.enums.Role;
 
 import java.util.Collection;
@@ -29,14 +29,17 @@ public class AuthenticationAspect {
 
     @Around("@annotation(authenticated)")
     public Object authenticate(ProceedingJoinPoint joinPoint, Authenticated authenticated) throws Throwable {
-        jwtRequestFilter.validateJwt(request);
+        String jwt = jwtRequestFilter.validateJwt(request);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthenticateException("인증과정에서 문제가 발생했습니다");
+            throw new AuthenticateException("인증과정에서 문제가 발생했습니다", jwt);
         }
 
         if (!userHasGrant(authenticated, authentication)) {
-            throw new UnAuthorizedException();
+            throw new UnAuthorizedException("%s 권한에 %s 가 접근 실패".formatted(
+                    authenticated.value().getKey(),
+                            authentication.getName() // ?
+            ));
         }
 
         return joinPoint.proceed();
