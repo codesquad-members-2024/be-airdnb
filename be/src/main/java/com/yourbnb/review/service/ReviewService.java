@@ -1,6 +1,7 @@
 package com.yourbnb.review.service;
 
 import com.yourbnb.accommodation.model.Accommodation;
+import com.yourbnb.accommodation.repository.AccommodationRepository;
 import com.yourbnb.member.model.Member;
 import com.yourbnb.member.repository.MemberRepository;
 import com.yourbnb.review.model.Review;
@@ -22,7 +23,7 @@ public class ReviewService {
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         Accommodation accommodation = accommodationRepository.findById(reviewCreationRequest.accommodationId())
-                .orElseThorw(() -> new RuntimeException("Accommodation not found"));
+                .orElseThrow(() -> new RuntimeException("Accommodation not found"));
 
         Review review = reviewCreationRequest.toEntity(member,accommodation);
 
