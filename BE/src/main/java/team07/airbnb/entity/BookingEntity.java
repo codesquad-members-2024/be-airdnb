@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team07.airbnb.domain.booking.property.BookingStatus;
+import team07.airbnb.data.booking.enums.BookingStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.product.ProductStatus;
+import team07.airbnb.data.product.ProductStatus;
 
 import java.time.LocalDate;
 

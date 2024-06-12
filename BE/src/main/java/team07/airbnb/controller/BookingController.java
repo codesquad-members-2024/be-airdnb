@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
-import team07.airbnb.domain.booking.BookingService;
-import team07.airbnb.domain.booking.dto.BookingInfo;
-import team07.airbnb.domain.booking.dto.request.BookingRequest;
-import team07.airbnb.domain.booking.dto.response.BookingCancelResponse;
-import team07.airbnb.domain.booking.dto.response.BookingDetailResponse;
-import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
+import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.data.booking.dto.BookingInfo;
+import team07.airbnb.data.booking.dto.request.BookingRequest;
+import team07.airbnb.data.booking.dto.response.BookingCancelResponse;
+import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
+import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.entity.BookingEntity;
-import team07.airbnb.domain.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
-import team07.airbnb.domain.user.enums.Role;
-import team07.airbnb.domain.user.service.UserService;
+import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.service.user.UserService;
 
 import java.util.List;
 

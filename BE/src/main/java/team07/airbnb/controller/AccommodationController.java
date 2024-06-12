@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import team07.airbnb.domain.accommodation.AccommodationService;
-import team07.airbnb.domain.accommodation.dto.AccommodationCreateRequest;
-import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
+import team07.airbnb.service.accommodation.AccommodationService;
+import team07.airbnb.data.accommodation.dto.request.AccommodationCreateRequest;
+import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.common.auth.aop.Authenticated;
-import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.enums.Role;
-import team07.airbnb.domain.user.service.UserService;
+import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.service.user.UserService;
 
 import java.util.List;
 

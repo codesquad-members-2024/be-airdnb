@@ -17,9 +17,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.accommodation.property.AccommodationLocation;
-import team07.airbnb.domain.accommodation.property.AccommodationType;
-import team07.airbnb.domain.accommodation.property.RoomInformation;
+import team07.airbnb.entity.embed.AccommodationLocation;
+import team07.airbnb.data.accommodation.enums.AccommodationType;
+import team07.airbnb.entity.embed.RoomInformation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

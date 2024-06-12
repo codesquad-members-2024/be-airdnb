@@ -11,13 +11,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
-import team07.airbnb.common.exception.base_exceptions.AuthenticateException;
-import team07.airbnb.common.exception.base_exceptions.UnAuthorizedException;
-import team07.airbnb.domain.user.enums.Role;
+import team07.airbnb.exception.auth.AuthenticateException;
+import team07.airbnb.exception.auth.UnAuthorizedException;
+import team07.airbnb.data.user.enums.Role;
 
 import java.util.Collection;
 
-import static team07.airbnb.domain.user.enums.Role.*;
+import static team07.airbnb.data.user.enums.Role.*;
 
 @Component
 @Aspect

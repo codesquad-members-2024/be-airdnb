@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
-import team07.airbnb.domain.user.service.JwtAndOAuthUserService;
+import team07.airbnb.service.user.JwtAndOAuthUserService;
 
 import java.util.List;
 

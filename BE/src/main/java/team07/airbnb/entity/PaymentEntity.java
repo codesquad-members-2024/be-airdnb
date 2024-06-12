@@ -9,9 +9,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.payment.Fee;
-import team07.airbnb.domain.payment.PaymentStatus;
-import team07.airbnb.domain.booking.dto.BookingInfo;
+import team07.airbnb.entity.embed.Fee;
+import team07.airbnb.data.payment.PaymentStatus;
+import team07.airbnb.data.booking.dto.BookingInfo;
 
 @Entity
 @Table(name = "PAYMENT")
