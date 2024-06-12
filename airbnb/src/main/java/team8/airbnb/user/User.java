@@ -31,4 +31,10 @@ public class User {
 
   @Column(name = "user_phone_number", unique = true)
   private String phoneNumber;
+
+  @Column(name = "role")
+  private String role;
+
+  @Column(name = "oauth_type")
+  private String oauthType;
 }
