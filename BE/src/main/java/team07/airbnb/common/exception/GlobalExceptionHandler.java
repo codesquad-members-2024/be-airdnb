@@ -1,4 +1,4 @@
-package team07.airbnb.common;
+package team07.airbnb.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

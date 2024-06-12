@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.domain.booking.BookingService;
-import team07.airbnb.domain.review.ReviewEntity;
+import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.domain.review.ReviewService;
 import team07.airbnb.domain.review.dto.ReviewPostRequest;
 import team07.airbnb.domain.user.dto.TokenUserInfo;

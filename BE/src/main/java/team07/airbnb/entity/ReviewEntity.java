@@ -1,4 +1,4 @@
-package team07.airbnb.domain.review;
+package team07.airbnb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -10,7 +10,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;

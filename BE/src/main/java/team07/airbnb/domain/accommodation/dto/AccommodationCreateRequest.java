@@ -1,10 +1,10 @@
 package team07.airbnb.domain.accommodation.dto;
 
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
 import team07.airbnb.domain.accommodation.property.AccommodationType;
 import team07.airbnb.domain.accommodation.property.RoomInformation;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package team07.airbnb.domain.review;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 
 @Service
 @RequiredArgsConstructor

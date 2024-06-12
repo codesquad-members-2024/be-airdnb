@@ -4,8 +4,8 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.UserEntity;
 
 import java.util.List;
 

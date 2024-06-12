@@ -1,8 +1,7 @@
 package team07.airbnb.domain.product;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import team07.airbnb.domain.product.entity.ProductEntity;
-import team07.airbnb.domain.product.entity.ProductStatus;
+import team07.airbnb.entity.ProductEntity;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,8 +1,6 @@
 package team07.airbnb.domain.booking.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.domain.booking.property.BookingStatus;
 
 import java.time.LocalDate;

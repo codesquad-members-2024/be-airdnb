@@ -3,9 +3,9 @@ package team07.airbnb.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.domain.product.entity.ProductEntity;
+import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
 
 import java.util.NoSuchElementException;

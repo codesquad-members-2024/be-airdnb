@@ -2,7 +2,7 @@ package team07.airbnb.domain.discount;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import team07.airbnb.domain.discount.entity.DiscountPolicyEntity;
+import team07.airbnb.entity.DiscountPolicyEntity;
 
 import java.util.Optional;
 

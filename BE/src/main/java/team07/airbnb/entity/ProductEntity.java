@@ -1,4 +1,4 @@
-package team07.airbnb.domain.product.entity;
+package team07.airbnb.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,10 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
-import team07.airbnb.domain.booking.entity.BookingEntity;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.domain.product.ProductStatus;
 
 import java.time.LocalDate;
 

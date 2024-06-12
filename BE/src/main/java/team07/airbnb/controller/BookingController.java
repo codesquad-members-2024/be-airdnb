@@ -19,9 +19,9 @@ import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.response.BookingCancelResponse;
 import team07.airbnb.domain.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
-import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;
 

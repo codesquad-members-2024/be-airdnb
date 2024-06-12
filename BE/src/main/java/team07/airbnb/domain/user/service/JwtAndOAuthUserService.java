@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import team07.airbnb.common.auth.jwt.JwtAuthentication;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
 import team07.airbnb.common.auth.jwt.JwtUserDetails;
 import team07.airbnb.common.auth.OAuthAttributes;

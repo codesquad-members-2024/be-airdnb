@@ -7,19 +7,18 @@ import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.booking.dto.request.BookingRequest;
 import team07.airbnb.domain.booking.dto.BookingInfo;
 import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
-import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.domain.booking.exception.BookingNotFoundException;
-import team07.airbnb.domain.booking.exception.InvalidDateException;
+import team07.airbnb.domain.booking.exception.DateInversionException;
 import team07.airbnb.domain.booking.price_policy.fee.AccommodationFee;
 import team07.airbnb.domain.booking.price_policy.fee.ServiceFee;
 import team07.airbnb.domain.booking.property.BookingStatus;
 import team07.airbnb.domain.discount.DiscountPolicyService;
-import team07.airbnb.domain.payment.PaymentEntity;
+import team07.airbnb.entity.PaymentEntity;
 import team07.airbnb.domain.payment.PaymentService;
 import team07.airbnb.domain.product.ProductService;
-import team07.airbnb.domain.product.entity.ProductStatus;
-import team07.airbnb.domain.review.ReviewEntity;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.ReviewEntity;
+import team07.airbnb.entity.UserEntity;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -140,7 +139,7 @@ public class BookingService {
 
     public long getRoughTotalPrice(long avgPrice, LocalDate checkIn, LocalDate checkOut) {
         long days = ChronoUnit.DAYS.between(checkIn, checkOut);
-        if (days <= 0) throw new InvalidDateException();
+        if (days <= 0) throw new DateInversionException(checkIn, checkOut);
 
         return avgPrice * days;
     }

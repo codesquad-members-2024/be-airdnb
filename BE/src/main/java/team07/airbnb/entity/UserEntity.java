@@ -1,4 +1,4 @@
-package team07.airbnb.domain.user.entity;
+package team07.airbnb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
@@ -15,9 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.BaseEntity;
-import team07.airbnb.domain.booking.entity.BookingEntity;
-import team07.airbnb.domain.product.entity.ProductEntity;
 import team07.airbnb.domain.user.enums.Role;
 
 import java.util.ArrayList;

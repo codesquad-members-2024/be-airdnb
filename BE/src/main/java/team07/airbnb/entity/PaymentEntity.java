@@ -1,4 +1,4 @@
-package team07.airbnb.domain.payment;
+package team07.airbnb.entity;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -9,7 +9,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.domain.BaseEntity;
+import team07.airbnb.domain.payment.Fee;
+import team07.airbnb.domain.payment.PaymentStatus;
 import team07.airbnb.domain.booking.dto.BookingInfo;
 
 @Entity

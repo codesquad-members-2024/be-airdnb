@@ -1,6 +1,6 @@
 package team07.airbnb.domain.accommodation.dto;
 
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
 import team07.airbnb.domain.accommodation.property.AccommodationType;
 

@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.domain.product.ProductService;
 import team07.airbnb.domain.product.dto.ProductListResponse;
-import team07.airbnb.domain.product.entity.ProductEntity;
-import team07.airbnb.domain.product.entity.ProductStatus;
+import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.domain.product.ProductStatus;
 import team07.airbnb.domain.user.dto.FavoritesResponse;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.entity.LikeEntity;
+import team07.airbnb.entity.LikeEntity;
 import team07.airbnb.domain.user.enums.Role;
 import team07.airbnb.domain.user.service.UserService;
 

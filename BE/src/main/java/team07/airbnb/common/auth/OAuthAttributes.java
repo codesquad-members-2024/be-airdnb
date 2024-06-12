@@ -2,7 +2,7 @@ package team07.airbnb.common.auth;
 
 import lombok.Builder;
 import lombok.Getter;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.domain.user.enums.RegistrationID;
 import team07.airbnb.domain.user.enums.Role;
 

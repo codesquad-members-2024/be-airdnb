@@ -1,4 +1,4 @@
-package team07.airbnb.domain;
+package team07.airbnb.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

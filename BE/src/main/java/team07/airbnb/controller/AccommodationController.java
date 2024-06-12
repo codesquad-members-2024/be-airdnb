@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.accommodation.dto.AccommodationCreateRequest;
 import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.enums.Role;

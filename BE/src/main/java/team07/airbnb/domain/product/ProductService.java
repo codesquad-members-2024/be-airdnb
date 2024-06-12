@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team07.airbnb.domain.accommodation.AccommodationService;
 import team07.airbnb.domain.accommodation.dto.AccommodationListResponse;
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
-import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.domain.product.dto.ProductListResponse;
-import team07.airbnb.domain.product.entity.ProductEntity;
+import team07.airbnb.entity.ProductEntity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static team07.airbnb.domain.product.entity.ProductStatus.OPEN;
+import static team07.airbnb.domain.product.ProductStatus.OPEN;
 
 @Service
 @RequiredArgsConstructor

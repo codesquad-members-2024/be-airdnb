@@ -1,9 +1,8 @@
 package team07.airbnb.domain.booking.dto.response;
 
-import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.domain.booking.property.BookingStatus;
-import team07.airbnb.domain.payment.PaymentEntity;
-import team07.airbnb.domain.user.entity.UserEntity;
+import team07.airbnb.entity.PaymentEntity;
 
 import java.time.LocalDate;
 

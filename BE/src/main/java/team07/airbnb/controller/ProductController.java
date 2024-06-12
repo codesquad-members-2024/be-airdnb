@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.domain.accommodation.AccommodationService;
-import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.domain.product.ProductCreateRequest;
 import team07.airbnb.domain.product.ProductService;
 import team07.airbnb.domain.product.dto.ProductListResponse;
