@@ -15,25 +15,7 @@ const RedirectPage = (provider) => {
     }
   }, [location, provider]);
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <div
-        style={{
-          textAlign: "center",
-          fontSize: "2vw",
-        }}
-      >
-        Processing...
-      </div>
-    </div>
-  );
+  return null;
 };
 
 export default RedirectPage;
