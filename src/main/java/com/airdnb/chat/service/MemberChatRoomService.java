@@ -4,6 +4,7 @@ import com.airdnb.chat.entity.ChatRoom;
 import com.airdnb.chat.entity.MemberChatRoom;
 import com.airdnb.chat.repository.MemberChatRoomRepository;
 import com.airdnb.member.entity.Member;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,14 @@ public class MemberChatRoomService {
         return memberChatRoomRepository.existsByMemberId(memberId);
     }
 
-    public void createMemberChatRoom(Member member, ChatRoom chatRoom) {
-        memberChatRoomRepository.save(MemberChatRoom.builder()
-            .member(member)
-            .chatRoom(chatRoom)
-            .build());
+    public void createMemberChatRoom(List<Member> members, ChatRoom chatRoom) {
+        for (Member member : members) {
+            MemberChatRoom memberChatRoom = MemberChatRoom.builder()
+                .member(member)
+                .chatRoom(chatRoom)
+                .build();
+            memberChatRoomRepository.save(memberChatRoom);
+        }
     }
 
 

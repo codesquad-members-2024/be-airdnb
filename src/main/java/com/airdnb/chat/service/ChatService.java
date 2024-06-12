@@ -1,6 +1,7 @@
 package com.airdnb.chat.service;
 
 import com.airdnb.chat.dto.MessageCreation;
+import com.airdnb.chat.dto.MessageResponse;
 import com.airdnb.chat.entity.ChatMessage;
 import com.airdnb.chat.entity.ChatRoom;
 import com.airdnb.chat.entity.MessageType;
@@ -22,24 +23,19 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
 
 
-    public void createChat(MessageCreation messageCreation) {
+    public MessageResponse createChat(MessageCreation messageCreation) {
         Member member = memberService.findMemberById(messageCreation.getMemberId());
         ChatRoom chatRoom = chatRoomService.findChatRoomById(messageCreation.getRoomId());
         boolean isMemberInChatRoom = memberChatRoomService.existsByMemberId(messageCreation.getMemberId());
         String message = "";
 
-        if (messageCreation.getMessageType().equals(MessageType.ENTER)) {
-            if (!isMemberInChatRoom) {
-                log.info("채팅방 입장");
-                memberChatRoomService.createMemberChatRoom(member, chatRoom);
-                message = member.getName() + "가 입장했습니다.";
-            }
+        if (messageCreation.getMessageType().equals(MessageType.ENTER) && isMemberInChatRoom) {
+            log.info("채팅방 입장");
         }
 
         if (messageCreation.getMessageType().equals(MessageType.LEAVE)) {
             log.info("채팅방 퇴장");
             chatRoomService.softDeleteChatRoom(chatRoom.getId());
-            message = member.getName() + "가 퇴장했습니다.";
         }
 
         if (messageCreation.getMessageType().equals(MessageType.CHAT)) {
@@ -54,6 +50,8 @@ public class ChatService {
             .build();
 
         chatMessageRepository.save(chatMessage);
+
+        return MessageResponse.from(chatMessage);
 
     }
 
