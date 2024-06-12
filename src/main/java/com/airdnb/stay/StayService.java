@@ -9,24 +9,32 @@ import com.airdnb.member.entity.Member;
 import com.airdnb.stay.dto.StayCommentDetail;
 import com.airdnb.stay.dto.StayCreate;
 import com.airdnb.stay.dto.StayDetailQueryResponse;
+import com.airdnb.stay.dto.StayListQueryResponse;
+import com.airdnb.stay.dto.StayPriceListQueryResponse;
+import com.airdnb.stay.dto.StayQueryCondition;
 import com.airdnb.stay.entity.CommentStatus;
 import com.airdnb.stay.entity.Location;
 import com.airdnb.stay.entity.Stay;
-import com.airdnb.stay.entity.Stay.StayType;
 import com.airdnb.stay.entity.StayComment;
 import com.airdnb.stay.entity.StayStatus;
+import com.airdnb.stay.entity.StayType;
 import com.airdnb.stay.repository.StayCommentRepository;
 import com.airdnb.stay.repository.StayRepository;
 import com.airdnb.staytag.StayTag;
 import com.airdnb.staytag.StayTagService;
 import com.airdnb.tag.entity.Tag;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class StayService {
     private final StayRepository stayRepository;
     private final StayCommentRepository stayCommentRepository;
@@ -34,7 +42,6 @@ public class StayService {
     private final ImageService imageService;
     private final MemberService memberService;
 
-    @Transactional
     public Long createStay(StayCreate stayCreate) {
         Stay stay = buildStay(stayCreate);
         stayRepository.save(stay);
@@ -73,7 +80,6 @@ public class StayService {
                 .orElseThrow(() -> new NotFoundException("id와 일치하는 숙소를 찾을 수 없습니다."));
     }
 
-    @Transactional
     public void softDeleteStay(Long id) {
         Stay stay = findActiveStayById(id);
         String currentMemberId = memberService.getCurrentMemberId();
@@ -82,6 +88,33 @@ public class StayService {
         }
         stay.softDelete();
     }
+
+    @Transactional(readOnly = true)
+    public List<StayListQueryResponse> queryStayList(StayQueryCondition condition) {
+        List<Stay> stays = stayRepository.findAll(condition);
+        List<StayListQueryResponse> responses = new ArrayList<>();
+        for (Stay stay : stays) {
+            Double activeRating = getActiveRating(stay);
+            Integer activeCommentCount = getActiveCommentCount(stay);
+            List<String> tagNames = getTagNames(stay);
+            StayListQueryResponse response = toStayListQueryResponse(stay, tagNames, activeRating,
+                    activeCommentCount);
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    @Transactional(readOnly = true)
+    public StayPriceListQueryResponse queryStayPriceList() {
+        List<Integer> prices = stayRepository.findPriceAll();
+        Map<Integer, Long> countPerPrice = getCountPerPrice(prices);
+        int minPrice = calculateMinPrice(prices);
+        int maxPrice = calculateMaxPrice(prices);
+        int avgPrice = calculateAvgPrice(prices);
+
+        return new StayPriceListQueryResponse(countPerPrice, minPrice, maxPrice, avgPrice);
+    }
+
 
     private Stay buildStay(StayCreate stayCreateRequest) {
         Image image = getImage(stayCreateRequest.getImageId());
@@ -140,5 +173,53 @@ public class StayService {
 
     private Double getActiveRating(Stay stay) {
         return stayCommentRepository.findCommentRatingAvg(stay.getId(), CommentStatus.ACTIVE);
+    }
+
+    private Integer getActiveCommentCount(Stay stay) {
+        return stayCommentRepository.countByStayIdAndStatus(stay.getId(), CommentStatus.ACTIVE);
+    }
+
+    private StayListQueryResponse toStayListQueryResponse(Stay stay, List<String> tagNames, Double activeRating,
+                                                          Integer activeCommentCount) {
+        return StayListQueryResponse.builder()
+                .id(stay.getId())
+                .name(stay.getName())
+                .price(stay.getPrice())
+                .type(stay.getType())
+                .address(stay.getLocation().getAddress())
+                .latitude(stay.getLocation().getLatitude())
+                .longitude(stay.getLocation().getLongitude())
+                .maxGuests(stay.getMaxGuests())
+                .tagNames(tagNames)
+                .imageUrl(stay.getImage().getUrl())
+                .rating(activeRating)
+                .commentCount(activeCommentCount)
+                .build();
+    }
+
+    private int calculateAvgPrice(List<Integer> prices) {
+        return (int) prices.stream()
+                .mapToInt(Integer::intValue)
+                .average()
+                .orElse(0);
+    }
+
+    private int calculateMaxPrice(List<Integer> prices) {
+        return prices.stream()
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(0);
+    }
+
+    private int calculateMinPrice(List<Integer> prices) {
+        return prices.stream()
+                .mapToInt(Integer::intValue)
+                .min()
+                .orElse(0);
+    }
+
+    private Map<Integer, Long> getCountPerPrice(List<Integer> prices) {
+        return prices.stream()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 }

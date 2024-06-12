@@ -1,6 +1,5 @@
 package com.airdnb.stay.entity;
 
-import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.image.entity.Image;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.entity.ReservationPeriod;
@@ -22,16 +21,17 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class Stay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,16 +106,5 @@ public class Stay {
     private boolean hasClosedDate(List<LocalDate> reservationDates) {
         return closedStayDates.stream()
                 .anyMatch(reservationDates::contains);
-    }
-
-    public enum StayType {
-        APT, PENSION, HOTEL;
-
-        public static StayType of(String typeValue) {
-            return Arrays.stream(values())
-                    .filter(stayType -> stayType.name().equals(typeValue.toUpperCase()))
-                    .findAny()
-                    .orElseThrow(() -> new NotFoundException("일치하는 숙소 타입을 찾을 수 없습니다."));
-        }
     }
 }

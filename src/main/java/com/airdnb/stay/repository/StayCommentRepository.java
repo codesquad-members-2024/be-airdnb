@@ -12,4 +12,6 @@ public interface StayCommentRepository extends JpaRepository<StayComment, Long> 
 
     @Query("SELECT AVG(sc.rating) FROM StayComment sc WHERE sc.stay.id = :stayId AND sc.status = :status")
     Double findCommentRatingAvg(@Param("stayId") Long stayId, @Param("status") CommentStatus status);
+
+    Integer countByStayIdAndStatus(Long stayId, CommentStatus status);
 }
