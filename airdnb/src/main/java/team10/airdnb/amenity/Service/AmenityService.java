@@ -21,13 +21,11 @@ public class AmenityService {
         this.amenityRepository = amenityRepository;
     }
 
-    // 새로운 어메니티 생성
     public Amenity saveAmenity(AmenityRequest request) {
         validateDuplicateAmenity(request.name());
         return amenityRepository.save(request.toEntity());
     }
 
-    // 어메니티 수정
     public Amenity updateAmenity(long amenityId, AmenityRequest request) {
         validateDuplicateAmenity(request.name());
         Amenity amenity = getAmenityById(amenityId);
@@ -35,7 +33,6 @@ public class AmenityService {
         return amenityRepository.save(amenity);
     }
 
-    // 어메니티 삭제
     public Amenity deleteAmenity(long amenityId) {
         Amenity amenity = getAmenityById(amenityId);
         amenityRepository.delete(amenity);
@@ -48,13 +45,13 @@ public class AmenityService {
 
     private Amenity getAmenityById(long amenityId) {
         return amenityRepository.findById(amenityId)
-                .orElseThrow(() -> new AmenityIdNotFoundException(ErrorCode.AMENITY_TYPE_NOT_EXISTS));
+                .orElseThrow(AmenityIdNotFoundException::new);
     }
 
     private void validateDuplicateAmenity(String inputAmenity) {
         amenityRepository.findByName(inputAmenity)
                 .ifPresent(amenity -> {
-                    throw new AmenityNameDuplicateException(ErrorCode.ALREADY_SAVED_AMENITY);
+                    throw new AmenityNameDuplicateException();
                 });
     }
 }

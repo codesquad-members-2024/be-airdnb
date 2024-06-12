@@ -4,7 +4,7 @@ import team10.airdnb.error.ErrorCode;
 import team10.airdnb.exception.BusinessException;
 
 public class AmenityIdNotFoundException extends BusinessException {
-    public AmenityIdNotFoundException(ErrorCode errorCode) {
-        super(errorCode);
+    public AmenityIdNotFoundException() {
+        super(ErrorCode.AMENITY_TYPE_NOT_EXISTS);
     }
 }
