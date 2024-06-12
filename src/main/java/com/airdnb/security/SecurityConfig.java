@@ -27,9 +27,10 @@ public class SecurityConfig {
         throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/members", "/api/members/verify").permitAll()
+                .requestMatchers("/api/members", "/api/members/verify", "/ws/**").permitAll()
                 .anyRequest().authenticated())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
