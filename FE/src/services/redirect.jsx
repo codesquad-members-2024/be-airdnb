@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { handleOAuth } from "./auth";
 
 const RedirectPage = (provider) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -12,8 +13,9 @@ const RedirectPage = (provider) => {
 
     if (code) {
       handleOAuth(code, state, provider);
+      navigate("/");
     }
-  }, [location, provider]);
+  }, [location, navigate, provider]);
 
   return null;
 };
