@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/global/layout";
-import LoginPage from "./pages/loginPage";
 import IntroductionPage from "./pages/inroduction";
+import LoginPage from "./pages/loginPage";
 import RedirectPage from "./services/redirect.jsx";
 
 const App = () => {
@@ -22,6 +22,8 @@ const App = () => {
             />
           </Route>
         </Routes>
+        <RedirectPage provider="github" />
+        <RedirectPage provider="google" />
       </BrowserRouter>
     </div>
   );
