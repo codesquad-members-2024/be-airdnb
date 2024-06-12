@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accommodation.entity.AccommodationEntity;
+import team07.airbnb.domain.booking.entity.BookingEntity;
+import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
 
@@ -26,10 +28,17 @@ public class ProductEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     private AccommodationEntity accommodation;
+
+    @ManyToOne
+    private BookingEntity booking;
+
     private LocalDate date;
+
     private int price;
+
     private ProductStatus status;
 
     public static ProductEntity ofOpen(AccommodationEntity accommodation, LocalDate date, int price){
@@ -39,5 +48,18 @@ public class ProductEntity extends BaseEntity {
                 .price(price)
                 .status(ProductStatus.OPEN)
                 .build();
+    }
+
+    public ProductEntity book(BookingEntity booking){
+        if(!canBook()) throw new IllegalStateException("[ %d번 상품 예약 실패]예약 불가 상태 상품입니다.".formatted(this.id));
+
+        this.booking = booking;
+        this.status = ProductStatus.BOOKED;
+
+        return this;
+    }
+
+    private boolean canBook() {
+        return this.booking != null || this.status != ProductStatus.OPEN;
     }
 }

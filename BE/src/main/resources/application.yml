@@ -6,3 +6,22 @@ spring:
       - app_settings/dev-db-config.yml
       - app_settings/oauth-config.yml
       - app_settings/jwt-config.yml
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  forward-headers-strategy: FRAMEWORK
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /docs
+  api-docs:
+    path: /bnb
+  default-produces-media-type: application/json

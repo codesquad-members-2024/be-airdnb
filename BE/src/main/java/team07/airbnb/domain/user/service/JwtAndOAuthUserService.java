@@ -10,12 +10,13 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import team07.airbnb.domain.auth.JwtAuthentication;
+import team07.airbnb.common.auth.JwtAuthentication;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.entity.UserEntity;
 import team07.airbnb.domain.user.repository.UserRepository;
-import team07.airbnb.domain.auth.JwtUserDetails;
-import team07.airbnb.domain.auth.OAuthAttributes;
-import team07.airbnb.util.jwt.JwtUtil;
+import team07.airbnb.common.auth.JwtUserDetails;
+import team07.airbnb.common.auth.OAuthAttributes;
+import team07.airbnb.common.util.jwt.JwtUtil;
 
 @RequiredArgsConstructor
 @Service
@@ -46,7 +47,7 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
         // 사용자 저장 또는 업데이트
         UserEntity user = saveOrUpdate(attributes);
 
-        JwtUserDetails userDetails = new JwtUserDetails(user, attributes.getAttributes());
+        JwtUserDetails userDetails = new JwtUserDetails(TokenUserInfo.of(user), attributes.getAttributes());
 
         String jwt = null;
         try {
@@ -58,7 +59,7 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
 
         userDetails.setPassword(jwt);
 
-        JwtAuthentication authentication = new JwtAuthentication(jwt, user, true);
+        JwtAuthentication authentication = new JwtAuthentication(jwt, TokenUserInfo.of(user), true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return userDetails;
@@ -68,7 +69,7 @@ public class JwtAndOAuthUserService extends DefaultOAuth2UserService {
     private UserEntity saveOrUpdate(OAuthAttributes attributes) {
         UserEntity user = userRepository.findByRegistrationIdAndName(attributes.getRegistrationId(), attributes.getName())
                 // 가입된 사용자는 이름과 이미지, 사진만 업데이트
-                .map(entity -> entity.update(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
+                .map(entity -> entity.updateInfo(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
                 // 가입되지 않은 사용자 => User 엔티티 생성
                 .orElse(attributes.toEntity());
 

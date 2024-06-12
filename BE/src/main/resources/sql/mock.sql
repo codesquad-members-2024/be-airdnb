@@ -61,10 +61,10 @@ VALUES (1, 'city_center_apartment_1.jpg'),
 
 -- accommodation_product 데이터 삽입
 INSERT INTO accommodation_product (date, price, status, accommodation_id, created_at, last_modified_at)
-VALUES ('2024-06-01', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-02', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-03', 100, 0, 1, NOW(), NOW()),
-       ('2024-06-04', 100, 0, 1, NOW(), NOW()),
+VALUES ('2024-06-01', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-02', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-03', 100, 0, 2, NOW(), NOW()),
+       ('2024-06-04', 100, 0, 2, NOW(), NOW()),
        ('2024-06-01', 150, 0, 2, NOW(), NOW()),
        ('2024-06-02', 150, 0, 2, NOW(), NOW()),
        ('2024-06-03', 150, 0, 2, NOW(), NOW()),
@@ -128,15 +128,9 @@ VALUES ('2024-07-01', 120, 0, 4, NOW(), NOW()),
        ('2024-07-05', 130, 1, 13, NOW(), NOW());
 
 -- booking 데이터 삽입
-INSERT INTO booking (adult_headcount, checkin, checkout, kid_headcount, status, booker_id, created_at, last_modified_at)
+INSERT INTO booking (headcount, checkin, checkout,status, booker_id, created_at, last_modified_at)
 VALUES (2, '2024-06-01', '2024-06-03', 0, 1, 1, NOW(), NOW()),
        (4, '2024-06-01', '2024-06-02', 2, 1, 2, NOW(), NOW());
-
--- booking_products 데이터 삽입
-INSERT INTO booking_products (booking_entity_id, products_id)
-VALUES (1, 1),
-       (1, 2),
-       (2, 5);
 
 -- payment 데이터 삽입
 INSERT INTO payment (booking_fee, cancellation_fee, service_fee, status, taxes, total_fee, booking_id, created_at,

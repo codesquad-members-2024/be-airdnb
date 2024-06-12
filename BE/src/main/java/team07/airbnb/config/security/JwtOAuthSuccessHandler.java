@@ -8,19 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
-import team07.airbnb.domain.auth.JwtUserDetails;
+import team07.airbnb.common.auth.JwtUserDetails;
+import team07.airbnb.domain.user.dto.TokenUserInfo;
 import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +28,7 @@ public class JwtOAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         JwtUserDetails userDetails = (JwtUserDetails) authentication.getPrincipal();
-        UserEntity user = userDetails.getUser();
+        TokenUserInfo user = userDetails.getUser();
 
         response.setContentType("application/json; charset=utf-8");
         response.setCharacterEncoding("UTF-8");
@@ -42,8 +36,8 @@ public class JwtOAuthSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, String> responseMap = new HashMap<>();
 
         responseMap.put("token", userDetails.getPassword());
-        responseMap.put("userId", user.getId().toString());
-        responseMap.put("userName", user.getName());
+        responseMap.put("userId", user.id().toString());
+        responseMap.put("userName", user.name());
 
         PrintWriter writer = response.getWriter();
         writer.print(mapper.writeValueAsString(responseMap));

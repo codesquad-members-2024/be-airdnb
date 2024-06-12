@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +21,13 @@ import team07.airbnb.domain.BaseEntity;
 import team07.airbnb.domain.accommodation.property.AccommodationLocation;
 import team07.airbnb.domain.accommodation.property.AccommodationType;
 import team07.airbnb.domain.accommodation.property.RoomInformation;
+import team07.airbnb.domain.booking.entity.BookingEntity;
 import team07.airbnb.domain.product.entity.ProductEntity;
+import team07.airbnb.domain.review.ReviewEntity;
 import team07.airbnb.domain.user.entity.UserEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -36,8 +40,10 @@ public class AccommodationEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     private UserEntity host;
+
     private AccommodationType type;
 
     @Embedded
@@ -48,18 +54,34 @@ public class AccommodationEntity extends BaseEntity {
 
     // Description
     private String name;
+
     private String description;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "accommodation_id")
-    private List<Pictures> pictures;
+    private List<Pictures> pictures = new ArrayList<>();
+
     private int basePricePerDay;
 
     @JsonIgnore
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductEntity> products;
+    private List<ProductEntity> products = new ArrayList<>();
+
+    @Transient
+    public List<ReviewEntity> reviews() {
+        return products.stream()
+                .map(ProductEntity::getBooking)
+                .map(BookingEntity::getReview)
+                .toList();
+    }
+
+    @Transient
+    public double rating(){
+        return reviews().stream().mapToDouble(ReviewEntity::getRating).average().orElseGet(() -> 0.0);
+    }
 
     public void addPicture(String url) {
-        pictures.add(new Pictures(this.id, url));
+        pictures.add(new Pictures(this, url));
     }
 
     public void addProduct(LocalDate date, int price){
