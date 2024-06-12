@@ -8,49 +8,45 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class FloorPlanData {
+public record FloorPlanData (
+        @NotNull
+        @Min(value = 1)
+        Integer maxGuestCount,
 
-    @NotNull
-    @Min(value = 1)
-    private Integer maxGuest;
+        @NotNull
+        @Min(value = 0)
+        Integer maxInfantCount,
 
-    @NotNull
-    @Min(value = 0)
-    private Integer maxInfant;
+        @NotNull
+        @Min(value = 0)
+        Integer bedroomCount,
 
-    @NotNull
-    @Min(value = 0)
-    private Integer bedroomNum;
+        @NotNull
+        @Min(value = 1)
+        Integer bedCount,
 
-    @NotNull
-    @Min(value = 1)
-    private Integer bedNum;
-
-    @NotNull
-    @Min(value = 0)
-    private Integer bathroomNum;
-
+        @NotNull
+        @Min(value = 0)
+        Integer bathroomCount
+) {
     public FloorPlan toEmbedded() {
         return FloorPlan.builder()
-                .maxGuest(maxGuest)
-                .maxInfant(maxInfant)
-                .bedroomNum(bedroomNum)
-                .bedNum(bedNum)
-                .bathroomNum(bathroomNum)
+                .maxGuestCount(maxGuestCount)
+                .maxInfantCount(maxInfantCount)
+                .bedroomCount(bedroomCount)
+                .bedCount(bedCount)
+                .bathroomCount(bathroomCount)
                 .build();
     }
 
     public static FloorPlanData toResponseEmbedded(FloorPlan floorPlan) {
         return FloorPlanData.builder()
-                .maxGuest(floorPlan.getMaxGuest())
-                .maxInfant(floorPlan.getMaxInfant())
-                .bedroomNum(floorPlan.getBedroomNum())
-                .bedNum(floorPlan.getBedNum())
-                .bathroomNum(floorPlan.getBathroomNum())
+                .maxGuestCount(floorPlan.getMaxGuestCount())
+                .maxInfantCount(floorPlan.getMaxInfantCount())
+                .bedroomCount(floorPlan.getBedroomCount())
+                .bedCount(floorPlan.getBedCount())
+                .bathroomCount(floorPlan.getBathroomCount())
                 .build();
     }
 }

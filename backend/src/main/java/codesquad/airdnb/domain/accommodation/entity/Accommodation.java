@@ -25,7 +25,7 @@ public class Accommodation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HOST_ID")
     private Member host;
 
@@ -33,7 +33,7 @@ public class Accommodation {
 
     private String placeCategory;
 
-    private Long price;
+    private Long basePricePerNight;
 
     private String description;
 

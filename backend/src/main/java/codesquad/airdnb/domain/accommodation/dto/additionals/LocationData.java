@@ -1,58 +1,35 @@
 package codesquad.airdnb.domain.accommodation.dto.additionals;
 
 import codesquad.airdnb.domain.accommodation.entity.embedded.Location;
+import codesquad.airdnb.domain.accommodation.util.GeometryHelper;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-import static codesquad.airdnb.env.Constants.SRID;
-
-@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LocationData {
+public record LocationData (
 
     @NotBlank
     @Size(min = 2, max = 2)
-    private String country;
+    String country,
 
     @NotBlank
-    private String province;
+    String province,
 
-    private String city;
-
-    @NotBlank
-    private String district;
+    String city,
 
     @NotBlank
-    private String streetAddress;
+    String district,
 
-    private String streetAddressDetail;
+    @NotBlank
+    String streetAddress,
 
-    private String postalCode;
+    String streetAddressDetail,
 
-    @NotNull
-    @Min(value = -90)
-    @Max(value = 90)
-    private Double coordinateX;
+    String postalCode,
 
-    @NotNull
-    @Min(value = -180)
-    @Max(value = 180)
-    private Double coordinateY;
-
-    private Point createPoint(Double coordinateX, Double coordinateY) {
-        GeometryFactory geometryFactory = new GeometryFactory();
-        Point point = geometryFactory.createPoint(new Coordinate(coordinateX, coordinateY));
-        point.setSRID(SRID);
-        return point;
-    }
+    Point point
+) {
 
     public Location toEmbedded() {
         return Location.builder()
@@ -63,7 +40,7 @@ public class LocationData {
                 .streetAddress(streetAddress)
                 .streetAddressDetail(streetAddressDetail)
                 .postalCode(postalCode)
-                .coordinate(createPoint(coordinateX, coordinateY))
+                .coordinate(point)
                 .build();
     }
 
@@ -76,8 +53,9 @@ public class LocationData {
                 .streetAddress(location.getStreetAddress())
                 .streetAddressDetail(location.getStreetAddressDetail())
                 .postalCode(location.getPostalCode())
-                .coordinateX(location.getCoordinate().getX())
-                .coordinateY(location.getCoordinate().getY())
+//                .latitude(location.getCoordinate().getX())
+//                .longitude(location.getCoordinate().getY())
+                .point(location.getCoordinate())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package codesquad.airdnb.domain.accommodation.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ACCO_IMAGE")
-public class AccoImage {
+@IdClass(ReservationProductId.class)
+@Table(name = "RESERVATION_PRODUCT")
+public class ReservationProduct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCO_ID")
-    private Accommodation accommodation;
+    @JoinColumn(name = "RESERVE_ID")
+    private Reservation reservation;
 
-    private String url;
+    @Id
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_ID")
+    private AccoProduct accoProduct;
 }

@@ -21,11 +21,11 @@ public class AccoAmen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCO_ID")
     private Accommodation accommodation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AMEN_ID")
     private Amenity amenity;
 

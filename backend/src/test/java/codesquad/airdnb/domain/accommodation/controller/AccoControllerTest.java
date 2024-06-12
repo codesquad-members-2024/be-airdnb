@@ -7,6 +7,7 @@ import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
 import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.accommodation.dto.response.SimpleAccommodationResponse;
 import codesquad.airdnb.domain.accommodation.service.AccoService;
+import codesquad.airdnb.domain.accommodation.util.GeometryHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Time;
 import java.util.List;
 
-@WebMvcTest(AccoController.class)
+@WebMvcTest(HostAccoController.class)
 class AccoControllerTest {
 
     @Autowired
@@ -37,6 +38,8 @@ class AccoControllerTest {
 
     @MockBean
     private AccoService accoService;
+
+    private final GeometryHelper geometryHelper = new GeometryHelper();
 
     private final String urlPrefix = "/api/host";
 
@@ -49,7 +52,7 @@ class AccoControllerTest {
             Time.valueOf("16:00:00"),
             Time.valueOf("11:00:00"),
             new LocationData("KR", "AnYang", "Seoul", "Songpa", "MoonJung",
-                    "100000동 100004호", "05794", 11.111, 22.222),
+                    "100000동 100004호", "05794", geometryHelper.createPoint(11.111, 22.222)),
             new FloorPlanData(2, 3, 5, 6, 7),
             List.of("1111", "22222", "33333", "44444", "55555"),
             List.of(1L, 2L, 3L, 4L, 5L));
@@ -59,12 +62,12 @@ class AccoControllerTest {
             .hostId(1L)
             .title("test")
             .placeCategory("house")
-            .price(1000L)
+            .basePricePerNight(1000L)
             .description("test description")
             .checkInTime(Time.valueOf("16:00:00"))
             .checkOutTime(Time.valueOf("11:00:00"))
             .locationData(new LocationData("KR", "AnYang", "Seoul", "Songpa", "MoonJung",
-                    "100000동 100004호", "05794", 11.111, 22.222))
+                    "100000동 100004호", "05794", geometryHelper.createPoint(11.111, 22.222)))
             .floorPlanData(new FloorPlanData(2, 3, 5, 6, 7))
             .imageUrls(List.of("1111", "22222", "33333", "44444", "55555"))
             .amenities(List.of(1L, 2L, 3L, 4L, 5L))

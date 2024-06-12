@@ -10,13 +10,13 @@ import lombok.*;
 @AllArgsConstructor
 public class FloorPlan {
 
-    private Integer maxGuest;
+    private Integer maxGuestCount;
 
-    private Integer maxInfant;
+    private Integer maxInfantCount;
 
-    private Integer bedroomNum;
+    private Integer bedroomCount;
 
-    private Integer bedNum;
+    private Integer bedCount;
 
-    private Integer bathroomNum;
+    private Integer bathroomCount;
 }

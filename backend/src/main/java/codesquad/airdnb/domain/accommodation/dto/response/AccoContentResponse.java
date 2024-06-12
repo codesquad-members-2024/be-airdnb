@@ -11,40 +11,38 @@ import java.sql.Time;
 import java.util.List;
 
 @Builder
-@Getter
-public class AccoContentResponse {
+public record AccoContentResponse (
+        Long id,
 
-    private Long id;
+        Long hostId,
 
-    private Long hostId;
+        String title,
 
-    private String title;
+        String placeCategory,
 
-    private String placeCategory;
+        Long basePricePerNight,
 
-    private Long price;
+        String description,
 
-    private String description;
+        Time checkInTime,
 
-    private Time checkInTime;
+        Time checkOutTime,
 
-    private Time checkOutTime;
+        LocationData locationData,
 
-    private LocationData locationData;
+        FloorPlanData floorPlanData,
 
-    private FloorPlanData floorPlanData;
+        List<Long> amenities,
 
-    private List<Long> amenities;
-
-    private List<String> imageUrls;
-
+        List<String> imageUrls
+) {
     public static AccoContentResponse of(Accommodation accommodation) {
         return AccoContentResponse.builder()
                 .id(accommodation.getId())
                 .hostId(accommodation.getHost().getId())
                 .title(accommodation.getTitle())
                 .placeCategory(accommodation.getPlaceCategory())
-                .price(accommodation.getPrice())
+                .basePricePerNight(accommodation.getBasePricePerNight())
                 .description(accommodation.getDescription())
                 .checkInTime(accommodation.getCheckInTime())
                 .checkOutTime(accommodation.getCheckOutTime())

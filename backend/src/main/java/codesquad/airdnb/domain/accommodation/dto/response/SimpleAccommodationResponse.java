@@ -6,15 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-@Getter
-@AllArgsConstructor
-public class SimpleAccommodationResponse {
+public record SimpleAccommodationResponse (
+    Long id,
 
-    private Long id;
+    String title,
 
-    private String title;
-
-    private String thumbnailUrl;
+    String thumbnailUrl
+) {
 
     public static SimpleAccommodationResponse of(Accommodation accommodation) {
         return SimpleAccommodationResponse.builder()
