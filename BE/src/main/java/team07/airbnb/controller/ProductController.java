@@ -40,7 +40,7 @@ public class ProductController {
     ) {
 
         return productService.findAvailableInDateRange(
-                accommodationService.findNearbyAccommodations(longitude, latitude, distance),
+                accommodationService.findNearbyAccommodations(longitude, latitude, distance * 1000),
                 checkIn, checkOut, headCount);
     }
 

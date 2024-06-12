@@ -42,7 +42,7 @@ public class AccommodationController {
             @RequestParam double latitude,
             @RequestParam double distance) {
 
-        return accommodationService.findNearbyAccommodations(longitude, latitude, distance)
+        return accommodationService.findNearbyAccommodations(longitude, latitude, distance * 1000)
                 .stream()
                 .map(AccommodationListResponse::of)
                 .toList();
