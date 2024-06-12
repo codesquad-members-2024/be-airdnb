@@ -36,10 +36,7 @@ public class AuthenticationAspect {
         }
 
         if (!userHasGrant(authenticated, authentication)) {
-            throw new UnAuthorizedException("%s 권한에 %s 가 접근 실패".formatted(
-                    authenticated.value().getKey(),
-                            authentication.getName() // ?
-            ));
+            throw new UnAuthorizedException("AOP 에서 권한 예외 발생함");
         }
 
         return joinPoint.proceed();

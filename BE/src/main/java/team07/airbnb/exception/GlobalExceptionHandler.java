@@ -17,20 +17,21 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<String> handleApplicationException(ApplicationException e) {
-        log.debug("{%s} Occurred \n{%s}".formatted(e.getClass(), e.getLog()));
+        log.debug("Occurred By : {%s}\n{%s}".formatted(e.getClass(), e.getLog()));
+
         return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors()
                 .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
 
         log.debug("[ Validation Error Occurred ]\n" + errors);
 
-        return errors;
+        return ResponseEntity.badRequest().body(errors);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

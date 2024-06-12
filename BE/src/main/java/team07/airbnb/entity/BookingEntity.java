@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -36,9 +37,11 @@ public class BookingEntity extends BaseEntity {
     private List<ProductEntity> products = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "booker_id")
     private UserEntity booker;
 
     @ManyToOne
+    @JoinColumn(name = "host_id")
     private UserEntity host;
 
     private Integer headCount;
@@ -47,7 +50,6 @@ public class BookingEntity extends BaseEntity {
 
     private LocalDate checkout;
 
-    @Setter
     private BookingStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -59,5 +61,17 @@ public class BookingEntity extends BaseEntity {
     public BookingEntity addReview(ReviewEntity review) {
         this.review = review;
         return this;
+    }
+
+    public void confirmBooking() {
+        this.status = BookingStatus.CONFIRM;
+    }
+
+    public void completeBooking() {
+        this.status = BookingStatus.COMPLETE;
+    }
+
+    public void cancelBooking() {
+        this.status = BookingStatus.CANCEL;
     }
 }

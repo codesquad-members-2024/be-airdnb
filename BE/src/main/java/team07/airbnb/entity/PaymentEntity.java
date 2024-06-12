@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.entity.embed.Fee;
 import team07.airbnb.data.payment.PaymentStatus;
-import team07.airbnb.data.booking.dto.BookingInfo;
+import team07.airbnb.data.booking.dto.PriceInfo;
 
 @Entity
 @Table(name = "PAYMENT")
@@ -32,9 +32,9 @@ public class PaymentEntity extends BaseEntity {
     private PaymentStatus status;
 
 
-    public static PaymentEntity of(BookingInfo bookingInfo) {
-        Fee fee = Fee.of(bookingInfo);
-        long totalPrice = bookingInfo.getRoughTotalPrice() - bookingInfo.getDiscountPrice() + fee.getAccommodationFee() + fee.getServiceFee();
+    public static PaymentEntity of(PriceInfo priceInfo) {
+        Fee fee = Fee.of(priceInfo);
+        long totalPrice = priceInfo.getRoughTotalPrice() - priceInfo.getDiscountPrice() + fee.getAccommodationFee() + fee.getServiceFee();
         return new PaymentEntity(
                 null,
                 fee,

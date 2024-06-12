@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class BookingInfo {
+public class PriceInfo {
 
     private long roughTotalPrice;
     private long discountPrice;
@@ -17,8 +17,8 @@ public class BookingInfo {
         return roughTotalPrice == 0 || discountPrice == 0 || serviceFee == 0 || accommodationFee == 0;
     }
 
-    public static BookingInfo of(long roughTotalPrice, long discountPrice, long serviceFee, long accommodationFee) {
-        return new BookingInfo(
+    public static PriceInfo of(long roughTotalPrice, long discountPrice, long serviceFee, long accommodationFee) {
+        return new PriceInfo(
                 roughTotalPrice,
                 discountPrice,
                 serviceFee,
@@ -26,8 +26,8 @@ public class BookingInfo {
         );
     }
 
-    public static BookingInfo empty() {
-        return new BookingInfo(
+    public static PriceInfo empty() {
+        return new PriceInfo(
                 0,0,0,0
         );
     }

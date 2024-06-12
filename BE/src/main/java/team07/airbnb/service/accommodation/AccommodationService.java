@@ -49,7 +49,7 @@ public class AccommodationService {
     @Transactional
     public void deleteById(long id, UserEntity user) {
         if(!getHostIdById(id).equals(user.getId()))
-            throw new UnAuthorizedException("USER ID : {%d} 유저가 HOST ID : {%d}에 권한 없는 접근 발생".formatted(user.getId(), id));
+            throw new UnAuthorizedException(AccommodationService.class, user.getId());
 
         try {
             accommodationRepository.deleteById(id);

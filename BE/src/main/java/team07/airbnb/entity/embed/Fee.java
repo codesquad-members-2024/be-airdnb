@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.data.booking.dto.BookingInfo;
+import team07.airbnb.data.booking.dto.PriceInfo;
 
 @Getter
 @Embeddable
@@ -14,10 +14,10 @@ public class Fee {
     private long serviceFee;
     private long accommodationFee;
 
-    public static Fee of(BookingInfo bookingInfo) {
+    public static Fee of(PriceInfo priceInfo) {
         return new Fee(
-                bookingInfo.getServiceFee(),
-                bookingInfo.getAccommodationFee()
+                priceInfo.getServiceFee(),
+                priceInfo.getAccommodationFee()
         );
     }
 }
