@@ -103,6 +103,8 @@ public class BookingService {
 
         String accName = accommodationService.findById(accId).getName();
 
+        bookingRepository.save(booking);
+
         return new BookingCreateResponse(accName, booking.getId(), checkIn, checkOut, headCount);
     }
 

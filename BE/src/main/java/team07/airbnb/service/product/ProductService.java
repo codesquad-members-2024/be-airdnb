@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.IllegalRequestException;
 import team07.airbnb.exception.not_found.ProductNotFoundException;
 import team07.airbnb.repository.ProductRepository;
@@ -61,6 +63,23 @@ public class ProductService {
                 .toList();
 
         remainProducts.stream().forEach(product -> productRepository.save(product.reopen(booking)));
+    }
+
+    public void closeProduct(Long productId) {
+        ProductEntity product = findById(productId);
+        product.close(null);
+        productRepository.save(product);
+    }
+
+    public void updatePrice(Long id, Integer price) {
+        ProductEntity product = findById(id);
+        product.setPrice(price);
+        productRepository.save(product);
+    }
+
+    public boolean isHostOf(Long id, UserEntity userInfo) {
+        ProductEntity product = findById(id);
+        return product.getAccommodation().getHost().equals(userInfo);
     }
 
     private ProductEntity getProductById(Long id) {

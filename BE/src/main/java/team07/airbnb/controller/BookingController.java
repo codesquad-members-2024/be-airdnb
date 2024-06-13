@@ -154,6 +154,7 @@ public class BookingController {
         return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
     }
 
+    @Operation(summary = "날짜와 지역에 따른 요금정보들 조회", description = "요금 그래프를 위한 선택한 지역, 날짜의 평균 요금들을 정렬된 리스트로 반환합니다.")
     @GetMapping("/pay-info")
     @ResponseStatus(OK)
     public List<Double> getPayInfo(@RequestBody BookingPaymentsRequest bookingPaymentsRequest) {

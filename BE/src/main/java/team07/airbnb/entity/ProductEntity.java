@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import team07.airbnb.data.product.ProductStatus;
 import team07.airbnb.exception.bad_request.IllegalProductStateException;
 
@@ -39,6 +40,7 @@ public class ProductEntity extends BaseEntity {
 
     private LocalDate date;
 
+    @Setter
     private Integer price;
 
     @Enumerated(EnumType.STRING)
@@ -74,7 +76,7 @@ public class ProductEntity extends BaseEntity {
     }
 
     public ProductEntity close(BookingEntity booking) {
-        if (!this.booking.getId().equals(booking.getId())) {
+        if (booking != null && !this.booking.getId().equals(booking.getId())) {
             // 닫을 상품과 예약 번호가 일치하지 않으면 의도하지 않은 버그임
             // 다른 로직에서 꼬였을 확률이 높음
             throw new RuntimeException("닫을 상품과 예약 번호가 일치하지 않습니다");
