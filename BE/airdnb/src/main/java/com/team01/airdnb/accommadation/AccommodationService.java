@@ -70,7 +70,7 @@ public class AccommodationService {
         .amenity(amenityService.findByAccommodationId(id))
         .images(imageService.findByAccommodationId(id))
         .host(userService.getHostResponse(accommodation.getUser()))
-        .comment(commentService.findAmenityByAmenityId(id))
+        .comment(commentService.showAllComment(id))
         .score(commentService.findAverageScoreByAccommodationId(id))
         .build();
   }

@@ -7,6 +7,7 @@ import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,9 @@ public class CommentService {
 
     return new CommentShowResponse(target.getId(), target.getScore(), target.getContent(),
         target.getCreatedAt(), target.getUser());
+  }
+
+  public Double findAverageScoreByAccommodationId(Long id) {
+    return commentRepository.findAverageScoreByAccommodationId(id);
   }
 }
