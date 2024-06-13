@@ -1,7 +1,7 @@
 package com.team01.airdnb.accommadation.dto;
 
 import com.team01.airdnb.amenity.dto.AmenityShowResponse;
-import com.team01.airdnb.comment.dto.CommentListResponse;
+import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.host.dto.HostSimplificationResponse;
 import com.team01.airdnb.image.dto.ImageListResponse;
 import java.util.List;
@@ -22,7 +22,7 @@ public record AccommodationDetailResponse(
     Integer maxInfants,
     Integer maxPets,
     List<ImageListResponse> images,
-    List<CommentListResponse> comment,
+    List<CommentShowResponse> comment,
     HostSimplificationResponse host,
     AmenityShowResponse amenity,
     Boolean wishListFlag
