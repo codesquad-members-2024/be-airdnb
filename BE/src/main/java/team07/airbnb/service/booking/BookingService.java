@@ -3,22 +3,20 @@ package team07.airbnb.service.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
-import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
-import team07.airbnb.exception.auth.UnAuthorizedException;
-import team07.airbnb.exception.bad_request.IllegalBookingStatusException;
-import team07.airbnb.exception.bad_request.InvalidBookingRequestException;
-import team07.airbnb.service.accommodation.AccommodationService;
-import team07.airbnb.repository.BookingRepository;
 import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
-import team07.airbnb.data.booking.enums.BookingStatus;
+import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.PaymentEntity;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
+import team07.airbnb.exception.auth.UnAuthorizedException;
+import team07.airbnb.exception.bad_request.IllegalBookingStatusException;
+import team07.airbnb.exception.bad_request.InvalidBookingRequestException;
 import team07.airbnb.exception.not_found.BookingNotFoundException;
-import team07.airbnb.exception.bad_request.DateInversionException;
+import team07.airbnb.repository.BookingRepository;
+import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.booking.price_policy.fee.AccommodationFee;
 import team07.airbnb.service.booking.price_policy.fee.ServiceFee;
 import team07.airbnb.service.discount.DiscountPolicyService;
@@ -28,10 +26,10 @@ import team07.airbnb.service.product.ProductService;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static team07.airbnb.data.booking.enums.BookingStatus.*;
+import static team07.airbnb.data.booking.enums.BookingStatus.CONFIRM;
+import static team07.airbnb.data.booking.enums.BookingStatus.REQUESTED;
 
 @Service
 @RequiredArgsConstructor
@@ -82,7 +80,7 @@ public class BookingService {
         BookingEntity booking = findByBookingId(bookingId);
 
         if (!booking.getHost().equals(requestedHost)) {
-            throw new UnAuthorizedException(BookingService.class, requestedHost.getId(), "숙소의 호스트가 아닌 사람의 숙소 확인 요청");
+            throw new UnAuthorizedException(BookingService.class, requestedHost.getId(), "숙소의 호스트가 아닌 사람의 예약 확정 요청");
         }
 
         if (!booking.getStatus().equals(REQUESTED)) {
@@ -115,10 +113,6 @@ public class BookingService {
     }
 
     public PriceInfo getPriceInfo(BookingInfoForPriceInfo requestInfo) {
-        if (requestInfo.checkIn() == null || requestInfo.checkOut() == null || requestInfo.headCount() == null) {
-            return PriceInfo.empty();
-        }
-
         int roughTotalPrice = getRoughTotalPrice(requestInfo.avgPrice(), requestInfo.checkIn(), requestInfo.checkOut());
         int discountPrice = getDiscountPrice(roughTotalPrice);
         int serviceFee = getServiceFee(roughTotalPrice, discountPrice);
@@ -133,15 +127,15 @@ public class BookingService {
     }
 
     public void addReview(Long bookingId, Long writerId, ReviewEntity review) {
-        BookingEntity booking = getById(bookingId);
-        if (!booking.getBooker().getId().equals(writerId)) throw new UnAuthorizedException(BookingService.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+        BookingEntity booking = findByBookingId(bookingId);
+        if (!booking.getBooker().getId().equals(writerId))
+            throw new UnAuthorizedException(BookingService.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
 
         bookingRepository.save(booking.addReview(review));
     }
 
     public BookingEntity findByBookingId(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new BookingNotFoundException(id));
+        return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
     }
 
     public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
@@ -158,6 +152,7 @@ public class BookingService {
         int days = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
         return avgPrice * days;
     }
+
     public int getDiscountPrice(int roughTotalPrice) {
         return discountPolicyService.getDiscountPrice(roughTotalPrice);
     }
@@ -168,9 +163,5 @@ public class BookingService {
 
     public int getAccommodationFee(int serviceFeePrice) {
         return accommodationFee.getAccommodationFeePrice(serviceFeePrice);
-    }
-
-    private BookingEntity getById(Long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(() -> new NoSuchElementException("%d 번 예약이 존재하지 않습니다!".formatted(bookingId)));
     }
 }

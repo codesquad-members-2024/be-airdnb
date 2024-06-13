@@ -25,10 +25,4 @@ public class PriceInfo {
                 accommodationFee
         );
     }
-
-    public static PriceInfo empty() {
-        return new PriceInfo(
-                0,0,0,0
-        );
-    }
 }
