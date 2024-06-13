@@ -11,15 +11,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "reservations")
 public class Reservation {
   @Id
@@ -44,4 +47,5 @@ public class Reservation {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
+  
 }
