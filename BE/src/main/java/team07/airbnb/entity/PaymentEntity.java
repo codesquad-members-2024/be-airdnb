@@ -2,6 +2,8 @@ package team07.airbnb.entity;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,21 +22,21 @@ import team07.airbnb.data.booking.dto.PriceInfo;
 @Getter
 public class PaymentEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Embedded
     private Fee fee;
 
-    private long totalPrice;
+    private int totalPrice;
 
+    @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
 
     public static PaymentEntity of(PriceInfo priceInfo) {
         Fee fee = Fee.of(priceInfo);
-        long totalPrice = priceInfo.getRoughTotalPrice() - priceInfo.getDiscountPrice() + fee.getAccommodationFee() + fee.getServiceFee();
+        int totalPrice = priceInfo.getRoughTotalPrice() - priceInfo.getDiscountPrice() + fee.getAccommodationFee() + fee.getServiceFee();
         return new PaymentEntity(
                 null,
                 fee,

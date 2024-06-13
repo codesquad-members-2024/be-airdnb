@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
+import team07.airbnb.data.product.ProductStatus;
 import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.entity.embed.RoomInformation;
 
@@ -32,11 +33,12 @@ import java.util.List;
 @Builder
 @Getter
 public class AccommodationEntity extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "host_id")
     private UserEntity host;
 
     private AccommodationType type;
@@ -52,8 +54,7 @@ public class AccommodationEntity extends BaseEntity {
 
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "accommodation_id")
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pictures> pictures = new ArrayList<>();
 
     private int basePricePerDay;
@@ -67,6 +68,12 @@ public class AccommodationEntity extends BaseEntity {
         return products.stream()
                 .map(ProductEntity::getBooking)
                 .map(BookingEntity::getReview)
+                .toList();
+    }
+
+    public List<ProductEntity> getOpenProducts() {
+        return this.getProducts().stream()
+                .filter(product -> product.getStatus().equals(ProductStatus.OPEN))
                 .toList();
     }
 

@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,20 +21,22 @@ import java.util.List;
 @Getter
 public class ReviewEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @JsonIgnore
-    @Column(name = "booking_id")
-    private Long bookingId;
+    @OneToOne(mappedBy = "review")
+    private BookingEntity booking;
+
     private String content;
+
     private int rating;
 
     @OneToMany(mappedBy = "review")
     private List<ReplyEntity> replies = new ArrayList<>();
 
-    public ReviewEntity(Long bookingId, String content, int rating) {
-        this.bookingId = bookingId;
+    public ReviewEntity(BookingEntity booking, String content, int rating) {
+        this.booking = booking;
         this.content = content;
         this.rating = rating;
     }

@@ -39,7 +39,7 @@ public class ReviewController {
     @Authenticated(Role.USER)
     @PostMapping("/{bookingId}")
     void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingId, request.content(), request.rating()));
+        bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingService.findByBookingId(bookingId), request.content(), request.rating()));
     }
 
     @Authenticated(Role.HOST)

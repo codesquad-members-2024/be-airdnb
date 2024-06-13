@@ -8,16 +8,16 @@ import lombok.Getter;
 @Getter
 public class PriceInfo {
 
-    private long roughTotalPrice;
-    private long discountPrice;
-    private long serviceFee;
-    private long accommodationFee;
+    private int roughTotalPrice;
+    private int discountPrice;
+    private int serviceFee;
+    private int accommodationFee;
 
     public boolean isEmpty() {
         return roughTotalPrice == 0 || discountPrice == 0 || serviceFee == 0 || accommodationFee == 0;
     }
 
-    public static PriceInfo of(long roughTotalPrice, long discountPrice, long serviceFee, long accommodationFee) {
+    public static PriceInfo of(int roughTotalPrice, int discountPrice, int serviceFee, int accommodationFee) {
         return new PriceInfo(
                 roughTotalPrice,
                 discountPrice,

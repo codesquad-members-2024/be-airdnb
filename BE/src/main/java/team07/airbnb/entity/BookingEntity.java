@@ -2,6 +2,8 @@ package team07.airbnb.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +31,7 @@ import java.util.List;
 @Getter
 public class BookingEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,6 +51,7 @@ public class BookingEntity extends BaseEntity {
 
     private LocalDate checkout;
 
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)

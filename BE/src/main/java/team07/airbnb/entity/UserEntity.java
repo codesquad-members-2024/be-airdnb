@@ -28,23 +28,18 @@ import java.util.List;
 @Getter
 public class UserEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String picture;
 
-    @NotNull
     private String name;
 
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private Role role;
 
-
-    @NotNull
     private String registrationId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

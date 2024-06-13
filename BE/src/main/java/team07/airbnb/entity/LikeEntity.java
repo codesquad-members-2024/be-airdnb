@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,16 @@ import java.util.Objects;
 @Builder
 @Getter
 public class LikeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
+    @JoinColumn(name = "user_id")
     UserEntity user;
+
     @ManyToOne
+    @JoinColumn(name = "product_id")
     ProductEntity product;
 
     public static LikeEntity from(UserEntity user, ProductEntity product) {

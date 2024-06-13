@@ -21,6 +21,6 @@ public record BookingRequest(
         Integer headCount,
         @NotNull
         @Size(min = 0)
-        Long avgPrice // ??
+        Integer avgPrice // ??
 ) {
 }

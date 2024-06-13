@@ -6,10 +6,10 @@ public class RateCalculateUtil {
 
     }
 
-    public static long calculate(double rate, long price) {
+    public static int calculate(double rate, int price) {
         double result = price * (rate / 100.0);
 
-        return (long) result;
+        return (int) result;
     }
 
 }

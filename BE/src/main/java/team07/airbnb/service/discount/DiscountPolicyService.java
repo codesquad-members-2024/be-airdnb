@@ -17,7 +17,7 @@ public class DiscountPolicyService {
     private final DiscountPolicyRepository discountPolicyRepository;
     private final ApplicationContext ac;
 
-    public long getDiscountPrice(long roughPrice) {
+    public int getDiscountPrice(int roughPrice) {
         //일단 주단위 할인
         Optional<DiscountPolicyEntity> weekDiscount = discountPolicyRepository.findByDescription("주단위할인");
         DiscountPolicyEntity entity = weekDiscount.orElseThrow(DiscountPolicyNotFoundException::new);

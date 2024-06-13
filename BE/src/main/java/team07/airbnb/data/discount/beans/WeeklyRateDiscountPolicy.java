@@ -15,7 +15,7 @@ public class WeeklyRateDiscountPolicy implements DiscountPolicy {
     }
 
     @Override
-    public long getDiscountPrice(long price) {
+    public int getDiscountPrice(int price) {
         return RateCalculateUtil.calculate(discountRate, price);
     }
 

@@ -8,7 +8,7 @@ public class AccommodationFee {
 
     private final double feeRate = 10.0;
 
-    public long getAccommodationFeePrice(long serviceFee) {
+    public int getAccommodationFeePrice(int serviceFee) {
         return RateCalculateUtil.calculate(feeRate, serviceFee);
     }
 

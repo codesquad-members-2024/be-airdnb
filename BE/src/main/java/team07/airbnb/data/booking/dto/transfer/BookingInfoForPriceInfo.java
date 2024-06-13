@@ -8,7 +8,7 @@ public record BookingInfoForPriceInfo(
         LocalDate checkIn,
         LocalDate checkOut,
         Integer headCount,
-        Long avgPrice
+        Integer avgPrice
 ) {
 
     public static BookingInfoForPriceInfo ofRequest(BookingRequest request) {

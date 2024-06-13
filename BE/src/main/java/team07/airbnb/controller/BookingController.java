@@ -59,7 +59,7 @@ public class BookingController {
     @ResponseStatus(OK)
     public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity host = userService.getCompleteUser(user);
-        if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
+        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, host)) {
             throw new UnAuthorizedException(BookingController.class, user.id());
         }
 
@@ -73,12 +73,12 @@ public class BookingController {
     public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity booker = userService.getCompleteUser(user);
 
-        if (!bookingService.isRequestedUserSameInBooking(bookingId, booker)) {
+        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, booker)) {
             throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 예약자가 아닙니다");
         }
 
         //취소 수수료 현재는 전체 결제 금액의 10%
-        Long cancelFee = bookingService.cancelBooking(bookingId, booker);
+        Integer cancelFee = bookingService.cancelBooking(bookingId, booker);
 
         return BookingCancelResponse.of(bookingId, cancelFee);
     }
@@ -94,7 +94,7 @@ public class BookingController {
     @Authenticated(Role.HOST)
     @ResponseStatus(OK)
     public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (!bookingService.isRequestedHostSameInBooking(bookingId, userService.getCompleteUser(host))) {
+        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, userService.getCompleteUser(host))) {
             throw new UnAuthorizedException(BookingController.class, host.id());
         }
         return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));

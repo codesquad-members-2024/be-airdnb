@@ -1,26 +1,25 @@
 package team07.airbnb.service.product;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.exception.IllegalRequestException;
+import team07.airbnb.exception.not_found.ProductNotFoundException;
 import team07.airbnb.repository.ProductRepository;
 import team07.airbnb.service.accommodation.AccommodationService;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static team07.airbnb.data.product.ProductStatus.OPEN;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductService {
     private final ProductRepository productRepository;
     private final AccommodationService accommodationService;
@@ -28,32 +27,23 @@ public class ProductService {
     public List<ProductListResponse> findAvailableInDateRange(
             List<AccommodationEntity> accommodations, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
 
-        List<Long> accomodationIds = accommodations.stream().map(AccommodationEntity::getId).toList();
-
-        Map<Long, List<ProductEntity>> availableProducts = getAvailableProducts(checkIn, checkOut, headCount, accomodationIds);
-
-        // Calculate average price per day and Make Response List
-        return availableProducts.keySet().stream().map(key -> {
-                    List<ProductEntity> productEntities = availableProducts.get(key);
-                    return new ProductListResponse(
+        return accommodations.stream()
+                    .map(AccommodationEntity::getOpenProducts)
+                    .filter(productEntities -> isAvailablePeopleCount(productEntities, headCount) && isAvailableInDateRange(productEntities, checkIn, checkOut))
+                    .map(productEntities -> new ProductListResponse(
                             AccommodationListResponse.of(productEntities.get(0).getAccommodation()),
-                            (int) productEntities.stream().mapToInt(ProductEntity::getPrice).average().getAsDouble()
-                    );
-                }
-        ).toList();
+                            (int) productEntities.stream().mapToInt(ProductEntity::getPrice).average().getAsDouble()))
+                    .toList();
     }
 
-    public Map<Long, List<ProductEntity>> getAvailableProducts(LocalDate checkIn, LocalDate checkOut, Integer headCount, List<Long> accomodationIds) {
-        Map<Long, List<ProductEntity>> products = productRepository.findAllByAccommodationIdInAndStatus(accomodationIds, OPEN)
-                .stream()
-                .collect(Collectors.groupingBy(p -> p.getAccommodation().getId()));
+    public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId , LocalDate checkIn , LocalDate checkOut, Integer headCount){
+        //예외 처리 로직(PostMan 같은걸로 웹 페이지가 아니라 데이터를 직접 보냈을때)
+        AccommodationEntity accommodation = accommodationService.findById(accommodationId);
+        List<ProductEntity> products = accommodation.getOpenProducts();
+        if (!isAvailablePeopleCount(products, headCount) && !isAvailableInDateRange(products, checkIn, checkOut)) {
+            throw new IllegalRequestException(ProductService.class);
+        }
 
-        return products.entrySet().stream()
-                .filter(entry -> isAvailableInDateRange(entry.getValue(), checkIn, checkOut) && isAvailablePeopleCount(entry.getValue(), headCount))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId, LocalDate checkIn, LocalDate checkOut) {
         return productRepository.findAllByAccommodationIdAndDateBetween(accommodationId, checkIn, checkOut);
     }
 
@@ -61,13 +51,15 @@ public class ProductService {
         return getProductById(id);
     }
 
-    private ProductEntity getProductById(long id) throws NoSuchElementException {
-        return productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 상품 %d".formatted(id)));
+    private ProductEntity getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
         //인원수를 설정하지 않았으면 무조건 true
         if (headCount == null) return true;
+
+        if (products.isEmpty()) return false;
 
         return accommodationService.isAvailableOccupancy(products.get(0).getAccommodation(), headCount);
     }

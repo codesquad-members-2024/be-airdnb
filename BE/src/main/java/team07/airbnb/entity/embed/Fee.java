@@ -12,8 +12,8 @@ import team07.airbnb.data.booking.dto.PriceInfo;
 @AllArgsConstructor
 @Getter
 public class Fee {
-    private long serviceFee;
-    private long accommodationFee;
+    private int serviceFee;
+    private int accommodationFee;
 
     public static Fee of(PriceInfo priceInfo) {
         return new Fee(

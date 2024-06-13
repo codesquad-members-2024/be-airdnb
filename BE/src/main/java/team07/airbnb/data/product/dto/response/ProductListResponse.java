@@ -3,8 +3,8 @@ package team07.airbnb.data.product.dto.response;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.entity.ProductEntity;
 
-public record ProductListResponse(
-        AccommodationListResponse accomodation,
+public record ProductListResponse (
+        AccommodationListResponse accommodation,
         int price
 ) {
 
