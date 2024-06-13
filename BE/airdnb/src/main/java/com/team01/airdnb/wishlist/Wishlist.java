@@ -10,12 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "wishlists")
 public class Wishlist {
   @Id
@@ -29,4 +35,11 @@ public class Wishlist {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
+
+  public static Wishlist createWishlist(User user, Accommodation accommodation) {
+    return Wishlist.builder()
+        .user(user)
+        .accommodation(accommodation)
+        .build();
+  }
 }

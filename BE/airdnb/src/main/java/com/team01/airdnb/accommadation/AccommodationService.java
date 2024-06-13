@@ -97,4 +97,7 @@ public class AccommodationService {
     return accommodation;
   }
 
+  public Accommodation findAccommodation(Long id) {
+    return accommodationRepository.findById(id).orElseThrow();
+  }
 }

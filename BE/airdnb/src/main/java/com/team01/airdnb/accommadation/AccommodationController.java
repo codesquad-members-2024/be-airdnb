@@ -35,7 +35,8 @@ public class AccommodationController {
 
   //숙소 상세보기
   @GetMapping("/accommodations/{id}")
-  public void showAccommodation(@PathVariable Long id) {
+  public Accommodation showAccommodation(@PathVariable Long id) {
+    return accommodationService.findAccommodation(id);
   }
 
   //숙소 수정

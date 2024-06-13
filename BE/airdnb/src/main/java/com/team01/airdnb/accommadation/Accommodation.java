@@ -74,7 +74,7 @@ public class Accommodation {
   @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Reservation> reservations;
 
-  @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToOne(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
   private Amenity amenity;
 
   /**
