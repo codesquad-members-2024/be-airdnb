@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentListResponse {
+public class CommentShowResponse {
 
   Long id;
   Double score;
@@ -17,7 +17,7 @@ public class CommentListResponse {
   LocalDateTime createdAt;
   UserShow user;
 
-  public CommentListResponse(Long id, Double score, String content, LocalDateTime createdAt,
+  public CommentShowResponse(Long id, Double score, String content, LocalDateTime createdAt,
       User user) {
     this.id = id;
     this.score = score;
