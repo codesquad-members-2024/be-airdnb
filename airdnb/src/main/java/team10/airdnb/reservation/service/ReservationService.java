@@ -16,6 +16,8 @@ import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
 import team10.airdnb.reservation.repository.ReservationRepository;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,15 +42,29 @@ public class ReservationService {
         return ReservationInformationResponse.from(reservation);
     }
 
+//    public ReservationSummaryResponse createReservation(ReservationCreateRequest request) {
+//        Member member = getMemberById(request.memberId());
+//
+//        Accommodation accommodation = getAccommodationById(request.accommodationId());
+//
+//        Reservation reservation = request.toEntity(member, accommodation);
+//
+//        reservationRepository.save(reservation);
+//
+//        return ReservationSummaryResponse.from(reservation);
+//    }
+
     public ReservationSummaryResponse createReservation(ReservationCreateRequest request) {
         Member member = getMemberById(request.memberId());
 
         Accommodation accommodation = getAccommodationById(request.accommodationId());
 
-        Reservation reservation = request.toEntity(member, accommodation);
+        // 총 비용 계산
+        long totalPrice = calculateTotalPrice(accommodation, request.checkInDate(), request.checkOutDate());
+
+        Reservation reservation = buildReservation(request, member, accommodation, totalPrice);
 
         reservationRepository.save(reservation);
-
         return ReservationSummaryResponse.from(reservation);
     }
 
@@ -73,5 +89,27 @@ public class ReservationService {
     private Accommodation getAccommodationById(long accommodationId) {
         return accommodationRepository.findById(accommodationId)
                 .orElseThrow(AccommodationIdNotFoundException::new);
+    }
+
+    // 총 비용을 계산
+    private long calculateTotalPrice(Accommodation accommodation, LocalDate checkInDate, LocalDate checkOutDate) {
+        //두 날짜 사이의 일 수를 계산
+        long numberOfDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        int dayRate = accommodation.getAccommodationFee().getDayRate();
+        int cleaningFee = accommodation.getAccommodationFee().getCleaningFee();
+        return dayRate * numberOfDays + cleaningFee;
+    }
+
+    // 예약 엔티티를 생성
+    private Reservation buildReservation(ReservationCreateRequest request, Member member, Accommodation accommodation, long totalPrice) {
+        return Reservation.builder()
+                .member(member)
+                .accommodation(accommodation)
+                .checkInDate(request.checkInDate())
+                .checkOutDate(request.checkOutDate())
+                .capacity(request.capacity())
+                .isConfirmed(false)
+                .totalPrice(totalPrice)
+                .build();
     }
 }
