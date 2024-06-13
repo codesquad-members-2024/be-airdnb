@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,5 +46,11 @@ public class GlobalExceptionHandler {
     public String handleAnyCheckedException(Exception e) {
         log.error("Unexpected Error Occurred", e);
         return "서버에 오류가 발생했습니다.😭\n잠시후 다시 시도해주세요.";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handleFaviconException(){
+        return;
     }
 }

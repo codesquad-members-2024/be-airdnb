@@ -1,5 +1,6 @@
 package team07.airbnb.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,9 @@ public class ProductController {
 
     private final AccommodationService accommodationService;
     private final ProductService productService;
-
+    
+    @Tag(name = "User")
+    @Operation(summary = "주변 예약 가능 상품 조회")
     @GetMapping("/available")
     public List<ProductListResponse> findNearByAvailableProducts(
             @RequestParam @Nullable LocalDate checkIn,
@@ -43,7 +46,9 @@ public class ProductController {
                 accommodationService.findNearbyAccommodations(longitude, latitude, distance * 1000),
                 checkIn, checkOut, headCount);
     }
-
+    
+    @Tag(name = "Host")
+    @Operation(summary = "상품 생성")
     @PostMapping()
     public void createProduct(@RequestBody ProductCreateRequest request) {
         AccommodationEntity accommodation = accommodationService.findById(request.accommodationId());

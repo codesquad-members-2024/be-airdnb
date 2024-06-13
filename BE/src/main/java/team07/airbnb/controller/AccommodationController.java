@@ -35,6 +35,7 @@ public class AccommodationController {
     private final ProductService productService;
     private final UserService userService;
 
+    @Tag(name = "Host")
     @Operation(summary = "숙소 등록", description = "스쿼드비엔비에 숙소를 등록합니다.")
     @PostMapping
     @Authenticated(Role.USER)
@@ -44,6 +45,7 @@ public class AccommodationController {
         ));
     }
 
+    @Tag(name = "Host")
     @Operation(summary = "숙소 삭제", description = "등록한 숙소를 삭제합니다.")
     @DeleteMapping("/{id}")
     @Authenticated(Role.HOST)
@@ -51,12 +53,14 @@ public class AccommodationController {
         accommodationService.deleteById(id, userService.getCompleteUser(user));
     }
 
+    @Tag(name = "User")
     @Operation(summary = "모든 숙소 조회", description = "스쿼드비엔비에 등록된 모든 숙소를 조회합니다.")
     @GetMapping
     public List<AccommodationListResponse> findAll() {
         return previewOf(accommodationService.findAllAccommodations());
     }
 
+    @Tag(name = "User")
     @Operation(summary = "주변 숙소 조회", description = "지정한 위치로부터 지정한 반경 내의 숙소를 조회합니다.")
     @GetMapping("/location")
     public List<AccommodationListResponse> findNeighbor(
@@ -75,12 +79,14 @@ public class AccommodationController {
         return previewOf(accommodationService.findByHost(userService.getCompleteUser(user)));
     }
 
+    @Tag(name = "User")
     @Operation(summary = "숙소 상세 조회", description = "숙소의 상세 정보를 조회합니다.")
     @GetMapping("/{id}")
     public AccommodationDetailResponse accommodationDetail(@PathVariable long id) {
         return AccommodationDetailResponse.of(accommodationService.findById(id));
     }
 
+    @Tag(name = "User")
     @Operation(summary = "예약 가능 일자 조회" , description = "지정 년월 중 숙소의 예약 가능 일자와 가격을 조회합니다.")
     @GetMapping("/available/{id}/{date}")
     public List<SimpleProductResponse> availableProducts(@PathVariable LocalDate date, @PathVariable Long id){

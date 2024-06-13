@@ -1,5 +1,6 @@
 package team07.airbnb.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,12 +32,16 @@ public class FavoriteController {
     private final UserService userService;
     private final ProductService productService;
 
+    @Tag(name = "User")
+    @Operation(summary = "위시리스트에 상품 추가")
     @Authenticated(Role.USER)
     @PostMapping("/{id}")
     public void addFavorite(@PathVariable long id, TokenUserInfo user) {
         userService.addFavorite(user.id(), productService.findById(id));
     }
 
+    @Tag(name = "User")
+    @Operation(summary = "위시리스트에서 상품 추가")
     @Authenticated(Role.USER)
     @DeleteMapping("/{id}")
     public void removeFavorite(@PathVariable long id, TokenUserInfo user) {
@@ -44,8 +49,10 @@ public class FavoriteController {
 
     }
 
+    @Tag(name = "User")
+    @Operation(summary = "내 위시리스트 조회")
     @Authenticated(Role.USER)
-    @GetMapping
+    @GetMapping("my")
     public FavoritesResponse getMyWishList(TokenUserInfo user) {
         List<ProductEntity> available = new ArrayList<>();
         List<ProductEntity> nonAvailable = new ArrayList<>();

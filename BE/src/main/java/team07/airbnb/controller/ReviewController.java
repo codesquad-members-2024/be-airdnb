@@ -1,6 +1,8 @@
 package team07.airbnb.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,7 @@ import team07.airbnb.service.user.UserService;
 
 import java.util.List;
 
-@Tag(name = "예약")
+@Tag(name = "리뷰")
 @RestController
 @RequestMapping("/review")
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final UserService userService;
 
+    @Operation(summary = "숙소 리뷰 조회")
     @GetMapping("/{accommodationId}")
     public List<ReviewWithReplyResponse> getReviews(@PathVariable Long accommodationId) {
         return accommodationService.findById(accommodationId).reviews()
@@ -39,12 +42,16 @@ public class ReviewController {
                 .map(ReviewWithReplyResponse::of).toList();
     }
 
+    @Tag(name = "User")
+    @Operation(summary = "리뷰 작성")
     @Authenticated(Role.USER)
     @PostMapping("/{bookingId}")
     void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
         bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingService.findByBookingId(bookingId), request.content(), request.rating()));
     }
 
+    @Tag(name = "Host")
+    @Operation(summary = "리뷰 댓글 작성")
     @Authenticated(Role.HOST)
     @PostMapping("/{reviewId}/reply")
     void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
