@@ -73,6 +73,34 @@ public class ProductEntity extends BaseEntity {
         return this;
     }
 
+    public ProductEntity close(BookingEntity booking) {
+        if (!this.booking.getId().equals(booking.getId())) {
+            // 닫을 상품과 예약 번호가 일치하지 않으면 의도하지 않은 버그임
+            // 다른 로직에서 꼬였을 확률이 높음
+            throw new RuntimeException("닫을 상품과 예약 번호가 일치하지 않습니다");
+        }
+        this.status = ProductStatus.CLOSE;
+
+        return this;
+    }
+
+    public ProductEntity reopen(BookingEntity booking) {
+        if (!this.booking.getId().equals(booking.getId())) {
+            // 닫을 상품과 예약 번호가 일치하지 않으면 의도하지 않은 버그임
+            // 다른 로직에서 꼬였을 확률이 높음
+            throw new RuntimeException("닫을 상품과 예약 번호가 일치하지 않습니다");
+        }
+
+        this.status = ProductStatus.CLOSE;
+
+        return ProductEntity.builder()
+                .accommodation(this.accommodation)
+                .date(this.date)
+                .price(this.price)
+                .status(ProductStatus.OPEN)
+                .build();
+    }
+
     private boolean canOpen() {
         return this.booking != null && this.status == ProductStatus.BOOKED;
     }

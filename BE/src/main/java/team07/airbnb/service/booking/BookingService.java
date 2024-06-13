@@ -1,12 +1,16 @@
 package team07.airbnb.service.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
+import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
+import team07.airbnb.data.booking.enums.BookingStatus;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.PaymentEntity;
 import team07.airbnb.entity.ReviewEntity;
@@ -44,6 +48,28 @@ public class BookingService {
 
     private final ServiceFee serviceFee;
     private final AccommodationFee accommodationFee;
+
+    /**
+     * 정오마다 오늘이 체크아웃 날짜인 모든 예약을 이용 완료 상태로 변경
+     */
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void completeAllBookings() {
+        LocalDate now = LocalDate.now();
+
+        List<BookingEntity> bookings = bookingRepository.findAllByCheckout(now);
+
+        bookings.forEach(booking -> {
+            booking.setStatus(BookingStatus.COMPLETE);
+            booking.getProducts().stream().close();
+        });
+    }
+
+    public void reopenBooking(Long bookingId) {
+        BookingEntity booking = findByBookingId(bookingId);
+        booking.completeBooking();
+        productService.reopen(booking);
+        bookingRepository.save(booking);
+    }
 
     public BookingCreateResponse createBooking(BookingInfoForPriceInfo bookingInfo, Long accId, UserEntity booker) {
         PriceInfo priceInfo = getPriceInfo(bookingInfo);
@@ -126,6 +152,10 @@ public class BookingService {
         );
     }
 
+    public List<BookingDetailResponse> findBookingsByUser(UserEntity booker) {
+        return bookingRepository.findAllByBooker(booker).stream().map(BookingDetailResponse::of).toList();
+    }
+
     public void addReview(Long bookingId, Long writerId, ReviewEntity review) {
         BookingEntity booking = findByBookingId(bookingId);
         if (!booking.getBooker().getId().equals(writerId))
@@ -138,18 +168,15 @@ public class BookingService {
         return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
     }
 
-    public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
+    public List<BookingManageInfoResponse> getBookingInfoListByHost(UserEntity host) {
         return bookingRepository.findAllByHost(host).stream()
                 .map(BookingManageInfoResponse::of)
                 .toList();
     }
 
-    public List<BookingManageInfoResponse> getBookingInfoListByBookerId(UserEntity booker){
-        return bookingRepository.findAllByBooker(booker).stream()
-                .map(BookingManageInfoResponse::of)
-                .toList();
+    public boolean isRequestedHostNotMatchInBooking(Long bookingId, UserEntity host) {
+        return !bookingRepository.existsByIdAndHost(bookingId, host);
     }
-
 
     public boolean isUserHostOrBookerOf(Long bookingId , UserEntity user){
         return isUserHostOf(bookingId, user) || isUserBookerOf(bookingId, user);
@@ -161,6 +188,10 @@ public class BookingService {
 
     public boolean isUserBookerOf(Long bookingId, UserEntity host) {
         return bookingRepository.existsByIdAndHost(bookingId, host);
+    }
+
+    public boolean isRequestedUserNotMatchInBooking(Long bookingId, UserEntity booker) {
+        return !bookingRepository.existsByIdAndBooker(bookingId, booker);
     }
 
     public int getRoughTotalPrice(int avgPrice, LocalDate checkIn, LocalDate checkOut) {

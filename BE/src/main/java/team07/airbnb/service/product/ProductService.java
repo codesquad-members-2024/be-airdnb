@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.exception.IllegalRequestException;
 import team07.airbnb.exception.not_found.ProductNotFoundException;
@@ -49,6 +50,10 @@ public class ProductService {
 
     public ProductEntity findById(long id) {
         return getProductById(id);
+    }
+
+    public void reopen(BookingEntity booking) {
+        booking.getProducts().forEach(product -> productRepository.save(product.reopen(booking)));
     }
 
     private ProductEntity getProductById(Long id) {

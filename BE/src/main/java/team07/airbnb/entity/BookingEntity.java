@@ -52,6 +52,7 @@ public class BookingEntity extends BaseEntity {
     private LocalDate checkout;
 
     @Enumerated(EnumType.STRING)
+    @Setter
     private BookingStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)

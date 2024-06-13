@@ -21,7 +21,6 @@ import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.booking.BookingService;
@@ -31,6 +30,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static team07.airbnb.data.user.enums.Role.*;
 
 @Tag(name = "예약")
 @RestController
@@ -53,7 +53,7 @@ public class BookingController {
     @Tag(name = "User")
     @Operation(summary = "예약 생성", description = "상품을 예약합니다.")
     @PostMapping
-    @Authenticated(Role.USER)
+    @Authenticated(USER)
     @ResponseStatus(CREATED)
     public BookingCreateResponse createBookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
         return bookingService.createBooking(BookingInfoForPriceInfo.ofRequest(request), request.accommodationId(), userService.getCompleteUser(user));
@@ -62,7 +62,7 @@ public class BookingController {
     @Tag(name = "Host")
     @Operation(summary = "예약 확정", description = "예약 상품의 호스트가 예약을 확정합니다.")
     @PostMapping("/confirm/{bookingId}")
-    @Authenticated(Role.HOST)
+    @Authenticated(HOST)
     @ResponseStatus(OK)
     public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity host = userService.getCompleteUser(user);
@@ -77,7 +77,7 @@ public class BookingController {
     @Tag(name = "User")
     @Operation(summary = "예약 취소", description = "예약을 취소합니다.")
     @PostMapping("/cancel/{bookingId}")
-    @Authenticated(Role.USER)
+    @Authenticated(USER)
     @ResponseStatus(OK)
     public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity booker = userService.getCompleteUser(user);
@@ -106,15 +106,6 @@ public class BookingController {
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성? 환불?
     }
 
-    @Tag(name = "Host")
-    @Operation(summary = "내 숙소의 예약 조회", description = "내가 등록한 숙소의 예약을 조회합니다.")
-    @GetMapping("/hosting")
-    @Authenticated(Role.HOST)
-    @ResponseStatus(OK)
-    public List<BookingManageInfoResponse> getBookingInfosOfHosting(TokenUserInfo host) {
-        return bookingService.getBookingInfoListByHostId(userService.getCompleteUser(host));
-    }
-
     @Tag(name = "User")
     @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
     @GetMapping("my")
@@ -123,16 +114,49 @@ public class BookingController {
         return bookingService.getBookingInfoListByBookerId(userService.getCompleteUser(user));
     }
 
-    @Operation(summary = "예약 상세 조회", description = "예약자나 호스트가 예약 상세 정보를 조회합니다.")
-    @GetMapping("/{bookingId}")
-    @Authenticated(Role.USER)
+    @Operation(summary = "유저 예약 상세 조회", description = "유저가 예약 상세 정보를 조회합니다.")
+    @GetMapping("/my-booking/{bookingId}")
+    @Authenticated(USER)
     @ResponseStatus(OK)
-    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo user) {
-        if (bookingService.isUserHostOrBookerOf(bookingId, userService.getCompleteUser(user))
+    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, TokenUserInfo userInfo) {
+        if (bookingService.isRequestedUserNotMatchInBooking(bookingId, userService.getCompleteUser(userInfo))) {
+            throw new UnAuthorizedException(BookingController.class, userInfo.id());
+        }
 
-        ) {
-            throw new UnAuthorizedException(BookingController.class, user.id());
+        return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+    }
+
+
+    @Tag(name = "Host")
+    @Operation(summary = "내 숙소의 예약 조회", description = "내가 등록한 숙소의 예약을 조회합니다.")
+    @Authenticated(HOST)
+    @GetMapping("/management")
+    @ResponseStatus(OK)
+    public List<BookingManageInfoResponse> getBookingInfosOfHosting(TokenUserInfo host) {
+        return bookingService.getBookingInfoListByHostId(userService.getCompleteUser(host));
+    }
+    
+
+    @Operation(summary = "호스트 예약 상세 조회", description = "호스트가 예약 상세 정보를 조회합니다.")
+    @GetMapping("/management/{bookingId}")
+    @Authenticated(HOST)
+    @ResponseStatus(OK)
+    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
+        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, userService.getCompleteUser(host))) {
+            throw new UnAuthorizedException(BookingController.class, host.id());
         }
         return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+    }
+
+
+    @PostMapping("/reopen/{bookingId}")
+    @Authenticated(HOST)
+    @ResponseStatus(OK)
+    public void reOpeningBooking(@PathVariable Long bookingId, TokenUserInfo host) {
+        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, userService.getCompleteUser(host))) {
+            throw new UnAuthorizedException(BookingController.class, host.id());
+        }
+
+        bookingService.reopenBooking(bookingId);
     }
 }

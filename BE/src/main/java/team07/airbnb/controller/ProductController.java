@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
@@ -33,6 +35,7 @@ public class ProductController {
     @Tag(name = "User")
     @Operation(summary = "주변 예약 가능 상품 조회")
     @GetMapping("/available")
+    @ResponseStatus(HttpStatus.OK)
     public List<ProductListResponse> findNearByAvailableProducts(
             @RequestParam @Nullable LocalDate checkIn,
             @RequestParam @Nullable LocalDate checkOut,
@@ -50,6 +53,7 @@ public class ProductController {
     @Tag(name = "Host")
     @Operation(summary = "상품 생성")
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@RequestBody ProductCreateRequest request) {
         AccommodationEntity accommodation = accommodationService.findById(request.accommodationId());
         int price = request.price() == null ? accommodation.getBasePricePerDay() : request.price();

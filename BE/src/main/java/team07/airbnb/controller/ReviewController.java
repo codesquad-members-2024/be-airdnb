@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
@@ -36,6 +38,7 @@ public class ReviewController {
 
     @Operation(summary = "숙소 리뷰 조회")
     @GetMapping("/{accommodationId}")
+    @ResponseStatus(HttpStatus.OK)
     public List<ReviewWithReplyResponse> getReviews(@PathVariable Long accommodationId) {
         return accommodationService.findById(accommodationId).reviews()
                 .stream()
@@ -46,7 +49,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 작성")
     @Authenticated(Role.USER)
     @PostMapping("/{bookingId}")
-    void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
+    @ResponseStatus(HttpStatus.OK)
+    public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
         bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingService.findByBookingId(bookingId), request.content(), request.rating()));
     }
 
@@ -54,7 +58,8 @@ public class ReviewController {
     @Operation(summary = "리뷰 댓글 작성")
     @Authenticated(Role.HOST)
     @PostMapping("/{reviewId}/reply")
-    void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
+    @ResponseStatus(HttpStatus.OK)
+    public void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
         reviewService.addReplyTo(reviewId, content, userService.getCompleteUser(user));
     }
 }

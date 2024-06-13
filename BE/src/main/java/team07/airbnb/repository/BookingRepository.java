@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.UserEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,4 +16,8 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     boolean existsByIdAndBooker(Long bookingId, UserEntity booker);
 
     boolean existsByIdAndHost(Long bookingId, UserEntity host);
+
+    List<BookingEntity> findAllByBooker(UserEntity booker);
+
+    List<BookingEntity> findAllByCheckout(LocalDate checkOut);
 }
