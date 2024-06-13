@@ -1,6 +1,7 @@
 package com.airdnb.clone.domain.stay.entity;
 
 import com.airdnb.clone.domain.common.Guest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class RoomInformation {
 
+    @JsonProperty(value = "guestCount")
     @Builder.Default
     @Embedded
     private Guest guest = Guest.builder().guestCount(1).build();

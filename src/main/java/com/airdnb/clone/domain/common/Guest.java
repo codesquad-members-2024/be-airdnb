@@ -2,7 +2,6 @@ package com.airdnb.clone.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class Guest {
 
-    @Min(value = 1)
     @Column(name = "GUEST_COUNT")
     private Integer guestCount;
 }

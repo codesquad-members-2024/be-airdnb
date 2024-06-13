@@ -20,8 +20,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,7 +61,6 @@ public class Stay extends BaseTimeEntity {
     private String description;
 
     @Embedded
-    @Column(name = "FEE")
     private StayFee fee;
 
     @Enumerated(EnumType.STRING)
@@ -72,56 +71,77 @@ public class Stay extends BaseTimeEntity {
     @Column(name = "STATUS")
     private Status status;
 
+    @Builder.Default
     @OneToMany(mappedBy = "stay", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AvailableAmenity> amenities;
+    private List<AvailableAmenity> amenities = new ArrayList<>();
 
+    @Builder.Default
     @ElementCollection
     @CollectionTable(name = "STAY_IMAGE", joinColumns = {
             @JoinColumn(name = "STAY_ID", foreignKey = @ForeignKey(name = "FK_STAY_IMAGE_ID")) // 중간 테이블이 가질 숙소 ID
     })
-    private List<StayImage> images;
+    private List<StayImage> images = new ArrayList<>();
 
     @Embedded
     private RoomInformation roomInfo;
 
-    public void changeAlias(String alias) {
+    public Stay changeAlias(String alias) {
         this.alias = alias;
+
+        return this;
     }
 
-    public void changeLocation(String location) {
+    public Stay changeLocation(String location) {
         this.location = location;
+
+        return this;
     }
 
-    public void changeCheckInTime(LocalTime checkInTime) {
+    public Stay changeCheckInOutTime(LocalTime checkInTime, LocalTime checkOutTime) {
         this.checkInTime = checkInTime;
-    }
-
-    public void changeCheckOutTime(LocalTime checkOutTime) {
         this.checkOutTime = checkOutTime;
+
+        return this;
     }
 
-    public void changeDescription(String description) {
+    public Stay changeDescription(String description) {
         this.description = description;
+
+        return this;
     }
 
-    public void changeType(Type type) {
+    public Stay changeFee(StayFee fee) {
+        this.fee = fee;
+
+        return this;
+    }
+
+    public Stay changeType(Type type) {
         this.type = type;
+
+        return this;
     }
 
-    public void changeStatus(Status status) {
+    public Stay changeStatus(Status status) {
         this.status = status;
+
+        return this;
     }
 
-    public void changeImages(List<StayImage> images) {
+    public Stay changeImages(List<StayImage> images) {
         this.images = images;
+
+        return this;
     }
 
-    public void changeRoomInfo(RoomInformation roomInfo) {
+    public Stay changeRoomInfo(RoomInformation roomInfo) {
         this.roomInfo = roomInfo;
+
+        return this;
     }
 
     public enum Status {
-        OPEN, REPAIR, CLOSE
+        OPEN, REPAIR, CLOSED
     }
 
     public enum Type {

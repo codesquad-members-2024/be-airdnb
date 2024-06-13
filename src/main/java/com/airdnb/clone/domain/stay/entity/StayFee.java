@@ -25,14 +25,6 @@ public class StayFee {
     @Column(name = "CLEANING_FEE")
     private Integer cleaningFee;
 
-    public void changePerNight(int perNight) {
-        this.perNight = perNight;
-    }
-
-    public void changeCleaningFee(int cleaningFee) {
-        this.cleaningFee = cleaningFee;
-    }
-
     public Long calculateTotalRate(LocalDateTime checkIn, LocalDateTime checkOut) {
         Duration duration = Duration.between(checkIn, checkOut);
         long totalDays = duration.toDays();
