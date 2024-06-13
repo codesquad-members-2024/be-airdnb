@@ -45,6 +45,14 @@ public class ReviewService {
         return ReviewSummaryResponse.from(review);
     }
 
+    public ReviewSummaryResponse deleteReview(long reviewId) {
+        Review review = getReviewById(reviewId);
+
+        reviewRepository.delete(review);
+
+        return ReviewSummaryResponse.from(review);
+    }
+
     private Review getReviewById(long reviewId) {
         return reviewRepository.findById(reviewId)
                 .orElseThrow(ReviewIdNotFoundException::new);

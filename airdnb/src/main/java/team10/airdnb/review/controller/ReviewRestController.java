@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,4 +52,17 @@ public class ReviewRestController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/api/review/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable long reviewId) {
+        ReviewSummaryResponse response = reviewService.deleteReview(reviewId);
+
+        log.info("리뷰 삭제 완료 : # {} : 리뷰 작성자  : {}, 숙소 이름 : {}, 수정된 댓글 내용 : {}, 수정된 별점 : {}",
+                response.reviewId(),
+                response.memberInformation().memberName(),
+                response.accommodationInformation().accommodationName(),
+                response.comment(),
+                response.rate());
+
+        return ResponseEntity.ok(response);
+    }
 }
