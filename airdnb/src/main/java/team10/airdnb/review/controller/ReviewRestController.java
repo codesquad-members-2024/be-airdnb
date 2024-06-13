@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,13 @@ import team10.airdnb.review.service.ReviewService;
 public class ReviewRestController {
 
     private final ReviewService reviewService;
+
+    @GetMapping("/api/reviews")
+    public ResponseEntity<?> getAllReviews() {
+        log.info("전체 리뷰 목록 조회");
+
+        return ResponseEntity.ok(reviewService.getReviews());
+    }
 
     @PostMapping("/api/review")
     public ResponseEntity<?> createReview(@RequestBody @Valid ReviewCreateRequest request) {

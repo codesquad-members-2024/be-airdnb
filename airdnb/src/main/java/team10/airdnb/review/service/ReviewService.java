@@ -15,6 +15,9 @@ import team10.airdnb.review.entity.Review;
 import team10.airdnb.review.exception.ReviewIdNotFoundException;
 import team10.airdnb.review.repository.ReviewRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -22,6 +25,12 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final AccommodationRepository accommodationRepository;
+
+    public List<ReviewSummaryResponse> getReviews() {
+        return reviewRepository.findAll().stream()
+                .map(ReviewSummaryResponse::from)
+                .collect(Collectors.toList());
+    }
 
     public ReviewSummaryResponse createReview(ReviewCreateRequest request) {
         Member member = getMemberById(request.memberId());
