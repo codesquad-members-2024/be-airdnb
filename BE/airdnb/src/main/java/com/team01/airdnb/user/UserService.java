@@ -1,7 +1,6 @@
 package com.team01.airdnb.user;
 
 import com.team01.airdnb.comment.CommentRepository;
-import com.team01.airdnb.user.dto.UserCommentResponse;
 import com.team01.airdnb.user.dto.UserHostResponse;
 import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
@@ -27,9 +26,5 @@ public class UserService {
         .username(user.username)
         .score(commentRepository.findAverageScoreByUser(user))
         .build();
-  }
-
-  public UserCommentResponse getCommentResponse(User user){
-    return UserCommentResponse.builder().username(user.getUsername()).build();
   }
 }

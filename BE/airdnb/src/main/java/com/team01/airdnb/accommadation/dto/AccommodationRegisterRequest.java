@@ -53,21 +53,21 @@ public record AccommodationRegisterRequest(
 
   public Accommodation toAccommodationEntity(User user) {
     return Accommodation.builder()
-        .title(title)
-        .content(content)
-        .price(price)
-        .discountRate(discount)
-        .maxAdults(maxAdults)
-        .maxChildren(maxChildren)
-        .maxInfants(maxInfants)
-        .maxPets(maxPets)
-        .address(address)
+        .title(this.title)
+        .content(this.content)
+        .price(this.price)
+        .discountRate(this.discount)
+        .maxAdults(this.maxAdults)
+        .maxChildren(this.maxChildren)
+        .maxInfants(this.maxInfants)
+        .maxPets(this.maxPets)
+        .address(this.address)
         .user(user)
         .build();
   }
 
   public List<Image> toImageEntity() {
-    return images.stream()
+    return this.images.stream()
         .map(imagePath -> Image.builder()
             .imagePath(imagePath)
             .build())
@@ -76,16 +76,16 @@ public record AccommodationRegisterRequest(
 
   public Amenity toAmenityEntity() {
     return Amenity.builder()
-        .tv(tv)
-        .kitchen(kitchen)
-        .washingMachine(washing_machine)
-        .freeParking(free_parking)
-        .paidParking(paid_parking)
-        .airConditioner(air_conditioning)
-        .dedicatedWorkspace(dedicated_workspace)
-        .wirelessInternet(wireless_internet)
-        .beds(beds)
-        .bathrooms(bathrooms)
+        .tv(this.tv)
+        .kitchen(this.kitchen)
+        .washingMachine(this.washing_machine)
+        .freeParking(this.free_parking)
+        .paidParking(this.paid_parking)
+        .airConditioner(this.air_conditioning)
+        .dedicatedWorkspace(this.dedicated_workspace)
+        .wirelessInternet(this.wireless_internet)
+        .beds(this.beds)
+        .bathrooms(this.bathrooms)
         .build();
   }
 }
