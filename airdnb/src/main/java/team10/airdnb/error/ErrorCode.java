@@ -31,6 +31,9 @@ public enum ErrorCode {
     // 숙소
     ACCOMMODATION_NOT_EXISTS(HttpStatus.BAD_REQUEST, "S-001", "해당 숙소는 존재하지 않습니다."),
 
+    // 리뷰
+    REVIEW_NOT_EXISTS(HttpStatus.BAD_REQUEST, "RV-001", "해당 리뷰는 존재하지 않습니다."),
+
     // 예약
     RESERVATION_NOT_EXISTS(HttpStatus.BAD_REQUEST, "R-001", "해당 예약은 존재하지 않습니다."),
 

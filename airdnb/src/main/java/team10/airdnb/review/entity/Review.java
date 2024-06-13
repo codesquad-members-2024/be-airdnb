@@ -39,4 +39,9 @@ public class Review {
 
     @Column(name = "rate", nullable = false)
     private double rate;
+
+    public void updateReview(String comment, double rate) {
+        this.comment = comment;
+        this.rate = rate;
+    }
 }

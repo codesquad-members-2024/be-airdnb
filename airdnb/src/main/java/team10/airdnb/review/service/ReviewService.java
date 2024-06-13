@@ -9,8 +9,10 @@ import team10.airdnb.member.entity.Member;
 import team10.airdnb.member.exception.MemberIdNotFoundException;
 import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.review.controller.request.ReviewCreateRequest;
+import team10.airdnb.review.controller.request.ReviewUpdateRequest;
 import team10.airdnb.review.controller.response.ReviewSummaryResponse;
 import team10.airdnb.review.entity.Review;
+import team10.airdnb.review.exception.ReviewIdNotFoundException;
 import team10.airdnb.review.repository.ReviewRepository;
 
 @Service
@@ -31,6 +33,21 @@ public class ReviewService {
         reviewRepository.save(review);
 
         return ReviewSummaryResponse.from(review);
+    }
+
+    public ReviewSummaryResponse updateReview(long reviewId, ReviewUpdateRequest request) {
+        Review review = getReviewById(reviewId);
+
+        review.updateReview(request.comment(), request.rate());
+
+        reviewRepository.save(review);
+
+        return ReviewSummaryResponse.from(review);
+    }
+
+    private Review getReviewById(long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(ReviewIdNotFoundException::new);
     }
 
     private Member getMemberById(String memberId) {
