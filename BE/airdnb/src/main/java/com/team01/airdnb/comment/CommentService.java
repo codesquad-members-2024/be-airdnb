@@ -27,6 +27,21 @@ public class CommentService {
   private AccommodationRepository accommodationRepository;
 
   /**
+   * 새로운 코멘트를 등록합니다. 특별 예외 사항 사용자를 찾을 수 없다면 예외가 발생합니다.
+   */
+  public CommentShowResponse register(CommentRegisterRequest commentRegisterRequest) {
+    User commentWriter = userRepository.findById(commentRegisterRequest.user()).orElseThrow();
+    Accommodation accommodation = accommodationRepository.findById(
+        commentRegisterRequest.accommodation()).orElseThrow();
+
+    Comment newComment = commentRegisterRequest.toEntity(commentWriter, accommodation);
+    log.debug("{} 코멘트가 등록되었습니다.", newComment.getId());
+    commentRepository.save(newComment);
+    return new CommentShowResponse(newComment.getId(), newComment.getScore(), newComment.getContent(),
+        newComment.getCreatedAt(), newComment.getUser());
+  }
+
+  /**
    * 해당 이슈에 달린 코멘트를 모두 조회합니다. 특별 예외 사항 댓글이 없는 경우 -> 아마 비어있는 리스트가 갈 듯
    */
   public List<CommentShowResponse> showAllComment(Long id) {
