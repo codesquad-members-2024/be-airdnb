@@ -11,6 +11,7 @@ import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
+import team07.airbnb.exception.not_found.AccommodationNotFoundException;
 import team07.airbnb.repository.AccommodationRepository;
 import team07.airbnb.service.user.UserService;
 
@@ -83,6 +84,6 @@ public class AccommodationService {
     }
 
     private AccommodationEntity getAccommodationById(long id) throws NoSuchElementException {
-        return accommodationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지 않는 숙소 %d".formatted(id)));
+        return accommodationRepository.findById(id).orElseThrow(() -> new AccommodationNotFoundException(id));
     }
 }
