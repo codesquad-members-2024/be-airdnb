@@ -30,6 +30,7 @@ public class WishlistService {
         userRepository.findById(wishlistCreateRequest.userId())
             .orElseThrow(NoSuchElementException::new);
 
+
     wishlistRepository.save(Wishlist.createWishlist(user, accommodation));
   }
 
