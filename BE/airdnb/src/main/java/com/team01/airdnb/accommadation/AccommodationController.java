@@ -1,6 +1,7 @@
 package com.team01.airdnb.accommadation;
 
 
+import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class AccommodationController {
+  AccommodationService accommodationService;
+
   @Autowired
-  private AccommodationService accommodationService;
-//  @GetMapping("/accommodations")
-//  public ResponseEntity<Accommodation>
+  public AccommodationController(AccommodationService accommodationService) {
+    this.accommodationService = accommodationService;
+  }
   
   //숙소 생성
   @PostMapping("/accommodations")
@@ -35,7 +38,8 @@ public class AccommodationController {
 
   //숙소 상세보기
   @GetMapping("/accommodations/{id}")
-  public void showAccommodation(@PathVariable Long id) {
+  public AccommodationDetailResponse showAccommodation(@PathVariable Long id) {
+    return accommodationService.show(id);
   }
 
   //숙소 수정
