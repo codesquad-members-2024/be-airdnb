@@ -27,7 +27,9 @@ public class CommentService {
   private AccommodationRepository accommodationRepository;
 
   /**
-   * 새로운 코멘트를 등록합니다. 특별 예외 사항 사용자를 찾을 수 없다면 예외가 발생합니다.
+   * 새로운 코멘트를 등록합니다.
+   * @param commentRegisterRequest 코멘트 등록 정보가 담긴 dto
+   * @return 등록된 코멘트를 변환한 조회 dto
    */
   public CommentShowResponse register(CommentRegisterRequest commentRegisterRequest) {
     User commentWriter = userRepository.findById(commentRegisterRequest.user()).orElseThrow();
@@ -42,7 +44,10 @@ public class CommentService {
   }
 
   /**
-   * 해당 이슈에 달린 코멘트를 모두 조회합니다. 특별 예외 사항 댓글이 없는 경우 -> 아마 비어있는 리스트가 갈 듯
+   * 해당 이슈에 달린 코멘트를 모두 조회합니다.
+   * 댓글이 없는 경우 비어있는 리스트가 생성됩니다.
+   * @param  id 숙소 id
+   * @return 코멘트 조회 dto 목록
    */
   public List<CommentShowResponse> showAllComment(Long id) {
     return commentRepository.findAllByAccommodationId(id);
@@ -50,6 +55,7 @@ public class CommentService {
 
   /**
    * 특정 코멘트를 삭제합니다.
+   * @param id 숙소 id
    */
   public void delete(Long id) {
     Comment target = commentRepository.findById(id).orElseThrow();
@@ -58,6 +64,9 @@ public class CommentService {
 
   /**
    * 특정 코멘트를 수정합니다. 수정하지 않는 부분(null)이 있는 경우는 체크해서 기존 값을 유지합니다.
+   * @param id 숙소 id
+   * @param commentUpdateRequest 업데이트 내역이 담겨 있는 dto
+   * @return 수정된 코멘트를 변환한 dto
    */
   @Transactional
   public CommentShowResponse update(Long id, CommentUpdateRequest commentUpdateRequest) {
