@@ -9,6 +9,7 @@ import team10.airdnb.member.entity.Member;
 import team10.airdnb.member.exception.MemberIdNotFoundException;
 import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.review.controller.request.ReviewCreateRequest;
+import team10.airdnb.review.controller.response.ReviewSummaryResponse;
 import team10.airdnb.review.entity.Review;
 import team10.airdnb.review.repository.ReviewRepository;
 
@@ -20,14 +21,16 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final AccommodationRepository accommodationRepository;
 
-    public Review createReview(ReviewCreateRequest request) {
+    public ReviewSummaryResponse createReview(ReviewCreateRequest request) {
         Member member = getMemberById(request.memberId());
 
         Accommodation accommodation = getAccommodationById(request.accommodationId());
 
         Review review = request.toEntity(member, accommodation);
 
-        return reviewRepository.save(review);
+        reviewRepository.save(review);
+
+        return ReviewSummaryResponse.from(review);
     }
 
     private Member getMemberById(String memberId) {
