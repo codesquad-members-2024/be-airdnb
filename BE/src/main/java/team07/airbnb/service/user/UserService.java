@@ -3,7 +3,7 @@ package team07.airbnb.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.repository.UserRepository;

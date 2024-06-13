@@ -19,7 +19,7 @@ import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;

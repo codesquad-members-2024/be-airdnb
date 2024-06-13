@@ -14,7 +14,7 @@ import team07.airbnb.common.auth.OAuthAttributes;
 import team07.airbnb.common.auth.jwt.JwtAuthentication;
 import team07.airbnb.common.auth.jwt.JwtUserDetails;
 import team07.airbnb.common.auth.jwt.JwtUtil;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.repository.UserRepository;
 

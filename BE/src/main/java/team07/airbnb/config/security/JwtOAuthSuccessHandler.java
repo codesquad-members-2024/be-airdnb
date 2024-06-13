@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import team07.airbnb.common.auth.jwt.JwtUserDetails;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 
 import java.io.IOException;
 import java.io.PrintWriter;

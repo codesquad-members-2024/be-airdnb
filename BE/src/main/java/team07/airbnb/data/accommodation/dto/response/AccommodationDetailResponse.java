@@ -1,7 +1,8 @@
 package team07.airbnb.data.accommodation.dto.response;
 
 import team07.airbnb.data.accommodation.enums.AccommodationType;
-import team07.airbnb.data.user.dto.SimpleUserResponse;
+import team07.airbnb.data.review.dto.response.ReviewWithReplyResponse;
+import team07.airbnb.data.user.dto.response.SimpleUserResponse;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.Pictures;
 import team07.airbnb.entity.ReviewEntity;
@@ -22,7 +23,7 @@ public record AccommodationDetailResponse(
         AccommodationType type,
         RoomInformation roomInformation,
         AccommodationLocation location,
-        List<ReviewEntity> reviews
+        List<ReviewWithReplyResponse> reviews
 ) {
 
     public static AccommodationDetailResponse of(AccommodationEntity accommodation) {
@@ -39,7 +40,7 @@ public record AccommodationDetailResponse(
                 accommodation.getType(),
                 accommodation.getRoomInformation(),
                 accommodation.getAddress(),
-                reviews
+                reviews.stream().map(ReviewWithReplyResponse::of).toList()
         );
     }
 }

@@ -76,7 +76,6 @@ public class AccommodationEntity extends BaseEntity {
                 .toList();
     }
 
-    @Transient
     public double rating() {
         return reviews().stream().mapToDouble(ReviewEntity::getRating).average().orElseGet(() -> 0.0);
     }

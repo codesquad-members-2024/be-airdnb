@@ -2,7 +2,6 @@ package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ import team07.airbnb.data.accommodation.dto.request.AccommodationCreateRequest;
 import team07.airbnb.data.accommodation.dto.response.AccommodationDetailResponse;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.SimpleProductResponse;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.service.accommodation.AccommodationService;

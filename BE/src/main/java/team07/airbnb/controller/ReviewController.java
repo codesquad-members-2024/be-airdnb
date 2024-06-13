@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
-import team07.airbnb.data.user.dto.TokenUserInfo;
+import team07.airbnb.data.review.dto.response.ReviewWithReplyResponse;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.service.accommodation.AccommodationService;
@@ -32,8 +33,10 @@ public class ReviewController {
     private final UserService userService;
 
     @GetMapping("/{accommodationId}")
-    public List<ReviewEntity> getReviews(@PathVariable Long accommodationId) {
-        return accommodationService.findById(accommodationId).reviews();
+    public List<ReviewWithReplyResponse> getReviews(@PathVariable Long accommodationId) {
+        return accommodationService.findById(accommodationId).reviews()
+                .stream()
+                .map(ReviewWithReplyResponse::of).toList();
     }
 
     @Authenticated(Role.USER)

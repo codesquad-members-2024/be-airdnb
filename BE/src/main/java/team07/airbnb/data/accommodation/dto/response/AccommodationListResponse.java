@@ -10,7 +10,8 @@ public record AccommodationListResponse(
         String imageUrl,
         AccommodationLocation location,
         AccommodationType type,
-        double rating
+        double rating,
+        int numOrReviews
 ) {
 
     public static AccommodationListResponse of(AccommodationEntity accomodation) {
@@ -20,7 +21,8 @@ public record AccommodationListResponse(
                 !accomodation.getPictures().isEmpty() ? accomodation.getPictures().get(0).getUrl() : null,
                 accomodation.getAddress(),
                 accomodation.getType(),
-                accomodation.rating()
+                accomodation.rating(),
+                accomodation.reviews().size()
         );
     }
 }

@@ -1,4 +1,4 @@
-package team07.airbnb.data.user.dto;
+package team07.airbnb.data.user.dto.response;
 
 import team07.airbnb.entity.UserEntity;
 
