@@ -26,24 +26,35 @@ public class Amenity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus tv = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  private Integer beds = 1;
+  @Builder.Default
+  private Integer bathrooms = 0;
+
   @Enumerated(EnumType.STRING)
   private AmenityStatus kitchen = AmenityStatus.NOT_AVAILABLE;
-  private Integer beds = 1;
-  private Integer bathrooms = 0;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus wirelessInternet = AmenityStatus.NOT_AVAILABLE;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus washingMachine = AmenityStatus.NOT_AVAILABLE;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus freeParking = AmenityStatus.NOT_AVAILABLE;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus paidParking = AmenityStatus.NOT_AVAILABLE;
-  @Enumerated(EnumType.STRING)
-  private AmenityStatus airConditioner = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
   @Enumerated(EnumType.STRING)
   private AmenityStatus dedicatedWorkspace = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus tv = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus washingMachine = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus airConditioner = AmenityStatus.NOT_AVAILABLE;
+
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus wirelessInternet = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus freeParking = AmenityStatus.NOT_AVAILABLE;
+  @Builder.Default
+  @Enumerated(EnumType.STRING)
+  private AmenityStatus paidParking = AmenityStatus.NOT_AVAILABLE;
 
   @Setter
   @OneToOne

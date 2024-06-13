@@ -1,5 +1,10 @@
 package com.team01.airdnb.image.dto;
 
-public class ImageListResponse {
+import lombok.Builder;
+
+@Builder
+public record ImageListResponse(
+    String imagePath
+) {
 
 }
