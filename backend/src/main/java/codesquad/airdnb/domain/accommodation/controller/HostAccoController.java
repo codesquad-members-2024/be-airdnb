@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/host/accommodations")
 @RequiredArgsConstructor
-public class AccoController {
+public class HostAccoController {
 
     private final AccoService accoService;
 

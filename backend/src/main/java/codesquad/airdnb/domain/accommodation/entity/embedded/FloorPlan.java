@@ -1,5 +1,6 @@
 package codesquad.airdnb.domain.accommodation.entity.embedded;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -10,13 +11,18 @@ import lombok.*;
 @AllArgsConstructor
 public class FloorPlan {
 
-    private Integer maxGuest;
+    @Column(name = "MAX_GUEST_COUNT")
+    private Integer maxGuestCount;
 
-    private Integer maxInfant;
+    @Column(name = "MAX_INFANT_COUNT")
+    private Integer maxInfantCount;
 
-    private Integer bedroomNum;
+    @Column(name = "BEDROOM_COUNT")
+    private Integer bedroomCount;
 
-    private Integer bedNum;
+    @Column(name = "BED_COUNT")
+    private Integer bedCount;
 
-    private Integer bathroomNum;
+    @Column(name = "BATHROOM_COUNT")
+    private Integer bathroomCount;
 }

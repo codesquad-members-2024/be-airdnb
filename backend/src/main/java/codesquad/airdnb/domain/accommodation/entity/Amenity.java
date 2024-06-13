@@ -16,7 +16,9 @@ public class Amenity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
+    @Column(name = "NAME")
     private String name;
 }

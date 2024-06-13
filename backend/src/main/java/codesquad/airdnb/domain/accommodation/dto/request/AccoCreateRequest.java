@@ -1,59 +1,54 @@
 package codesquad.airdnb.domain.accommodation.dto.request;
 
-import codesquad.airdnb.domain.accommodation.entity.AccoImage;
-import codesquad.airdnb.domain.accommodation.entity.Accommodation;
 import codesquad.airdnb.domain.accommodation.dto.additionals.FloorPlanData;
 import codesquad.airdnb.domain.accommodation.dto.additionals.LocationData;
+import codesquad.airdnb.domain.accommodation.entity.AccoImage;
+import codesquad.airdnb.domain.accommodation.entity.Accommodation;
 import codesquad.airdnb.domain.member.Member;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.sql.Time;
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class AccoCreateRequest {
+@Builder
+public record AccoCreateRequest (
+        @NotNull
+        Long hostId,
 
-    @NotNull
-    private Long hostId;
+        @NotBlank
+        @Size(max = 50)
+        String title,
 
-    @NotBlank
-    @Size(max = 50)
-    private String title;
+        @NotBlank
+        String placeCategory,
 
-    @NotBlank
-    private String placeCategory;
+        @NotNull
+        Long basePricePerNight,
 
-    @NotNull
-    private Long price;
+        @Size(max = 500)
+        String description,
 
-    @Size(max = 500)
-    private String description;
+        @NotNull
+        Time checkInTime,
 
-    @NotNull
-    private Time checkInTime;
+        @NotNull
+        Time checkOutTime,
 
-    @NotNull
-    private Time checkOutTime;
+        @Valid
+        LocationData locationData,
 
-    @Valid
-    private LocationData locationData;
+        @Valid
+        FloorPlanData floorPlanData,
 
-    @Valid
-    private FloorPlanData floorPlanData;
+        @Size(min = 5)
+        List<String> imageUrls,
 
-    @Size(min = 5)
-    private List<String> imageUrls;
-
-    private List<Long> amenities;
-
+        List<Long> amenities
+) {
     public boolean validateImageUrls() {
         return imageUrls.stream().noneMatch(String::isBlank);
     }
@@ -63,7 +58,7 @@ public class AccoCreateRequest {
                 .host(host)
                 .title(title)
                 .placeCategory(placeCategory)
-                .price(price)
+                .basePricePerNight(basePricePerNight)
                 .description(description)
                 .checkInTime(checkInTime)
                 .checkOutTime(checkOutTime)

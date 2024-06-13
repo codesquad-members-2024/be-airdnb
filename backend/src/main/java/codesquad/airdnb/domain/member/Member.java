@@ -16,11 +16,15 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
+    @Column(name = "LOGIN_ID")
     private String loginId;
 
+    @Column(name = "LOGIN_PASSWORD")
     private String loginPassword;
 
+    @Column(name = "NICKNAME")
     private String nickname;
 }
