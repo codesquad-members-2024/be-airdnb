@@ -16,6 +16,9 @@ import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
 import team10.airdnb.reservation.repository.ReservationRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -24,6 +27,12 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
     private final AccommodationRepository accommodationRepository;
+
+    public List<ReservationSummaryResponse> getReservations() {
+        return reservationRepository.findAll().stream()
+                .map(ReservationSummaryResponse::from)
+                .collect(Collectors.toList());
+    }
 
     public ReservationInformationResponse getReservation(long reservationId) {
         Reservation reservation = getReservationById(reservationId);
