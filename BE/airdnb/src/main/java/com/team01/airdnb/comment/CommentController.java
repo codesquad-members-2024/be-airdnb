@@ -5,6 +5,7 @@ import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +36,10 @@ public class CommentController {
   public CommentShowResponse registerComment(
       @RequestBody CommentRegisterRequest commentRegisterRequest) {
     return commentService.register(commentRegisterRequest);
+  }
+
+  @DeleteMapping("/comments/{commentId}")
+  public void deleteComment(@PathVariable Long commentId) {
+    commentService.delete(commentId);
   }
 }

@@ -2,7 +2,7 @@ package com.team01.airdnb.comment;
 
 import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.accommadation.AccommodationRepository;
-import com.team01.airdnb.amenity.dto.CommentRegisterRequest;
+import com.team01.airdnb.comment.dto.CommentRegisterRequest;
 import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import com.team01.airdnb.user.User;
@@ -46,6 +46,14 @@ public class CommentService {
    */
   public List<CommentShowResponse> showAllComment(Long id) {
     return commentRepository.findAllByAccommodationId(id);
+  }
+
+  /**
+   * 특정 코멘트를 삭제합니다.
+   */
+  public void delete(Long id) {
+    Comment target = commentRepository.findById(id).orElseThrow();
+    commentRepository.delete(target);
   }
 
   /**
