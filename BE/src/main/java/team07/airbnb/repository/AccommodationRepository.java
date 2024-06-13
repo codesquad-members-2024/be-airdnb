@@ -14,5 +14,7 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
     @Query(value = "SELECT * FROM ACCOMMODATION WHERE ST_Distance_Sphere(point, :point) <= :distance", nativeQuery = true)
     List<AccommodationEntity> findByLocationWithinDistance(@Param("point") Point point, @Param("distance") double distance);
 
+    List<AccommodationEntity> findAllByHost(UserEntity host);
+
     boolean findAccommodationEntityByHost(UserEntity host);
 }

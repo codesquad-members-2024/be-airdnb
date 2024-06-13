@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
     List<BookingEntity> findAllByHost(UserEntity host);
+    List<BookingEntity> findAllByBooker(UserEntity booker);
 
     boolean existsByIdAndBooker(Long bookingId, UserEntity booker);
 

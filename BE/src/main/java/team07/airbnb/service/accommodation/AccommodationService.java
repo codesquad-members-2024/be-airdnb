@@ -75,6 +75,10 @@ public class AccommodationService {
         ).toList();
     }
 
+    public List<AccommodationEntity> findByHost(UserEntity user){
+        return accommodationRepository.findAllByHost(user);
+    }
+
     public boolean isAvailableOccupancy(AccommodationEntity accommodation, Integer headCount) {
         return accommodation.getRoomInformation().getMaxOccupancy() >= headCount;
     }

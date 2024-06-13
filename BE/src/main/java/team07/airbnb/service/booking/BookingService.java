@@ -141,10 +141,25 @@ public class BookingService {
     public List<BookingManageInfoResponse> getBookingInfoListByHostId(UserEntity host) {
         return bookingRepository.findAllByHost(host).stream()
                 .map(BookingManageInfoResponse::of)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public boolean isRequestedHostNotMatchInBooking(Long bookingId, UserEntity host) {
+    public List<BookingManageInfoResponse> getBookingInfoListByBookerId(UserEntity booker){
+        return bookingRepository.findAllByBooker(booker).stream()
+                .map(BookingManageInfoResponse::of)
+                .toList();
+    }
+
+
+    public boolean isUserHostOrBookerOf(Long bookingId , UserEntity user){
+        return isUserHostOf(bookingId, user) || isUserBookerOf(bookingId, user);
+    }
+
+    public boolean isUserHostOf(Long bookingId, UserEntity booker) {
+        return bookingRepository.existsByIdAndBooker(bookingId, booker);
+    }
+
+    public boolean isUserBookerOf(Long bookingId, UserEntity host) {
         return bookingRepository.existsByIdAndHost(bookingId, host);
     }
 

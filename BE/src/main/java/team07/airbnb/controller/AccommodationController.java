@@ -67,6 +67,14 @@ public class AccommodationController {
         return previewOf(accommodationService.findNearbyAccommodations(longitude, latitude, distance * 1000));
     }
 
+    @Tag(name = "Host")
+    @Operation(summary = "나의 숙소 조회", description = "내가 등록한 숙소를 조회합니다.")
+    @Authenticated(Role.HOST)
+    @GetMapping("/my")
+    public List<AccommodationListResponse> myAccommodations(TokenUserInfo user){
+        return previewOf(accommodationService.findByHost(userService.getCompleteUser(user)));
+    }
+
     @Operation(summary = "숙소 상세 조회", description = "숙소의 상세 정보를 조회합니다.")
     @GetMapping("/{id}")
     public AccommodationDetailResponse accommodationDetail(@PathVariable long id) {
