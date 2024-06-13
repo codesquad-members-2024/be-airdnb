@@ -28,4 +28,8 @@ public class Address {
         this.detail = detail;
         this.location = location;
     }
+
+    public String getFullAddress() {
+        return country + " " + state + " " + city + " " + detail;
+    }
 }

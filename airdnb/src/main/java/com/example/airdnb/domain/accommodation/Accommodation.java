@@ -79,6 +79,10 @@ public class Accommodation {
         this.images.add(image);
     }
 
+    public String getFullAddress() {
+        return address.getFullAddress();
+    }
+
     public void setUser(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
