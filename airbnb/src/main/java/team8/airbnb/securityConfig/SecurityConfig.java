@@ -33,7 +33,7 @@ public class SecurityConfig {
     http.httpBasic((auth) -> auth.disable());
     http.authorizeHttpRequests((requests) -> requests
         .requestMatchers(POST, "/auth/login", "/auth/registration").permitAll()
-        .requestMatchers(GET, "/", "/naverlogin", "/total/login").permitAll()
+        .requestMatchers(GET, "/", "/naverlogin", "/total/login","/success").permitAll()
         .anyRequest().authenticated()
     );
     http
@@ -48,7 +48,7 @@ public class SecurityConfig {
      */
     http
         .oauth2Login((oauth2) -> oauth2
-            .loginPage("/total/login") // 전체 로그인 페이지
+//            .loginPage("/total/login") // 전체 로그인 페이지
             .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                 .userService(customOAuth2UserService))
             .successHandler(customSuccessHandler)
