@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="/css/setting/top-btn.css">
 </head>
 <body>
+<div class="top-button-container"></div>
+
 <div class="container">
-    <div class="top-button-container"></div>
     <h1>숙소 등록</h1>
     <form id="accommodationForm">
         <label for="memberId">숙소 소유주 이름 (이메일):</label>
@@ -51,9 +52,15 @@
         <input type="number" id="perPrice" name="perPrice" min="10000" max="15000000" required>
         <span class="error-message" id="perPriceError"></span>
 
-        <button type="submit">등록</button>
+        <label for="amenities">편의시설:</label>
+        <div id="amenities"></div>
+
+        <button class="submit_btn" type="submit">등록</button>
     </form>
 </div>
+<script src="/js/accommodation/fetchFunctions.js"></script>
+<script src="/js/accommodation/validation.js"></script>
+<script src="/js/accommodation/submitForm.js"></script>
 <script src="/js/accommodation/createForm.js"></script>
 <script src="/js/setting/top-btn.js"></script>
 </body>
