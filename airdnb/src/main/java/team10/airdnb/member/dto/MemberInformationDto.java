@@ -1,4 +1,4 @@
-package team10.airdnb.reservation.dto;
+package team10.airdnb.member.dto;
 
 import team10.airdnb.member.entity.Member;
 
