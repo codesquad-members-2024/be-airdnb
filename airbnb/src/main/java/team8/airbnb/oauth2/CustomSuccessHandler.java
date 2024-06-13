@@ -23,7 +23,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
   }
 
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException, ServletException {
 
 //    // Authorization Code를 출력하는 로직
 //    String code = request.getParameter("code");
@@ -40,7 +41,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     String role = auth.getAuthority();
 
     String token = jwtUtil.generateToken(username);
-    System.out.println("token 생성완 = " + token);
+    logger.debug("token 생성완 : " + token);
 
     /*
     JWT 토큰을 Authorization 헤더에 추가
