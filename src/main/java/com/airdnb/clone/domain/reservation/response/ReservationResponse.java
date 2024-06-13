@@ -3,11 +3,13 @@ package com.airdnb.clone.domain.reservation.response;
 import com.airdnb.clone.domain.reservation.entity.Reservation;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationResponse {
     private final Long reservationId;
     private final Long memberId;

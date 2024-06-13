@@ -2,7 +2,7 @@ package com.airdnb.clone.domain.stay.service;
 
 import static com.airdnb.clone.domain.stay.entity.Stay.StayBuilder;
 
-import com.airdnb.clone.domain.member.Member;
+import com.airdnb.clone.domain.member.entity.Member;
 import com.airdnb.clone.domain.member.repository.MemberRepository;
 import com.airdnb.clone.domain.stay.controller.dto.response.StayDetailResponse;
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.AliasEditResponse;

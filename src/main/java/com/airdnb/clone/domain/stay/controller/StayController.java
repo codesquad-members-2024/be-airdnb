@@ -22,7 +22,6 @@ import com.airdnb.clone.domain.stay.controller.dto.response.edit.LocationEditRes
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.RoomInfoResponse;
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.StatusEditResponse;
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.TypeEditResponse;
-import com.airdnb.clone.domain.stay.entity.Stay;
 import com.airdnb.clone.domain.stay.service.StayService;
 import jakarta.validation.Valid;
 import java.util.List;
