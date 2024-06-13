@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.request.BookingPaymentsRequest;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCancelResponse;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
+import team07.airbnb.data.booking.dto.transfer.DateInfo;
+import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
@@ -27,6 +30,7 @@ import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.booking.BookingService;
 import team07.airbnb.service.user.UserService;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -97,8 +101,8 @@ public class BookingController {
     @Operation(summary = "예약 이용 완료", description = "예약을 이용 완료 처리합니다.")
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
-    public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user){
-         UserEntity host = userService.getCompleteUser(user);
+    public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+        UserEntity host = userService.getCompleteUser(user);
 
         if (bookingService.isUserBookerOf(bookingId, host)) {
             throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 호스트가 아닙니다");
@@ -112,7 +116,7 @@ public class BookingController {
     @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
     @GetMapping("/my-bookings")
     @Authenticated(USER)
-    public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user){
+    public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user) {
         return bookingService.findBookingsByUser(userService.getCompleteUser(user));
     }
 
@@ -137,28 +141,27 @@ public class BookingController {
     public List<BookingDetailResponse> getBookingInfosOfHosting(TokenUserInfo host) {
         return bookingService.getBookingInfoListByHost(userService.getCompleteUser(host));
     }
-    
+
 
     @Operation(summary = "호스트 예약 상세 조회", description = "호스트가 예약 상세 정보를 조회합니다.")
     @GetMapping("/management/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
     public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, userService.getCompleteUser(host))) {
+        if (bookingService.isUserHostOf(bookingId, userService.getCompleteUser(host))) {
             throw new UnAuthorizedException(BookingController.class, host.id());
         }
         return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
     }
 
-
-    @PostMapping("/reopen/{bookingId}")
-    @Authenticated(HOST)
+    @GetMapping("/pay-info")
     @ResponseStatus(OK)
-    public void reOpeningBooking(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (bookingService.isRequestedHostNotMatchInBooking(bookingId, userService.getCompleteUser(host))) {
-            throw new UnAuthorizedException(BookingController.class, host.id());
-        }
-
-        bookingService.reopenBooking(bookingId);
+    public List<Double> getPayInfo(@RequestBody BookingPaymentsRequest bookingPaymentsRequest) {
+        List<Double> result = bookingService.getPricesAccAvailable(
+                                DateInfo.of(bookingPaymentsRequest),
+                                DistanceInfo.of(bookingPaymentsRequest)
+                        );
+        result.sort(Comparator.naturalOrder());
+        return result;
     }
 }

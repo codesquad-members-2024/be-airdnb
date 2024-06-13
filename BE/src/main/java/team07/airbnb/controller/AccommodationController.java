@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
+import static team07.airbnb.data.user.enums.Role.*;
 
 @Tag(name = "숙소")
 @RequestMapping("/accommodation")
@@ -42,7 +43,7 @@ public class AccommodationController {
     @Tag(name = "Host")
     @Operation(summary = "숙소 등록", description = "스쿼드비엔비에 숙소를 등록합니다.")
     @PostMapping
-    @Authenticated(Role.USER)
+    @Authenticated(USER)
     @ResponseStatus(OK)
     public AccommodationListResponse createAccommodation(@RequestBody AccommodationCreateRequest createRequest, TokenUserInfo user) {
         return AccommodationListResponse.of(accommodationService.addAccommodation(
@@ -53,7 +54,7 @@ public class AccommodationController {
     @Tag(name = "Host")
     @Operation(summary = "숙소 삭제", description = "등록한 숙소를 삭제합니다.")
     @DeleteMapping("/{id}")
-    @Authenticated(Role.HOST)
+    @Authenticated(HOST)
     @ResponseStatus(OK)
     public void deleteAccommodation(@PathVariable long id, TokenUserInfo user) {
         accommodationService.deleteById(id, userService.getCompleteUser(user));
@@ -81,7 +82,7 @@ public class AccommodationController {
 
     @Tag(name = "Host")
     @Operation(summary = "나의 숙소 조회", description = "내가 등록한 숙소를 조회합니다.")
-    @Authenticated(Role.HOST)
+    @Authenticated(HOST)
     @GetMapping("/my")
     public List<AccommodationListResponse> myAccommodations(TokenUserInfo user){
         return previewOf(accommodationService.findByHost(userService.getCompleteUser(user)));
@@ -105,7 +106,6 @@ public class AccommodationController {
                 .map(SimpleProductResponse::of)
                 .toList();
     }
-
 
     private List<AccommodationListResponse> previewOf(List<AccommodationEntity> accommodations){
         return accommodations.stream().map(AccommodationListResponse::of).toList();

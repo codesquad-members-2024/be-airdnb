@@ -10,9 +10,13 @@ import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
+import team07.airbnb.data.booking.dto.transfer.DateInfo;
+import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
 import team07.airbnb.data.booking.enums.BookingStatus;
+import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.PaymentEntity;
+import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
@@ -174,8 +178,14 @@ public class BookingService {
                 .toList();
     }
 
-    public boolean isRequestedHostNotMatchInBooking(Long bookingId, UserEntity host) {
-        return !bookingRepository.existsByIdAndHost(bookingId, host);
+    public List<Double> getPricesAccAvailable(DateInfo dateInfo, DistanceInfo distanceInfo) {
+        List<AccommodationEntity> nearbyAccommodations =
+                accommodationService.findNearbyAccommodations(distanceInfo.longitude(), distanceInfo.latitude(), distanceInfo.distance());
+
+        return nearbyAccommodations.stream()
+                    .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
+                    .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
+                    .toList();
     }
 
     public boolean isUserHostOrBookerOf(Long bookingId , UserEntity user){
