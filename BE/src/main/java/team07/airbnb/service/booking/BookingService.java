@@ -168,9 +168,9 @@ public class BookingService {
         return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
     }
 
-    public List<BookingManageInfoResponse> getBookingInfoListByHost(UserEntity host) {
+    public List<BookingDetailResponse> getBookingInfoListByHost(UserEntity host) {
         return bookingRepository.findAllByHost(host).stream()
-                .map(BookingManageInfoResponse::of)
+                .map(BookingDetailResponse::of)
                 .toList();
     }
 

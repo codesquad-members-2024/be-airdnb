@@ -53,7 +53,14 @@ public class ProductService {
     }
 
     public void reopen(BookingEntity booking) {
-        booking.getProducts().forEach(product -> productRepository.save(product.reopen(booking)));
+        LocalDate checkOut = booking.getCheckout();
+
+        //예약이 완료된 다음날부터 체크아웃 날짜까지만 상품 재생성
+        List<ProductEntity> remainProducts = booking.getProducts().stream()
+                .filter(product -> product.getDate().isAfter(LocalDate.now()) && product.getDate().isBefore(checkOut.plusDays(1L)))
+                .toList();
+
+        remainProducts.stream().forEach(product -> productRepository.save(product.reopen(booking)));
     }
 
     private ProductEntity getProductById(Long id) {

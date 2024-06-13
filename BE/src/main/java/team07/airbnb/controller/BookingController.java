@@ -21,6 +21,7 @@ import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
+import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.booking.BookingService;
@@ -95,7 +96,7 @@ public class BookingController {
     @Tag(name = "Host")
     @Operation(summary = "예약 이용 완료", description = "예약을 이용 완료 처리합니다.")
     @PostMapping("/complete/{bookingId}")
-    @Authenticated(Role.HOST)
+    @Authenticated(HOST)
     public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user){
          UserEntity host = userService.getCompleteUser(user);
 
@@ -103,15 +104,16 @@ public class BookingController {
             throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 호스트가 아닙니다");
         }
 
-        // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성? 환불?
+        // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
+        bookingService.reopenBooking(bookingId);
     }
 
     @Tag(name = "User")
     @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
-    @GetMapping("my")
-    @Authenticated(Role.USER)
-    public List<BookingManageInfoResponse> getMyBookingInfos(TokenUserInfo user){
-        return bookingService.getBookingInfoListByBookerId(userService.getCompleteUser(user));
+    @GetMapping("/my-bookings")
+    @Authenticated(USER)
+    public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user){
+        return bookingService.findBookingsByUser(userService.getCompleteUser(user));
     }
 
     @Operation(summary = "유저 예약 상세 조회", description = "유저가 예약 상세 정보를 조회합니다.")
@@ -132,8 +134,8 @@ public class BookingController {
     @Authenticated(HOST)
     @GetMapping("/management")
     @ResponseStatus(OK)
-    public List<BookingManageInfoResponse> getBookingInfosOfHosting(TokenUserInfo host) {
-        return bookingService.getBookingInfoListByHostId(userService.getCompleteUser(host));
+    public List<BookingDetailResponse> getBookingInfosOfHosting(TokenUserInfo host) {
+        return bookingService.getBookingInfoListByHost(userService.getCompleteUser(host));
     }
     
 
