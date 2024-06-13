@@ -24,23 +24,28 @@ public class AccoProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCO_ID")
     private Accommodation accommodation;
 
+    @Column(name = "RESERVE_DATE")
     private LocalDate reserveDate;
 
+    @Column(name = "PRICE")
     private Long price;
 
     @Column(name = "IS_RESERVED")
     private boolean isReserved;
 
     @CreatedDate
+    @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
 
     public void reserve() {

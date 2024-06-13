@@ -8,11 +8,14 @@ import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.accommodation.dto.response.SimpleAccommodationResponse;
 import codesquad.airdnb.domain.accommodation.service.AccoService;
 import codesquad.airdnb.domain.accommodation.util.GeometryHelper;
+import codesquad.airdnb.global.config.JacksonConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -28,6 +31,8 @@ import java.sql.Time;
 import java.util.List;
 
 @WebMvcTest(HostAccoController.class)
+@MockBean(JpaMetamodelMappingContext.class)
+@Import({JacksonConfig.class, GeometryHelper.class})
 class AccoControllerTest {
 
     @Autowired

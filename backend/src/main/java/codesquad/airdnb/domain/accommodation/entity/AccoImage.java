@@ -16,11 +16,13 @@ public class AccoImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCO_ID")
     private Accommodation accommodation;
 
+    @Column(name = "URL")
     private String url;
 }
