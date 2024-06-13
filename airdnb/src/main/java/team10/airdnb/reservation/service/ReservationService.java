@@ -47,6 +47,8 @@ public class ReservationService {
 
         Reservation reservation = request.toEntity(member, accommodation);
 
+        reservationRepository.save(reservation);
+
         return ReservationSummaryResponse.from(reservation);
     }
 
