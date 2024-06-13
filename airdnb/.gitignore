@@ -39,3 +39,6 @@ out/
 ### yaml 파일 ###
 application.yaml
 application.yml
+
+### queryDSL ###
+/src/main/generated

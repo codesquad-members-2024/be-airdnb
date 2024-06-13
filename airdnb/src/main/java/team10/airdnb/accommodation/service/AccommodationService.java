@@ -34,6 +34,14 @@ public class AccommodationService {
     private final AccommodationAmenityRepository accommodationAmenityRepository;
     private final AmenityRepository amenityRepository;
 
+    public List<Accommodation> getAccommodations() {
+        return accommodationRepository.findAll();
+    }
+
+    public Accommodation getAccommodation(long accommodationId) {
+        return getAccommodationById(accommodationId);
+    }
+
     public Accommodation createAccommodation(AccommodationCreateRequest request) {
         AccommodationType accommodationType = getAccommodationTypeById(request.accommodationType());
 
