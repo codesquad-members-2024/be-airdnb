@@ -1,4 +1,4 @@
-package com.airdnb.clone.domain.member;
+package com.airdnb.clone.domain.member.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
 import jakarta.persistence.Column;

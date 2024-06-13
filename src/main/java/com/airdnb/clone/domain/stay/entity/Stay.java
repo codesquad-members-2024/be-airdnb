@@ -1,7 +1,7 @@
 package com.airdnb.clone.domain.stay.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
-import com.airdnb.clone.domain.member.Member;
+import com.airdnb.clone.domain.member.entity.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;

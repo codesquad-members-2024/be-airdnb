@@ -2,12 +2,13 @@ package com.airdnb.clone.domain.reservation.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
 import com.airdnb.clone.domain.common.Guest;
-import com.airdnb.clone.domain.member.Member;
+import com.airdnb.clone.domain.member.entity.Member;
 import com.airdnb.clone.domain.stay.entity.Stay;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -36,11 +37,11 @@ public class Reservation extends BaseTimeEntity {
     @Column(name = "RESERVATION_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID", foreignKey = @ForeignKey(name = "FK_MEMBER_RESERVE_ID"))
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STAY_ID", foreignKey = @ForeignKey(name = "FK_STAY_RESERVE_ID"))
     private Stay stay;
 
@@ -57,8 +58,13 @@ public class Reservation extends BaseTimeEntity {
     private Guest guest;
 
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     private Status status = Status.PENDING;
+
+    public void changeGuest(Guest guest) {
+        this.guest = guest;
+    }
 
     public void confirm() {
         status = Status.RESERVED;
