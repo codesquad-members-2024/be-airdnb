@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
+import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 
@@ -55,17 +56,8 @@ public class Accommodation {
     @Column(name = "accommodation_images", nullable = true)
     private String accommodationImages;
 
-    @Column(name = "bedroom_count", nullable = false)
-    private long bedroomCount;
-
-    @Column(name = "bathroom_count", nullable = false)
-    private long bathroomCount;
-
-    @Column(name = "bed_count", nullable = false)
-    private long bedCount;
-
-    @Column(name = "per_price", nullable = false)
-    private long perPrice;
+    @Embedded
+    private RoomInfo roomInfo;
 
     @Embedded
     private AccommodationFee accommodationFee;
