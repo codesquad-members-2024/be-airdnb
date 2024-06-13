@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +27,7 @@ public class CommentController {
     return commentService.showAllComment(commentId);
   }
 
-  @PutMapping("/comments/{commentId}")
+  @PatchMapping("/comments/{commentId}")
   public CommentShowResponse updateComment(@PathVariable Long commentId,
       @RequestBody CommentUpdateRequest commentUpdateRequest) {
     return commentService.update(commentId, commentUpdateRequest);
