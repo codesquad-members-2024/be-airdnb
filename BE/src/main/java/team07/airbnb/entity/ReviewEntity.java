@@ -10,6 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ReviewEntity extends BaseEntity {
     @OneToOne(mappedBy = "review")
     private BookingEntity booking;
 
+    @Setter
     private String content;
 
     private int rating;

@@ -15,7 +15,8 @@ import lombok.Getter;
 public class ReplyEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "writer_id")
