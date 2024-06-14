@@ -7,7 +7,6 @@ import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +50,7 @@ public class CommentService {
    * @return 코멘트 조회 dto 목록
    */
   public List<CommentShowResponse> showAllComment(Long id) {
+    findExistAccommodation(id);
     return commentRepository.findAllByAccommodationId(id);
   }
 
@@ -81,5 +81,13 @@ public class CommentService {
 
   public Double findAverageScoreByAccommodationId(Long id) {
     return commentRepository.findAverageScoreByAccommodationId(id);
+  }
+
+  /**
+   * 존재하지 않는 숙소의 코멘트를 조회하려고 하는 경우를 체크합니다.
+   * @param id
+   */
+  private void findExistAccommodation(Long id) {
+    accommodationRepository.findById(id).orElseThrow();
   }
 }
