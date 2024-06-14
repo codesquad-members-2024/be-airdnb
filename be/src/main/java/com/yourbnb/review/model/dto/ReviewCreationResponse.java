@@ -12,17 +12,20 @@ public class ReviewCreationResponse {
     private final String content;
     private final String message;
 
-    public ReviewCreationResponse(Review review) {
-        this.id = review.getId();
-        this.content = review.getContent();
-        this.message = generateSuccessMessage(review);
-    }
-
-    private String generateSuccessMessage(Review review) {
-        return String.format(CREATE_SUCCESS_MESSAGE_FORMAT, review.getId(), review.getContent());
+    private ReviewCreationResponse(Long id, String content, String message) {
+        this.id = id;
+        this.content = content;
+        this.message = message;
     }
 
     public static ReviewCreationResponse from(Review review) {
-        return new ReviewCreationResponse(review);
+        Long id = review.getId();
+        String content = review.getContent();
+        String message = generateSuccessMessage(review);
+        return new ReviewCreationResponse(id, content, message);
+    }
+
+    private static String generateSuccessMessage(Review review) {
+        return String.format(CREATE_SUCCESS_MESSAGE_FORMAT, review.getId(), review.getContent());
     }
 }
