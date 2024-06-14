@@ -24,10 +24,14 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  # data.sql operate after hibernate init (not on production)
+  defer-datasource-initialization: true
 
-    # data.sql operate after hibernate init (not on production)
-    defer-datasource-initialization: true
 
+  # oauth2
+  profiles:
+    include: oauth
+    
   # sql init (not on production)
   sql:
     init:
