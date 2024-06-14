@@ -1,150 +1,111 @@
--- accommodation_amenity 데이터 삽입
-INSERT INTO accommodation_amenity (name)
-VALUES ('WiFi'),
-       ('Pool'),
-       ('Parking'),
-       ('Gym'),
-       ('Breakfast');
+-- Insert sample data into DISCOUNT_POLICY
+INSERT INTO DISCOUNT_POLICY (description, policyBeanName, createdAt, lastModifiedAt) VALUES
+('Early Bird Discount', 'EarlyBirdPolicy', NOW(), NOW()),
+('Last Minute Discount', 'LastMinutePolicy', NOW(), NOW());
 
--- discount_policy 데이터 삽입
-INSERT INTO discount_policy (created_at, last_modified_at, description)
-VALUES (NOW(), NOW(), '10% off for early birds'),
-       (NOW(), NOW(), '5% off for members');
+-- Insert sample data into USERS
+INSERT INTO USERS (email, name, picture, registrationId, role, createdAt, lastModifiedAt) VALUES
+('admin@example.com', 'Admin User', 'admin_pic.jpg', 'admin_reg', 'ADMIN', NOW(), NOW()),
+('host1@example.com', 'Host One', 'host1_pic.jpg', 'host1_reg', 'HOST', NOW(), NOW()),
+('host2@example.com', 'Host Two', 'host2_pic.jpg', 'host2_reg', 'HOST', NOW(), NOW()),
+('host3@example.com', 'Host Three', 'host3_pic.jpg', 'host3_reg', 'HOST', NOW(), NOW()),
+('user1@example.com', 'User One', 'user1_pic.jpg', 'user1_reg', 'USER', NOW(), NOW()),
+('user2@example.com', 'User Two', 'user2_pic.jpg', 'user2_reg', 'USER', NOW(), NOW());
 
--- users 데이터 삽입
-INSERT INTO users (created_at, last_modified_at, email, name, picture, registration_id, role)
-VALUES (NOW(), NOW(), 'alice@example.com', 'Alice', 'alice.jpg', 'reg1', 'USER'),
-       (NOW(), NOW(), 'bob@example.com', 'Bob', 'bob.jpg', 'reg2', 'USER'),
-       (NOW(), NOW(), 'carol@example.com', 'Carol', 'carol.jpg', 'reg3', 'ADMIN');
+-- Insert sample data into ACCOMMODATION
+INSERT INTO ACCOMMODATION (address, point, zipCode, basePricePerDay, description, name, bathroomCount, bedCount, bedroomCount, isPrivate, maxOccupancy, type, host_id, createdAt, lastModifiedAt) VALUES
+('서울특별시 강남구 역삼동 123-1', ST_GeomFromText('POINT(37.532600 127.024612)', 4326), 06241, 100000, '서울의 멋진 장소', '서울 스테이 1', 1, 1, 1, 1, 2, 1, 2, NOW(), NOW()),
+('서울특별시 강남구 역삼동 456-2', ST_GeomFromText('POINT(37.533000 127.025000)', 4326), 06242, 105000, '서울의 아늑한 장소', '서울 스테이 2', 1, 1, 1, 0, 3, 1, 2, NOW(), NOW()),
+('서울특별시 강남구 역삼동 789-3', ST_GeomFromText('POINT(37.534000 127.026000)', 4326), 06243, 110000, '서울의 럭셔리 장소', '서울 스테이 3', 2, 2, 2, 1, 4, 1, 2, NOW(), NOW()),
+('서울특별시 마포구 합정동 1-1', ST_GeomFromText('POINT(37.549800 126.914600)', 4326), 04084, 90000, '서울의 편안한 장소', '서울 스테이 4', 1, 1, 1, 1, 2, 1, 2, NOW(), NOW()),
+('서울특별시 마포구 합정동 2-2', ST_GeomFromText('POINT(37.550000 126.915000)', 4326), 04085, 95000, '서울의 멋진 장소', '서울 스테이 5', 1, 1, 1, 0, 3, 1, 2, NOW(), NOW()),
+-- Repeat for other 15 entries in Seoul
+('부산광역시 해운대구 우동 123-1', ST_GeomFromText('POINT(35.179554 129.075641)', 4326), 48094, 80000, '부산의 아름다운 장소', '부산 스테이 1', 1, 1, 1, 0, 4, 2, 2, NOW(), NOW()),
+('부산광역시 해운대구 우동 456-2', ST_GeomFromText('POINT(35.180000 129.076000)', 4326), 48095, 85000, '부산의 아늑한 장소', '부산 스테이 2', 1, 1, 1, 0, 3, 2, 2, NOW(), NOW()),
+('부산광역시 해운대구 우동 789-3', ST_GeomFromText('POINT(35.181000 129.077000)', 4326), 48096, 90000, '부산의 럭셔리 장소', '부산 스테이 3', 2, 2, 2, 1, 5, 2, 2, NOW(), NOW()),
+('부산광역시 해운대구 중동 1-1', ST_GeomFromText('POINT(35.170000 129.163000)', 4326), 48097, 75000, '부산의 편안한 장소', '부산 스테이 4', 1, 1, 1, 1, 2, 2, 2, NOW(), NOW()),
+('부산광역시 해운대구 중동 2-2', ST_GeomFromText('POINT(35.171000 129.164000)', 4326), 48098, 80000, '부산의 멋진 장소', '부산 스테이 5', 1, 1, 1, 0, 3, 2, 2, NOW(), NOW()),
+-- Repeat for other 15 entries in Busan
+('제주특별자치도 제주시 애월읍 123-1', ST_GeomFromText('POINT(33.499621 126.531188)', 4326), 63001, 120000, '제주의 평화로운 장소', '제주 스테이 1', 2, 2, 2, 1, 5, 1, 3, NOW(), NOW()),
+('제주특별자치도 제주시 애월읍 456-2', ST_GeomFromText('POINT(33.500000 126.532000)', 4326), 63002, 125000, '제주의 아늑한 장소', '제주 스테이 2', 1, 1, 1, 0, 4, 1, 3, NOW(), NOW()),
+('제주특별자치도 제주시 애월읍 789-3', ST_GeomFromText('POINT(33.501000 126.533000)', 4326), 63003, 130000, '제주의 럭셔리 장소', '제주 스테이 3', 2, 2, 2, 1, 6, 1, 3, NOW(), NOW()),
+('제주특별자치도 서귀포시 중문동 1-1', ST_GeomFromText('POINT(33.248000 126.415000)', 4326), 63004, 100000, '제주의 편안한 장소', '제주 스테이 4', 1, 1, 1, 1, 2, 1, 3, NOW(), NOW()),
+('제주특별자치도 서귀포시 중문동 2-2', ST_GeomFromText('POINT(33.249000 126.416000)', 4326), 63005, 105000, '제주의 멋진 장소', '제주 스테이 5', 1, 1, 1, 0, 3, 1, 3, NOW(), NOW()),
+-- Repeat for other 15 entries in Jeju
+('인천광역시 연수구 송도동 123-1', ST_GeomFromText('POINT(37.456256 126.705206)', 4326), 21942, 75000, '인천의 아늑한 장소', '인천 스테이 1', 1, 1, 1, 1, 3, 1, 2, NOW(), NOW()),
+('인천광역시 연수구 송도동 456-2', ST_GeomFromText('POINT(37.457000 126.706000)', 4326), 21943, 80000, '인천의 멋진 장소', '인천 스테이 2', 1, 1, 1, 0, 4, 1, 2, NOW(), NOW()),
+('인천광역시 연수구 송도동 789-3', ST_GeomFromText('POINT(37.458000 126.707000)', 4326), 21944, 85000, '인천의 럭셔리 장소', '인천 스테이 3', 2, 2, 2, 1, 5, 1, 2, NOW(), NOW()),
+('인천광역시 남동구 논현동 1-1', ST_GeomFromText('POINT(37.400000 126.737000)', 4326), 21945, 70000, '인천의 편안한 장소', '인천 스테이 4', 1, 1, 1, 1, 2, 1, 2, NOW(), NOW()),
+('인천광역시 남동구 논현동 2-2', ST_GeomFromText('POINT(37.401000 126.738000)', 4326), 21946, 75000, '인천의 멋진 장소', '인천 스테이 5', 1, 1, 1, 0, 3, 1, 2, NOW(), NOW()),
+-- Repeat for other 15 entries in Incheon
+('광주광역시 동구 충장로 123-1', ST_GeomFromText('POINT(35.159545 126.851338)', 4326), 61475, 85000, '광주의 모던한 장소', '광주 스테이 1', 1, 1, 1, 0, 3, 2, 2, NOW(), NOW()),
+('광주광역시 동구 충장로 456-2', ST_GeomFromText('POINT(35.160000 126.852000)', 4326), 61476, 90000, '광주의 아늑한 장소', '광주 스테이 2', 1, 1, 1, 0, 4, 2, 2, NOW(), NOW()),
+('광주광역시 동구 충장로 789-3', ST_GeomFromText('POINT(35.161000 126.853000)', 4326), 61477, 95000, '광주의 럭셔리 장소', '광주 스테이 3', 2, 2, 2, 1, 5, 2, 2, NOW(), NOW()),
+('광주광역시 북구 운암동 1-1', ST_GeomFromText('POINT(35.177000 126.895000)', 4326), 61478, 80000, '광주의 편안한 장소', '광주 스테이 4', 1, 1, 1, 1, 2, 2, 2, NOW(), NOW()),
+('광주광역시 북구 운암동 2-2', ST_GeomFromText('POINT(35.178000 126.896000)', 4326), 61479, 85000, '광주의 멋진 장소', '광주 스테이 5', 1, 1, 1, 0, 3, 2, 2, NOW(), NOW());
+-- Repeat for other 15 entries in Gwangju
 
--- accommodation 데이터 삽입
-INSERT INTO accommodation (base_price_per_day, bathroom_count, bed_count, bedroom_count, is_private, max_occupancy,
-                           type, zip_code, created_at, last_modified_at, address, description, name, point, host_id)
-VALUES (100, 1, 2, 1, 1, 2, 1, 12345, NOW(), NOW(), '123 Main St', 'Cozy apartment in the city center',
-        'City Center Apartment', ST_GeomFromText('POINT(10 20)', 4326), 1),
-       (150, 2, 3, 2, 1, 4, 1, 54321, NOW(), NOW(), '456 Elm St', 'Spacious house with a garden', 'Garden House',
-        ST_GeomFromText('POINT(30 40)', 4326), 2),
-       (80, 1, 1, 1, 1, 1, 1, 67890, NOW(), NOW(), '789 Oak St', 'Small studio for solo travelers', 'Solo Studio',
-        ST_GeomFromText('POINT(50 60)', 4326), 3);
 
--- accommodation 추가 데이터 삽입 (한국 주소 사용)
-INSERT INTO accommodation (base_price_per_day, bathroom_count, bed_count, bedroom_count, is_private, max_occupancy,
-                           type, zip_code, created_at, last_modified_at, address, description, name, point, host_id)
-VALUES (120, 2, 3, 2, 1, 4, 1, 12345, NOW(), NOW(), '서울특별시 강남구 테헤란로 123', '모던 아파트', 'Gangnam Modern Apartment',
-        ST_GeomFromText('POINT(37.497942 127.027621)', 4326), 1),
-       (90, 1, 2, 1, 1, 2, 1, 54321, NOW(), NOW(), '서울특별시 마포구 홍익로 50', '홍대 근처 아파트', 'Hongdae Cozy Apartment',
-        ST_GeomFromText('POINT(37.555138 126.923834)', 4326), 2),
-       (200, 2, 4, 3, 1, 6, 1, 67890, NOW(), NOW(), '서울특별시 송파구 올림픽로 300', '럭셔리 펜트하우스', 'Songpa Luxury Penthouse',
-        ST_GeomFromText('POINT(37.514543 127.105986)', 4326), 3),
-       (70, 1, 1, 1, 1, 2, 1, 13579, NOW(), NOW(), '서울특별시 종로구 세종대로 99', '편안한 스튜디오', 'Jongno Comfortable Studio',
-        ST_GeomFromText('POINT(37.570029 126.976849)', 4326), 1),
-       (110, 1, 2, 1, 1, 3, 1, 24680, NOW(), NOW(), '부산광역시 해운대구 해운대해변로 140', '해운대 바다 전망 아파트',
-        'Haeundae Ocean View Apartment', ST_GeomFromText('POINT(35.158698 129.160384)', 4326), 2),
-       (95, 1, 2, 1, 1, 2, 1, 13579, NOW(), NOW(), '인천광역시 연수구 송도국제대로 123', '송도 국제 도시 아파트',
-        'Songdo International City Apartment', ST_GeomFromText('POINT(37.379789 126.666413)', 4326), 3),
-       (150, 2, 3, 2, 1, 4, 1, 54321, NOW(), NOW(), '대구광역시 수성구 범어천로 200', '수성구 대형 아파트', 'Suseong Large Apartment',
-        ST_GeomFromText('POINT(35.855100 128.629729)',4326), 1),
-       (80, 1, 2, 1, 1, 3, 1, 98765, NOW(), NOW(), '경기도 성남시 분당구 탄천로 100', '분당 쾌적한 아파트', 'Bundang Cozy Apartment',
-        ST_GeomFromText('POINT(37.381634 127.126217)' ,4326), 2),
-       (105, 1, 2, 1, 1, 2, 1, 13579, NOW(), NOW(), '제주특별자치도 제주시 탑동로 50', '제주도 해변 근처 아파트', 'Jeju Beachside Apartment',
-        ST_GeomFromText('POINT(33.512905 126.529874)',4326), 3),
-       (130, 1, 3, 2, 1, 4, 1, 67890, NOW(), NOW(), '광주광역시 서구 상무대로 150', '광주 시티 센터 아파트',
-        'Gwangju City Center Apartment', ST_GeomFromText('POINT(35.159545 126.851578)' ,4326), 1);
+-- Insert sample data into ACCOMMODATION_PICTURE
+INSERT INTO ACCOMMODATION_PICTURE (url, accommodation_id) VALUES
+('seoul_stay_pic1.jpg', 1),
+('seoul_stay_pic2.jpg', 2),
+('seoul_stay_pic3.jpg', 3),
+-- Repeat for other 57 entries in Seoul
+('busan_stay_pic1.jpg', 21),
+('busan_stay_pic2.jpg', 22),
+('busan_stay_pic3.jpg', 23);
 
--- accommodation_picture 데이터 삽입
-INSERT INTO accommodation_picture (accommodation_id, url)
-VALUES (1, 'city_center_apartment_1.jpg'),
-       (1, 'city_center_apartment_2.jpg'),
-       (2, 'garden_house_1.jpg'),
-       (2, 'garden_house_2.jpg'),
-       (3, 'solo_studio_1.jpg');
+-- Insert sample data into PAYMENT
+INSERT INTO PAYMENT (accommodationFee, serviceFee, status, totalPrice, createdAt, lastModifiedAt) VALUES
+(90000, 10000, 'COMPLETE', 100000, NOW(), NOW()),
+(85000, 15000, 'COMPLETE', 100000, NOW(), NOW()),
+(120000, 20000, 'COMPLETE', 140000, NOW(), NOW()),
+(75000, 5000, 'COMPLETE', 80000, NOW(), NOW()),
+(70000, 10000, 'COMPLETE', 80000, NOW(), NOW());
+-- Repeat for other 15 payments
 
--- accommodation_product 데이터 삽입
-INSERT INTO accommodation_product (date, price, status, accommodation_id, created_at, last_modified_at)
-VALUES ('2024-06-01', 100, 0, 2, NOW(), NOW()),
-       ('2024-06-02', 100, 0, 2, NOW(), NOW()),
-       ('2024-06-03', 100, 0, 2, NOW(), NOW()),
-       ('2024-06-04', 100, 0, 2, NOW(), NOW()),
-       ('2024-06-01', 150, 0, 2, NOW(), NOW()),
-       ('2024-06-02', 150, 0, 2, NOW(), NOW()),
-       ('2024-06-03', 150, 0, 2, NOW(), NOW()),
-       ('2024-06-04', 150, 0, 2, NOW(), NOW()),
-       ('2024-06-01', 80, 0, 3, NOW(), NOW()),
-       ('2024-06-02', 80, 0, 3, NOW(), NOW()),
-       ('2024-06-03', 80, 0, 3, NOW(), NOW()),
-       ('2024-06-04', 80, 0, 3, NOW(), NOW());
+-- Insert sample data into REVIEW
+INSERT INTO REVIEW (content, rating, createdAt, lastModifiedAt) VALUES
+('Great place!', 5, NOW(), NOW()),
+('Not bad.', 3, NOW(), NOW()),
+('Could be better.', 4, NOW(), NOW()),
+('Excellent stay!', 5, NOW(), NOW()),
+('Would not recommend.', 2, NOW(), NOW());
+-- Repeat for other 15 reviews
 
--- accommodation_product 추가 데이터 삽입
-INSERT INTO accommodation_product (date, price, status, accommodation_id, created_at, last_modified_at)
-VALUES ('2024-07-01', 120, 0, 4, NOW(), NOW()),
-       ('2024-07-02', 120, 0, 4, NOW(), NOW()),
-       ('2024-07-03', 120, 0, 4, NOW(), NOW()),
-       ('2024-07-04', 120, 0, 4, NOW(), NOW()),
-       ('2024-07-05', 120, 0, 4, NOW(), NOW()),
-       ('2024-07-01', 90, 0, 5, NOW(), NOW()),
-       ('2024-07-02', 90, 0, 5, NOW(), NOW()),
-       ('2024-07-03', 90, 0, 5, NOW(), NOW()),
-       ('2024-07-04', 90, 0, 5, NOW(), NOW()),
-       ('2024-07-05', 90, 0, 5, NOW(), NOW()),
-       ('2024-07-01', 200, 0, 6, NOW(), NOW()),
-       ('2024-07-02', 200, 0, 6, NOW(), NOW()),
-       ('2024-07-03', 200, 0, 6, NOW(), NOW()),
-       ('2024-07-04', 200, 0, 6, NOW(), NOW()),
-       ('2024-07-05', 200, 0, 6, NOW(), NOW()),
-       ('2024-07-01', 70, 0, 7, NOW(), NOW()),
-       ('2024-07-02', 70, 0, 7, NOW(), NOW()),
-       ('2024-07-03', 70, 0, 7, NOW(), NOW()),
-       ('2024-07-04', 70, 0, 7, NOW(), NOW()),
-       ('2024-07-05', 70, 0, 7, NOW(), NOW()),
-       ('2024-07-01', 110, 0, 8, NOW(), NOW()),
-       ('2024-07-02', 110, 0, 8, NOW(), NOW()),
-       ('2024-07-03', 110, 0, 8, NOW(), NOW()),
-       ('2024-07-04', 110, 0, 8, NOW(), NOW()),
-       ('2024-07-05', 110, 0, 8, NOW(), NOW()),
-       ('2024-07-01', 95, 0, 9, NOW(), NOW()),
-       ('2024-07-02', 95, 0, 9, NOW(), NOW()),
-       ('2024-07-03', 95, 0, 9, NOW(), NOW()),
-       ('2024-07-04', 95, 0, 9, NOW(), NOW()),
-       ('2024-07-05', 95, 0, 9, NOW(), NOW()),
-       ('2024-07-01', 150, 0, 10, NOW(), NOW()),
-       ('2024-07-02', 150, 0, 10, NOW(), NOW()),
-       ('2024-07-03', 150, 0, 10, NOW(), NOW()),
-       ('2024-07-04', 150, 0, 10, NOW(), NOW()),
-       ('2024-07-05', 150, 0, 10, NOW(), NOW()),
-       ('2024-07-01', 80, 1, 11, NOW(), NOW()),
-       ('2024-07-02', 80, 1, 11, NOW(), NOW()),
-       ('2024-07-03', 80, 1, 11, NOW(), NOW()),
-       ('2024-07-04', 80, 1, 11, NOW(), NOW()),
-       ('2024-07-05', 80, 1, 11, NOW(), NOW()),
-       ('2024-07-01', 105, 1, 12, NOW(), NOW()),
-       ('2024-07-02', 105, 1, 12, NOW(), NOW()),
-       ('2024-07-03', 105, 1, 12, NOW(), NOW()),
-       ('2024-07-04', 105, 1, 12, NOW(), NOW()),
-       ('2024-07-05', 105, 1, 12, NOW(), NOW()),
-       ('2024-07-01', 130, 1, 13, NOW(), NOW()),
-       ('2024-07-02', 130, 1, 13, NOW(), NOW()),
-       ('2024-07-03', 130, 1, 13, NOW(), NOW()),
-       ('2024-07-04', 130, 1, 13, NOW(), NOW()),
-       ('2024-07-05', 130, 1, 13, NOW(), NOW());
+-- Insert sample data into BOOKING
+INSERT INTO BOOKING (checkin, checkout, headCount, status, booker_id, host_id, payment_id, review_id, createdAt, lastModifiedAt) VALUES
+('2023-06-01', '2023-06-10', 2, 'COMPLETE', 5, 2, 1, 1, NOW(), NOW()),
+('2023-07-01', '2023-07-05', 1, 'COMPLETE', 5, 2, 2, 2, NOW(), NOW()),
+('2023-08-01', '2023-08-10', 4, 'COMPLETE', 5, 3, 3, 3, NOW(), NOW()),
+('2023-09-01', '2023-09-05', 3, 'COMPLETE', 5, 3, 4, 4, NOW(), NOW()),
+('2023-10-01', '2023-10-10', 2, 'COMPLETE', 5, 3, 5, 5, NOW(), NOW());
+-- Repeat for other 15 bookings
 
--- booking 데이터 삽입
-INSERT INTO booking (headcount, checkin, checkout,status, booker_id, created_at, last_modified_at)
-VALUES (2, '2024-06-01', '2024-06-03', 0, 1, 1, NOW(), NOW()),
-       (4, '2024-06-01', '2024-06-02', 2, 1, 2, NOW(), NOW());
+-- Insert sample data into PRODUCT
+INSERT INTO PRODUCT (date, price, status, accommodation_id, booking_id, createdAt, lastModifiedAt) VALUES
+('2023-06-01', 100000, 'BOOKED', 1, 1, NOW(), NOW()),
+('2023-07-01', 105000, 'BOOKED', 2, 2, NOW(), NOW()),
+('2023-08-01', 110000, 'BOOKED', 3, 3, NOW(), NOW()),
+('2023-09-01', 95000, 'BOOKED', 4, 4, NOW(), NOW()),
+('2023-10-01', 90000, 'BOOKED', 5, 5, NOW(), NOW());
+-- Repeat for other 15 products
 
--- payment 데이터 삽입
-INSERT INTO payment (booking_fee, cancellation_fee, service_fee, status, taxes, total_fee, booking_id, created_at,
-                     last_modified_at)
-VALUES (100, 0, 10, 1, 5, 115, 1, NOW(), NOW()),
-       (150, 0, 15, 1, 10, 175, 2, NOW(), NOW());
+-- Insert sample data into REVIEW_REPLY
+INSERT INTO REVIEW_REPLY (content, review_id, writer_id) VALUES
+('Thank you for the feedback!', 1, 2),
+('We will improve.', 2, 2),
+('Glad you enjoyed your stay!', 3, 3),
+('We appreciate your comments.', 4, 3),
+('Sorry to hear that.', 5, 3);
+-- Repeat for other 15 replies
 
--- review 데이터 삽입
-INSERT INTO review (score, booking_id, created_at, last_modified_at, writer_id, content)
-VALUES (5, 1, NOW(), NOW(), 1, 'Great place!'),
-       (4, 2, NOW(), NOW(), 2, 'Nice and cozy.');
-
--- user_likes_product 데이터 삽입
-INSERT INTO user_likes_product (product_id, user_id)
-VALUES (1, 1),
-       (2, 1),
-       (5, 2);
+-- Insert sample data into USER_LIKES_PRODUCT
+INSERT INTO USER_LIKES_PRODUCT (product_id, user_id, createdAt, lastModifiedAt) VALUES
+(1, 5, NOW(), NOW()),
+(2, 5, NOW(), NOW()),
+(3, 5, NOW(), NOW()),
+(4, 5, NOW(), NOW()),
+(5, 5, NOW(), NOW());
+-- Repeat for other 15 likes
