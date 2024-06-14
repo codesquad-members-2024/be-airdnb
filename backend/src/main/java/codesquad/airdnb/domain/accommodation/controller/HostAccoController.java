@@ -1,15 +1,16 @@
 package codesquad.airdnb.domain.accommodation.controller;
 
 import codesquad.airdnb.domain.accommodation.dto.request.AccoCreateRequest;
-import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
+import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.accommodation.service.AccoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/host/accommodations")
 @RequiredArgsConstructor
 public class HostAccoController {

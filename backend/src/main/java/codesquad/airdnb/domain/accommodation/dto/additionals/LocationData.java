@@ -1,7 +1,6 @@
 package codesquad.airdnb.domain.accommodation.dto.additionals;
 
 import codesquad.airdnb.domain.accommodation.entity.embedded.Location;
-import codesquad.airdnb.domain.accommodation.util.GeometryHelper;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import org.locationtech.jts.geom.Point;
@@ -45,7 +44,7 @@ public record LocationData (
                 .build();
     }
 
-    public static LocationData toResponseEmbedded(Location location) {
+    public static LocationData of(Location location) {
         return LocationData.builder()
                 .country(location.getCountry())
                 .province(location.getProvince())
@@ -54,8 +53,6 @@ public record LocationData (
                 .streetAddress(location.getStreetAddress())
                 .streetAddressDetail(location.getStreetAddressDetail())
                 .postalCode(location.getPostalCode())
-//                .latitude(location.getCoordinate().getX())
-//                .longitude(location.getCoordinate().getY())
                 .point(location.getCoordinate())
                 .build();
     }

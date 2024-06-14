@@ -3,10 +3,7 @@ package codesquad.airdnb.domain.accommodation.dto.additionals;
 import codesquad.airdnb.domain.accommodation.entity.embedded.FloorPlan;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Builder
 public record FloorPlanData (
@@ -40,7 +37,7 @@ public record FloorPlanData (
                 .build();
     }
 
-    public static FloorPlanData toResponseEmbedded(FloorPlan floorPlan) {
+    public static FloorPlanData of(FloorPlan floorPlan) {
         return FloorPlanData.builder()
                 .maxGuestCount(floorPlan.getMaxGuestCount())
                 .maxInfantCount(floorPlan.getMaxInfantCount())

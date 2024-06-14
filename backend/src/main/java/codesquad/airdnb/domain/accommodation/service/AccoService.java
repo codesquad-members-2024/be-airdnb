@@ -96,7 +96,7 @@ public class AccoService {
     // **************** Scheduled_END ****************
 
     @Transactional
-    public void reservation(@Valid AccoReservationRequest request, Long memberId) {
+    public void reservation(AccoReservationRequest request, Long memberId) {
         AccoProducts accoProducts = new AccoProducts(accoProductRepository.findAllById(request.products()));
         accoProducts.validate(request);
 

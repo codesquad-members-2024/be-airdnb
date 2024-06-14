@@ -6,10 +6,7 @@ import codesquad.airdnb.domain.accommodation.entity.AccoImage;
 import codesquad.airdnb.domain.accommodation.entity.Accommodation;
 import codesquad.airdnb.domain.member.Member;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.sql.Time;
@@ -28,7 +25,8 @@ public record AccoCreateRequest (
         String placeCategory,
 
         @NotNull
-        @Size(min = 1, max = 14000000)
+        @Min(value = 1)
+        @Max(value = 14000000)
         Long basePricePerNight,
 
         @Size(max = 500)
