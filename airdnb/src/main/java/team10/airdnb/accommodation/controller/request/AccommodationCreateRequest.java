@@ -1,5 +1,6 @@
 package team10.airdnb.accommodation.controller.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -47,6 +48,7 @@ public record AccommodationCreateRequest(
         @Min(0) @Max(1000000)
         int cleaningFee,
 
+        @Nullable
         List<Long> amenityIds
 ) {
     public Accommodation toEntity(AccommodationType accommodationType, AccommodationRoomType accommodationRoomType) {

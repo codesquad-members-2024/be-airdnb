@@ -19,6 +19,7 @@ import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
 import team10.airdnb.amenity.entity.Amenity;
 import team10.airdnb.amenity.repository.AmenityRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class AccommodationService {
 
         log.info("저장된 숙소 정보 : {}", accommodation);
 
-        List<Amenity> amenities = amenityRepository.findAllById(request.amenityIds());
+        List<Amenity> amenities = amenityRepository.findAllById(request.amenityIds() != null ? request.amenityIds() : Collections.emptyList());
 
         Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
                 .map(amenity -> AccommodationAmenity.builder()

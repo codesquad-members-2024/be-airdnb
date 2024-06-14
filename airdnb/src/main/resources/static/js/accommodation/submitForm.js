@@ -21,7 +21,8 @@ function submitForm() {
     jsonData['bedroomCount'] = Number(jsonData['bedroomCount']);
     jsonData['bathroomCount'] = Number(jsonData['bathroomCount']);
     jsonData['bedCount'] = Number(jsonData['bedCount']);
-    jsonData['perPrice'] = Number(jsonData['perPrice']);
+    jsonData['dayRate'] = Number(jsonData['dayRate']);
+    jsonData['cleaningFee'] = Number(jsonData['cleaningFee']);
 
     fetch('/api/accommodation', {
         method: 'POST',
@@ -40,3 +41,8 @@ function submitForm() {
         })
         .catch(error => console.error('Error submitting form:', error));
 }
+
+document.getElementById("accommodationForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    submitForm();
+});

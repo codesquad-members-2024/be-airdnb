@@ -25,11 +25,6 @@ public class KakaoTokenController {
     @Value("${kakao.client.secret}")
     private String clientSecret;
 
-    @GetMapping("/login")
-    public String login() {
-        return "loginForm";
-    }
-
     @GetMapping("/oauth/kakao/callback")
     public OauthLoginDto.Response loginCallback(@RequestParam String code) {
         // 1. 카카오 인증서버가 콜백으로 code를 준다.(내가 받음)

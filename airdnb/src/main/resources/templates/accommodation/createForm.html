@@ -12,7 +12,7 @@
 <div class="container">
     <h1>숙소 등록</h1>
     <form id="accommodationForm">
-        <label for="memberId">숙소 소유주 이름 (이메일):</label>
+        <label for="memberId">숙소 소유주 이메일:</label>
         <input type="email" id="memberId" name="memberId" required>
         <span class="error-message" id="memberIdError"></span>
 
@@ -36,6 +36,14 @@
         </select>
         <span class="error-message" id="accommodationRoomTypeError"></span>
 
+        <label for="accommodationDescription">숙소 설명:</label>
+        <textarea id="accommodationDescription" name="accommodationDescription"></textarea>
+        <span class="error-message" id="accommodationDescriptionError"></span>
+
+        <label for="accommodationImages">숙소 이미지 URL:</label>
+        <input type="text" id="accommodationImages" name="accommodationImages">
+        <span class="error-message" id="accommodationImagesError"></span>
+
         <label for="bedroomCount">침실 개수:</label>
         <input type="number" id="bedroomCount" name="bedroomCount" min="0" max="50" required>
         <span class="error-message" id="bedroomCountError"></span>
@@ -48,9 +56,13 @@
         <input type="number" id="bedCount" name="bedCount" min="1" max="50" required>
         <span class="error-message" id="bedCountError"></span>
 
-        <label for="perPrice">1박당 가격:</label>
-        <input type="number" id="perPrice" name="perPrice" min="10000" max="15000000" required>
-        <span class="error-message" id="perPriceError"></span>
+        <label for="dayRate">1박당 가격:</label>
+        <input type="number" id="dayRate" name="dayRate" min="10000" max="15000000" required>
+        <span class="error-message" id="dayRateError"></span>
+
+        <label for="cleaningFee">청소비:</label>
+        <input type="number" id="cleaningFee" name="cleaningFee" min="0" max="1000000" required>
+        <span class="error-message" id="cleaningFeeError"></span>
 
         <label for="amenities">편의시설:</label>
         <div id="amenities"></div>

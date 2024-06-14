@@ -13,7 +13,7 @@ CREATE TABLE accommodation
     bedroom_count             INTEGER      NOT NULL,
     bathroom_count            INTEGER      NOT NULL,
     bed_count                 INTEGER      NOT NULL,
-    CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES member (id),
+    CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ,
     CONSTRAINT fk_accommodation_type FOREIGN KEY (accommodation_type) REFERENCES accommodation_type (id) ON DELETE SET NULL,
     CONSTRAINT fk_accommodation_room_type FOREIGN KEY (accommodation_room_type) REFERENCES accommodation_room_type (id) ON DELETE SET NULL
 );
