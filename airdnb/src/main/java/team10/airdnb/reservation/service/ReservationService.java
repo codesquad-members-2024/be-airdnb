@@ -65,6 +65,7 @@ public class ReservationService {
         Reservation reservation = buildReservation(request, member, accommodation, totalPrice);
 
         reservationRepository.save(reservation);
+
         return ReservationSummaryResponse.from(reservation);
     }
 

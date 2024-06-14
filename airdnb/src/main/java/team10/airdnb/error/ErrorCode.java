@@ -31,8 +31,15 @@ public enum ErrorCode {
     // 숙소
     ACCOMMODATION_NOT_EXISTS(HttpStatus.BAD_REQUEST, "S-001", "해당 숙소는 존재하지 않습니다."),
 
+    // 리뷰
+    REVIEW_NOT_EXISTS(HttpStatus.BAD_REQUEST, "RV-001", "해당 리뷰는 존재하지 않습니다."),
+
     // 예약
     RESERVATION_NOT_EXISTS(HttpStatus.BAD_REQUEST, "R-001", "해당 예약은 존재하지 않습니다."),
+
+    // 북마크
+    BOOKMARK_NOT_EXISTS(HttpStatus.BAD_REQUEST, "B-001", "해당 북마크는 존재하지 않습니다."),
+    ALREADY_SAVED_BOOKMARK(HttpStatus.BAD_REQUEST, "B-002", "이미 설정된 북마크입니다."),
 
     //회원
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(memberType : KAKAO)"),

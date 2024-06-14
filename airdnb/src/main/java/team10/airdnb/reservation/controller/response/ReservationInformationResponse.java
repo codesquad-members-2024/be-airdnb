@@ -1,7 +1,8 @@
 package team10.airdnb.reservation.controller.response;
 
-import team10.airdnb.reservation.dto.AccommodationInformationDto;
-import team10.airdnb.reservation.dto.MemberInformationDto;
+
+import team10.airdnb.accommodation.dto.AccommodationInformationDto;
+import team10.airdnb.member.dto.MemberInformationDto;
 import team10.airdnb.reservation.entity.Reservation;
 
 import java.time.LocalDate;
