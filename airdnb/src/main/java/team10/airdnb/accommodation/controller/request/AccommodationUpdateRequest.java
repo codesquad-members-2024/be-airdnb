@@ -2,10 +2,6 @@ package team10.airdnb.accommodation.controller.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import team10.airdnb.accommodation.entity.Accommodation;
-import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
-import team10.airdnb.accommodation_type.entity.AccommodationType;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +15,15 @@ public record AccommodationUpdateRequest(
         Optional<Long> accommodationType,
         Optional<Long> accommodationRoomType,
         @Min(value = 0) @Max(value = 50)
-        Optional<Long> bedroomCount,
+        Optional<Integer> bedroomCount,
         @Min(value = 1) @Max(value = 50)
-        Optional<Long> bathroomCount,
+        Optional<Integer> bathroomCount,
         @Min(value = 1) @Max(value = 50)
-        Optional<Long> bedCount,
-        @Min(value = 10000) @Max(value = 15000000)
-        Optional<Long> perPrice,
+        Optional<Integer> bedCount,
+        @Min(10000) @Max(15000000)
+        Optional<Integer> dayRate,
+        @Min(0) @Max(1000000)
+        Optional<Integer> cleaningFee,
         Optional<List<Long>> amenityIds
 ) {
 }

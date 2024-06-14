@@ -6,10 +6,13 @@ CREATE TABLE accommodation
     max_capacity            BIGINT       NOT NULL,
     accommodation_type      BIGINT       NULL,
     accommodation_room_type BIGINT       NULL,
-    bedroom_count           BIGINT       NOT NULL,
-    bathroom_count          BIGINT       NOT NULL,
-    bed_count               BIGINT       NOT NULL,
-    per_price               BIGINT       NOT NULL,
+    accommodation_description TEXT       NULL,
+    accommodation_images    TEXT         NULL,
+    day_rate                INTEGER      NOT NULL,
+    cleaning_fee            INTEGER      NOT NULL,
+    bedroom_count           INTEGER      NOT NULL,
+    bathroom_count          INTEGER      NOT NULL,
+    bed_count               INTEGER      NOT NULL,
     CONSTRAINT fk_accommodation_type FOREIGN KEY (accommodation_type) REFERENCES accommodation_type (id) ON DELETE SET NULL,
     CONSTRAINT fk_accommodation_room_type FOREIGN KEY (accommodation_room_type) REFERENCES accommodation_room_type (id) ON DELETE SET NULL
 );

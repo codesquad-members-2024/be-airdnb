@@ -2,6 +2,7 @@ package team10.airdnb.accommodation.entity;
 
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
+import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 
@@ -23,6 +27,7 @@ import team10.airdnb.accommodation_type.entity.AccommodationType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,43 +51,16 @@ public class Accommodation {
     @JoinColumn(name = "accommodation_room_type", nullable = true)
     private AccommodationRoomType accommodationRoomType;
 
-    @Column(name = "bedroom_count", nullable = false)
-    private long bedroomCount;
+    @Column(name = "accommodation_description", nullable = true)
+    private String accommodationDescription;
 
-    @Column(name = "bathroom_count", nullable = false)
-    private long bathroomCount;
+    @Column(name = "accommodation_images", nullable = true)
+    private String accommodationImages;
 
-    @Column(name = "bed_count", nullable = false)
-    private long bedCount;
+    @Embedded
+    private RoomInfo roomInfo;
 
-    @Column(name = "per_price", nullable = false)
-    private long perPrice;
-
-    @Override
-    public String toString() {
-        return String.format("""
-                                                
-                        {
-                        memberId='%s'
-                        name='%s'
-                        maxCapacity=%d
-                        accommodationType=%s
-                        accommodationRoomType=%s
-                        bedroomCount=%d
-                        bathroomCount=%d
-                        bedCount=%d
-                        perPrice=%d
-                        }""",
-                memberId,
-                name,
-                maxCapacity,
-                accommodationType != null ? accommodationType.getId() : "null",
-                accommodationRoomType != null ? accommodationRoomType.getId() : "null",
-                bedroomCount,
-                bathroomCount,
-                bedCount,
-                perPrice);
-    }
-
+    @Embedded
+    private AccommodationFee accommodationFee;
 
 }
