@@ -9,7 +9,9 @@ import com.yourbnb.accommodation.repository.AmenityRepository;
 import com.yourbnb.accommodation.util.AccommodationMapper;
 import com.yourbnb.image.util.S3Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,9 +44,17 @@ public class AccommodationService {
     }
 
     private AccommodationResponse mapAccommodationToResponse(Accommodation accommodation) {
-        Set<Long> amenityIds = accommodationAmenityRepository.findAmenitiesByAccommodationId(accommodation.getId());
+        Set<Long> amenityIds = getAmenityIds(accommodation);
         Set<Amenity> amenities = amenityRepository.findAllByIdIsIn(amenityIds);
         String url = s3Service.getImageUrl(accommodation.getAccommodationImages().getUploadName());
         return AccommodationMapper.toAccommodationResponse(accommodation, amenities, url);
+    }
+
+    private Set<Long> getAmenityIds(Accommodation accommodation) {
+        return accommodationAmenityRepository.findAllByAccommodations_Id(accommodation.getId())
+                .stream()
+                .filter(mapping -> Objects.nonNull(mapping.getAmenities())) // Amenity가 null이 아닌 경우에만 필터링
+                .map(mapping -> mapping.getAmenities().getId())
+                .collect(Collectors.toUnmodifiableSet());
     }
 }
