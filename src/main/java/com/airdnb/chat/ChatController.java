@@ -35,7 +35,6 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void sendMessage(@Payload MessageCreationRequest messageRequest) {
-        log.info("content: {}", messageRequest.getContent());
         MessageResponse messageResponse = chatService.createChat(MessageCreation.from(messageRequest));
         template.convertAndSend("/sub/chat/room/" + messageRequest.getRoomId(), messageResponse);
     }
