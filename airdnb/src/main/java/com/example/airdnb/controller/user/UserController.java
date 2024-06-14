@@ -1,10 +1,13 @@
 package com.example.airdnb.controller.user;
 
+import com.example.airdnb.domain.user.User;
 import com.example.airdnb.dto.user.UserCreateRequest;
 import com.example.airdnb.dto.user.UserResponse;
 import com.example.airdnb.service.user.UserService;
 import jakarta.validation.Valid;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +23,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public Long createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
-        return userService.join(userCreateRequest);
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
+        Long userId = userService.join(userCreateRequest);
+        return ResponseEntity.created(URI.create("/users/" + userId)).build();
     }
 
     @GetMapping("/{userId}")
