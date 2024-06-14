@@ -13,8 +13,9 @@ public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String content;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "hashtag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AccommodationHashtag> AccommodationHashtags = new ArrayList<>();
 }
