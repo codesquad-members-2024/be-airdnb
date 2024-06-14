@@ -11,11 +11,13 @@ import codesquad.team05.domain.user.UserRepository;
 import codesquad.team05.web.dto.request.reservation.ReservationServiceDto;
 import codesquad.team05.web.dto.request.reservation.ReservationUpdate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class ReservationBusinessService {
     private final AccommodationRepository accommodationRepository;
