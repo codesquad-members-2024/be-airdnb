@@ -26,6 +26,7 @@ public record LocationData (
 
     String streetAddressDetail,
 
+    @Size(min = 1, max = 100)
     String postalCode,
 
     Point point

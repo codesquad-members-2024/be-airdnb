@@ -17,7 +17,7 @@ public class GuestAccoController {
 
     private final AccoService accoService;
 
-    @GetMapping("/{accoId}")
+    @GetMapping
     public ResponseEntity<?> getAccoByCondition(
             @RequestParam("guestCount") Integer guestCount,
             @RequestParam(value = "infantCount", required = false) Integer infantCount,
