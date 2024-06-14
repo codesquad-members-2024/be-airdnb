@@ -67,51 +67,51 @@ public class AccommodationService {
         return savedAccommodation;
     }
 
-    public Accommodation updateAccommodation(Long accommodationId, AccommodationUpdateRequest request) {
-        Accommodation accommodation = getAccommodationById(accommodationId);
-
-        Accommodation.AccommodationBuilder builder = Accommodation.builder();
-
-        builder.id(accommodation.getId());
-        request.memberId().ifPresent(builder::memberId);
-        request.name().ifPresent(builder::name);
-        request.maxCapacity().ifPresent(builder::maxCapacity);
-
-        request.accommodationType().ifPresent(accommodationTypeId -> {
-            builder.accommodationType(
-                    getAccommodationTypeById(accommodationTypeId)
-            );
-        });
-
-        request.accommodationRoomType().ifPresent(accommodationRoomTypeId -> {
-            builder.accommodationRoomType(
-                    getAccommodationRoomTypeById(accommodationRoomTypeId)
-            );
-        });
-
-        request.bedroomCount().ifPresent(builder::bedroomCount);
-        request.bathroomCount().ifPresent(builder::bathroomCount);
-        request.bedCount().ifPresent(builder::bedCount);
-        request.perPrice().ifPresent(builder::perPrice);
-
-        Accommodation updatedAccommodation = builder.build();
-
-        // Update amenities if amenityIds is provided
-        request.amenityIds().ifPresent(amenityIds -> {
-            List<Amenity> amenities = amenityRepository.findAllById(amenityIds);
-
-            Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
-                    .map(amenity -> AccommodationAmenity.builder()
-                            .accommodation(accommodation)
-                            .amenity(amenity)
-                            .build())
-                    .collect(Collectors.toSet());
-
-            accommodationAmenityRepository.saveAll(accommodationAmenities);
-        });
-
-        return accommodationRepository.save(updatedAccommodation);
-    }
+//    public Accommodation updateAccommodation(Long accommodationId, AccommodationUpdateRequest request) {
+//        Accommodation accommodation = getAccommodationById(accommodationId);
+//
+//        Accommodation.AccommodationBuilder builder = Accommodation.builder();
+//
+//        builder.id(accommodation.getId());
+//        request.memberId().ifPresent(builder::memberId);
+//        request.name().ifPresent(builder::name);
+//        request.maxCapacity().ifPresent(builder::maxCapacity);
+//
+//        request.accommodationType().ifPresent(accommodationTypeId -> {
+//            builder.accommodationType(
+//                    getAccommodationTypeById(accommodationTypeId)
+//            );
+//        });
+//
+//        request.accommodationRoomType().ifPresent(accommodationRoomTypeId -> {
+//            builder.accommodationRoomType(
+//                    getAccommodationRoomTypeById(accommodationRoomTypeId)
+//            );
+//        });
+//
+//        request.bedroomCount().ifPresent(builder::bedroomCount);
+//        request.bathroomCount().ifPresent(builder::bathroomCount);
+//        request.bedCount().ifPresent(builder::bedCount);
+//        request.perPrice().ifPresent(builder::perPrice);
+//
+//        Accommodation updatedAccommodation = builder.build();
+//
+//        // Update amenities if amenityIds is provided
+//        request.amenityIds().ifPresent(amenityIds -> {
+//            List<Amenity> amenities = amenityRepository.findAllById(amenityIds);
+//
+//            Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
+//                    .map(amenity -> AccommodationAmenity.builder()
+//                            .accommodation(accommodation)
+//                            .amenity(amenity)
+//                            .build())
+//                    .collect(Collectors.toSet());
+//
+//            accommodationAmenityRepository.saveAll(accommodationAmenities);
+//        });
+//
+//        return accommodationRepository.save(updatedAccommodation);
+//    }
 
     private Accommodation getAccommodationById(Long accommodationId) {
         return accommodationRepository.findById(accommodationId)

@@ -11,9 +11,7 @@ public record ReservationCreateRequest(
         long accommodationId,
         LocalDate checkInDate,
         LocalDate checkOutDate,
-        long capacity,
-        boolean isConfirmed,
-        long totalPrice
+        long capacity
 ) {
     public Reservation toEntity(Member member, Accommodation accommodation) {
         return Reservation.builder()
@@ -22,8 +20,6 @@ public record ReservationCreateRequest(
                 .checkInDate(checkInDate)
                 .checkOutDate(checkOutDate)
                 .capacity(capacity)
-                .isConfirmed(isConfirmed)
-                .totalPrice(totalPrice)
                 .build();
     }
 }

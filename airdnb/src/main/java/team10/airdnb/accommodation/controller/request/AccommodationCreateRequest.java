@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
 import team10.airdnb.accommodation.entity.embedded.RoomInfo;
@@ -21,11 +22,15 @@ public record AccommodationCreateRequest(
         String name,
 
         @Min(1) @Max(16)
-        long maxCapacity,
+        int maxCapacity,
 
         Long accommodationType,
 
         Long accommodationRoomType,
+
+        String accommodationDescription,
+
+        String accommodationImages,
 
         @Min(0) @Max(50)
         int bedroomCount,
@@ -51,6 +56,8 @@ public record AccommodationCreateRequest(
                 .maxCapacity(maxCapacity)
                 .accommodationType(accommodationType)
                 .accommodationRoomType(accommodationRoomType)
+                .accommodationDescription(accommodationDescription)
+                .accommodationImages(accommodationImages)
                 .roomInfo(RoomInfo.builder()
                         .bedroomCount(bedroomCount)
                         .bathroomCount(bathroomCount)
@@ -62,4 +69,5 @@ public record AccommodationCreateRequest(
                         .build())
                 .build();
     }
+
 }
