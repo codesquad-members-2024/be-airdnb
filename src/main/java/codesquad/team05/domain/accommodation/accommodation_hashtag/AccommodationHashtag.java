@@ -12,10 +12,10 @@ public class AccommodationHashtag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id")
+    @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtag_id")
+    @JoinColumn(name = "hashtag_id", nullable = false)
     private Hashtag hashtag;
 }
