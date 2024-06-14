@@ -26,14 +26,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     this.userRepository = userRepository;
   }
 
-  //  Spring Security에서 OAuth2 로그인 시 사용되는 인터페이스인 OAuth2UserService의 메서드
-  //  이 메서드는 OAuth2 프로토콜을 사용하여 인증된 사용자의 정보를 가져오는 역할
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oAuth2User = super.loadUser(userRequest);
-    /*
-    어디 서비스에서 온 요청인지 확인
-     */
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
     OAuth2Response oAuth2Response = null;
@@ -48,13 +43,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
       return null;
     }
 
-    /*
-    리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
-     */
     log.debug("oAuth2Response : {}", oAuth2Response.getUsername());
 
     String username = oAuth2Response.getUsername();
-    String providerId = oAuth2Response.getProviderId();
 
     User existData = userRepository.findByUsername(username);
 

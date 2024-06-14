@@ -33,7 +33,7 @@ public class SecurityConfig {
     http.httpBasic((auth) -> auth.disable());
     http.authorizeHttpRequests((requests) -> requests
         .requestMatchers(POST, "/auth/login", "/auth/registration").permitAll()
-        .requestMatchers(GET, "/", "/naverlogin", "/total/login","/success").permitAll()
+        .requestMatchers(GET, "/", "/total/login","/success").permitAll()
         .anyRequest().authenticated()
     );
     http

@@ -26,11 +26,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
 
-//    // Authorization Code를 출력하는 로직
-//    String code = request.getParameter("code");
-//    System.out.println("Authorization code: " + code);
-
-    //OAuth2User
     CustomOAuth2User customUserDetails = (CustomOAuth2User) authentication.getPrincipal();
 
     String username = customUserDetails.getName();
