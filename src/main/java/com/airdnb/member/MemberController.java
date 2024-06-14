@@ -6,6 +6,7 @@ import com.airdnb.member.dto.MemberRegistration;
 import com.airdnb.member.dto.MemberRegistrationRequest;
 import com.airdnb.member.dto.MemberVerification;
 import com.airdnb.member.dto.MemberVerificationRequest;
+import com.airdnb.member.dto.VerificationResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class MemberController {
 
     @PostMapping("/verify")
     public ApiResponse verifyMember(@Valid @RequestBody MemberVerificationRequest memberVerificationRequest) {
-        String accessToken = memberService.verify(MemberVerification.from(memberVerificationRequest));
-        return ApiResponse.success(accessToken);
+        VerificationResponse response = memberService.verify(MemberVerification.from(memberVerificationRequest));
+        return ApiResponse.success(response);
     }
 }
