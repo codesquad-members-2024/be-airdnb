@@ -13,10 +13,10 @@ public class Like {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "login_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id")
+    @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 }
