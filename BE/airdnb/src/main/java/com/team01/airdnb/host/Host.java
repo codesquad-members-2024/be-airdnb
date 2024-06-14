@@ -32,7 +32,4 @@ public class Host {
   @MapsId
   @JoinColumn(name = "user_id")
   private User user;
-
-  @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Accommodation> accommodations;
 }

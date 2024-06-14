@@ -1,5 +1,6 @@
 package com.team01.airdnb.user;
 
+import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.comment.Comment;
 import com.team01.airdnb.host.Host;
 import com.team01.airdnb.reservation.Reservation;
@@ -57,4 +58,7 @@ public class User {
 
   @OneToMany(mappedBy = "user")
   private List<Comment> comments;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Accommodation> accommodations;
 }
