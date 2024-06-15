@@ -29,7 +29,9 @@ public class SecurityConfig {
             )
             .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                 .permitAll()
-            );
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
     }
