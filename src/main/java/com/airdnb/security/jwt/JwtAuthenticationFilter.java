@@ -30,7 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = jwtUtil.getToken(request.getHeader(SecurityConstants.AUTHORIZATION_HEADER));
 
-        if (token != null && jwtBlacklistService.isTokenBlacklisted(token)) {
+        if (token == null) {
+            log.info("토큰이 없습니다.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (jwtBlacklistService.isTokenBlacklisted(token)) {
             log.info("블랙리스트 토큰입니다.");
             filterChain.doFilter(request, response);
             return;

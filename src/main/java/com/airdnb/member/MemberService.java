@@ -3,13 +3,16 @@ package com.airdnb.member;
 import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.dto.MemberRegistration;
 import com.airdnb.member.dto.MemberVerification;
+import com.airdnb.member.dto.VerificationResponse;
 import com.airdnb.member.entity.Member;
 import com.airdnb.security.jwt.JwtUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +43,7 @@ public class MemberService {
     }
 
     @Transactional
-    public String verify(MemberVerification memberVerification) {
+    public VerificationResponse verify(MemberVerification memberVerification) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 memberVerification.getId(),
@@ -51,11 +54,18 @@ public class MemberService {
         Member member = findMemberById(memberVerification.getId());
         String token = jwtUtil.createToken(member.getId());
         log.info("토큰 발급 완료: {}", token);
-        return token;
+
+        return VerificationResponse.from(token, member);
     }
 
     public String getCurrentMemberId() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public List<String> getCurrentMemberRoles() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList();
     }
 
 
