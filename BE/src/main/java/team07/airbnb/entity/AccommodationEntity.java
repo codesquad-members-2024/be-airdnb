@@ -91,4 +91,24 @@ public class AccommodationEntity extends BaseEntity {
     public void addProduct(LocalDate date) {
         products.add(ProductEntity.ofOpen(this, date, basePricePerDay));
     }
+
+    public void updateRoomInfo(RoomInformation roomInformation){
+        this.roomInformation = roomInformation;
+    }
+
+    public void updateDescription(String name , String description){
+        this.name = name;
+        this.description = description;
+    }
+
+    public void updateBaseInfo(AccommodationType type, AccommodationLocation address, Integer basePricePerDay){
+        this.type = type;
+        this.address = address;
+        this.basePricePerDay = basePricePerDay;
+    }
+
+    public void updatePictures(List<Pictures> pictures){
+        this.pictures.forEach(Pictures::detach);
+        this.pictures = pictures;
+    }
 }

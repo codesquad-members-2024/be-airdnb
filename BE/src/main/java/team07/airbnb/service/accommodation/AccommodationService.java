@@ -6,10 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.common.util.DateHelper;
 import team07.airbnb.common.util.GeometryHelper;
+import team07.airbnb.data.accommodation.enums.AccommodationType;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.Pictures;
 import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.UserEntity;
+import team07.airbnb.entity.embed.AccommodationLocation;
+import team07.airbnb.entity.embed.RoomInformation;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.exception.not_found.AccommodationNotFoundException;
 import team07.airbnb.repository.AccommodationRepository;
@@ -39,18 +43,48 @@ public class AccommodationService {
 
     @Transactional
     public void deleteById(long id, UserEntity user) {
-        if (!getHostIdById(id).equals(user.getId()))
-            throw new UnAuthorizedException(AccommodationService.class, user.getId());
-
-        try {
-            accommodationRepository.deleteById(id);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("존재하지 않는 숙소%d 를 삭제할 수 없습니다.".formatted(id));
-        }
+        accommodationRepository.delete(authorize(id, user.getId()));
 
         boolean hostHasAcc = accommodationRepository.findAccommodationEntityByHost(user);
         if (!hostHasAcc) userService.userGrantToUser(user); // 남은 숙소가 없다면 호스트에서 일반 유저로 변경
     }
+
+    @Transactional
+    public AccommodationEntity updateAccommodation(Long id, RoomInformation roomInformation, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
+        accommodation.updateRoomInfo(roomInformation);
+        return accommodationRepository.save(accommodation);
+    }
+
+    @Transactional
+    public AccommodationEntity updateAccommodation(Long id,String name, String description, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
+        accommodation.updateDescription(name, description);
+        return accommodationRepository.save(accommodation);
+    }
+
+    @Transactional
+    public AccommodationEntity updateAccommodation(Long id,
+                                                   AccommodationType type,
+                                                   AccommodationLocation address,
+                                                   int basePricePerDay,
+                                                   Long userId)
+    {
+        AccommodationEntity accommodation = authorize(id, userId);
+        accommodation.updateBaseInfo(type, address, basePricePerDay);
+        return accommodationRepository.save(accommodation);
+    }
+
+    @Transactional
+    public AccommodationEntity updateAccommodation(Long id, List<String> pictures, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
+        accommodation.updatePictures(
+                pictures.stream().map(url -> new Pictures(accommodation, url)).toList()
+        );
+
+        return accommodationRepository.save(accommodation);
+    }
+
 
     public AccommodationEntity findById(long id) {
         return getAccommodationById(id);
@@ -66,7 +100,7 @@ public class AccommodationService {
         return accommodationRepository.findAll();
     }
 
-    public List<ProductEntity> findAvailableProductsInMonth(LocalDate request , Long accommodationId){
+    public List<ProductEntity> findAvailableProductsInMonth(LocalDate request, Long accommodationId) {
         int year = request.getYear();
         int month = request.getMonthValue();
 
@@ -75,7 +109,7 @@ public class AccommodationService {
         ).toList();
     }
 
-    public List<AccommodationEntity> findByHost(UserEntity user){
+    public List<AccommodationEntity> findByHost(UserEntity user) {
         return accommodationRepository.findAllByHost(user);
     }
 
@@ -89,5 +123,12 @@ public class AccommodationService {
 
     private AccommodationEntity getAccommodationById(long id) throws NoSuchElementException {
         return accommodationRepository.findById(id).orElseThrow(() -> new AccommodationNotFoundException(id));
+    }
+
+    private AccommodationEntity authorize(long id, long userId) {
+        AccommodationEntity accommodation = getAccommodationById(id);
+        if (!accommodation.getHost().getId().equals(id)) throw new UnAuthorizedException(this.getClass(), userId);
+
+        return accommodation;
     }
 }
