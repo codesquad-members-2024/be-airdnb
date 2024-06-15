@@ -1,9 +1,9 @@
-package com.example.airdnb.controller.user;
+package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.dto.user.UserCreateRequest;
 import com.example.airdnb.dto.user.UserResponse;
-import com.example.airdnb.service.user.UserService;
+import com.example.airdnb.service.UserService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

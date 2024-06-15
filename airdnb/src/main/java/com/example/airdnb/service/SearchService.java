@@ -1,4 +1,4 @@
-package com.example.airdnb.service.search;
+package com.example.airdnb.service;
 
 import com.example.airdnb.domain.search.SearchCondition;
 import org.springframework.stereotype.Service;
