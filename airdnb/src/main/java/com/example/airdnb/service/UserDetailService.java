@@ -1,8 +1,8 @@
-package com.example.airdnb.service.user;
+package com.example.airdnb.service;
 
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.domain.user.UserDetail;
-import com.example.airdnb.repository.user.UserRepository;
+import com.example.airdnb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

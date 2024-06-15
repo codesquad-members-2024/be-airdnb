@@ -1,4 +1,4 @@
-package com.example.airdnb.repository.user;
+package com.example.airdnb.repository;
 
 import com.example.airdnb.domain.user.User;
 import java.util.Optional;

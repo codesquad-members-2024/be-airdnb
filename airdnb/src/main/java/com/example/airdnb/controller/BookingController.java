@@ -1,9 +1,9 @@
-package com.example.airdnb.controller.booking;
+package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.booking.Booking;
 import com.example.airdnb.dto.booking.BookingCreateRequest;
 import com.example.airdnb.dto.booking.BookingResponse;
-import com.example.airdnb.service.booking.BookingService;
+import com.example.airdnb.service.BookingService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;

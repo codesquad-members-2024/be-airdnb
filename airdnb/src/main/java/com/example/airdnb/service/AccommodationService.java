@@ -1,12 +1,12 @@
-package com.example.airdnb.service.accommodation;
+package com.example.airdnb.service;
 
 import com.example.airdnb.domain.accommodation.Accommodation;
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.domain.user.User.Role;
 import com.example.airdnb.dto.accommodation.AccommodationCreationRequest;
 import com.example.airdnb.dto.accommodation.AccommodationResponse;
-import com.example.airdnb.repository.accommodation.AccommodationRepository;
-import com.example.airdnb.repository.user.UserRepository;
+import com.example.airdnb.repository.AccommodationRepository;
+import com.example.airdnb.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.airdnb.repository.booking;
+package com.example.airdnb.repository;
 
 
 import com.example.airdnb.domain.booking.Booking;

@@ -1,13 +1,13 @@
-package com.example.airdnb.service.booking;
+package com.example.airdnb.service;
 
 import com.example.airdnb.domain.accommodation.Accommodation;
 import com.example.airdnb.domain.booking.Booking;
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.dto.booking.BookingCreateRequest;
 import com.example.airdnb.dto.booking.BookingResponse;
-import com.example.airdnb.repository.accommodation.AccommodationRepository;
-import com.example.airdnb.repository.booking.BookingRepository;
-import com.example.airdnb.repository.user.UserRepository;
+import com.example.airdnb.repository.AccommodationRepository;
+import com.example.airdnb.repository.BookingRepository;
+import com.example.airdnb.repository.UserRepository;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

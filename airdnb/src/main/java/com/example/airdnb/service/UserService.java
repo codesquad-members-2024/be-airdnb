@@ -1,9 +1,9 @@
-package com.example.airdnb.service.user;
+package com.example.airdnb.service;
 
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.dto.user.UserCreateRequest;
 import com.example.airdnb.dto.user.UserResponse;
-import com.example.airdnb.repository.user.UserRepository;
+import com.example.airdnb.repository.UserRepository;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

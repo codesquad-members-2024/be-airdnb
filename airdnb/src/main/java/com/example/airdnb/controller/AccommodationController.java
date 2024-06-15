@@ -1,9 +1,9 @@
-package com.example.airdnb.controller.accommodation;
+package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.accommodation.Accommodation;
 import com.example.airdnb.dto.accommodation.AccommodationCreationRequest;
 import com.example.airdnb.dto.accommodation.AccommodationResponse;
-import com.example.airdnb.service.accommodation.AccommodationService;
+import com.example.airdnb.service.AccommodationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

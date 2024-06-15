@@ -1,8 +1,8 @@
-package com.example.airdnb.controller.search;
+package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.search.SearchCondition;
 import com.example.airdnb.dto.search.SearchConditionRequest;
-import com.example.airdnb.service.search.SearchService;
+import com.example.airdnb.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

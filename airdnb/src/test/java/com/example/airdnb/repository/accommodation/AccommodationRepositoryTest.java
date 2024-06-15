@@ -7,6 +7,7 @@ import com.example.airdnb.domain.accommodation.Address;
 import com.example.airdnb.domain.accommodation.Image;
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.domain.user.User.Role;
+import com.example.airdnb.repository.AccommodationRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
