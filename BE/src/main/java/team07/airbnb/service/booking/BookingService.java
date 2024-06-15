@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team07.airbnb.controller.ReviewController;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
@@ -165,7 +166,7 @@ public class BookingService {
     public void addReview(Long bookingId, Long writerId, ReviewEntity review) {
         BookingEntity booking = findByBookingId(bookingId);
         if (!booking.getBooker().getId().equals(writerId))
-            throw new UnAuthorizedException(BookingService.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
 
         bookingRepository.save(booking.addReview(review));
     }

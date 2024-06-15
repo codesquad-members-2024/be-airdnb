@@ -27,4 +27,10 @@ public class ReplyEntity {
     private ReviewEntity review;
 
     private String content;
+
+    public ReplyEntity(UserEntity writer, ReviewEntity review, String content) {
+        this.writer = writer;
+        this.review = review;
+        this.content = content;
+    }
 }

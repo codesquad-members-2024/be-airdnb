@@ -58,10 +58,6 @@ public class ReviewController {
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
     public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        if (!bookingService.isUserBookerOf(bookingId, userService.getCompleteUser(user))) {
-            throw new UnAuthorizedException(ReviewController.class, user.id(), "ID : {%d} 유저가 자신의 예약이 아닌 예약에 리뷸를 남기려고함".formatted(user.id()));
-        }
-
         bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingService.findByBookingId(bookingId), request.content(), request.rating()));
     }
 
@@ -82,10 +78,6 @@ public class ReviewController {
     public void updateReview(@PathVariable Long reviewId,
                              @RequestBody @NotBlank String content,
                              TokenUserInfo user) {
-        if (!reviewService.isWriterOf(reviewId, userService.getCompleteUser(user))) {
-            throw new UnAuthorizedException(ReviewController.class, user.id(), "ID : {%d} 유저가 자신의 리뷰가 아닌 리뷰를 수정하려고함".formatted(user.id()));
-        }
-
-        reviewService.updateReviewContent(reviewId, content);
+        reviewService.updateReviewContent(reviewId, content, user.id());
     }
 }
