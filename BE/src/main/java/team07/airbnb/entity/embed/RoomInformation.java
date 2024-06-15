@@ -2,7 +2,9 @@ package team07.airbnb.entity.embed;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Embeddable
 @Getter
 public class RoomInformation {

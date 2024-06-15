@@ -1,5 +1,7 @@
 package team07.airbnb.data.accommodation.dto.request;
 
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Range;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.UserEntity;
@@ -10,12 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record AccommodationCreateRequest(
+        @NotNull
         AccommodationType type,
+        @NotNull
         RoomInformation roomInformation,
-        AccommodationLocation address,
+        @NotNull
+        AccommodationLocationRequest address,
+        @NotNull
         String name,
+        @NotNull
         String description,
+        @NotNull
         List<String> pictures,
+        @NotNull
+        @Range(min = 0)
         int basePricePerDay
 ) {
     public AccommodationEntity toEntity(UserEntity host) {
@@ -23,7 +33,7 @@ public record AccommodationCreateRequest(
                 .host(host)
                 .type(type)
                 .roomInformation(roomInformation)
-                .address(address)
+                .address(address.toLocation())
                 .name(name)
                 .description(description)
                 .pictures(new ArrayList<>())
