@@ -15,10 +15,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import team07.airbnb.common.auth.JwtAuthenticationFilter;
-import team07.airbnb.domain.user.service.JwtAndOAuthUserService;
+import team07.airbnb.common.auth.jwt.JwtAuthenticationFilter;
+import team07.airbnb.service.user.JwtAndOAuthUserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Configuration
@@ -31,10 +33,12 @@ public class SecurityConfig {
     private final JwtOAuthSuccessHandler successHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final String LOCALHOST_REACT = "http://localhost:3000";
-    private final String PROD_REACT = "https://squadbnb.site:3000";
-    private final String PROD_HTTP = "https://squadbnb.site:80";
-    private final String PROD_HTTPS = "https://squadbnb.site:443";
+    private final Set<String> ALLOWURLS = Set.of(
+            "http://localhost:3000", // LOCALHOST_REACT
+            "https://squadbnb.site:3000", // PROD_REACT
+            "https://squadbnb.site:80", // PROD_HTTP
+            "https://squadbnb.site:443" // PROD_HTTPS
+    );
 
     @Bean
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> authorizeRequests() {
@@ -47,11 +51,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                PROD_REACT,
-                PROD_HTTP,
-                PROD_HTTPS,
-                LOCALHOST_REACT
+        config.setAllowedOrigins(new ArrayList<>(
+                ALLOWURLS
         ));
         config.setAllowedMethods(List.of("POST", "GET", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));

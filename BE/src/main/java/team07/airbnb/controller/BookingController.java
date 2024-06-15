@@ -1,31 +1,41 @@
 package team07.airbnb.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
-import team07.airbnb.domain.booking.BookingService;
-import team07.airbnb.domain.booking.dto.BookingInfo;
-import team07.airbnb.domain.booking.dto.request.BookingRequest;
-import team07.airbnb.domain.booking.dto.response.BookingCancelResponse;
-import team07.airbnb.domain.booking.dto.response.BookingDetailResponse;
-import team07.airbnb.domain.booking.dto.response.BookingManageInfoResponse;
-import team07.airbnb.domain.booking.entity.BookingEntity;
-import team07.airbnb.domain.user.dto.TokenUserInfo;
-import team07.airbnb.domain.user.entity.UserEntity;
-import team07.airbnb.domain.user.enums.Role;
-import team07.airbnb.domain.user.service.UserService;
+import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.request.BookingPaymentsRequest;
+import team07.airbnb.data.booking.dto.request.BookingRequest;
+import team07.airbnb.data.booking.dto.response.BookingCancelResponse;
+import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
+import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
+import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
+import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
+import team07.airbnb.data.booking.dto.transfer.DateInfo;
+import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
+import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.UserEntity;
+import team07.airbnb.exception.auth.UnAuthorizedException;
+import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.service.user.UserService;
 
+import java.util.Comparator;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static team07.airbnb.data.user.enums.Role.*;
 
 @Tag(name = "예약")
 @RestController
@@ -37,71 +47,122 @@ public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
 
+    @Tag(name = "User")
+    @Operation(summary = "예약 요금 정보 조회", description = "예약의 요금 정보를 조회합니다.")
     @GetMapping
-    public BookingInfo getBookingInfo(@RequestBody @Valid BookingRequest requestInfo) {
-        return bookingService.getBookingInfo(requestInfo);
+    @ResponseStatus(OK)
+    public PriceInfo getBookingPriceInfo(@RequestBody @Valid BookingRequest requestInfo) {
+        return bookingService.getPriceInfo(BookingInfoForPriceInfo.ofRequest(requestInfo));
     }
 
+    @Tag(name = "User")
+    @Operation(summary = "예약 생성", description = "상품을 예약합니다.")
     @PostMapping
-    @Authenticated(Role.USER)
-    public ResponseEntity<Long> bookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
-        BookingInfo bookingInfo = bookingService.getBookingInfo(request);
-        if (bookingInfo.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        BookingEntity result = bookingService.createBooking(bookingInfo, request, userService.getCompleteUser(user));
-
-        return ResponseEntity.ok(result.getId());
+    @Authenticated(USER)
+    @ResponseStatus(CREATED)
+    public BookingCreateResponse createBookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
+        return bookingService.createBooking(BookingInfoForPriceInfo.ofRequest(request), request.accommodationId(), userService.getCompleteUser(user));
     }
 
+    @Tag(name = "Host")
+    @Operation(summary = "예약 확정", description = "예약 상품의 호스트가 예약을 확정합니다.")
     @PostMapping("/confirm/{bookingId}")
-    @Authenticated(Role.HOST)
-    public ResponseEntity<Long> confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+    @Authenticated(HOST)
+    @ResponseStatus(OK)
+    public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity host = userService.getCompleteUser(user);
-        if (!bookingService.isRequestedHostSameInBooking(bookingId, host)) {
-            throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
+        if (bookingService.isUserHostOf(bookingId, host)) {
+            throw new UnAuthorizedException(BookingController.class, user.id());
         }
 
-        BookingEntity nowBooking = bookingService.findByBookingId(bookingId);
-
-        BookingEntity confirmedBooking = bookingService.confirmBooking(nowBooking, host);
-
-        return ResponseEntity.ok(confirmedBooking.getId());
+        //컨펌한 예약의 아이디 리턴
+        return bookingService.confirmBooking(bookingId, host);
     }
 
+    @Tag(name = "User")
+    @Operation(summary = "예약 취소", description = "예약을 취소합니다.")
     @PostMapping("/cancel/{bookingId}")
-    @Authenticated(Role.USER)
-    public ResponseEntity<BookingCancelResponse> cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+    @Authenticated(USER)
+    @ResponseStatus(OK)
+    public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
         UserEntity booker = userService.getCompleteUser(user);
 
-        if (!bookingService.isRequestedUserSameInBooking(bookingId, booker)) {
-            throw new OAuth2AuthenticationException("해당 예약의 예약자가 아닙니다");
+        if (bookingService.isUserBookerOf(bookingId, booker)) {
+            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 예약자가 아닙니다");
         }
 
-        BookingEntity toCancel = bookingService.findByBookingId(bookingId);
+        //취소 수수료 현재는 전체 결제 금액의 10%
+        Integer cancelFee = bookingService.cancelBooking(bookingId, booker);
 
-        BookingEntity canceledBooking = bookingService.cancelBooking(toCancel, booker);
-
-        long cancelFee = (long) (canceledBooking.getPayment().getTotalPrice() * (0.1));
-
-        return ResponseEntity.ok(
-                BookingCancelResponse.of(canceledBooking.getId(), cancelFee)
-        );
+        return BookingCancelResponse.of(bookingId, cancelFee);
     }
 
+    @Tag(name = "Host")
+    @Operation(summary = "예약 이용 완료", description = "예약을 이용 완료 처리합니다.")
+    @PostMapping("/complete/{bookingId}")
+    @Authenticated(HOST)
+    public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+        UserEntity host = userService.getCompleteUser(user);
+
+        if (bookingService.isUserBookerOf(bookingId, host)) {
+            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 호스트가 아닙니다");
+        }
+
+        // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
+        bookingService.reopenBooking(bookingId);
+    }
+
+    @Tag(name = "User")
+    @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
+    @GetMapping("/my-bookings")
+    @Authenticated(USER)
+    public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user) {
+        return bookingService.findBookingsByUser(userService.getCompleteUser(user));
+    }
+
+    @Operation(summary = "유저 예약 상세 조회", description = "유저가 예약 상세 정보를 조회합니다.")
+    @GetMapping("/my-booking/{bookingId}")
+    @Authenticated(USER)
+    @ResponseStatus(OK)
+    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, TokenUserInfo userInfo) {
+        if (bookingService.isRequestedUserNotMatchInBooking(bookingId, userService.getCompleteUser(userInfo))) {
+            throw new UnAuthorizedException(BookingController.class, userInfo.id());
+        }
+
+        return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+    }
+
+
+    @Tag(name = "Host")
+    @Operation(summary = "내 숙소의 예약 조회", description = "내가 등록한 숙소의 예약을 조회합니다.")
+    @Authenticated(HOST)
     @GetMapping("/management")
-    @Authenticated(Role.HOST)
-    public ResponseEntity<List<BookingManageInfoResponse>> getBookingInfoList(TokenUserInfo host) {
-        return ResponseEntity.ok(bookingService.getBookingInfoListByHostId(userService.getCompleteUser(host)));
+    @ResponseStatus(OK)
+    public List<BookingDetailResponse> getBookingInfosOfHosting(TokenUserInfo host) {
+        return bookingService.getBookingInfoListByHost(userService.getCompleteUser(host));
     }
 
+
+    @Operation(summary = "호스트 예약 상세 조회", description = "호스트가 예약 상세 정보를 조회합니다.")
     @GetMapping("/management/{bookingId}")
-    @Authenticated(Role.HOST)
-    public ResponseEntity<BookingDetailResponse> getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (!bookingService.isRequestedHostSameInBooking(bookingId, userService.getCompleteUser(host))) {
-            throw new OAuth2AuthenticationException("해당 예약의 호스트가 아닙니다");
+    @Authenticated(HOST)
+    @ResponseStatus(OK)
+    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
+        if (bookingService.isUserHostOf(bookingId, userService.getCompleteUser(host))) {
+            throw new UnAuthorizedException(BookingController.class, host.id());
         }
-        return ResponseEntity.ok(BookingDetailResponse.of(bookingService.findByBookingId(bookingId)));
+        return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+    }
+
+    @Operation(summary = "날짜와 지역에 따른 요금정보들 조회", description = "요금 그래프를 위한 선택한 지역, 날짜의 평균 요금들을 정렬된 리스트로 반환합니다.")
+    @GetMapping("/pay-info")
+    @ResponseStatus(OK)
+    public List<Double> getPayInfo(@RequestBody BookingPaymentsRequest bookingPaymentsRequest) {
+        List<Double> result = bookingService.getPricesAccAvailable(
+                                DateInfo.of(bookingPaymentsRequest),
+                                DistanceInfo.of(bookingPaymentsRequest)
+                        );
+        result.sort(Comparator.naturalOrder());
+        return result;
     }
 }

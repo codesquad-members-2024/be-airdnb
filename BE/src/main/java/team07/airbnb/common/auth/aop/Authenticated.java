@@ -1,6 +1,6 @@
 package team07.airbnb.common.auth.aop;
 
-import team07.airbnb.domain.user.enums.Role;
+import team07.airbnb.data.user.enums.Role;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -2,9 +2,9 @@ package team07.airbnb.common.auth;
 
 import lombok.Builder;
 import lombok.Getter;
-import team07.airbnb.domain.user.entity.UserEntity;
-import team07.airbnb.domain.user.enums.RegistrationID;
-import team07.airbnb.domain.user.enums.Role;
+import team07.airbnb.data.user.enums.RegistrationID;
+import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.UserEntity;
 
 import java.util.Map;
 
@@ -65,6 +65,7 @@ public class OAuthAttributes {
                 .registrationId(registrationId)
                 .build();
     }
+
     public UserEntity toEntity() {
         return UserEntity.builder()
                 .name(name)

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import team07.airbnb.common.util.TokenArgumentResolver;
+import team07.airbnb.common.auth.jwt.TokenArgumentResolver;
 
 import java.util.List;
 
