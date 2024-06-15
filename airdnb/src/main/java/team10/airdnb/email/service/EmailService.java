@@ -52,11 +52,11 @@ public class EmailService {
         String authCode = redisUtil.getData(email);
 
         if (authCode == null) {
-            throw new AuthCodeNullException(ErrorCode.AUTH_CODE_NOT_EXISTS);
+            throw new AuthCodeNullException();
         }
 
         if (!authCode.equals(inputAuthCode)) {
-            throw new AuthCodeValidateException(ErrorCode.INVALID_AUTH_CODE);
+            throw new AuthCodeValidateException();
         }
     }
 

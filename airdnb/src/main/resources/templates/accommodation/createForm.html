@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>숙소 등록</title>
+    <link rel="stylesheet" href="/css/accommodation/createForm.css">
+    <link rel="stylesheet" href="/css/setting/top-btn.css">
+</head>
+<body>
+<div class="top-button-container"></div>
+
+<div class="container">
+    <h1>숙소 등록</h1>
+    <form id="accommodationForm">
+        <label for="memberId">숙소 소유주 이메일:</label>
+        <input type="email" id="memberId" name="memberId" required>
+        <span class="error-message" id="memberIdError"></span>
+
+        <label for="name">숙소 이름:</label>
+        <input type="text" id="name" name="name" required>
+        <span class="error-message" id="nameError"></span>
+
+        <label for="maxCapacity">숙소 숙박 최대 인원:</label>
+        <input type="number" id="maxCapacity" name="maxCapacity" min="1" max="16" required>
+        <span class="error-message" id="maxCapacityError"></span>
+
+        <label for="accommodationType">숙소 타입:</label>
+        <select id="accommodationType" name="accommodationType">
+            <option value="">선택 안함</option>
+        </select>
+        <span class="error-message" id="accommodationTypeError"></span>
+
+        <label for="accommodationRoomType">숙소 방 타입:</label>
+        <select id="accommodationRoomType" name="accommodationRoomType">
+            <option value="">선택 안함</option>
+        </select>
+        <span class="error-message" id="accommodationRoomTypeError"></span>
+
+        <label for="accommodationDescription">숙소 설명:</label>
+        <textarea id="accommodationDescription" name="accommodationDescription"></textarea>
+        <span class="error-message" id="accommodationDescriptionError"></span>
+
+        <label for="accommodationImages">숙소 이미지 URL:</label>
+        <input type="text" id="accommodationImages" name="accommodationImages">
+        <span class="error-message" id="accommodationImagesError"></span>
+
+        <label for="bedroomCount">침실 개수:</label>
+        <input type="number" id="bedroomCount" name="bedroomCount" min="0" max="50" required>
+        <span class="error-message" id="bedroomCountError"></span>
+
+        <label for="bathroomCount">화장실 개수:</label>
+        <input type="number" id="bathroomCount" name="bathroomCount" min="1" max="50" required>
+        <span class="error-message" id="bathroomCountError"></span>
+
+        <label for="bedCount">침대 개수:</label>
+        <input type="number" id="bedCount" name="bedCount" min="1" max="50" required>
+        <span class="error-message" id="bedCountError"></span>
+
+        <label for="dayRate">1박당 가격:</label>
+        <input type="number" id="dayRate" name="dayRate" min="10000" max="15000000" required>
+        <span class="error-message" id="dayRateError"></span>
+
+        <label for="cleaningFee">청소비:</label>
+        <input type="number" id="cleaningFee" name="cleaningFee" min="0" max="1000000" required>
+        <span class="error-message" id="cleaningFeeError"></span>
+
+        <label for="amenities">편의시설:</label>
+        <div id="amenities"></div>
+
+        <button class="submit_btn" type="submit">등록</button>
+    </form>
+</div>
+<script src="/js/accommodation/fetchFunctions.js"></script>
+<script src="/js/accommodation/validation.js"></script>
+<script src="/js/accommodation/submitForm.js"></script>
+<script src="/js/accommodation/createForm.js"></script>
+<script src="/js/setting/top-btn.js"></script>
+</body>
+</html>
