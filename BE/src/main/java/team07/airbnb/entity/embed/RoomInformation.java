@@ -1,6 +1,7 @@
 package team07.airbnb.entity.embed;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 

@@ -1,7 +1,8 @@
 package team07.airbnb.data.accommodation.dto.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Range;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -12,15 +13,15 @@ public record AccommodationLocationRequest(
         String address,
 
         @NotNull
-        @Range(min = 10000, max = 99999)
+        @Min(10000) @Max(99999)
         Integer zipCode,
 
         @NotNull
-        @Range(min = -180, max = 180)
+        @Min(-180) @Max(180)
         Double longitude,
 
         @NotNull
-        @Range(min = -90, max = 90)
+        @Min(-90) @Max(90)
         Double latitude
 ) {
 
