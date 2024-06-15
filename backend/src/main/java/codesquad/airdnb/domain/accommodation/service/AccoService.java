@@ -48,6 +48,7 @@ public class AccoService {
         List<Amenity> amenities = amenityRepository.findAllById(request.amenities());
         List<AccoAmen> accoAmens = AccoAmen.of(accommodation, amenities);
         accommodation.addAmenities(accoAmens);
+
         List<AccoImage> accoImages = request.buildAccoImages(accommodation);
         accommodation.addImages(accoImages);
 
@@ -82,7 +83,8 @@ public class AccoService {
         GeometryHelper geometryHelper = new GeometryHelper();
         Point point = geometryHelper.createPoint(longitude, latitude);
         List<Long> ids = accoRepository.findIdsByCoordAndHumanCount(point, guestCount, infantCount);
-       return accoProductRepository.getAccoListFilteredBy(ids, checkInDate, checkOutDate);
+
+        return accoProductRepository.getAccoListFilteredBy(ids, checkInDate, checkOutDate);
     }
 
     // ****************** Scheduled ******************
@@ -94,62 +96,19 @@ public class AccoService {
     // **************** Scheduled_END ****************
 
     @Transactional
-    public void reservation(@Valid AccoReservationRequest request, Long memberId) {
+    public void reservation(AccoReservationRequest request, Long memberId) {
+        AccoProducts accoProducts = new AccoProducts(accoProductRepository.findAllById(request.products()));
+        accoProducts.validate(request);
 
-        List<AccoProduct> accoProducts = accoProductRepository.findAllById(request.products());
-        reservationRequestValidate(request, accoProducts);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 멤버가 존재하지 않습니다."));
 
-        Long finalPrice = accoProducts.stream()
-                .map(AccoProduct::getPrice)
-                .reduce(Long::sum)
-                .orElseThrow(() -> new NoSuchElementException("해당하는 숙소상품이 존재하지 않습니다."));
-
-        Reservation reservation = Reservation.builder()
-                .member(memberRepository.findById(memberId)
-                        .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 멤버가 존재하지 않습니다.")))
-                .adultCount(request.adultCount())
-                .childCount(request.childCount())
-                .infantCount(request.infantCount())
-                .checkInDate(request.startDate())
-                .checkOutDate(request.endDate())
-                .finalPrice(finalPrice)
-                .status(ReservationStatus.PENDING)
-                .build();
-
+        Reservation reservation = request.toReservation(member, accoProducts.getTotalRoomCharge());
         reservationRepositry.save(reservation);
 
-        List<ReservationProduct> reservationProducts = accoProducts.stream()
-                .map(accoProduct -> ReservationProduct.builder()
-                        .reservation(reservation)
-                        .accoProduct(accoProduct)
-                        .build())
-                .toList();
-
+        List<ReservationProduct> reservationProducts = accoProducts.toReservationProducts(reservation);
         reservationProductRepository.saveAll(reservationProducts);
 
-        for (AccoProduct accoProduct : accoProducts) {
-            accoProduct.reserve();
-        }
-    }
-
-    // TODO: 일부 검증 로직(isReserved, reserveDate)을 QueryDSL!! 사용해서 처리하도록 변경해보기
-    private void reservationRequestValidate(AccoReservationRequest request, List<AccoProduct> accoProducts) {
-        // 예약하려는 모든 상품이 존재하는지.
-        if (request.products().size() > accoProducts.size())
-            throw new NoSuchElementException("예약하려는 상품 중 존재하지 않는 상품이 있습니다.");
-
-        for (AccoProduct accoProduct : accoProducts) {
-            // 예약하려는 상품이 이미 예약되어 있는건 아닌 지.
-            if (accoProduct.isReserved())
-                throw new IllegalArgumentException("이미 예약된 상품입니다.");
-            //
-            if (accoProduct.getReserveDate().isBefore(request.startDate()) ||
-                    accoProduct.getReserveDate().isAfter(request.endDate().minusDays(1))) {
-                throw new IllegalArgumentException("예약 범위를 벗어난 날짜의 상품입니다.");
-            }
-            if (accoProduct.getAccommodation().getFloorPlan().getMaxGuestCount() < request.adultCount() + request.childCount() ||
-                    accoProduct.getAccommodation().getFloorPlan().getMaxInfantCount() < request.infantCount())
-                throw new IllegalArgumentException("최대 인원 수를 초과하였습니다.");
-        }
+        accoProducts.updateRoomToBooked();
     }
 }

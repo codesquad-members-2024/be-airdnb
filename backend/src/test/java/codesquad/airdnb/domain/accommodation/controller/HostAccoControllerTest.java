@@ -20,20 +20,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.sql.Time;
+import java.util.List;
+
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-import java.sql.Time;
-import java.util.List;
-
 @WebMvcTest(HostAccoController.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @Import({JacksonConfig.class, GeometryHelper.class})
-class AccoControllerTest {
+class HostAccoControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;

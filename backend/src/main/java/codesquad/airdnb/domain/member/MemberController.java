@@ -1,9 +1,9 @@
 package codesquad.airdnb.domain.member;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class MemberController {
 
