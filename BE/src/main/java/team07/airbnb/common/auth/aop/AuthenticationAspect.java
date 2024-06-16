@@ -43,7 +43,7 @@ public class AuthenticationAspect {
             throw new UnAuthorizedException("사용자 {%d} 가 권한이 없는 서비스에 접근함. 필요권한 -> {%S}, 소유 권한 -> {%s}"
                     .formatted(user.id(), authenticated.value().getKey(), user.stringRole()));
         }
-        
+
         return joinPoint.proceed();
     }
 

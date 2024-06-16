@@ -76,22 +76,15 @@ public class ProductEntity extends BaseEntity {
     }
 
     public ProductEntity close(BookingEntity booking) {
-        if (booking != null && !this.booking.getId().equals(booking.getId())) {
-            // 닫을 상품과 예약 번호가 일치하지 않으면 의도하지 않은 버그임
-            // 다른 로직에서 꼬였을 확률이 높음
-            throw new RuntimeException("닫을 상품과 예약 번호가 일치하지 않습니다");
-        }
+        checkBookingEquality(booking);
+
         this.status = ProductStatus.CLOSE;
 
         return this;
     }
 
     public ProductEntity reopen(BookingEntity booking) {
-        if (!this.booking.getId().equals(booking.getId())) {
-            // 닫을 상품과 예약 번호가 일치하지 않으면 의도하지 않은 버그임
-            // 다른 로직에서 꼬였을 확률이 높음
-            throw new RuntimeException("닫을 상품과 예약 번호가 일치하지 않습니다");
-        }
+        checkBookingEquality(booking);
 
         this.status = ProductStatus.CLOSE;
 
@@ -101,6 +94,16 @@ public class ProductEntity extends BaseEntity {
                 .price(this.price)
                 .status(ProductStatus.OPEN)
                 .build();
+    }
+
+    public boolean isDateInRange(LocalDate start, LocalDate end) {
+        return this.date.isAfter(start) && this.date.isBefore(end.plusDays(1L));
+    }
+
+    private void checkBookingEquality(BookingEntity booking) {
+        if (booking.equals(this.booking)) {
+            throw new RuntimeException("예약 번호가 일치하지 않습니다");
+        }
     }
 
     private boolean canOpen() {

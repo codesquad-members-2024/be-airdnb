@@ -35,7 +35,7 @@ public class PaymentEntity extends BaseEntity {
 
 
     public static PaymentEntity of(PriceInfo priceInfo) {
-        Fee fee = Fee.of(priceInfo);
+        Fee fee = Fee.of(priceInfo.getServiceFee(), priceInfo.getAccommodationFee());
         int totalPrice = priceInfo.getRoughTotalPrice() - priceInfo.getDiscountPrice() + fee.getAccommodationFee() + fee.getServiceFee();
         return new PaymentEntity(
                 null,

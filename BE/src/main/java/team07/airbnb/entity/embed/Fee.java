@@ -15,10 +15,10 @@ public class Fee {
     private int serviceFee;
     private int accommodationFee;
 
-    public static Fee of(PriceInfo priceInfo) {
+    public static Fee of(int serviceFee, int accommodationFee) {
         return new Fee(
-                priceInfo.getServiceFee(),
-                priceInfo.getAccommodationFee()
+                serviceFee,
+                accommodationFee
         );
     }
 }

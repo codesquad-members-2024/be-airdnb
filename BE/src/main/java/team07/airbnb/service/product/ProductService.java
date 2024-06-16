@@ -3,7 +3,6 @@ package team07.airbnb.service.product;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import team07.airbnb.controller.ProductController;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.AccommodationEntity;
@@ -41,10 +40,7 @@ public class ProductService {
     }
 
     public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
-        //예외 처리 로직(PostMan 같은걸로 웹 페이지가 아니라 데이터를 직접 보냈을때)
-        AccommodationEntity accommodation = accommodationService.findById(accommodationId);
-        List<ProductEntity> products = accommodation.getOpenProducts();
-        if (!isAvailablePeopleCount(products, headCount) && !isAvailableInDateRange(products, checkIn, checkOut)) {
+        if (isIllegalRequest(accommodationId, checkIn, checkOut, headCount)) {
             throw new IllegalRequestException(ProductService.class);
         }
 
@@ -60,10 +56,10 @@ public class ProductService {
 
         //예약이 완료된 다음날부터 체크아웃 날짜까지만 상품 재생성
         List<ProductEntity> remainProducts = booking.getProducts().stream()
-                .filter(product -> product.getDate().isAfter(LocalDate.now()) && product.getDate().isBefore(checkOut.plusDays(1L)))
+                .filter(product -> product.isDateInRange(LocalDate.now(), checkOut))
                 .toList();
 
-        remainProducts.stream().forEach(product -> productRepository.save(product.reopen(booking)));
+        remainProducts.forEach(product -> productRepository.save(product.reopen(booking)));
     }
 
     public void closeProduct(Long productId, Long userId) {
@@ -93,6 +89,14 @@ public class ProductService {
             throw new UnAuthorizedException(this.getClass(), userId, "ID : {%d} 호스트가 ID : {%d} 상품을 변경 시도함".formatted(userId, id));
 
         return product;
+    }
+
+    private boolean isIllegalRequest(Long accId, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
+        //예외 처리 로직(PostMan 같은걸로 웹 페이지가 아니라 데이터를 직접 보냈을때)
+        AccommodationEntity accommodation = accommodationService.findById(accId);
+        List<ProductEntity> products = accommodation.getOpenProducts();
+
+        return !isAvailablePeopleCount(products, headCount) && !isAvailableInDateRange(products, checkIn, checkOut);
     }
 
     private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
