@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team10.airdnb.member.controller.request.MemberCreationRequest;
+import team10.airdnb.member.controller.request.MemberLoginRequest;
 import team10.airdnb.member.entity.Member;
 import team10.airdnb.member.exception.MemberIdNotFoundException;
+import team10.airdnb.member.exception.MemberLoginException;
 import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.error.ErrorCode;
 import team10.airdnb.oauth.exception.AuthenticationException;
@@ -34,6 +36,16 @@ public class MemberService {
     public Member registerMember(Member member) {
         validateDuplicateMember(member);
         return memberRepository.save(member);
+    }
+
+    public Member loginMember(MemberLoginRequest request) {
+        Member member = findMemberByMemberId(request.email());
+
+        if (!member.getPassword().equals(request.password())) {
+            throw new MemberLoginException();
+        }
+
+        return member;
     }
 
     private void validateDuplicateMember(Member member) throws BusinessException {
