@@ -52,7 +52,7 @@ public class User {
 
     @Column(nullable = false)
     @CreatedDate
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Builder
     public User(String email, String password, String name, Role role) {
