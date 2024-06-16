@@ -6,22 +6,32 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope("prototype")
 public class Request {
 
     @Autowired
     private ObjectMapper customObjectMapper;
 
-    @Value("${jwt.host}")
-    private String HOST_TOKEN;
+    private String jwtToken;
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+//    private void applyJwtToken() {
+//        if (jwtToken != null) {
+//            RestAssured.given().header("Authorization", "Bearer " + jwtToken);
+//        }
+//    }
 
     public ExtractableResponse<Response> get(String url) {
         return RestAssured.given().log().all()
-//                .auth().oauth2(HOST_TOKEN)
+                .auth().oauth2(jwtToken)
                 .when()
                 .get(url)
                 .then().log().all()
@@ -30,6 +40,7 @@ public class Request {
 
     public ExtractableResponse<Response> post(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
                 .body(customObjectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
@@ -40,6 +51,7 @@ public class Request {
 
     public ExtractableResponse<Response> put(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
                 .body(customObjectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
@@ -50,17 +62,19 @@ public class Request {
 
     public ExtractableResponse<Response> patch(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
-            .body(customObjectMapper.writeValueAsString(params))
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .when()
-            .patch(url)
-            .then()
-            .log().all()
-            .extract();
+                .auth().oauth2(jwtToken)
+                .body(customObjectMapper.writeValueAsString(params))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .patch(url)
+                .then()
+                .log().all()
+                .extract();
     }
 
     public ExtractableResponse<Response> delete(String url) {
         return RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
                 .when()
                 .delete(url)
                 .then().log().all()
