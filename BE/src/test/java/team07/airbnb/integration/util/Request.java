@@ -1,8 +1,11 @@
 package team07.airbnb.integration.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -10,21 +13,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class Request {
 
+    @Autowired
+    private ObjectMapper customObjectMapper;
+
     @Value("${jwt.host}")
     private String HOST_TOKEN;
 
     public ExtractableResponse<Response> get(String url) {
         return RestAssured.given().log().all()
-                .auth().oauth2(HOST_TOKEN)
+//                .auth().oauth2(HOST_TOKEN)
                 .when()
                 .get(url)
                 .then().log().all()
                 .extract();
     }
 
-    public ExtractableResponse<Response> post(Object params, String url) {
+    public ExtractableResponse<Response> post(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
-                .body(params)
+                .body(customObjectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .post(url)
@@ -32,9 +38,9 @@ public class Request {
                 .extract();
     }
 
-    public ExtractableResponse<Response> put(Object params, String url) {
+    public ExtractableResponse<Response> put(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
-                .body(params)
+                .body(customObjectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .put(url)
@@ -42,9 +48,9 @@ public class Request {
                 .extract();
     }
 
-    public ExtractableResponse<Response> patch(Object params, String url){
+    public ExtractableResponse<Response> patch(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
-            .body(params)
+            .body(customObjectMapper.writeValueAsString(params))
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .when()
             .patch(url)
