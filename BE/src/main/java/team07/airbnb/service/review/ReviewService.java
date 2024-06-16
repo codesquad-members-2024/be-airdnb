@@ -3,13 +3,12 @@ package team07.airbnb.service.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.controller.ReviewController;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.exception.not_found.ReviewNotFoundException;
 import team07.airbnb.repository.ReviewRepository;
-import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.service.booking.BookingInquiryService;
 
 @Service
 @RequiredArgsConstructor
@@ -17,12 +16,12 @@ import team07.airbnb.service.booking.BookingService;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final BookingService bookingService;
+    private final BookingInquiryService bookingInquiryService;
 
     public void addReplyTo(long reviewId, String content, UserEntity writer) {
         ReviewEntity review = getById(reviewId);
 
-        if (!bookingService.isUserHostOrBookerOf(review.getBooking().getId(), writer)) {
+        if (!bookingInquiryService.isUserHostOrBookerOf(review.getBooking().getId(), writer)) {
             throw new UnAuthorizedException(this.getClass(), writer.getId(), "ID : {%d} 유저가 권한 없는 댓글 작성 시도".formatted(writer.getId()));
         }
 

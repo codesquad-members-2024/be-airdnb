@@ -2,11 +2,8 @@ package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +16,9 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.data.review.dto.response.ReviewWithReplyResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.ReviewEntity;
-import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.accommodation.AccommodationService;
-import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.service.booking.BookingInquiryService;
 import team07.airbnb.service.review.ReviewService;
 import team07.airbnb.service.user.UserService;
 
@@ -39,7 +34,7 @@ import static team07.airbnb.data.user.enums.Role.*;
 public class ReviewController {
 
     private final AccommodationService accommodationService;
-    private final BookingService bookingService;
+    private final BookingInquiryService bookingInquiryService;
     private final ReviewService reviewService;
     private final UserService userService;
 
@@ -58,7 +53,7 @@ public class ReviewController {
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
     public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        bookingService.addReview(bookingId, user.id(), new ReviewEntity(bookingService.findByBookingId(bookingId), request.content(), request.rating()));
+        bookingInquiryService.addReview(bookingId, user.id(), new ReviewEntity(bookingInquiryService.findByBookingId(bookingId), request.content(), request.rating()));
     }
 
     @Tag(name = "Host")
