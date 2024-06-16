@@ -17,11 +17,12 @@ public class FavoriteService {
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
 
-    public Favorite createFavorite(@RequestBody FavoriteSaveDto favoriteSaveDto) {
+    public Long createFavorite(@RequestBody FavoriteSaveDto favoriteSaveDto) {
 
         User user = userRepository.findById(favoriteSaveDto.getUserId()).get();
         Accommodation accommodation = accommodationRepository.findById(favoriteSaveDto.getAccommodationId()).get();
-        return favoriteRepository.save(favoriteSaveDto.toEntity(user, accommodation));
+        Favorite savedFavorite = favoriteRepository.save(favoriteSaveDto.toEntity(user, accommodation));
+        return savedFavorite.getId();
     }
 
     public void deleteFavorite(Long favoriteId) {

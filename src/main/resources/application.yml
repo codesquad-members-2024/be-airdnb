@@ -2,4 +2,6 @@ spring:
   application:
     name: airdnb
   config:
-    import: db-config.yml
+    import:
+        - db-config.yml
+        - authentication-config.yml

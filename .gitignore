@@ -1,5 +1,6 @@
 ### config ###
 /src/main/resources/db-config.yml
+/src/main/resources/authentication-config.yml
 
 ### build ###
 HELP.md

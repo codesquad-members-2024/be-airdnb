@@ -18,9 +18,9 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<Void> createReview(@RequestBody ReviewSaveDto reviewSaveDto, UriComponentsBuilder uriComponentsBuilder) {
-        Review createdReview = reviewService.createReview(reviewSaveDto);
+        Long reviewId = reviewService.createReview(reviewSaveDto);
         URI location = uriComponentsBuilder.path("/reviews/{id}")
-                .buildAndExpand(createdReview.getId())
+                .buildAndExpand(reviewId)
                 .toUri();
 
         return ResponseEntity

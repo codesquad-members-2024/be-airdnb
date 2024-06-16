@@ -1,8 +1,8 @@
 package team03.airdnb.accommodation;
 
-import java.time.LocalDate;
 import java.util.List;
+import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
 
 public interface AccommodationRepositoryCustom {
-    List<Accommodation> findAccommodationsByFilters(LocalDate checkIn, LocalDate checkOut, Double minPrice, Double maxPrice, Integer capacity);
+    List<Accommodation> findAccommodationsByFilters(AccommodationFilterDto filterDto);
 }

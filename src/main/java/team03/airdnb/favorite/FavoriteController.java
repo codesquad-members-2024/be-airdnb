@@ -21,9 +21,9 @@ public class FavoriteController {
 
     @PostMapping
     public ResponseEntity<Void> createFavorite(@RequestBody FavoriteSaveDto favoriteSaveDto, UriComponentsBuilder uriComponentsBuilder) {
-        Favorite createdFavorite = favoriteService.createFavorite(favoriteSaveDto);
+        Long favoriteId = favoriteService.createFavorite(favoriteSaveDto);
         URI location = uriComponentsBuilder.path("/favorites/{id}")
-                .buildAndExpand(createdFavorite.getId())
+                .buildAndExpand(favoriteId)
                 .toUri();
 
         return ResponseEntity

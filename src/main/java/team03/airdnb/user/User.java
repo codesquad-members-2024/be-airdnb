@@ -1,21 +1,23 @@
 package team03.airdnb.user;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.common.BaseEntity;
 import team03.airdnb.favorite.Favorite;
 import team03.airdnb.reservation.Reservation;
 import team03.airdnb.review.Review;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 public class User extends BaseEntity {
 
@@ -23,6 +25,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String password;
     private String profileImg;
     private String type;
 

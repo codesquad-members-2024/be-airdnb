@@ -1,10 +1,12 @@
 package team03.airdnb.accommodation;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Embeddable
 @Getter
+@AllArgsConstructor
 public class Address {
 
     private String firstAddress; // 광역시/도
@@ -12,11 +14,5 @@ public class Address {
     private String thirdAddress; // 도로명
 
     protected Address() {
-    }
-
-    public Address(String firstAddress, String secondAddress, String thirdAddress) {
-        this.firstAddress = firstAddress;
-        this.secondAddress = secondAddress;
-        this.thirdAddress = thirdAddress;
     }
 }

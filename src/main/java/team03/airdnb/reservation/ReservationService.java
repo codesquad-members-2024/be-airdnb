@@ -16,10 +16,11 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
 
-    public Reservation createReservation(ReservationSaveDto reservationSaveDto) {
+    public Long createReservation(ReservationSaveDto reservationSaveDto) {
         User user = userRepository.findById(reservationSaveDto.getUserId()).get(); // 예외처리 추가할 예정입니다!
         Accommodation accommodation = accommodationRepository.findById(reservationSaveDto.getAccommodationId()).get(); // 예외처리 추가할 예정입니다!
-        return reservationRepository.save(reservationSaveDto.toEntity(user, accommodation));
+        Reservation savedReservation = reservationRepository.save(reservationSaveDto.toEntity(user, accommodation));
+        return savedReservation.getId();
     }
 
     public void deleteReservation(Long reservationId) {

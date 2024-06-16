@@ -17,9 +17,9 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Void> createReservation(@RequestBody ReservationSaveDto reservationSaveDto, UriComponentsBuilder uriComponentsBuilder) {
-        Reservation createdReservation = reservationService.createReservation(reservationSaveDto);
+        Long reservationId = reservationService.createReservation(reservationSaveDto);
         URI location = uriComponentsBuilder.path("/reservations/{id}")
-                .buildAndExpand(createdReservation.getId())
+                .buildAndExpand(reservationId)
                 .toUri();
 
         return ResponseEntity

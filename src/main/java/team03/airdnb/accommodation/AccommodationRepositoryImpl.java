@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
 
 @Repository
 public class AccommodationRepositoryImpl implements AccommodationRepositoryCustom {
@@ -23,10 +24,14 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
     }
 
     @Override
-    public List<Accommodation> findAccommodationsByFilters(LocalDate checkIn, LocalDate checkOut, Double minPrice,
-                                                           Double maxPrice, Integer capacity) {
-        // BooleanBuilder 초기화
+    public List<Accommodation> findAccommodationsByFilters(AccommodationFilterDto filterDto) {
         BooleanBuilder builder = new BooleanBuilder();
+
+        LocalDate checkIn = filterDto.getCheckIn();
+        LocalDate checkOut = filterDto.getCheckOut();
+        Double minPrice = filterDto.getMinPrice();
+        Double maxPrice = filterDto.getMaxPrice();
+        Integer capacity = filterDto.getCapacity();
 
         if (checkIn != null && checkOut != null) {
             // 서브쿼리 조건 작성
