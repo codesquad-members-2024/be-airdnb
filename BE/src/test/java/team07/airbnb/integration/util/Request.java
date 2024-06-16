@@ -23,12 +23,6 @@ public class Request {
         this.jwtToken = jwtToken;
     }
 
-//    private void applyJwtToken() {
-//        if (jwtToken != null) {
-//            RestAssured.given().header("Authorization", "Bearer " + jwtToken);
-//        }
-//    }
-
     public ExtractableResponse<Response> get(String url) {
         return RestAssured.given().log().all()
                 .auth().oauth2(jwtToken)
@@ -38,7 +32,7 @@ public class Request {
                 .extract();
     }
 
-    public ExtractableResponse<Response> post(Object params, String url) throws JsonProcessingException {
+    public <T> T post(Object params, String url, Class<T> responseType) throws JsonProcessingException {
         return RestAssured.given().log().all()
                 .auth().oauth2(jwtToken)
                 .body(customObjectMapper.writeValueAsString(params))
@@ -46,7 +40,8 @@ public class Request {
                 .when()
                 .post(url)
                 .then().log().all()
-                .extract();
+                .extract()
+                .as(responseType);
     }
 
     public ExtractableResponse<Response> put(Object params, String url) throws JsonProcessingException {
