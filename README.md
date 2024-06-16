@@ -9,4 +9,4 @@
 
 ## ERD
 
-![image](https://github.com/codesquad-masters2024-team04/issue-tracker/assets/126778700/ee4e4b19-cae9-4d2d-b660-4d3c67d97b6b)
+![image](https://github.com/horanga/iTshirt/assets/148988364/70190f72-cc86-4ebc-bfeb-bc5e1059a3b4)
