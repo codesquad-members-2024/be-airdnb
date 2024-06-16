@@ -62,7 +62,7 @@ public class ReviewController {
     @PostMapping("/{reviewId}/reply")
     @ResponseStatus(OK)
     public void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
-        reviewService.addReplyTo(reviewId, content, userService.getCompleteUser(user));
+        reviewService.addReplyTo(reviewId, content, user);
     }
 
     @Tag(name = "User")

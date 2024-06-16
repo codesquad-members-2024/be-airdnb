@@ -22,9 +22,11 @@ import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.data.booking.dto.transfer.DateInfo;
 import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
+import team07.airbnb.data.booking.enums.CheckAuthType;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
+import team07.airbnb.service.booking.BookingAuthService;
 import team07.airbnb.service.booking.BookingManageService;
 import team07.airbnb.service.booking.BookingInquiryService;
 import team07.airbnb.service.booking.BookingPriceService;
@@ -48,6 +50,7 @@ public class BookingController {
     private final UserService userService;
     private final BookingPriceService bookingPriceService;
     private final BookingManageService bookingManageService;
+    private final BookingAuthService bookingAuthService;
 
     @Tag(name = "User")
     @Operation(summary = "예약 요금 정보 조회", description = "예약의 요금 정보를 조회합니다.")
@@ -72,10 +75,7 @@ public class BookingController {
     @Authenticated(HOST)
     @ResponseStatus(OK)
     public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = userService.getCompleteUser(user);
-        if (bookingInquiryService.isUserHostOf(bookingId, host)) {
-            throw new UnAuthorizedException(BookingController.class, user.id());
-        }
+        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         //컨펌한 예약의 아이디 리턴
         return bookingManageService.confirmBooking(bookingId, host);
@@ -87,11 +87,7 @@ public class BookingController {
     @Authenticated(USER)
     @ResponseStatus(OK)
     public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity booker = userService.getCompleteUser(user);
-
-        if (bookingInquiryService.isUserBookerOf(bookingId, booker)) {
-            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 예약자가 아닙니다");
-        }
+        UserEntity booker = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         //취소 수수료 현재는 전체 결제 금액의 10%
         Integer cancelFee = bookingManageService.cancelBooking(bookingId, booker);
@@ -104,11 +100,7 @@ public class BookingController {
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
     public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = userService.getCompleteUser(user);
-
-        if (bookingInquiryService.isUserBookerOf(bookingId, host)) {
-            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 호스트가 아닙니다");
-        }
+        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
         bookingManageService.reopenBooking(bookingId);
@@ -127,9 +119,7 @@ public class BookingController {
     @Authenticated(USER)
     @ResponseStatus(OK)
     public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, TokenUserInfo userInfo) {
-        if (!bookingInquiryService.isUserBookerOf(bookingId, userService.getCompleteUser(userInfo))) {
-            throw new UnAuthorizedException(BookingController.class, userInfo.id());
-        }
+        bookingAuthService.currentUserIsSameWith(bookingId, userInfo, CheckAuthType.USER);
 
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }
@@ -150,9 +140,7 @@ public class BookingController {
     @Authenticated(HOST)
     @ResponseStatus(OK)
     public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (bookingInquiryService.isUserHostOf(bookingId, userService.getCompleteUser(host))) {
-            throw new UnAuthorizedException(BookingController.class, host.id());
-        }
+        bookingAuthService.currentUserIsSameWith(bookingId, host, CheckAuthType.HOST);
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }
 

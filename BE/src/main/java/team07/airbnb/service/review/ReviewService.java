@@ -3,11 +3,14 @@ package team07.airbnb.service.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team07.airbnb.data.booking.enums.CheckAuthType;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.exception.not_found.ReviewNotFoundException;
 import team07.airbnb.repository.ReviewRepository;
+import team07.airbnb.service.booking.BookingAuthService;
 import team07.airbnb.service.booking.BookingInquiryService;
 
 @Service
@@ -16,14 +19,12 @@ import team07.airbnb.service.booking.BookingInquiryService;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final BookingInquiryService bookingInquiryService;
+    private final BookingAuthService bookingAuthService;
 
-    public void addReplyTo(long reviewId, String content, UserEntity writer) {
+    public void addReplyTo(long reviewId, String content, TokenUserInfo writerInfo) {
         ReviewEntity review = getById(reviewId);
 
-        if (!bookingInquiryService.isUserHostOrBookerOf(review.getBooking().getId(), writer)) {
-            throw new UnAuthorizedException(this.getClass(), writer.getId(), "ID : {%d} 유저가 권한 없는 댓글 작성 시도".formatted(writer.getId()));
-        }
+        UserEntity writer = bookingAuthService.currentUserIsSameWith(review.getBooking().getId(), writerInfo, CheckAuthType.ALL);
 
         review.addReply(content, writer);
     }
