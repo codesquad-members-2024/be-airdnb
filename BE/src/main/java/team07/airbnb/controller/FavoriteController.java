@@ -13,7 +13,7 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.product.ProductStatus;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.dto.request.FavoritesResponse;
+import team07.airbnb.data.user.dto.response.FavoritesResponse;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.LikeEntity;
 import team07.airbnb.entity.ProductEntity;
