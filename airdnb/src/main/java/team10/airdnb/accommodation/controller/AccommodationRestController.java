@@ -53,12 +53,4 @@ public class AccommodationRestController {
         return ResponseEntity.ok(response);
     }
 
-//    @PatchMapping("/api/accommodation/{accommodationId}")
-//    public ResponseEntity<?> updateAccommodation(@PathVariable Long accommodationId, @RequestBody AccommodationUpdateRequest request) {
-//        Accommodation updatedAccommodation = accommodationService.updateAccommodation(accommodationId, request);
-//
-//        log.info("숙소 수정 완료 : # {} : 저장된 이름 : {}", updatedAccommodation.getId(), updatedAccommodation.getName());
-//
-//        return ResponseEntity.ok(updatedAccommodation);
-//    }
 }
