@@ -1,6 +1,5 @@
 package com.airdnb.chat.service;
 
-import com.airdnb.chat.dto.MessageCreation;
 import com.airdnb.chat.dto.MessageResponse;
 import com.airdnb.chat.entity.ChatMessage;
 import com.airdnb.chat.entity.ChatRoom;

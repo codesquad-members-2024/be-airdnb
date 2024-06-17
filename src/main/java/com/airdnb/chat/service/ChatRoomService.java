@@ -1,7 +1,6 @@
 package com.airdnb.chat.service;
 
-import com.airdnb.chat.dto.ChatRoomCreation;
-import com.airdnb.chat.dto.ChatRoomResponse;
+import com.airdnb.chat.dto.ChatRoomRecipient;
 import com.airdnb.chat.entity.ChatMessage;
 import com.airdnb.chat.entity.ChatRoom;
 import com.airdnb.chat.entity.MemberChatRoom;
@@ -46,13 +45,13 @@ public class ChatRoomService {
         chatRoom.softDelete();
     }
 
-    public List<ChatRoomResponse> getChatRooms() {
+    public List<ChatRoomRecipient> getChatRooms() {
 
         Member member = memberService.findMemberById(memberService.getCurrentMemberId());
 
-        List<ChatRoomResponse> chatRooms = member.getMemberChatRooms().stream()
+        List<ChatRoomRecipient> chatRooms = member.getMemberChatRooms().stream()
             .map(MemberChatRoom::getChatRoom)
-            .map(chatRoom -> ChatRoomResponse.from(chatRoom, getRecipientName(chatRoom, member)))
+            .map(chatRoom -> ChatRoomRecipient.from(chatRoom, chatRoom.getRecipientName(member)))
             .toList();
 
         if (chatRooms.isEmpty()) {
@@ -67,11 +66,5 @@ public class ChatRoomService {
 
     }
 
-    private String getRecipientName(ChatRoom chatRoom, Member member) {
-        if (chatRoom.getHost().getId().equals(member.getId())) {
-            return chatRoom.getGuest().getName();
-        }
-        return chatRoom.getHost().getName();
-    }
 
 }

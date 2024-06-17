@@ -1,5 +1,6 @@
-package com.airdnb.chat.dto;
+package com.airdnb.chat.service;
 
+import com.airdnb.chat.dto.ChatRoomCreationRequest;
 import lombok.Builder;
 import lombok.Value;
 

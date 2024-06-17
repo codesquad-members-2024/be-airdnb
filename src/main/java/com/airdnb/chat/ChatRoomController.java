@@ -1,6 +1,5 @@
 package com.airdnb.chat;
 
-import com.airdnb.chat.dto.ChatRoomCreation;
 import com.airdnb.chat.dto.ChatRoomCreationRequest;
 import com.airdnb.chat.dto.ChatRoomResponse;
 import com.airdnb.chat.dto.MessageResponse;
@@ -30,7 +29,7 @@ public class ChatRoomController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createChatRoom(@Valid @RequestBody ChatRoomCreationRequest chatRoomCreationRequest) {
-        Long roomId = chatRoomService.createChatRoom(ChatRoomCreation.from(chatRoomCreationRequest));
+        Long roomId = chatRoomService.createChatRoom(chatRoomCreationRequest.toChatRoomCreation());
         URI location = UriMaker.makeUri(roomId);
         return ResponseEntity.created(location).body(ApiResponse.success(null));
 
@@ -38,7 +37,7 @@ public class ChatRoomController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getChatRooms() {
-        List<ChatRoomResponse> chatRooms = chatRoomService.getChatRooms();
+        List<ChatRoomResponse> chatRooms = chatRoomService.getChatRooms().stream().map(ChatRoomResponse::from).toList();
         return ResponseEntity.ok(ApiResponse.success(chatRooms));
     }
 
