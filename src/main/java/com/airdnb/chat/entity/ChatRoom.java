@@ -56,4 +56,11 @@ public class ChatRoom {
     public void softDelete() {
         this.status = ChatStatus.INACTIVE;
     }
+
+    public String getRecipientName(Member member) {
+        if (getHost().getId().equals(member.getId())) {
+            return getGuest().getName();
+        }
+        return getHost().getName();
+    }
 }

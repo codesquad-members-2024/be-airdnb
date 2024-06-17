@@ -3,6 +3,7 @@ package com.airdnb.chat.service;
 import com.airdnb.chat.dto.ChatRoomRecipient;
 import com.airdnb.chat.entity.ChatMessage;
 import com.airdnb.chat.entity.ChatRoom;
+import com.airdnb.chat.entity.MemberChatRoom;
 import com.airdnb.chat.repository.ChatRoomRepository;
 import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.MemberService;
@@ -49,8 +50,8 @@ public class ChatRoomService {
         Member member = memberService.findMemberById(memberService.getCurrentMemberId());
 
         List<ChatRoomRecipient> chatRooms = member.getMemberChatRooms().stream()
-            .map(memberChatRoom -> memberChatRoom.getChatRoom())
-            .map(chatRoom -> ChatRoomRecipient.from(chatRoom, getRecipientName(chatRoom, member)))
+            .map(MemberChatRoom::getChatRoom)
+            .map(chatRoom -> ChatRoomRecipient.from(chatRoom, chatRoom.getRecipientName(member)))
             .toList();
 
         if (chatRooms.isEmpty()) {
@@ -65,11 +66,5 @@ public class ChatRoomService {
 
     }
 
-    private String getRecipientName(ChatRoom chatRoom, Member member) {
-        if (chatRoom.getHost().getId().equals(member.getId())) {
-            return chatRoom.getGuest().getName();
-        }
-        return chatRoom.getHost().getName();
-    }
 
 }
