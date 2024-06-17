@@ -29,12 +29,12 @@ public class CommentShowResponse {
   @Getter
   static class UserShow {
 
-    private String id;
+    private Long id;
     private String username;
 
     public UserShow(User user) {
-      this.id = user.id;
-      this.username = user.username;
+      this.id = user.getId();
+      this.username = user.getUsername();
     }
   }
 }
