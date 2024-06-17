@@ -1,9 +1,9 @@
 package com.airdnb.chat;
 
-import com.airdnb.chat.dto.MessageCreation;
 import com.airdnb.chat.entity.MessageType;
 import com.airdnb.chat.service.ChatRoomService;
 import com.airdnb.chat.service.ChatService;
+import com.airdnb.chat.service.MessageCreation;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

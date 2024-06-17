@@ -1,6 +1,7 @@
 package com.airdnb.chat.dto;
 
 import com.airdnb.chat.entity.MessageType;
+import com.airdnb.chat.service.MessageCreation;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;

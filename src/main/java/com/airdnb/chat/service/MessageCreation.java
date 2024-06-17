@@ -1,4 +1,4 @@
-package com.airdnb.chat.dto;
+package com.airdnb.chat.service;
 
 import com.airdnb.chat.entity.MessageType;
 import lombok.Builder;
