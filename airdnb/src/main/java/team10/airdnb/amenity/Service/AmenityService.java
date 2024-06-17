@@ -1,5 +1,6 @@
 package team10.airdnb.amenity.Service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -8,18 +9,13 @@ import team10.airdnb.amenity.entity.Amenity;
 import team10.airdnb.amenity.exception.AmenityIdNotFoundException;
 import team10.airdnb.amenity.exception.AmenityNameDuplicateException;
 import team10.airdnb.amenity.repository.AmenityRepository;
-import team10.airdnb.error.ErrorCode;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AmenityService {
     private final AmenityRepository amenityRepository;
-
-    @Autowired
-    public AmenityService(AmenityRepository amenityRepository) {
-        this.amenityRepository = amenityRepository;
-    }
 
     public Amenity saveAmenity(AmenityRequest request) {
         validateDuplicateAmenity(request.name());

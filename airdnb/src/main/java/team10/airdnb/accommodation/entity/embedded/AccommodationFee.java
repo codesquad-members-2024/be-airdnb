@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -15,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class AccommodationFee {
 
     @Column(name = "day_rate", nullable = false)
-    private Integer dayRate;
+    private BigDecimal dayRate;
 
     @Column(name = "cleaning_fee", nullable = false)
-    private Integer cleaningFee;
+    private BigDecimal cleaningFee;
 }

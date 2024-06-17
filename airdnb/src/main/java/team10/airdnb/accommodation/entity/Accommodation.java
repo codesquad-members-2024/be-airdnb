@@ -32,7 +32,7 @@ public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "member_id", nullable = false)
     private String memberId;
@@ -41,7 +41,7 @@ public class Accommodation {
     private String name;
 
     @Column(name = "max_capacity", nullable = false)
-    private long maxCapacity;
+    private Integer maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "accommodation_type", nullable = true)
