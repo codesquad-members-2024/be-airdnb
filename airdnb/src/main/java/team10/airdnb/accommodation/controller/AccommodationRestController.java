@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
 import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
+import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.service.AccommodationService;
 
@@ -42,11 +43,14 @@ public class AccommodationRestController {
     @PostMapping("/api/accommodation")
     public ResponseEntity<?> createAccommodation(@RequestBody @Valid AccommodationCreateRequest request) {
 
-        Accommodation savedAccommodation = accommodationService.createAccommodation(request);
+        AccommodationCreateResponse response = accommodationService.createAccommodation(request);
 
-        log.info("숙소 생성 완료 : # {} : 저장된 이름 : {}", savedAccommodation.getId(), savedAccommodation.getName());
+        log.info("숙소 생성 완료 : # {} : 저장된 이름 : {}, 저장된 편의시설 : {}",
+                response.accommodation().getId(),
+                response.accommodation().getName(),
+                response.amenities().amenityNames().toString());
 
-        return ResponseEntity.ok(savedAccommodation);
+        return ResponseEntity.ok(response);
     }
 
 //    @PatchMapping("/api/accommodation/{accommodationId}")
