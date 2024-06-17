@@ -38,7 +38,7 @@ public class ChatRoomController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getChatRooms() {
-        List<ChatRoomResponse> chatRooms = chatRoomService.getChatRooms();
+        List<ChatRoomResponse> chatRooms = chatRoomService.getChatRooms().stream().map(ChatRoomResponse::from).toList();
         return ResponseEntity.ok(ApiResponse.success(chatRooms));
     }
 
