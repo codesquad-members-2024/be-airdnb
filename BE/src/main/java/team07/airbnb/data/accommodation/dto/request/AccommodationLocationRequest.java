@@ -29,11 +29,11 @@ public record AccommodationLocationRequest(
         return new AccommodationLocation(
                 this.address,
                 this.zipCode,
-                getPoint()
+                point()
         );
     }
 
-    public Point getPoint() {
+    public Point point() {
         Point pointType = new GeometryFactory().createPoint(new Coordinate(longitude, latitude));
         pointType.setSRID(4326);
 

@@ -26,8 +26,9 @@ public class AuthHelper {
     private EntityManager entityManager;
 
     public String login(Role role) throws JsonProcessingException {
-        UserEntity dummyUser = new UserEntity(null, "", "testUser", "test@test.com", role, "regTest", new ArrayList<>());
+        UserEntity dummyUser = new UserEntity(null, "", role.getTitle(), "test@test.com", role, "regTest", new ArrayList<>());
         entityManager.persist(dummyUser);
+        entityManager.flush();
 
         TokenUserInfo dummyTUI = TokenUserInfo.of(dummyUser);
         JwtUserDetails dummyDetails = new JwtUserDetails(dummyTUI, null);

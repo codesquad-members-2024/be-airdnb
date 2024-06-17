@@ -24,6 +24,7 @@ import team07.airbnb.entity.embed.RoomInformation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ACCOMMODATION")
@@ -62,11 +63,12 @@ public class AccommodationEntity extends BaseEntity {
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductEntity> products = new ArrayList<>();
 
-    @Transient
     public List<ReviewEntity> reviews() {
         return products.stream()
                 .map(ProductEntity::getBooking)
+                .filter(Objects::nonNull)
                 .map(BookingEntity::getReview)
+                .filter(Objects::nonNull)
                 .toList();
     }
 

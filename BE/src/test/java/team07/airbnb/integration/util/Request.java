@@ -35,18 +35,41 @@ public class Request {
                 .extract();
     }
 
-    public <T> T post(Object params, String url, Class<T> responseType) throws JsonProcessingException {
-        return RestAssured
-                .given()
-                    .auth().oauth2(jwtToken)
-//                    .header("Authorization", "Bearer " + jwtToken)
-                    .body(customObjectMapper.writeValueAsString(params))
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .log().all()
+    public <T> T get(String url, Class<T> responseType) throws JsonProcessingException {
+        String responseJson = RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
+                .when()
+                .get(url)
+                .then().log().all()
+                .extract()
+                .asString();
+
+        return customObjectMapper.readValue(responseJson, responseType);
+    }
+
+    public ExtractableResponse<Response> post(Object params, String url) throws JsonProcessingException {
+        return RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
+                .body(customObjectMapper.writeValueAsString(params))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                     .post(url)
                 .then().log().all()
-                .extract().as(responseType);
+                .extract();
+    }
+
+    public <T> T post(Object params, String url, Class<T> responseType) throws JsonProcessingException {
+        String responseJson = RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
+                .body(customObjectMapper.writeValueAsString(params))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .post(url)
+                .then().log().all()
+                .extract()
+                .asString();
+
+        return customObjectMapper.readValue(responseJson, responseType);
     }
 
     public ExtractableResponse<Response> put(Object params, String url) throws JsonProcessingException {

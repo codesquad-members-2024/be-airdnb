@@ -6,9 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +19,6 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.enums.Role;
-import team07.airbnb.entity.AccommodationEntity;
-import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.product.ProductService;
 import team07.airbnb.service.user.UserService;
@@ -31,8 +26,9 @@ import team07.airbnb.service.user.UserService;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
-import static team07.airbnb.data.user.enums.Role.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
+import static team07.airbnb.data.user.enums.Role.HOST;
 
 @Tag(name = "상품")
 @RequestMapping("/products")
@@ -68,10 +64,7 @@ public class ProductController {
     @PostMapping()
     @ResponseStatus(CREATED)
     public void createProduct(@RequestBody ProductCreateRequest request) {
-        AccommodationEntity accommodation = accommodationService.findById(request.accommodationId());
-        int price = request.price() == null ? accommodation.getBasePricePerDay() : request.price();
-
-        accommodation.addProduct(request.date(), price);
+        productService.createProduct(request.accommodationId(), request.date(), request.price());
     }
 
     @Tag(name = "Host")

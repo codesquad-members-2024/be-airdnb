@@ -123,4 +123,10 @@ public class ProductService {
 
         return dateSet.isEmpty();
     }
+
+    public void createProduct(long accommodationId, LocalDate date, Integer requestPrice) {
+        AccommodationEntity accommodation = accommodationService.findById(accommodationId);
+        int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
+        accommodation.addProduct(date, price);
+    }
 }
