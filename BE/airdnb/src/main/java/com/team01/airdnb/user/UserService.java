@@ -16,14 +16,14 @@ public class UserService {
 
   }
 
-  public User FindUserById(String userId){
+  public User FindUserById(Long userId){
     return userRepository.findById(userId)
         .orElseThrow(() -> new NoSuchElementException("해당하는 유저가 존재하지 않습니다"));
   }
 
   public UserHostResponse getHostResponse(User user){
     return UserHostResponse.builder()
-        .username(user.username)
+        .username(user.getUsername())
         .score(commentRepository.findAverageScoreByUser(user))
         .build();
   }
