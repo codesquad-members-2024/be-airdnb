@@ -29,7 +29,7 @@ public class FavoriteTest {
     @Autowired
     Request hostRequest;
     @Autowired
-    Request guestRequest;
+    Request userRequest;
     @Autowired
     FixtureMonkey monkey;
     @Autowired
@@ -55,10 +55,10 @@ public class FavoriteTest {
 
         ProductCreateRequest pro = new ProductCreateRequest(created.id() , LocalDate.now(), 1000);
         hostRequest.post(pro, "/products");
-        guestRequest.post(null, "/favorite/" + 1);
+        userRequest.post(null, "/favorite/" + 1);
 
         // when
-        FavoritesResponse response = guestRequest.get("favorite/my", FavoritesResponse.class);
+        FavoritesResponse response = userRequest.get("favorite/my", FavoritesResponse.class);
 
         //then
         assertThat(response.available()).hasSize(1);

@@ -47,6 +47,21 @@ public class Request {
         return customObjectMapper.readValue(responseJson, responseType);
     }
 
+    public <T> T get(Object params, String url, Class<T> responseType) throws JsonProcessingException {
+        String responseJson = RestAssured.given().log().all()
+                .auth().oauth2(jwtToken)
+                .body(customObjectMapper.writeValueAsString(params))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get(url)
+                .then().log().all()
+                .extract()
+                .asString();
+
+        return customObjectMapper.readValue(responseJson, responseType);
+    }
+
+
     public ExtractableResponse<Response> post(Object params, String url) throws JsonProcessingException {
         return RestAssured.given().log().all()
                 .auth().oauth2(jwtToken)

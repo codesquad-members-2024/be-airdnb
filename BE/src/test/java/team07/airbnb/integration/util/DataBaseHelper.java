@@ -39,7 +39,6 @@ public class DataBaseHelper {
         names.add("USERS"); // 유저 테이블은 초기화 제외
         names.add("DISCOUNT_POLICY");
         truncate(names);
-        entityManager.close();
     }
 
     public void put(List<Object> dummies) {
@@ -48,8 +47,6 @@ public class DataBaseHelper {
             if (entityManager.contains(dummy)) entityManager.merge(dummy);
             else entityManager.persist(dummy);
         }
-
-        entityManager.close();
     }
 
     private void truncate(Set<String> withOut) {

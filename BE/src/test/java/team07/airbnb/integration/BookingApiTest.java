@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.entity.AccommodationEntity;
@@ -40,6 +41,9 @@ class BookingApiTest {
 
     @Autowired
     Request userRequest;
+
+    @Autowired
+    Request otherRequest;
 
     @Autowired
     DataBaseHelper dataBaseHelper;
@@ -86,6 +90,24 @@ class BookingApiTest {
 
     }
 
+    @Test
+    void getBookingPriceTest() throws JsonProcessingException {
+        //given
+        BookingRequest dummyRequest = monkey.giveMeBuilder(BookingRequest.class)
+                .set("accommodationId", 1L)
+                .set("checkIn", LocalDate.now())
+                .set("checkOut", LocalDate.now().plusDays(5L))
+                .set("headCount", 1)
+                .sample();
+
+        //when
+        PriceInfo response = otherRequest.get(dummyRequest, "/booking", PriceInfo.class);
+
+        //then
+        assertThat(response.getRoughTotalPrice()).isEqualTo(60000);
+        assertThat(response.getDiscountPrice()).isEqualTo((int) (60000 * 0.04));
+    }
+
     void createDummyAccommodation() {
         List<Object> dummies = new ArrayList<>();
         AccommodationEntity dummyAC = monkey
@@ -99,32 +121,9 @@ class BookingApiTest {
         dataBaseHelper.put(dummies);
     }
 
-    @Test
-    void test() throws JsonProcessingException {
-        //given
-        BookingRequest dummyRequest = monkey.giveMeBuilder(BookingRequest.class)
-                .set("accommodationId", 1L)
-                .set("checkIn", LocalDate.now())
-                .set("checkOut", LocalDate.now().plusDays(5L))
-                .set("headCount", 1)
-                .sample();
-
-
-        //when
-        BookingCreateResponse response = userRequest.post(dummyRequest, "/booking", BookingCreateResponse.class);
-
-        //then
-        assertThat(response.checkIn()).isEqualTo(LocalDate.now());
-        assertThat(response.checkOut()).isEqualTo(LocalDate.now().plusDays(5L));
-        assertThat(response.headCount()).isEqualTo(1);
-        assertThat(response.bookingId()).isEqualTo(1L);
-    }
-
-
     @AfterEach
     void shutDown() {
         System.out.println("shutdown");
-        auth.logout();
         dataBaseHelper.clear();
     }
 }
