@@ -1,6 +1,5 @@
 package com.airdnb.chat;
 
-import com.airdnb.chat.dto.MessageCreation;
 import com.airdnb.chat.dto.MessageCreationRequest;
 import com.airdnb.chat.dto.MessageResponse;
 import com.airdnb.chat.service.ChatService;
@@ -35,7 +34,7 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void sendMessage(@Payload MessageCreationRequest messageRequest) {
-        MessageResponse messageResponse = chatService.createChat(MessageCreation.from(messageRequest));
+        MessageResponse messageResponse = chatService.createChat(messageRequest.toMessageCreation());
         template.convertAndSend("/sub/chat/room/" + messageRequest.getRoomId(), messageResponse);
     }
 }

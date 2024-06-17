@@ -13,13 +13,5 @@ public class MessageCreation {
     Long roomId;
     MessageType messageType;
 
-    public static MessageCreation from(MessageCreationRequest messageCreationRequest) {
-        return MessageCreation.builder()
-            .memberId(messageCreationRequest.getMemberId())
-            .content(messageCreationRequest.getContent())
-            .roomId(messageCreationRequest.getRoomId())
-            .messageType(messageCreationRequest.getMessageType())
-            .build();
-    }
 
 }
