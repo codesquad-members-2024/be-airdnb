@@ -3,7 +3,7 @@ package team10.airdnb.reservation.dto;
 import team10.airdnb.accommodation.entity.Accommodation;
 
 public record AccommodationInformationDto(
-        long accommodationId,
+        Long accommodationId,
         String accommodationName
 ) {
     public static AccommodationInformationDto from(Accommodation accommodation) {

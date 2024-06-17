@@ -8,10 +8,10 @@ import team10.airdnb.accommodation.entity.Accommodation;
 
 public record ReservationCreateRequest(
         String memberId,
-        long accommodationId,
+        Long accommodationId,
         LocalDate checkInDate,
         LocalDate checkOutDate,
-        long capacity
+        Integer capacity
 ) {
     public Reservation toEntity(Member member, Accommodation accommodation) {
         return Reservation.builder()

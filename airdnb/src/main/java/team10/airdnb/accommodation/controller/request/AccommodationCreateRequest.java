@@ -12,6 +12,7 @@ import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record AccommodationCreateRequest(
@@ -43,10 +44,10 @@ public record AccommodationCreateRequest(
         int bedCount,
 
         @Min(10000) @Max(15000000)
-        int dayRate,
+        BigDecimal dayRate,
 
         @Min(0) @Max(1000000)
-        int cleaningFee,
+        BigDecimal cleaningFee,
 
         @Nullable
         List<Long> amenityIds
