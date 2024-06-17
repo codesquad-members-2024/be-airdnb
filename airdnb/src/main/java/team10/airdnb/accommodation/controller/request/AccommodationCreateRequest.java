@@ -1,6 +1,7 @@
 package team10.airdnb.accommodation.controller.request;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,6 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
+import team10.airdnb.accommodation.entity.embedded.Address;
+import team10.airdnb.accommodation.entity.embedded.Coordinate;
 import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
@@ -24,7 +27,7 @@ public record AccommodationCreateRequest(
         String name,
 
         @Min(1) @Max(16)
-        int maxCapacity,
+        Long maxCapacity,
 
         Long accommodationType,
 
@@ -49,6 +52,20 @@ public record AccommodationCreateRequest(
         @Min(0) @Max(1000000)
         BigDecimal cleaningFee,
 
+        String city,
+
+        String district,
+
+        String neighborhood,
+
+        String streetName,
+
+        String detailedAddress,
+
+        Double latitude,
+
+        Double longitude,
+
         @Nullable
         List<Long> amenityIds
 ) {
@@ -69,6 +86,17 @@ public record AccommodationCreateRequest(
                 .accommodationFee(AccommodationFee.builder()
                         .dayRate(dayRate)
                         .cleaningFee(cleaningFee)
+                        .build())
+                .address(Address.builder()
+                        .city(city)
+                        .district(district)
+                        .neighborhood(neighborhood)
+                        .streetName(streetName)
+                        .detailedAddress(detailedAddress)
+                        .build())
+                .coordinate(Coordinate.builder()
+                        .latitude(latitude)
+                        .longitude(longitude)
                         .build())
                 .build();
     }

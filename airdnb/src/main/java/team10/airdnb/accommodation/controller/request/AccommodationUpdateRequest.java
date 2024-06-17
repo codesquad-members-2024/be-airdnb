@@ -10,20 +10,27 @@ import java.util.Optional;
 public record AccommodationUpdateRequest(
         Optional<String> memberId,
         Optional<String> name,
-        @Min(value = 1) @Max(value = 16)
+        @Min(1) @Max(16)
         Optional<Long> maxCapacity,
         Optional<Long> accommodationType,
         Optional<Long> accommodationRoomType,
-        @Min(value = 0) @Max(value = 50)
+        @Min(0) @Max(50)
         Optional<Integer> bedroomCount,
-        @Min(value = 1) @Max(value = 50)
+        @Min(1) @Max(50)
         Optional<Integer> bathroomCount,
-        @Min(value = 1) @Max(value = 50)
+        @Min(1) @Max(50)
         Optional<Integer> bedCount,
         @Min(10000) @Max(15000000)
         Optional<Integer> dayRate,
         @Min(0) @Max(1000000)
         Optional<Integer> cleaningFee,
+        Optional<String> city,
+        Optional<String> district,
+        Optional<String> neighborhood,
+        Optional<String> streetName,
+        Optional<String> detailedAddress,
+        Optional<Double> latitude,
+        Optional<Double> longitude,
         Optional<List<Long>> amenityIds
 ) {
 }
