@@ -100,8 +100,8 @@ public class ProductService {
     }
 
     private boolean isAvailablePeopleCount(List<ProductEntity> products, Integer headCount) {
-        //인원수를 설정하지 않았으면 무조건 true
-        if (headCount == null) return true;
+        //인원수가 1이면 무조건 true
+        if (headCount == 1) return true;
 
         if (products.isEmpty()) return false;
 

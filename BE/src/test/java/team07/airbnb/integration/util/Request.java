@@ -24,54 +24,66 @@ public class Request {
     }
 
     public ExtractableResponse<Response> get(String url) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(jwtToken)
+        return RestAssured
+                .given()
+                    .log().all()
+                    .auth().oauth2(jwtToken)
                 .when()
-                .get(url)
-                .then().log().all()
+                    .get(url)
+                .then()
+                    .log().all()
                 .extract();
     }
 
     public <T> T post(Object params, String url, Class<T> responseType) throws JsonProcessingException {
-        return RestAssured.given().log().all()
-                .auth().oauth2(jwtToken)
-                .body(customObjectMapper.writeValueAsString(params))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        return RestAssured
+                .given()
+                    .auth().oauth2(jwtToken)
+//                    .header("Authorization", "Bearer " + jwtToken)
+                    .body(customObjectMapper.writeValueAsString(params))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .log().all()
                 .when()
-                .post(url)
+                    .post(url)
                 .then().log().all()
-                .extract()
-                .as(responseType);
+                .extract().as(responseType);
     }
 
     public ExtractableResponse<Response> put(Object params, String url) throws JsonProcessingException {
-        return RestAssured.given().log().all()
-                .auth().oauth2(jwtToken)
-                .body(customObjectMapper.writeValueAsString(params))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        return RestAssured
+                .given()
+                    .log().all()
+                    .header("Authorization", "Bearer " + jwtToken)
+                    .body(customObjectMapper.writeValueAsString(params))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .put(url)
-                .then().log().all()
+                    .put(url)
+                .then()
+                    .log().all()
                 .extract();
     }
 
     public ExtractableResponse<Response> patch(Object params, String url) throws JsonProcessingException {
-        return RestAssured.given().log().all()
-                .auth().oauth2(jwtToken)
-                .body(customObjectMapper.writeValueAsString(params))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+        return RestAssured
+                .given()
+                    .header("Authorization", "Bearer " + jwtToken)
+                    .body(customObjectMapper.writeValueAsString(params))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .log().all()
                 .when()
-                .patch(url)
+                    .patch(url)
                 .then()
-                .log().all()
+                    .log().all()
                 .extract();
     }
 
     public ExtractableResponse<Response> delete(String url) {
-        return RestAssured.given().log().all()
-                .auth().oauth2(jwtToken)
+        return RestAssured
+                .given()
+                    .log().all()
+                    .header("Authorization", "Bearer " + jwtToken)
                 .when()
-                .delete(url)
+                    .delete(url)
                 .then().log().all()
                 .extract();
     }

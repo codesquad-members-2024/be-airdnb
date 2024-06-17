@@ -3,6 +3,7 @@ package team07.airbnb.integration.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.junit.jupiter.api.AfterAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import team07.airbnb.entity.UserEntity;
 import java.util.ArrayList;
 
 @Component
+@Transactional
 public class AuthHelper {
 
     @Autowired
@@ -23,7 +25,6 @@ public class AuthHelper {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional
     public String login(Role role) throws JsonProcessingException {
         UserEntity dummyUser = new UserEntity(null, "", "testUser", "test@test.com", role, "regTest", new ArrayList<>());
         entityManager.persist(dummyUser);
@@ -35,8 +36,10 @@ public class AuthHelper {
         return jwtUtil.generateToken(dummyDetails);
     }
 
-    @Transactional
+
     public void logout() {
-        entityManager.createNativeQuery("truncate table USERS");
+        entityManager.createNativeQuery("TRUNCATE TABLE USERS");
+        entityManager.flush();
+        entityManager.clear();
     }
 }

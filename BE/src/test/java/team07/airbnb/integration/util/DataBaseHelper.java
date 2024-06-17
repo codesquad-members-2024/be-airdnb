@@ -15,9 +15,10 @@ import java.util.Set;
 
 @Component
 @Profile("test")
+@Transactional
 public class DataBaseHelper {
 
-    private static final String FOREIGN_KEY_CHECK_FORMAT = "SET FOREIGN_KEY_CHECKS %d";
+    private static final String FOREIGN_KEY_CHECK_FORMAT = "SET FOREIGN_KEY_CHECKS = %d";
     private static final String TRUNCATE_FORMAT = "TRUNCATE TABLE %s";
 
     private final List<String> tableNames = new ArrayList<>();
@@ -32,21 +33,23 @@ public class DataBaseHelper {
         tableNames.addAll(tableInfos);
     }
 
-    @Transactional
     public void clear(String... withOuts) {
         entityManager.clear();
         Set<String> names = new HashSet<>(Arrays.asList(withOuts));
         names.add("USERS"); // 유저 테이블은 초기화 제외
         names.add("DISCOUNT_POLICY");
         truncate(names);
+        entityManager.close();
     }
 
-    @Transactional
     public void put(List<Object> dummies) {
+        entityManager.clear();
         for (Object dummy : dummies) {
-            entityManager.persist(dummy);
+            if (entityManager.contains(dummy)) entityManager.merge(dummy);
+            else entityManager.persist(dummy);
         }
-        entityManager.flush();
+
+        entityManager.close();
     }
 
     private void truncate(Set<String> withOut) {
