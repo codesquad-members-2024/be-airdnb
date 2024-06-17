@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
+import team10.airdnb.accommodation.entity.embedded.Address;
+import team10.airdnb.accommodation.entity.embedded.Coordinate;
 import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
@@ -62,5 +64,11 @@ public class Accommodation {
 
     @Embedded
     private AccommodationFee accommodationFee;
+
+    @Embedded
+    private Address address;
+
+    @Embedded
+    private Coordinate coordinate;
 
 }
