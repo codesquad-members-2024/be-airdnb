@@ -15,7 +15,9 @@ import lombok.NoArgsConstructor;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.member.entity.Member;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "reservation")
@@ -26,7 +28,7 @@ import java.time.LocalDate;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -43,11 +45,28 @@ public class Reservation {
     private LocalDate checkOutDate;
 
     @Column(name = "capacity")
-    private long capacity;
+    private Integer capacity;
 
     @Column(name = "is_confirmed")
     private boolean isConfirmed;
 
     @Column(name = "total_price")
-    private long totalPrice;
+    private BigDecimal totalPrice;
+
+    // 숙박 총 비용을 계산
+    public static BigDecimal calculateTotalPrice(Accommodation accommodation, LocalDate checkInDate, LocalDate checkOutDate) {
+        // 두 날짜 사이의 일 수를 계산
+        BigDecimal numberOfDays = BigDecimal.valueOf(ChronoUnit.DAYS.between(checkInDate, checkOutDate));
+
+        BigDecimal dayRate = accommodation.getAccommodationFee().getDayRate();
+
+        BigDecimal cleaningFee = accommodation.getAccommodationFee().getCleaningFee();
+
+        // 요금 계산
+        BigDecimal totalDayRate = dayRate.multiply(numberOfDays);
+
+        BigDecimal totalPrice = totalDayRate.add(cleaningFee);
+
+        return totalPrice;
+    }
 }

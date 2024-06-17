@@ -5,17 +5,18 @@ import team10.airdnb.accommodation.dto.AccommodationInformationDto;
 import team10.airdnb.member.dto.MemberInformationDto;
 import team10.airdnb.reservation.entity.Reservation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record ReservationInformationResponse(
-        long reservationId,
+        Long reservationId,
         MemberInformationDto memberInformation,
         AccommodationInformationDto accommodationInformation,
         LocalDate checkInDate,
         LocalDate checkOutDate,
-        long capacity,
+        Integer capacity,
         boolean isConfirmed,
-        long totalPrice
+        BigDecimal totalPrice
 ) {
     public static ReservationInformationResponse from(Reservation reservation) {
         return new ReservationInformationResponse(

@@ -45,6 +45,7 @@ public enum ErrorCode {
     INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-001", "잘못된 회원 타입 입니다.(memberType : KAKAO)"),
     ALREADY_REGISTERED_MEMBER(HttpStatus.BAD_REQUEST, "M-002", "이미 가입된 회원 입니다."),
     MEMBER_NOT_EXISTS(HttpStatus.BAD_REQUEST, "M-003", "해당 회원은 존재하지 않습니다."),
+    MEMBER_PASSWORD_INVALID(HttpStatus.UNAUTHORIZED, "M-004", "회원 비밀번호가 일치하지 않습니다."),
 
     //어메니티
     AMENITY_TYPE_NOT_EXISTS(HttpStatus.BAD_REQUEST, "AM-001", "해당 어메니티 유형은 존재하지 않습니다."),

@@ -71,9 +71,8 @@ public class ReservationRestController {
      * 2) 체크인 날짜 수정  - checkIn/Out Date 속성
      * */
 
-
     @DeleteMapping("/api/reservation/{reservationId}")
-    public ResponseEntity<ReservationSummaryResponse> deleteReservation(@PathVariable long reservationId) {
+    public ResponseEntity<ReservationSummaryResponse> deleteReservation(@PathVariable Long reservationId) {
         ReservationSummaryResponse response = reservationService.deleteReservation(reservationId);
 
         log.info("예약 삭제 완료 : # {} : 숙소 이름 : {}, 예약자 이름 : {}",
