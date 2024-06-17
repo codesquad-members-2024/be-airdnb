@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Coordinate {
 
-    @Column(name = "latitued", nullable = false)
+    @Column(name = "latitude", nullable = false)
     private Double latitude; // 위도
 
     @Column(name = "longitude", nullable = false)
