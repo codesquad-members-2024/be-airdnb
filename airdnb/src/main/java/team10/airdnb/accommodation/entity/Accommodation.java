@@ -43,7 +43,7 @@ public class Accommodation {
     private String name;
 
     @Column(name = "max_capacity", nullable = false)
-    private Integer maxCapacity;
+    private Long maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "accommodation_type", nullable = true)
