@@ -22,4 +22,21 @@ public class StayListQueryResponse {
     private final Double rating;
     private final Integer commentCount;
     private final List<String> tagNames;
+
+    public static StayListQueryResponse from(StayListQuery stayListQuery) {
+        return StayListQueryResponse.builder()
+                .id(stayListQuery.getId())
+                .name(stayListQuery.getName())
+                .price(stayListQuery.getPrice())
+                .maxGuests(stayListQuery.getMaxGuests())
+                .address(stayListQuery.getAddress())
+                .latitude(stayListQuery.getLatitude())
+                .longitude(stayListQuery.getLongitude())
+                .imageUrl(stayListQuery.getImageUrl())
+                .type(stayListQuery.getType())
+                .rating(stayListQuery.getRating())
+                .commentCount(stayListQuery.getCommentCount())
+                .tagNames(stayListQuery.getTagNames())
+                .build();
+    }
 }

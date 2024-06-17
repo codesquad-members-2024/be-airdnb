@@ -8,9 +8,9 @@ import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.stay.dto.StayCommentDetail;
 import com.airdnb.stay.dto.StayCreate;
-import com.airdnb.stay.dto.StayDetailQueryResponse;
-import com.airdnb.stay.dto.StayListQueryResponse;
-import com.airdnb.stay.dto.StayPriceListQueryResponse;
+import com.airdnb.stay.dto.StayDetailQuery;
+import com.airdnb.stay.dto.StayListQuery;
+import com.airdnb.stay.dto.StayPriceListQuery;
 import com.airdnb.stay.dto.StayQueryCondition;
 import com.airdnb.stay.entity.CommentStatus;
 import com.airdnb.stay.entity.Location;
@@ -51,10 +51,10 @@ public class StayService {
     }
 
     @Transactional(readOnly = true)
-    public StayDetailQueryResponse queryStayDetailById(Long id) {
+    public StayDetailQuery queryStayDetailById(Long id) {
         Stay stay = findActiveStayById(id);
 
-        return StayDetailQueryResponse.builder()
+        return StayDetailQuery.builder()
                 .id(stay.getId())
                 .name(stay.getName())
                 .hostName(stay.getHost().getName())
@@ -90,14 +90,14 @@ public class StayService {
     }
 
     @Transactional(readOnly = true)
-    public List<StayListQueryResponse> queryStayList(StayQueryCondition condition) {
+    public List<StayListQuery> queryStayList(StayQueryCondition condition) {
         List<Stay> stays = stayRepository.findAll(condition);
-        List<StayListQueryResponse> responses = new ArrayList<>();
+        List<StayListQuery> responses = new ArrayList<>();
         for (Stay stay : stays) {
             Double activeRating = getActiveRating(stay);
             Integer activeCommentCount = getActiveCommentCount(stay);
             List<String> tagNames = getTagNames(stay);
-            StayListQueryResponse response = toStayListQueryResponse(stay, tagNames, activeRating,
+            StayListQuery response = toStayListQuery(stay, tagNames, activeRating,
                     activeCommentCount);
             responses.add(response);
         }
@@ -105,14 +105,14 @@ public class StayService {
     }
 
     @Transactional(readOnly = true)
-    public StayPriceListQueryResponse queryStayPriceList() {
+    public StayPriceListQuery queryStayPriceList() {
         List<Integer> prices = stayRepository.findPriceAll();
         Map<Integer, Long> countPerPrice = getCountPerPrice(prices);
         int minPrice = calculateMinPrice(prices);
         int maxPrice = calculateMaxPrice(prices);
         int avgPrice = calculateAvgPrice(prices);
 
-        return new StayPriceListQueryResponse(countPerPrice, minPrice, maxPrice, avgPrice);
+        return new StayPriceListQuery(countPerPrice, minPrice, maxPrice, avgPrice);
     }
 
 
@@ -179,9 +179,9 @@ public class StayService {
         return stayCommentRepository.countByStayIdAndStatus(stay.getId(), CommentStatus.ACTIVE);
     }
 
-    private StayListQueryResponse toStayListQueryResponse(Stay stay, List<String> tagNames, Double activeRating,
-                                                          Integer activeCommentCount) {
-        return StayListQueryResponse.builder()
+    private StayListQuery toStayListQuery(Stay stay, List<String> tagNames, Double activeRating,
+                                          Integer activeCommentCount) {
+        return StayListQuery.builder()
                 .id(stay.getId())
                 .name(stay.getName())
                 .price(stay.getPrice())

@@ -15,4 +15,9 @@ public class StayQueryConditionRequest {
     private final Double latitude;
     private final Double longitude;
     private final Integer distance;
+
+    public StayQueryCondition toStayQueryCondition() {
+        return new StayQueryCondition(checkinDate, checkoutDate, minPrice, maxPrice, guestCount, latitude, longitude,
+                distance);
+    }
 }
