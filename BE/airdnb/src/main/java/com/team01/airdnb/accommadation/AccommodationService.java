@@ -27,15 +27,17 @@ public class AccommodationService {
   AmenityService amenityService;
   ImageService imageService;
   CommentService commentService;
+  AccommodationFilterRepository accommodationFilterRepository;
 
   public AccommodationService(AccommodationRepository accommodationRepository, UserService userService,
       AmenityService amenityService, ImageService imageService,
-      CommentService commentService) {
+      CommentService commentService, AccommodationFilterRepository accommodationFilterRepository) {
     this.accommodationRepository = accommodationRepository;
     this.userService = userService;
     this.amenityService = amenityService;
     this.imageService = imageService;
     this.commentService = commentService;
+    this.accommodationFilterRepository = accommodationFilterRepository;
   }
 
   /**
@@ -122,5 +124,12 @@ public class AccommodationService {
 
   public Accommodation findAccommodation(Long id) {
     return accommodationRepository.findById(id).orElseThrow();
+  }
+
+  /**
+   * 필터?
+   */
+  public List<AccommodationSearchResponse> doFilter(LocalDate checkin, LocalDate checkout) {
+    return accommodationFilterRepository.afterCheckin(checkin, checkout);
   }
 }
