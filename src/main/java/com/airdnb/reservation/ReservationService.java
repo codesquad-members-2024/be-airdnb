@@ -5,7 +5,7 @@ import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.dto.ReservationCreate;
-import com.airdnb.reservation.dto.ReservationQueryResponse;
+import com.airdnb.reservation.dto.ReservationQuery;
 import com.airdnb.reservation.entity.Reservation;
 import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.reservation.entity.ReservationStatus;
@@ -44,12 +44,12 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public ReservationQueryResponse queryReservationDetail(Long id) {
+    public ReservationQuery queryReservationDetail(Long id) {
         Reservation reservation = findReservationById(id);
         String currentMemberId = memberService.getCurrentMemberId();
         reservation.validateQueryAuthority(currentMemberId);
 
-        return ReservationQueryResponse.builder()
+        return ReservationQuery.builder()
                 .id(reservation.getId())
                 .customerName(reservation.getCustomer().getName())
                 .createdAt(reservation.getCreatedAt())
