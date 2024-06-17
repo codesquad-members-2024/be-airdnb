@@ -40,7 +40,7 @@ public class OauthLoginService {
             oauthMember = optionalMember.get();
         }
         // 토큰 생성
-        jwtTokenDto = tokenManager.createJwtTokenDto(oauthMember.getId());
+        jwtTokenDto = tokenManager.createJwtTokenDto(oauthMember);
         oauthMember.updateRefreshToken(jwtTokenDto);
 
         return OauthLoginDto.Response.of(jwtTokenDto);
