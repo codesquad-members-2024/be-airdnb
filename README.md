@@ -5,7 +5,7 @@
 | team | members | repository URL |
 | ---- | ------- | -------------- |
 | 1    | 미르, 에디, 데이| [1팀 레포](https://github.com/codesquad-masters2024-airbnb-team01/be-airdnb)                                                                 |
-| 2    |         |                |
+| 2    | 코리, 심바 | [2팀 레포](https://github.com/codesquad-masters2024-airdnb-team02/be-airdnb) |
 | 3    |         |                |
 | 4    | yelly, gromit        | [4팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team04/be-airdnb)               |
 | 5    |웨이드, 알렉스         |[5팀 레포](https://github.com/codesquad-masters2024-be-airdnb-team05/be-airdnb)                |
