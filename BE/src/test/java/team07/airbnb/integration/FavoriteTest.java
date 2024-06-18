@@ -3,7 +3,6 @@ package team07.airbnb.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import io.restassured.RestAssured;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +19,8 @@ import team07.airbnb.integration.util.DataBaseHelper;
 import team07.airbnb.integration.util.Request;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Profile("test")
@@ -45,9 +46,9 @@ public class FavoriteTest {
         dataBaseHelper.clear();
     }
 
-    @DisplayName("유저는 상품을 위시리스트에 추가할 수 있다.")
+    @DisplayName("유저는 상품을 위시리스트에 추가하고 조회할 수 있다.")
     @Test
-    void test() throws JsonProcessingException {
+    void addFavorite() throws JsonProcessingException {
         // given
         AccommodationCreateRequest acc = monkey.giveMeOne(AccommodationCreateRequest.class);
         AccommodationListResponse created = hostRequest.post(acc, "/accommodation", AccommodationListResponse.class);
@@ -60,6 +61,27 @@ public class FavoriteTest {
         FavoritesResponse response = guestRequest.get("favorite/my", FavoritesResponse.class);
 
         //then
-        Assertions.assertThat(response.available()).hasSize(1);
+        assertThat(response.available()).hasSize(1);
+        assertThat(response.available().get(0).accommodation().id()).isEqualTo(created.id());
+    }
+
+    @DisplayName("유저는 상품을 위시리스트에서 삭제할 수 있다.")
+    @Test
+    void removeFavorite() throws JsonProcessingException {
+        // given
+        AccommodationCreateRequest acc = monkey.giveMeOne(AccommodationCreateRequest.class);
+        AccommodationListResponse created = hostRequest.post(acc, "/accommodation", AccommodationListResponse.class);
+
+        ProductCreateRequest pro = new ProductCreateRequest(created.id() , LocalDate.now(), 1000);
+        hostRequest.post(pro, "/products");
+        userRequest.post(null, "/favorite/" + 1);
+
+
+        // when
+        userRequest.delete( "/favorite/" + 1);
+        FavoritesResponse response = userRequest.get("favorite/my", FavoritesResponse.class);
+
+        //then
+        assertThat(response.available()).hasSize(0);
     }
 }
