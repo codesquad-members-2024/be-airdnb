@@ -16,7 +16,6 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.data.review.dto.response.ReviewWithReplyResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.booking.BookingInquiryService;
 import team07.airbnb.service.review.ReviewService;
@@ -53,7 +52,7 @@ public class ReviewController {
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
     public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        bookingInquiryService.foo(user.id(), bookingId, request);
+        bookingInquiryService.postReview(user.id(), bookingId, request);
     }
 
     @Tag(name = "Host")

@@ -75,7 +75,7 @@ public class BookingInquiryService {
                 .toList();
     }
 
-    public void foo(Long userId, Long bookingId, ReviewPostRequest request) {
+    public void postReview(Long userId, Long bookingId, ReviewPostRequest request) {
         BookingEntity booking = this.findByBookingId(bookingId);
         this.addReview(
                 bookingId,
