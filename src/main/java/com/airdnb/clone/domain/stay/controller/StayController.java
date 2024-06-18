@@ -24,7 +24,6 @@ import com.airdnb.clone.domain.stay.controller.dto.response.edit.StatusEditRespo
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.TypeEditResponse;
 import com.airdnb.clone.domain.stay.service.StayService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,13 +52,6 @@ public class StayController {
     @GetMapping("/{id}")
     public StayDetailResponse getStayDetail(@PathVariable("id") Long id) {
         return stayService.getStay(id);
-    }
-
-    @GetMapping
-    public List<StayDetailResponse> getAllStays() {
-        return stayService.getStays().stream()
-                .map(StayDetailResponse::of)
-                .toList();
     }
 
     @DeleteMapping("/{id}")

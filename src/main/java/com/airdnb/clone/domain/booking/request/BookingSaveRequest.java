@@ -1,8 +1,8 @@
-package com.airdnb.clone.domain.reservation.request;
+package com.airdnb.clone.domain.booking.request;
 
+import com.airdnb.clone.domain.booking.entity.Booking.BookingBuilder;
 import com.airdnb.clone.domain.common.Guest;
-import com.airdnb.clone.domain.reservation.entity.Reservation;
-import com.airdnb.clone.domain.reservation.entity.Reservation.ReservationBuilder;
+import com.airdnb.clone.domain.booking.entity.Booking;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-public class ReservationSaveRequest {
+public class BookingSaveRequest {
 
     @NotNull
     private final Long memberId;
@@ -33,8 +33,8 @@ public class ReservationSaveRequest {
     @Min(value = 1)
     private final Integer guestCount;
 
-    public ReservationBuilder toBuilder() {
-        return Reservation.builder()
+    public BookingBuilder toBuilder() {
+        return Booking.builder()
                 .checkIn(checkIn)
                 .checkOut(checkOut)
                 .totalRate(totalRate)

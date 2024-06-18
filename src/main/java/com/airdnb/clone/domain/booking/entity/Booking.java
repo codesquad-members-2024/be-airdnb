@@ -1,4 +1,4 @@
-package com.airdnb.clone.domain.reservation.entity;
+package com.airdnb.clone.domain.booking.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
 import com.airdnb.clone.domain.common.Guest;
@@ -28,13 +28,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@Table(name = "RESERVATION")
+@Table(name = "BOOKING")
 @Entity
-public class Reservation extends BaseTimeEntity {
+public class Booking extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RESERVATION_ID")
+    @Column(name = "BOOKING_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
