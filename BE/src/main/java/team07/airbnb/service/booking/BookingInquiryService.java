@@ -9,6 +9,7 @@ import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.transfer.DateInfo;
 import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
 import team07.airbnb.data.booking.enums.BookingStatus;
+import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ProductEntity;
@@ -53,13 +54,6 @@ public class BookingInquiryService {
         return bookingRepository.findAllByBooker(booker).stream().map(BookingDetailResponse::of).toList();
     }
 
-    public void addReview(Long bookingId, Long writerId, ReviewEntity review) {
-        BookingEntity booking = findByBookingId(bookingId);
-        if (!booking.getBooker().getId().equals(writerId))
-            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
-
-        bookingRepository.save(booking.addReview(review));
-    }
 
     public BookingEntity findByBookingId(Long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
@@ -76,8 +70,26 @@ public class BookingInquiryService {
                 accommodationService.findNearbyAccommodations(distanceInfo.longitude(), distanceInfo.latitude(), distanceInfo.distance());
 
         return nearbyAccommodations.stream()
-                    .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
-                    .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
-                    .toList();
+                .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
+                .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
+                .toList();
+    }
+
+    public void foo(Long userId, Long bookingId, ReviewPostRequest request) {
+        BookingEntity booking = this.findByBookingId(bookingId);
+        this.addReview(
+                bookingId,
+                userId,
+                new ReviewEntity(booking, request.content(), request.rating())
+        );
+    }
+
+
+    private void addReview(Long bookingId, Long writerId, ReviewEntity review) {
+        BookingEntity booking = findByBookingId(bookingId);
+        if (!booking.getBooker().getId().equals(writerId))
+            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+
+        bookingRepository.save(booking.addReview(review));
     }
 }
