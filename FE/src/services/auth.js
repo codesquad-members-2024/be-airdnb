@@ -13,9 +13,9 @@ export const handleOAuth = async (code, state, provider) => {
     localStorage.setItem("userName", data.userName);
     localStorage.setItem("profileImage", data.profileImage);
 
-    alert("로그인 성공: " + data.userName + "님 환영합니다!");
+    // alert("로그인 성공: " + data.userName + "님 환영합니다!");
   } catch (error) {
-    alert("로그인 실패: " + error.response.data.message);
+    // alert("로그인 실패: " + error.response.data.message);
   }
   window.location.reload();
   window.location.replace("/");
@@ -29,7 +29,7 @@ export function logout() {
   localStorage.removeItem("userName");
   localStorage.removeItem("userId");
 
-  alert(userName + "님 안녕히가세요!");
+  // alert(userName + "님 안녕히가세요!");
 
   // 서버에 로그아웃 요청 보내기
   fetch("https://squadbnb.site/api/logout", {
