@@ -20,4 +20,19 @@ public class ReservationQueryResponse {
     private final LocalDateTime createdAt;
     private final Integer guestCount;
     private final Double paymentAmount;
+
+    public static ReservationQueryResponse from(ReservationQuery reservationQuery) {
+        return ReservationQueryResponse.builder()
+                .id(reservationQuery.getId())
+                .hostName(reservationQuery.getHostName())
+                .paymentAmount(reservationQuery.getPaymentAmount())
+                .checkinAt(reservationQuery.getCheckinAt())
+                .checkoutAt(reservationQuery.getCheckoutAt())
+                .createdAt(reservationQuery.getCreatedAt())
+                .stayName(reservationQuery.getStayName())
+                .guestCount(reservationQuery.getGuestCount())
+                .customerName(reservationQuery.getCustomerName())
+                .status(reservationQuery.getStatus())
+                .build();
+    }
 }

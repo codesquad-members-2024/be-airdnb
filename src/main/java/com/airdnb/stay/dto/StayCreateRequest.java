@@ -37,4 +37,19 @@ public class StayCreateRequest {
     private final Double longitude;
     @NotBlank
     private final String type;
+
+    public StayCreate toStayCreate() {
+        return new StayCreate(
+                name
+                , price
+                , startDate
+                , endDate
+                , imageId
+                , tagIds
+                , maxGuests
+                , address
+                , latitude
+                , longitude,
+                type);
+    }
 }

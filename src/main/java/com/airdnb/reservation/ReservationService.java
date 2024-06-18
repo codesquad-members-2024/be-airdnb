@@ -1,11 +1,10 @@
 package com.airdnb.reservation;
 
-import com.airdnb.global.exception.InvalidRequestException;
 import com.airdnb.global.exception.NotFoundException;
 import com.airdnb.member.MemberService;
 import com.airdnb.member.entity.Member;
 import com.airdnb.reservation.dto.ReservationCreate;
-import com.airdnb.reservation.dto.ReservationQueryResponse;
+import com.airdnb.reservation.dto.ReservationQuery;
 import com.airdnb.reservation.entity.Reservation;
 import com.airdnb.reservation.entity.ReservationPeriod;
 import com.airdnb.reservation.entity.ReservationStatus;
@@ -31,7 +30,7 @@ public class ReservationService {
         Stay stay = stayService.findActiveStayById(reservationCreate.getStayId());
         ReservationPeriod reservationPeriod = confirmReservationPeriod(stay, reservationCreate.getCheckinAt(),
                 reservationCreate.getCheckoutAt());
-        validateGuestsCount(stay.getMaxGuests(), reservationCreate.getGuestCount());
+        ReservationValidator.validateGuestsCount(stay, reservationCreate.getGuestCount());
         Member customer = getCustomer(stay);
         Double paymentAmount = calculatePaymentAmount(stay.getPrice(),
                 Objects.requireNonNull(reservationPeriod).getDaysOfStay());
@@ -44,12 +43,12 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public ReservationQueryResponse queryReservationDetail(Long id) {
+    public ReservationQuery queryReservationDetail(Long id) {
         Reservation reservation = findReservationById(id);
         String currentMemberId = memberService.getCurrentMemberId();
         reservation.validateQueryAuthority(currentMemberId);
 
-        return ReservationQueryResponse.builder()
+        return ReservationQuery.builder()
                 .id(reservation.getId())
                 .customerName(reservation.getCustomer().getName())
                 .createdAt(reservation.getCreatedAt())
@@ -73,21 +72,13 @@ public class ReservationService {
         ReservationStatus requestStatus = ReservationStatus.of(status);
         String currentMemberId = memberService.getCurrentMemberId();
 
+        ReservationValidator.validateReservationStatus(requestStatus);
+
         if (requestStatus == ReservationStatus.APPROVED || requestStatus == ReservationStatus.REJECTED) {
             reservation.handleReservation(currentMemberId, requestStatus);
             return;
         }
-        if (requestStatus == ReservationStatus.CANCELED) {
-            reservation.cancelReservation(currentMemberId);
-            return;
-        }
-        throw new InvalidRequestException("해당 상태로는 변경할 수 없습니다."); // PENDING으로 변경 요청시
-    }
-
-    private void validateGuestsCount(Integer maxGuests, Integer guestCount) {
-        if (guestCount > maxGuests) {
-            throw new InvalidRequestException("예약 신청 인원이 수용 가능 인원을 초과하였습니다.");
-        }
+        reservation.cancelReservation(currentMemberId);
     }
 
     private Reservation buildReservation(ReservationCreate reservationCreate, Stay stay,
@@ -104,9 +95,9 @@ public class ReservationService {
 
     private ReservationPeriod confirmReservationPeriod(Stay stay, LocalDateTime checkinAt, LocalDateTime checkoutAt) {
         ReservationPeriod reservationPeriod = new ReservationPeriod(checkinAt, checkoutAt);
-        if (!stay.isSatisfyingPeriod(reservationPeriod)) {
-            throw new InvalidRequestException("해당 날짜는 예약이 불가능합니다.");
-        }
+
+        ReservationValidator.validateReservationPeriod(stay, reservationPeriod);
+
         List<LocalDate> reservationDates = reservationPeriod.getReservationDates();
         stay.addClosedDates(reservationDates);
         return reservationPeriod;
@@ -119,9 +110,9 @@ public class ReservationService {
 
     private Member getCustomer(Stay stay) {
         String currentMemberId = memberService.getCurrentMemberId();
-        if (stay.hasSameHostId(currentMemberId)) {
-            throw new InvalidRequestException("예약자와 호스트는 동일할 수 없습니다.");
-        }
+
+        ReservationValidator.validateCustomer(stay, currentMemberId);
+
         return memberService.findMemberById(currentMemberId);
     }
 }

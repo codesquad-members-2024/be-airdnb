@@ -4,6 +4,7 @@ import com.airdnb.global.ApiResponse;
 import com.airdnb.global.UriMaker;
 import com.airdnb.reservation.dto.ReservationCreate;
 import com.airdnb.reservation.dto.ReservationCreateRequest;
+import com.airdnb.reservation.dto.ReservationQuery;
 import com.airdnb.reservation.dto.ReservationQueryResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -28,7 +29,7 @@ public class ReservationController {
     public ResponseEntity<ApiResponse> createReservation(
             @Valid @RequestBody ReservationCreateRequest reservationCreateRequest) {
 
-        ReservationCreate reservationCreate = toReservationCreate(reservationCreateRequest);
+        ReservationCreate reservationCreate = reservationCreateRequest.toReservationCreate();
 
         Long reservationId = reservationService.createReservation(reservationCreate);
 
@@ -38,20 +39,13 @@ public class ReservationController {
 
     @GetMapping("/{id}")
     public ApiResponse queryReservationDetail(@PathVariable Long id) {
-        ReservationQueryResponse reservationQueryResponse = reservationService.queryReservationDetail(id);
-        return ApiResponse.success(reservationQueryResponse);
+        ReservationQuery reservationQuery = reservationService.queryReservationDetail(id);
+        return ApiResponse.success(ReservationQueryResponse.from(reservationQuery));
     }
 
     @PatchMapping("/{id}")
     public ApiResponse updateReservationStatus(@PathVariable Long id, @RequestParam String status) {
         reservationService.updateReservationStatus(id, status);
         return ApiResponse.success(null);
-    }
-
-    private ReservationCreate toReservationCreate(ReservationCreateRequest reservationCreateRequest) {
-        return new ReservationCreate(reservationCreateRequest.getStayId()
-                , reservationCreateRequest.getCheckinAt(),
-                reservationCreateRequest.getCheckoutAt(),
-                reservationCreateRequest.getGuestCount());
     }
 }

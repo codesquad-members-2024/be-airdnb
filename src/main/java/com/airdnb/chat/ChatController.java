@@ -1,9 +1,9 @@
 package com.airdnb.chat;
 
-import com.airdnb.chat.dto.MessageCreation;
 import com.airdnb.chat.dto.MessageCreationRequest;
 import com.airdnb.chat.dto.MessageResponse;
 import com.airdnb.chat.service.ChatService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -34,8 +34,8 @@ public class ChatController {
     }
 
     @MessageMapping("/chat")
-    public void sendMessage(@Payload MessageCreationRequest messageRequest) {
-        MessageResponse messageResponse = chatService.createChat(MessageCreation.from(messageRequest));
+    public void sendMessage(@Valid @Payload MessageCreationRequest messageRequest) {
+        MessageResponse messageResponse = chatService.createChat(messageRequest.toMessageCreation());
         template.convertAndSend("/sub/chat/room/" + messageRequest.getRoomId(), messageResponse);
     }
 }

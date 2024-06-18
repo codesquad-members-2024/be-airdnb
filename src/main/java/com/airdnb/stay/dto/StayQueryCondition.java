@@ -5,9 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public class StayQueryCondition {
     private final LocalDate checkinDate;
@@ -19,22 +17,20 @@ public class StayQueryCondition {
     private final Double longitude;
     private final Integer distance;
 
-    public static StayQueryCondition from(StayQueryConditionRequest request) {
-        LocalDate checkinDate = request.getCheckinDate();
-        LocalDate checkoutDate = request.getCheckoutDate();
-        Integer minPrice = request.getMinPrice();
-        Integer maxPrice = request.getMaxPrice();
-        Integer guestCount = request.getGuestCount();
-        Double latitude = request.getLatitude();
-        Double longitude = request.getLongitude();
-        Integer distance = request.getDistance();
-
+    public StayQueryCondition(LocalDate checkinDate, LocalDate checkoutDate, Integer minPrice, Integer maxPrice,
+                              Integer guestCount, Double latitude, Double longitude, Integer distance) {
         validateDateCondition(checkinDate, checkoutDate);
         validatePriceCondition(minPrice, maxPrice);
         validateLocationCondition(latitude, longitude, distance);
 
-        return new StayQueryCondition(checkinDate, checkoutDate, minPrice, maxPrice, guestCount, latitude, longitude,
-                distance);
+        this.checkinDate = checkinDate;
+        this.checkoutDate = checkoutDate;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.guestCount = guestCount;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.distance = distance;
     }
 
     public List<LocalDate> getReservationDates() {
@@ -63,19 +59,19 @@ public class StayQueryCondition {
         return guestCount != null;
     }
 
-    private static void validateDateCondition(LocalDate checkinDate, LocalDate checkoutDate) {
+    private void validateDateCondition(LocalDate checkinDate, LocalDate checkoutDate) {
         if ((checkinDate == null && checkoutDate != null) || (checkinDate != null && checkoutDate == null)) {
             throw new InvalidRequestException("검색 조건이 올바르지 않습니다. (숙박 기간)");
         }
     }
 
-    private static void validatePriceCondition(Integer minPrice, Integer maxPrice) {
+    private void validatePriceCondition(Integer minPrice, Integer maxPrice) {
         if ((minPrice == null && maxPrice != null) || minPrice != null && maxPrice == null) {
             throw new InvalidRequestException("검색 조건이 올바르지 않습니다. (가격)");
         }
     }
 
-    private static void validateLocationCondition(Double latitude, Double longitude, Integer distance) {
+    private void validateLocationCondition(Double latitude, Double longitude, Integer distance) {
         if (latitude == null && longitude == null && distance == null) {
             return;
         }
