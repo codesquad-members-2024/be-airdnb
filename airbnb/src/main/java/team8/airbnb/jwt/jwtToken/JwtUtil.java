@@ -1,4 +1,4 @@
-package team8.airbnb.user.jwtToken;
+package team8.airbnb.jwt.jwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

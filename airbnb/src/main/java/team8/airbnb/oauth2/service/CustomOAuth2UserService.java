@@ -12,8 +12,8 @@ import team8.airbnb.oauth2.dto.KakaoResponse;
 import team8.airbnb.oauth2.dto.NaverResponse;
 import team8.airbnb.oauth2.dto.OAuth2Response;
 import team8.airbnb.oauth2.dto.UserDTO;
-import team8.airbnb.user.User;
-import team8.airbnb.user.UserRepository;
+import team8.airbnb.entity.User;
+import team8.airbnb.repository.UserRepository;
 
 @Slf4j
 @Service

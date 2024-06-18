@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import team8.airbnb.oauth2.CustomSuccessHandler;
 import team8.airbnb.oauth2.service.CustomOAuth2UserService;
-import team8.airbnb.user.jwtToken.JwtFilter;
+import team8.airbnb.jwt.jwtToken.JwtFilter;
 
 @Configuration
 @RequiredArgsConstructor

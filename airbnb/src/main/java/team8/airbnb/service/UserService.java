@@ -1,10 +1,12 @@
-package team8.airbnb.user;
+package team8.airbnb.service;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import team8.airbnb.entity.User;
+import team8.airbnb.repository.UserRepository;
 
 @Slf4j
 @Service

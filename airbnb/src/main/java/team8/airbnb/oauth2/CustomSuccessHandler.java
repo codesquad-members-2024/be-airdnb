@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import team8.airbnb.oauth2.dto.CustomOAuth2User;
-import team8.airbnb.user.jwtToken.JwtUtil;
+import team8.airbnb.jwt.jwtToken.JwtUtil;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
