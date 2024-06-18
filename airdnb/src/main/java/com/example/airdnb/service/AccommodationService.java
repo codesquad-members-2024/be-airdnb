@@ -5,6 +5,7 @@ import com.example.airdnb.domain.accommodation.search.AccommodationSearchCond;
 import com.example.airdnb.domain.user.User;
 import com.example.airdnb.domain.user.User.Role;
 import com.example.airdnb.dto.accommodation.AccommodationCreationRequest;
+import com.example.airdnb.dto.accommodation.search.AccommodationResponse;
 import com.example.airdnb.repository.AccommodationRepository;
 import com.example.airdnb.repository.UserRepository;
 import java.util.List;
@@ -18,8 +19,11 @@ public class AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
 
-    public List<Accommodation> searchWithCondition(AccommodationSearchCond searchCond) {
-        return accommodationRepository.search(searchCond);
+    public List<AccommodationResponse> searchWithCondition(AccommodationSearchCond searchCond) {
+        List<Accommodation> accommodations = accommodationRepository.search(searchCond);
+        return accommodations.stream()
+                .map(AccommodationResponse::of)
+                .toList();
     }
 
     public Accommodation createNewAccommodation(AccommodationCreationRequest request) {
