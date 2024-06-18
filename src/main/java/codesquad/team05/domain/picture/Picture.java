@@ -1,9 +1,8 @@
 package codesquad.team05.domain.picture;
 
 import codesquad.team05.domain.accommodation.Accommodation;
-import codesquad.team05.web.dto.response.accommodation.PictureDto;
+import codesquad.team05.web.accommodation.dto.response.PictureDto;
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 

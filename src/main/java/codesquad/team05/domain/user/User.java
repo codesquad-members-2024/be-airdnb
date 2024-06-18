@@ -1,12 +1,11 @@
 package codesquad.team05.domain.user;
 
 import codesquad.team05.domain.accommodation.Accommodation;
-import codesquad.team05.domain.accommodation.like.Like;
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.review.Review;
 import codesquad.team05.domain.host.Host;
-import codesquad.team05.web.dto.response.user.UserResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import codesquad.team05.domain.like.Like;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.review.Review;
+import codesquad.team05.web.user.dto.response.UserResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
 

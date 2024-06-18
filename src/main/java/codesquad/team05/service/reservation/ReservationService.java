@@ -1,8 +1,8 @@
 package codesquad.team05.service.reservation;
 
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.ReservationRepository;
-import codesquad.team05.web.dto.response.reservation.ReservationResponse;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.reservation.ReservationRepository;
+import codesquad.team05.web.reservation.dto.response.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

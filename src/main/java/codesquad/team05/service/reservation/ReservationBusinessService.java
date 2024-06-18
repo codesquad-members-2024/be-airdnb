@@ -2,14 +2,14 @@ package codesquad.team05.service.reservation;
 
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.accommodation.AccommodationRepository;
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.ReservationRepository;
-import codesquad.team05.domain.exception.DateAlreadyBookedException;
-import codesquad.team05.domain.exception.PersonCountExceededException;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.reservation.ReservationRepository;
 import codesquad.team05.domain.user.User;
 import codesquad.team05.domain.user.UserRepository;
-import codesquad.team05.web.dto.request.reservation.ReservationServiceDto;
-import codesquad.team05.web.dto.request.reservation.ReservationUpdate;
+import codesquad.team05.exception.DateAlreadyBookedException;
+import codesquad.team05.exception.PersonCountExceededException;
+import codesquad.team05.web.reservation.dto.request.ReservationServiceDto;
+import codesquad.team05.web.reservation.dto.request.ReservationUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

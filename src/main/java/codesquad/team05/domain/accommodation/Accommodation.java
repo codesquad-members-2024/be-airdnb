@@ -1,12 +1,12 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.accommodation.like.Like;
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.review.Review;
 import codesquad.team05.domain.hashtag.Hashtag;
+import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
-import codesquad.team05.web.dto.request.accommodation.AccommodationUpdate;
-import codesquad.team05.web.dto.response.accommodation.AccommodationResponse;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.review.Review;
+import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
+import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
