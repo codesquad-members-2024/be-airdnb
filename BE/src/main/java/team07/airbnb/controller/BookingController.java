@@ -16,6 +16,7 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.request.BookingPaymentsRequest;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
+import team07.airbnb.data.booking.dto.request.CreateBookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCancelResponse;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
@@ -65,8 +66,8 @@ public class BookingController {
     @PostMapping
     @Authenticated(USER)
     @ResponseStatus(CREATED)
-    public BookingCreateResponse createBookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
-        return bookingManageService.createBooking(BookingInfoForPriceInfo.ofRequest(request), request.accommodationId(), userService.getCompleteUser(user));
+    public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request, TokenUserInfo user) {
+        return bookingManageService.createBooking(request, userService.getCompleteUser(user));
     }
 
     @Tag(name = "Host")
