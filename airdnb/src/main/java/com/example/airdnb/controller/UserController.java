@@ -1,6 +1,8 @@
 package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.user.User;
+import com.example.airdnb.dto.user.LoginRequest;
+import com.example.airdnb.dto.user.LoginResponse;
 import com.example.airdnb.dto.user.UserCreateRequest;
 import com.example.airdnb.dto.user.UserResponse;
 import com.example.airdnb.service.UserService;
@@ -23,7 +25,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
+    public ResponseEntity<User> createUser(
+        @RequestBody @Valid UserCreateRequest userCreateRequest) {
         Long userId = userService.join(userCreateRequest);
         return ResponseEntity.created(URI.create("/users/" + userId)).build();
     }
@@ -33,4 +36,8 @@ public class UserController {
         return userService.findById(userId);
     }
 
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody @Valid LoginRequest request) {
+        return userService.login(request);
+    }
 }
