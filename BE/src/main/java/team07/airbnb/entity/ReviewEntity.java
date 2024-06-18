@@ -45,4 +45,10 @@ public class ReviewEntity extends BaseEntity {
     public UserEntity getWriter(){
         return this.booking.getBooker();
     }
+
+    public void addReply(String content , UserEntity writer){
+        this.replies.add(
+                new ReplyEntity(writer, this, content)
+        );
+    }
 }

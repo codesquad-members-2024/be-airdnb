@@ -18,9 +18,6 @@ public record BookingRequest(
         @Future
         LocalDate checkOut,
         @NotNull
-        Integer headCount,
-        @NotNull
-        @Size(min = 0)
-        Integer avgPrice // ??
+        Integer headCount
 ) {
 }

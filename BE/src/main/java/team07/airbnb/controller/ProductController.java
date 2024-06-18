@@ -80,11 +80,8 @@ public class ProductController {
     @ResponseStatus(OK)
     @Authenticated(HOST)
     public void closeProduct(@PathVariable @NotNull Long productId, TokenUserInfo hostInfo) {
-        if (!productService.isHostOf(productId, userService.getCompleteUser(hostInfo))) {
-            throw new UnAuthorizedException(ProductController.class, hostInfo.id(), "ID : {%d} 호스트가 ID : {%d} 상품을 닫으려고 시도함".formatted(hostInfo.id(), productId));
-        }
 
-        productService.closeProduct(productId);
+        productService.closeProduct(productId, hostInfo.id());
     }
 
     @PostMapping("/update/{productId}")
@@ -93,10 +90,7 @@ public class ProductController {
     public void updatePrice(@PathVariable @NotNull Long productId,
                             @RequestParam @NotNull @Size Integer price,
                             TokenUserInfo hostInfo) {
-        if (!productService.isHostOf(productId, userService.getCompleteUser(hostInfo))) {
-            throw new UnAuthorizedException(ProductController.class, hostInfo.id(), "ID : {%d} 호스트가 ID : {%d} 상품의 가격수정을 시도함".formatted(hostInfo.id(), productId));
-        }
 
-        productService.updatePrice(productId, price);
+        productService.updatePrice(productId, price, hostInfo.id());
     }
 }

@@ -77,4 +77,12 @@ public class BookingEntity extends BaseEntity {
     public void cancelBooking() {
         this.status = BookingStatus.CANCEL;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BookingEntity) {
+            return this.id.equals(((BookingEntity) obj).id);
+        }
+        return false;
+    }
 }

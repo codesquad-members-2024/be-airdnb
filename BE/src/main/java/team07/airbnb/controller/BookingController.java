@@ -19,15 +19,17 @@ import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCancelResponse;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
-import team07.airbnb.data.booking.dto.response.BookingManageInfoResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.data.booking.dto.transfer.DateInfo;
 import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
+import team07.airbnb.data.booking.enums.CheckAuthType;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
-import team07.airbnb.service.booking.BookingService;
+import team07.airbnb.service.booking.BookingAuthService;
+import team07.airbnb.service.booking.BookingManageService;
+import team07.airbnb.service.booking.BookingInquiryService;
+import team07.airbnb.service.booking.BookingPriceService;
 import team07.airbnb.service.user.UserService;
 
 import java.util.Comparator;
@@ -44,15 +46,18 @@ import static team07.airbnb.data.user.enums.Role.*;
 @Slf4j
 public class BookingController {
 
-    private final BookingService bookingService;
+    private final BookingInquiryService bookingInquiryService;
     private final UserService userService;
+    private final BookingPriceService bookingPriceService;
+    private final BookingManageService bookingManageService;
+    private final BookingAuthService bookingAuthService;
 
     @Tag(name = "User")
     @Operation(summary = "예약 요금 정보 조회", description = "예약의 요금 정보를 조회합니다.")
     @GetMapping
     @ResponseStatus(OK)
     public PriceInfo getBookingPriceInfo(@RequestBody @Valid BookingRequest requestInfo) {
-        return bookingService.getPriceInfo(BookingInfoForPriceInfo.ofRequest(requestInfo));
+        return bookingPriceService.getPriceInfo(BookingInfoForPriceInfo.ofRequest(requestInfo));
     }
 
     @Tag(name = "User")
@@ -61,7 +66,7 @@ public class BookingController {
     @Authenticated(USER)
     @ResponseStatus(CREATED)
     public BookingCreateResponse createBookingRequest(@RequestBody @Valid BookingRequest request, TokenUserInfo user) {
-        return bookingService.createBooking(BookingInfoForPriceInfo.ofRequest(request), request.accommodationId(), userService.getCompleteUser(user));
+        return bookingManageService.createBooking(BookingInfoForPriceInfo.ofRequest(request), request.accommodationId(), userService.getCompleteUser(user));
     }
 
     @Tag(name = "Host")
@@ -70,13 +75,10 @@ public class BookingController {
     @Authenticated(HOST)
     @ResponseStatus(OK)
     public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = userService.getCompleteUser(user);
-        if (bookingService.isUserHostOf(bookingId, host)) {
-            throw new UnAuthorizedException(BookingController.class, user.id());
-        }
+        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         //컨펌한 예약의 아이디 리턴
-        return bookingService.confirmBooking(bookingId, host);
+        return bookingManageService.confirmBooking(bookingId, host);
     }
 
     @Tag(name = "User")
@@ -85,14 +87,10 @@ public class BookingController {
     @Authenticated(USER)
     @ResponseStatus(OK)
     public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity booker = userService.getCompleteUser(user);
-
-        if (bookingService.isUserBookerOf(bookingId, booker)) {
-            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 예약자가 아닙니다");
-        }
+        UserEntity booker = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         //취소 수수료 현재는 전체 결제 금액의 10%
-        Integer cancelFee = bookingService.cancelBooking(bookingId, booker);
+        Integer cancelFee = bookingManageService.cancelBooking(bookingId, booker);
 
         return BookingCancelResponse.of(bookingId, cancelFee);
     }
@@ -102,14 +100,10 @@ public class BookingController {
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
     public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = userService.getCompleteUser(user);
-
-        if (bookingService.isUserBookerOf(bookingId, host)) {
-            throw new UnAuthorizedException(BookingController.class, user.id(), "해당 예약의 호스트가 아닙니다");
-        }
+        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
-        bookingService.reopenBooking(bookingId);
+        bookingManageService.reopenBooking(bookingId);
     }
 
     @Tag(name = "User")
@@ -117,7 +111,7 @@ public class BookingController {
     @GetMapping("/my-bookings")
     @Authenticated(USER)
     public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user) {
-        return bookingService.findBookingsByUser(userService.getCompleteUser(user));
+        return bookingInquiryService.findBookingsByUser(userService.getCompleteUser(user));
     }
 
     @Operation(summary = "유저 예약 상세 조회", description = "유저가 예약 상세 정보를 조회합니다.")
@@ -125,11 +119,9 @@ public class BookingController {
     @Authenticated(USER)
     @ResponseStatus(OK)
     public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, TokenUserInfo userInfo) {
-        if (bookingService.isRequestedUserNotMatchInBooking(bookingId, userService.getCompleteUser(userInfo))) {
-            throw new UnAuthorizedException(BookingController.class, userInfo.id());
-        }
+        bookingAuthService.currentUserIsSameWith(bookingId, userInfo, CheckAuthType.USER);
 
-        return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+        return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }
 
 
@@ -139,7 +131,7 @@ public class BookingController {
     @GetMapping("/management")
     @ResponseStatus(OK)
     public List<BookingDetailResponse> getBookingInfosOfHosting(TokenUserInfo host) {
-        return bookingService.getBookingInfoListByHost(userService.getCompleteUser(host));
+        return bookingInquiryService.getBookingInfoListByHost(userService.getCompleteUser(host));
     }
 
 
@@ -148,17 +140,15 @@ public class BookingController {
     @Authenticated(HOST)
     @ResponseStatus(OK)
     public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
-        if (bookingService.isUserHostOf(bookingId, userService.getCompleteUser(host))) {
-            throw new UnAuthorizedException(BookingController.class, host.id());
-        }
-        return BookingDetailResponse.of(bookingService.findByBookingId(bookingId));
+        bookingAuthService.currentUserIsSameWith(bookingId, host, CheckAuthType.HOST);
+        return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }
 
     @Operation(summary = "날짜와 지역에 따른 요금정보들 조회", description = "요금 그래프를 위한 선택한 지역, 날짜의 평균 요금들을 정렬된 리스트로 반환합니다.")
     @GetMapping("/pay-info")
     @ResponseStatus(OK)
     public List<Double> getPayInfo(@RequestBody BookingPaymentsRequest bookingPaymentsRequest) {
-        List<Double> result = bookingService.getPricesAccAvailable(
+        List<Double> result = bookingInquiryService.getPricesAccAvailable(
                                 DateInfo.of(bookingPaymentsRequest),
                                 DistanceInfo.of(bookingPaymentsRequest)
                         );

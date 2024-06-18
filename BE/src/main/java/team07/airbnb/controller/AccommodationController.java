@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,21 +16,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.accommodation.dto.request.AccommodationCreateRequest;
+import team07.airbnb.data.accommodation.dto.request.AccommodationDescriptionRequest;
+import team07.airbnb.data.accommodation.dto.request.BaseAccommodationInfoRequest;
 import team07.airbnb.data.accommodation.dto.response.AccommodationDetailResponse;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.SimpleProductResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.embed.RoomInformation;
 import team07.airbnb.service.accommodation.AccommodationService;
-import team07.airbnb.service.product.ProductService;
 import team07.airbnb.service.user.UserService;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
-import static team07.airbnb.data.user.enums.Role.*;
+import static org.springframework.http.HttpStatus.OK;
+import static team07.airbnb.data.user.enums.Role.HOST;
+import static team07.airbnb.data.user.enums.Role.USER;
 
 @Tag(name = "숙소")
 @RequestMapping("/accommodation")
@@ -37,7 +41,6 @@ import static team07.airbnb.data.user.enums.Role.*;
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
-    private final ProductService productService;
     private final UserService userService;
 
     @Tag(name = "Host")
@@ -48,6 +51,70 @@ public class AccommodationController {
     public AccommodationListResponse createAccommodation(@RequestBody AccommodationCreateRequest createRequest, TokenUserInfo user) {
         return AccommodationListResponse.of(accommodationService.addAccommodation(
                 createRequest.toEntity(userService.getCompleteUser(user))
+        ));
+    }
+
+    @Tag(name = "Host")
+    @Operation(summary = "숙소의 방 정보 수정")
+    @Authenticated(Role.HOST)
+    @PatchMapping("{id}/roomInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public AccommodationDetailResponse updateRoomInformation(@PathVariable Long id,
+                                                             @RequestBody RoomInformation info,
+                                                             TokenUserInfo user) {
+        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
+                id,
+                info,
+                user.id()
+        ));
+    }
+
+    @Tag(name = "Host")
+    @Operation(summary = "숙소의 설명 정보 수정")
+    @Authenticated(Role.HOST)
+    @PatchMapping("{id}/description")
+    @ResponseStatus(HttpStatus.OK)
+    public AccommodationDetailResponse updateDescription(@PathVariable Long id,
+                                                         @RequestBody AccommodationDescriptionRequest description,
+                                                         TokenUserInfo user) {
+        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
+                id,
+                description.name(),
+                description.description(),
+                user.id()
+        ));
+    }
+
+    @Tag(name = "Host")
+    @Operation(summary = "숙소의 기본 정보 수정")
+    @Authenticated(Role.HOST)
+    @PatchMapping("{id}/base")
+    @ResponseStatus(HttpStatus.OK)
+    public AccommodationDetailResponse updateBaseInformation(@PathVariable Long id,
+                                                             @RequestBody BaseAccommodationInfoRequest baseInfo,
+                                                             TokenUserInfo user) {
+
+        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
+                id,
+                baseInfo.type(),
+                baseInfo.address(),
+                baseInfo.basePricePerDay(),
+                user.id()
+        ));
+    }
+
+    @Tag(name = "Host")
+    @Operation(summary = "숙소의 사진 수정")
+    @Authenticated(Role.HOST)
+    @PatchMapping("{id}/picture")
+    @ResponseStatus(HttpStatus.OK)
+    public AccommodationDetailResponse updatePictures(@PathVariable Long id,
+                                       @RequestBody List<String> pictureUrls,
+                                       TokenUserInfo user) {
+        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
+                id,
+                pictureUrls,
+                user.id()
         ));
     }
 
@@ -84,7 +151,7 @@ public class AccommodationController {
     @Operation(summary = "나의 숙소 조회", description = "내가 등록한 숙소를 조회합니다.")
     @Authenticated(HOST)
     @GetMapping("/my")
-    public List<AccommodationListResponse> myAccommodations(TokenUserInfo user){
+    public List<AccommodationListResponse> myAccommodations(TokenUserInfo user) {
         return previewOf(accommodationService.findByHost(userService.getCompleteUser(user)));
     }
 
@@ -97,17 +164,17 @@ public class AccommodationController {
     }
 
     @Tag(name = "User")
-    @Operation(summary = "예약 가능 일자 조회" , description = "지정 년월 중 숙소의 예약 가능 일자와 가격을 조회합니다.")
+    @Operation(summary = "예약 가능 일자 조회", description = "지정 년월 중 숙소의 예약 가능 일자와 가격을 조회합니다.")
     @GetMapping("/available/{id}/{date}")
     @ResponseStatus(OK)
-    public List<SimpleProductResponse> availableProducts(@PathVariable LocalDate date, @PathVariable Long id){
-        return accommodationService.findAvailableProductsInMonth(date , id)
+    public List<SimpleProductResponse> availableProducts(@PathVariable LocalDate date, @PathVariable Long id) {
+        return accommodationService.findAvailableProductsInMonth(date, id)
                 .stream()
                 .map(SimpleProductResponse::of)
                 .toList();
     }
 
-    private List<AccommodationListResponse> previewOf(List<AccommodationEntity> accommodations){
+    private List<AccommodationListResponse> previewOf(List<AccommodationEntity> accommodations) {
         return accommodations.stream().map(AccommodationListResponse::of).toList();
     }
 }

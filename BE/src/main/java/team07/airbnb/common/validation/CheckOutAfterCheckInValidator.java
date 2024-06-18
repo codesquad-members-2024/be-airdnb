@@ -2,11 +2,11 @@ package team07.airbnb.common.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import team07.airbnb.data.booking.dto.request.BookingRequest;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 
-public class CheckOutAfterCheckInValidator implements ConstraintValidator<CheckOutAfterCheckIn, BookingRequest> {
+public class CheckOutAfterCheckInValidator implements ConstraintValidator<CheckOutAfterCheckIn, Object> {
 
     @Override
     public void initialize(CheckOutAfterCheckIn constraintAnnotation) {
@@ -14,14 +14,22 @@ public class CheckOutAfterCheckInValidator implements ConstraintValidator<CheckO
     }
 
     @Override
-    public boolean isValid(BookingRequest request, ConstraintValidatorContext context) {
-        LocalDate checkIn = request.checkIn();
-        LocalDate checkOut = request.checkOut();
+    public boolean isValid(Object object, ConstraintValidatorContext context) {
+        try {
+            Method getCheckIn = object.getClass().getMethod("checkIn");
+            Method getCheckOut = object.getClass().getMethod("checkOut");
 
-        if (checkIn == null || checkOut == null) {
-            return true; // null 값은 다른 validator가 처리
+            LocalDate checkIn = (LocalDate) getCheckIn.invoke(object);
+            LocalDate checkOut = (LocalDate) getCheckOut.invoke(object);
+
+
+            if (checkIn == null || checkOut == null) {
+                return true; // null 값은 다른 validator가 처리
+            }
+
+            return !checkOut.isBefore(checkIn);
+        }catch (Exception e) {
+            throw new RuntimeException("Error validating CheckOutAfterCheckIn", e);
         }
-
-        return !checkOut.isBefore(checkIn);
     }
 }
