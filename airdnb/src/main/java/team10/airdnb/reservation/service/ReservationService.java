@@ -14,6 +14,7 @@ import team10.airdnb.reservation.controller.response.ReservationSummaryResponse;
 import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
 import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
+import team10.airdnb.reservation.exception.ReservationUnavailableException;
 import team10.airdnb.reservation.repository.ReservationRepository;
 
 import java.math.BigDecimal;
@@ -42,6 +43,8 @@ public class ReservationService {
     }
 
     public ReservationSummaryResponse createReservation(ReservationCreateRequest request) {
+        validateReservationAvailable(request); // 추가된 부분
+
         Member member = getMemberById(request.memberId());
 
         Accommodation accommodation = getAccommodationById(request.accommodationId());
@@ -59,6 +62,18 @@ public class ReservationService {
         reservationRepository.delete(reservation);
 
         return ReservationSummaryResponse.from(reservation);
+    }
+
+    private void validateReservationAvailable(ReservationCreateRequest request) {
+        List<Reservation> reservations = reservationRepository.findConflictingReservations(
+                request.accommodationId(),
+                request.checkInDate(),
+                request.checkOutDate()
+        );
+
+        if (!reservations.isEmpty()) {
+            throw new ReservationUnavailableException();
+        }
     }
 
     private Reservation getReservationById(long reservationId) {
