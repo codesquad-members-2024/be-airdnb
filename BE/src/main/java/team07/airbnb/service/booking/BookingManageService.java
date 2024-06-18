@@ -3,6 +3,7 @@ package team07.airbnb.service.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.request.CreateBookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.entity.BookingEntity;
@@ -45,11 +46,12 @@ public class BookingManageService {
         PriceInfo priceInfo = bookingPriceService.getPriceInfo(bookingInfo);
 
         PaymentEntity payment = paymentService.createNewPayment(priceInfo);
-        LocalDate checkIn = bookingInfo.checkIn();
-        LocalDate checkOut = bookingInfo.checkOut();
-        Integer headCount = bookingInfo.headCount();
+        Long accId = request.accommodationId();
+        LocalDate checkIn = request.checkIn();
+        LocalDate checkOut = request.checkOut();
+        Integer headCount = request.headCount();
 
-        UserEntity host = accommodationService.getHostIdById(accId);
+        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
 
         BookingEntity booking = BookingEntity.builder()
                 .host(host)

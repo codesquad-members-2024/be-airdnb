@@ -58,7 +58,12 @@ public class BookingController {
     @GetMapping
     @ResponseStatus(OK)
     public PriceInfo getBookingPriceInfo(@RequestBody @Valid BookingRequest requestInfo) {
-        return bookingPriceService.getPriceInfo(BookingInfoForPriceInfo.ofRequest(requestInfo));
+        return bookingPriceService.getPriceInfo(
+                requestInfo.accommodationId(),
+                requestInfo.checkIn(),
+                requestInfo.checkOut(),
+                requestInfo.headCount()
+        );
     }
 
     @Tag(name = "User")
