@@ -1,14 +1,17 @@
 package com.example.airdnb.controller;
 
 import com.example.airdnb.domain.accommodation.Accommodation;
+import com.example.airdnb.domain.accommodation.search.AccommodationSearchCond;
 import com.example.airdnb.domain.user.UserDetail;
 import com.example.airdnb.dto.accommodation.AccommodationCreationRequest;
-import com.example.airdnb.dto.accommodation.AccommodationResponse;
+import com.example.airdnb.dto.accommodation.search.AccommodationResponse;
 import com.example.airdnb.dto.review.ReviewCreateRequest;
 import com.example.airdnb.dto.review.ReviewResponse;
+import com.example.airdnb.dto.accommodation.search.AccommodationSearchCondRequest;
 import com.example.airdnb.service.AccommodationService;
 import com.example.airdnb.service.ReviewService;
 import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,15 +36,18 @@ public class AccommodationController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public List<AccommodationResponse> getAccommodationList() {
-        return accommodationService.getAccommodationList();
+    public List<AccommodationResponse> search(@ModelAttribute @Valid AccommodationSearchCondRequest accommodationSearchCondRequest) {
+
+        AccommodationSearchCond accommodationSearchCond = accommodationSearchCondRequest.toEntity();
+        log.info(accommodationSearchCond.toString());
+        return accommodationService.searchWithCondition(accommodationSearchCond);
     }
 
     @PostMapping
     public ResponseEntity<String> createNewAccommodation(@RequestBody AccommodationCreationRequest request) {
         log.info(request.toString());
-        Accommodation newAccommodation = accommodationService.createNewAccommodation(request);
-        return ResponseEntity.ok(String.format("SUCCESS!! NAME : %s", newAccommodation.getName()));
+        Accommodation createdAccommodation = accommodationService.createNewAccommodation(request);
+        return ResponseEntity.created(URI.create("/accommodations/" + createdAccommodation.getId())).build();
     }
 
     @PostMapping("/{accommodationId}/reviews")

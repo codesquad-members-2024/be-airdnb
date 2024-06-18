@@ -1,4 +1,4 @@
-package com.example.airdnb.domain.search;
+package com.example.airdnb.domain.accommodation.search;
 
 import java.time.LocalDate;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class StayPeriod {
     }
 
     private void validateDates(LocalDate checkInDate, LocalDate checkOutDate) {
-        if (checkInDate.isAfter(checkOutDate)) {
+        if (checkInDate.isAfter(checkOutDate) || checkInDate.isEqual(checkOutDate)) {
             throw new RuntimeException(); // 예외 변경 예정
         }
     }
