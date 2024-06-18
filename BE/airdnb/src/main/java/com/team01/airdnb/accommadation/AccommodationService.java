@@ -99,23 +99,12 @@ public class AccommodationService {
         .orElseThrow(() -> new NoSuchElementException("해당하는 숙소가 존재하지 않습니다."));
   }
 
-  /**
-   * 숙소를 검색합니다.
-   */
-  public List<AccommodationSearchResponse> search(LocalDate checkIn, LocalDate checkOut,
-      double minPrice,
-      double maxPrice, int adults, int children, int infants, int pets) {
-    List<AccommodationSearchResponse> searchResults = new ArrayList<>();
-
-    return searchResults;
-  }
-
   public Accommodation findAccommodation(Long id) {
     return accommodationRepository.findById(id).orElseThrow();
   }
 
   /**
-   * 필터를 적용하여 조건에 맞는 결과를 가져옵니다.
+   * 숙소 검색을 위해 필터를 적용하여 조건에 맞는 결과를 가져옵니다.
    */
   public List<AccommodationSearchResponse> searchFilteredAccommodations(
       AccommodationFilterRequest accommodationFilterRequest) {
