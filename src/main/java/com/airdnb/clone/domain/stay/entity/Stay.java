@@ -85,6 +85,9 @@ public class Stay extends BaseTimeEntity {
     @Embedded
     private RoomInformation roomInfo;
 
+    public static class StayBuilder {
+    }
+
     public Stay changeAlias(String alias) {
         this.alias = alias;
 

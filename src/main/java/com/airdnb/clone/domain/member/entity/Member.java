@@ -1,12 +1,16 @@
 package com.airdnb.clone.domain.member.entity;
 
 import com.airdnb.clone.domain.common.BaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +33,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "LOGIN_ID")
     private String loginId;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "PASSWORD")
     private String password;
 
@@ -38,7 +43,12 @@ public class Member extends BaseTimeEntity {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
-    // TODO: Spring Security -> PasswordEncoder 적용하기
+    @Column(name = "ROLE")
+    private String role;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+    private Set<Authority> authorities; // DTO에서 JsonIgnore 설정하기. (백엔드에서만 사용)
+
     public void changePassword(String password) {
         this.password = password;
     }
