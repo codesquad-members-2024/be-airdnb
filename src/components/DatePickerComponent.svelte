@@ -1,4 +1,3 @@
-<!-- DatePickerComponent.svelte -->
 <script>
     import { DatePicker } from '@svelte-plugins/datepicker';
     import { createEventDispatcher } from 'svelte';
@@ -7,18 +6,19 @@
     export let checkOut;
     export let dowLabels;
     export let monthLabels;
-    export let isRange = true;
-    export let isMultipane = true;
-    export let enableFutureDates = true;
-    export let enablePastDates = false;
-    export let showYearControls = false;
-    export let onDatePickerPopup = false;
+    export let onDatePickerPopup;
   
     const dispatch = createEventDispatcher();
   
     const handleDateSelected = (e) => {
       const { startDate, endDate } = e.detail;
+      checkIn = startDate;
+      checkOut = endDate;
       dispatch('dateSelected', { startDate, endDate });
+    };
+  
+    const toggleDatePicker = () => {
+      dispatch('toggle');
     };
   </script>
   
@@ -30,11 +30,11 @@
           bind:endDate={checkOut}
           {dowLabels}
           {monthLabels}
-          {isRange}
-          {isMultipane}
-          {enableFutureDates}
-          {enablePastDates}
-          {showYearControls}
+          isRange
+          isMultipane
+          enableFutureDates
+          enablePastDates={false}
+          showYearControls={false}
           on:dateSelected={handleDateSelected}
         />
   {/if}

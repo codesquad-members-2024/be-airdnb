@@ -2,29 +2,19 @@
   import { format } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
 
+  export let checkIn;
+  export let checkOut;
+
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
-  let checkIn = '';
-  let checkOut = '';
-  let dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
-  let monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-
-  const onClickClearCheckIn = () => {
-    checkIn = '';
-  };
-
-  const onClickClearCheckOut = () => {
-    checkOut = '';
-  };
+  const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
+  const monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
   const toggleDatePicker = () => {
     onDatePickerPopup = !onDatePickerPopup;
   };
 
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
-
-  let formattedCheckIn = '';
-  let formattedCheckOut = '';
 
   $: formattedCheckIn = formatDate(checkIn);
   $: formattedCheckOut = formatDate(checkOut);
@@ -35,21 +25,15 @@
     checkOut = endDate;
     toggleDatePicker();
   };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      toggleDatePicker();
-    }
-  };
 </script>
 
 <div class="fixed top-24 left-1/2 transform -translate-x-1/2 w-full max-w-4xl">
   <div class="bg-white shadow-md rounded-full flex items-center w-full">
-    <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleDatePicker} on:keydown={handleKeyDown}>
+    <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleDatePicker}>
       <div class="text-xs font-semibold text-gray-600">체크인</div>
       <div class="text-sm text-gray-800">{formattedCheckIn || '날짜 입력'}</div>
     </button>
-    <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleDatePicker} on:keydown={handleKeyDown}>
+    <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleDatePicker}>
       <div class="text-xs font-semibold text-gray-600">체크아웃</div>
       <div class="text-sm text-gray-800">{formattedCheckOut || '날짜 입력'}</div>
     </button>
@@ -71,15 +55,17 @@
   </div>
 </div>
 
-<DatePickerComponent
-  bind:checkIn={checkIn}
-  bind:checkOut={checkOut}
-  {dowLabels}
-  {monthLabels}
-  {onDatePickerPopup}
-  on:dateSelected={handleDateSelected}
-  on:toggle={toggleDatePicker}
-/>
+{#if onDatePickerPopup}
+  <DatePickerComponent
+    bind:checkIn
+    bind:checkOut
+    {dowLabels}
+    {monthLabels}
+    {onDatePickerPopup}
+    on:dateSelected={handleDateSelected}
+    on:toggle={toggleDatePicker}
+  />
+{/if}
 
 <style>
   .border-r {

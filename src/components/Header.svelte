@@ -6,11 +6,13 @@
 
   let showMiniSearchBar = false;
   let header;
+  let checkIn = '';
+  let checkOut = '';
 
   onMount(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      showMiniSearchBar = scrollPosition > 200; // 100px 스크롤 시 MiniSearchBar 보이기
+      showMiniSearchBar = scrollPosition > 200; // 200px 스크롤 시 MiniSearchBar 보이기
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -33,21 +35,18 @@
     
     <!-- 중앙 버튼들 -->
     <div class="flex justify-center space-x-6">
-
-    {#if !showMiniSearchBar}
+      {#if !showMiniSearchBar}
         <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">숙소</button>
         <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">체험</button>
         <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">온라인 체험</button>
-    {/if}
-    {#if showMiniSearchBar}
-          <MiniSearchBar />
-    {/if}
-  </div>
-
+      {/if}
+      {#if showMiniSearchBar}
+        <MiniSearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} />
+      {/if}
+    </div>
 
     <!-- 오른쪽 로그인 컴포넌트 및 미니 검색 바 -->
     <div class="flex items-center space-x-4">
-      
       <LoginPopup />
     </div>
   </div>
@@ -56,7 +55,7 @@
   <div class="absolute w-full flex justify-center">
     {#if !showMiniSearchBar}
       <div class="w-full max-w-4xl">
-        <SearchBar />
+        <SearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} />
       </div>
     {/if}
   </div>
