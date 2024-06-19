@@ -5,18 +5,17 @@ import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.reservation.Reservation;
 import codesquad.team05.domain.review.Review;
-import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
-import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Accommodation {
 
@@ -41,22 +40,33 @@ public class Accommodation {
     private String amenity;
     private Long hostId;
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
     List<Reservation> reservation = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
     List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @Setter
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Picture> pictures = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
     List<Hashtag> hashtags = new ArrayList<>();
 
-    public Accommodation(String name, int price, String address, int maxCapacity, int roomCount, int bedCount, String description, String amenity, Long hostId) {
+    public Accommodation(
+            String name,
+            int price,
+            String address,
+            int maxCapacity,
+            int roomCount,
+            int bedCount,
+            String description,
+            String amenity,
+            Long hostId
+    ) {
         this.name = name;
         this.price = price;
         this.address = address;
@@ -68,30 +78,23 @@ public class Accommodation {
         this.hostId = hostId;
     }
 
-    public void update(AccommodationUpdate newAccommodation) {
-        this.name = newAccommodation.getName();
-        this.price = newAccommodation.getPrice();
-        this.address = newAccommodation.getAddress();
-        this.maxCapacity = newAccommodation.getMaxCapacity();
-        this.roomCount = newAccommodation.getRoomCount();
-        this.bedCount = newAccommodation.getBedCount();
-        this.description = newAccommodation.getDescription();
-        this.amenity = newAccommodation.getAmenity();
-    }
-
-    public AccommodationResponse toEntity() {
-        AccommodationResponse accommodationResponse = new AccommodationResponse();
-        accommodationResponse.setId(id);
-        accommodationResponse.setName(name);
-        accommodationResponse.setPrice(price);
-        accommodationResponse.setAddress(address);
-        accommodationResponse.setMaxCapacity(maxCapacity);
-        accommodationResponse.setRoomCount(roomCount);
-        accommodationResponse.setBedCount(bedCount);
-        accommodationResponse.setDescription(description);
-        accommodationResponse.setAmenity(amenity);
-        accommodationResponse.setPictures(pictures.stream().map(Picture::toEntity).toList());
-
-        return accommodationResponse;
+    public void update(
+            String name,
+            int price,
+            String address,
+            int maxCapacity,
+            int roomCount,
+            int bedCount,
+            String description,
+            String amenity
+    ) {
+        this.name = name;
+        this.price = price;
+        this.address = address;
+        this.maxCapacity = maxCapacity;
+        this.roomCount = roomCount;
+        this.bedCount = bedCount;
+        this.description = description;
+        this.amenity = amenity;
     }
 }
