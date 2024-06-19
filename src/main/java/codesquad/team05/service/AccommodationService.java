@@ -3,8 +3,10 @@ package codesquad.team05.service;
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.accommodation.AccommodationRepository;
 import codesquad.team05.domain.picture.Picture;
-import codesquad.team05.web.accommodation.dto.request.AccommodationSave;
-import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
+import codesquad.team05.util.AccommodationMapper;
+import codesquad.team05.web.accommodation.dto.request.AccommodationSaveServiceRequest;
+import codesquad.team05.web.accommodation.dto.request.AccommodationUpdateServiceRequest;
+import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -24,36 +26,27 @@ public class AccommodationService {
     private final AmazonS3Client amazonS3Client;
     private final AccommodationRepository accommodationRepository;
 
-
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Value("${cloud.aws.s3.url}")
     private String s3Url;
 
-
-    public Long register(AccommodationSave form, List<String> pictures) {
-        Accommodation accommodation = new Accommodation(form.getName(), form.getPrice(), form.getAddress(), form.getMaxCapacity(), form.getRoomCount(),
-                form.getBedCount(), form.getDescription(), form.getAmenity(), null);
-
+    public Long register(AccommodationSaveServiceRequest serviceRequest, List<String> pictures) {
+        Accommodation accommodation = AccommodationMapper.toEntity(serviceRequest);
         List<Picture> picture = toPicture(pictures, accommodation);
         accommodation.setPictures(picture);
         return accommodationRepository.save(accommodation).getId();
     }
 
-
     public String uploadFile(MultipartFile file) throws IOException {
-
         if (file == null || file.isEmpty()) {
             return null;
         }
-
         String filename = file.getOriginalFilename();
         String fileUrl = s3Url + filename;
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
-
-
         objectMetadata.setContentType(file.getContentType());
         objectMetadata.setContentLength(file.getSize());
 
@@ -63,14 +56,26 @@ public class AccommodationService {
     }
 
     @Transactional(readOnly = true)
-    public Accommodation getAccommodation(Long accommodationId) {
-        return accommodationRepository.findById(accommodationId).orElseThrow();
+    public AccommodationResponse getAccommodationById(Long accommodationId) {
+        return AccommodationMapper.toResponse(accommodationRepository.findById(accommodationId).orElseThrow());
     }
 
-    public void updateAccommodation(Long accommodationId, AccommodationUpdate newAccommodation, List<String> url) {
+    public void updateAccommodation(
+            Long accommodationId,
+            AccommodationUpdateServiceRequest newAccommodation,
+            List<String> url
+    ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
-        accommodation.update(newAccommodation);
-
+        accommodation.update(
+                newAccommodation.getName(),
+                newAccommodation.getPrice(),
+                newAccommodation.getAddress(),
+                newAccommodation.getMaxCapacity(),
+                newAccommodation.getRoomCount(),
+                newAccommodation.getBedCount(),
+                newAccommodation.getDescription(),
+                newAccommodation.getAmenity()
+        );
     }
 
     private List<Picture> toPicture(List<String> pictures, Accommodation accommodation) {
@@ -79,7 +84,6 @@ public class AccommodationService {
             picture.setAccommodation(accommodation);
             return picture;
         }).toList();
-
     }
 
     public void delete(Long id) {
