@@ -3,32 +3,28 @@ package codesquad.team05.web.accommodation.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
-@AllArgsConstructor
-@Data
+@Getter
+@RequiredArgsConstructor
 public class AccommodationUpdate {
 
     @NotEmpty
-    private String name;
+    private final String name;
     @NotBlank
     @Size
-    private int price;
+    private final int price;
     @NotEmpty
-    private String address;
+    private final String address;
     @NotBlank
     @Size(min = 1)
-    private int maxCapacity;
+    private final int maxCapacity;
     @NotBlank
     @Size
-    private int roomCount;
+    private final int roomCount;
     @Size
-    private int bedCount;
-    private String description;
-    private String amenity;
-    private List<String> hashtags;
-
+    private final int bedCount;
+    private final String description;
+    private final String amenity;
 }
