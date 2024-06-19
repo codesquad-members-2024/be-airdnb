@@ -33,9 +33,7 @@ import static team07.airbnb.data.user.enums.Role.*;
 public class ReviewController {
 
     private final AccommodationService accommodationService;
-    private final BookingInquiryService bookingInquiryService;
     private final ReviewService reviewService;
-    private final UserService userService;
 
     @Operation(summary = "숙소 리뷰 조회")
     @GetMapping("/{accommodationId}")

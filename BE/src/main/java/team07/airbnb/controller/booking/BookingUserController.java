@@ -47,7 +47,6 @@ public class BookingUserController {
 
     private final BookingInquiryService bookingInquiryService;
     private final UserService userService;
-    private final BookingPriceService bookingPriceService;
     private final BookingManageService bookingManageService;
     private final BookingAuthService bookingAuthService;
 

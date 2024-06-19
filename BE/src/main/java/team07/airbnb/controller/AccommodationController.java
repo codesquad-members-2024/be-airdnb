@@ -62,11 +62,12 @@ public class AccommodationController {
     public AccommodationDetailResponse updateRoomInformation(@PathVariable Long id,
                                                              @RequestBody RoomInformation info,
                                                              TokenUserInfo user) {
-        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
-                id,
-                info,
-                user.id()
-        ));
+        return AccommodationDetailResponse.of(
+                accommodationService.updateAccommodation(
+                        id,
+                        info,
+                        userService.getCompleteUser(user)
+                ));
     }
 
     @Tag(name = "Host")
@@ -77,12 +78,13 @@ public class AccommodationController {
     public AccommodationDetailResponse updateDescription(@PathVariable Long id,
                                                          @RequestBody AccommodationDescriptionRequest description,
                                                          TokenUserInfo user) {
-        return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
-                id,
-                description.name(),
-                description.description(),
-                user.id()
-        ));
+        return AccommodationDetailResponse.of(
+                accommodationService.updateAccommodation(
+                        id,
+                        description.name(),
+                        description.description(),
+                        userService.getCompleteUser(user)
+                ));
     }
 
     @Tag(name = "Host")
@@ -99,7 +101,7 @@ public class AccommodationController {
                 baseInfo.type(),
                 baseInfo.address(),
                 baseInfo.basePricePerDay(),
-                user.id()
+                userService.getCompleteUser(user)
         ));
     }
 
@@ -109,15 +111,15 @@ public class AccommodationController {
     @PatchMapping("{id}/picture")
     @ResponseStatus(HttpStatus.OK)
     public AccommodationDetailResponse updatePictures(@PathVariable Long id,
-                                       @RequestBody List<String> pictureUrls,
-                                       TokenUserInfo user) {
+                                                      @RequestBody List<String> pictureUrls,
+                                                      TokenUserInfo user) {
         return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
                 id,
                 pictureUrls,
-                user.id()
+                userService.getCompleteUser(user)
         ));
     }
-
+    
     @Tag(name = "Host")
     @Operation(summary = "숙소 삭제", description = "등록한 숙소를 삭제합니다.")
     @DeleteMapping("/{id}")

@@ -49,7 +49,7 @@ public class BookingHostController {
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
     public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
+        bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
         bookingManageService.reopenBooking(bookingId);

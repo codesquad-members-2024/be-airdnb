@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.booking.enums.CheckAuthType;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.repository.BookingRepository;
