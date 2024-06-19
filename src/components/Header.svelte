@@ -1,9 +1,27 @@
 <script>
-  // 필요한 경우 여기에 스크립트를 추가할 수 있습니다.
+  import { onMount } from 'svelte';
   import LoginPopup from "./LoginPopup.svelte";
+  import MiniSearchBar from "./MiniSearchBar.svelte";
+  import SearchBar from "./SearchBar.svelte";
+
+  let showMiniSearchBar = false;
+  let header;
+
+  onMount(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      showMiniSearchBar = scrollPosition > 200; // 100px 스크롤 시 MiniSearchBar 보이기
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
 </script>
 
-<header class="absolute top-0 left-0 w-full bg-transparent text-white z-50">
+<header bind:this={header} class="fixed top-0 left-0 w-full bg-transparent text-white z-50">
   <div class="container mx-auto flex justify-between items-center py-4 px-6">
     
     <!-- 왼쪽 로고 -->
@@ -15,15 +33,31 @@
     
     <!-- 중앙 버튼들 -->
     <div class="flex justify-center space-x-6">
-      <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">숙소</button>
-      <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">체험</button>
-      <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">온라인 체험</button>
-    </div>
 
-    <!-- 오른쪽 로그인 컴포넌트 -->
-    <div class="flex justify-end">
+    {#if !showMiniSearchBar}
+        <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">숙소</button>
+        <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">체험</button>
+        <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">온라인 체험</button>
+    {/if}
+    {#if showMiniSearchBar}
+          <MiniSearchBar />
+    {/if}
+  </div>
+
+
+    <!-- 오른쪽 로그인 컴포넌트 및 미니 검색 바 -->
+    <div class="flex items-center space-x-4">
+      
       <LoginPopup />
     </div>
+  </div>
 
+  <!-- Search Bar -->
+  <div class="absolute w-full flex justify-center">
+    {#if !showMiniSearchBar}
+      <div class="w-full max-w-4xl">
+        <SearchBar />
+      </div>
+    {/if}
   </div>
 </header>
