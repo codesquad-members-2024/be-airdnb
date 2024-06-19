@@ -31,15 +31,14 @@ public class AccommodationService {
   AccommodationFilterRepository accommodationFilterRepository;
 
   public AccommodationService(AccommodationRepository accommodationRepository,
-      UserService userService,
-      AmenityService amenityService, ImageService imageService,
-      CommentService commentService, AccommodationFilterRepository accommodationFilterRepository) {
+      UserService userService, AmenityService amenityService, ImageService imageService,
+      CommentService commentService) {
     this.accommodationRepository = accommodationRepository;
     this.userService = userService;
     this.amenityService = amenityService;
     this.imageService = imageService;
     this.commentService = commentService;
-    this.accommodationFilterRepository = accommodationFilterRepository;
+
   }
 
   /**
@@ -108,7 +107,7 @@ public class AccommodationService {
    */
   public List<AccommodationSearchResponse> searchFilteredAccommodations(
       AccommodationFilterRequest accommodationFilterRequest) {
-    return accommodationFilterRepository.filterAccommodation(
+    return accommodationRepository.filterAccommodation(
         accommodationFilterRequest.checkin(),
         accommodationFilterRequest.checkout(),
         accommodationFilterRequest.minPrice(),
