@@ -3,8 +3,6 @@
   import Header from './components/Header.svelte'
 </script>
 
-<TailwindCss/>
-
 <Header />
 
 <main>
