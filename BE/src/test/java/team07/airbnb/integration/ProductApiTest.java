@@ -38,9 +38,9 @@ public class ProductApiTest {
         dataBaseHelper.clear();
     }
 
-    @DisplayName("")
+    @DisplayName("필터 적용 테스트")
     @Test
-    void test() {
+    void filter() {
         // given
 
         // when

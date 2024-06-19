@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.common.util.DateHelper;
 import team07.airbnb.common.util.GeometryHelper;
+import team07.airbnb.controller.AccommodationFilterDTO;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
@@ -130,5 +131,9 @@ public class AccommodationService {
         if (!accommodation.getHost().getId().equals(id)) throw new UnAuthorizedException(this.getClass(), userId);
 
         return accommodation;
+    }
+
+    public List<AccommodationEntity> findWithFilter(AccommodationFilterDTO filter) {
+        return null;
     }
 }

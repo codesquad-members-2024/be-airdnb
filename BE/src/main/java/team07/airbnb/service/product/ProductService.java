@@ -3,6 +3,7 @@ package team07.airbnb.service.product;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import team07.airbnb.controller.AccommodationFilterDTO;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.AccommodationEntity;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +29,70 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final AccommodationService accommodationService;
 
-    public List<ProductListResponse> findAvailableInDateRange(
-            List<AccommodationEntity> accommodations, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
+    public List<ProductListResponse> findWithFilter(AccommodationFilterDTO filter) {
 
-        return accommodations.stream()
-                .map(AccommodationEntity::getOpenProducts)
-                .filter(productEntities -> isAvailablePeopleCount(productEntities, headCount) && isAvailableInDateRange(productEntities, checkIn, checkOut))
-                .map(productEntities -> new ProductListResponse(
-                        AccommodationListResponse.of(productEntities.get(0).getAccommodation()),
-                        (int) productEntities.stream().mapToInt(ProductEntity::getPrice).average().getAsDouble()))
-                .toList();
+        List<AccommodationEntity> nearbyAccommodations = accommodationService.findNearbyAccommodations(
+                filter.longitude(),
+                filter.latitude(),
+                filter.distance() * 1000);
+
+        Stream<List<ProductEntity>> filteredStream = getFilteredStream(filter, nearbyAccommodations);
+
+        List<ProductListResponse> accommodations = filteredStream
+                .map(openProducts -> new ProductListResponse(
+                                AccommodationListResponse.of(openProducts.get(0).getAccommodation()),
+                                getAveragePriceForDateRange(openProducts, filter.checkInDate(), filter.checkOutDate())
+                        )
+                ).toList();
+
+        if (filter.minPrice() != null){
+            accommodations = accommodations.stream()
+                    .filter(accommodation -> accommodation.price() >= filter.minPrice())
+                    .toList();
+        }
+
+       if (filter.maxPrice() != null){
+            accommodations = accommodations.stream()
+                    .filter(accommodation -> accommodation.price() <= filter.maxPrice())
+                    .toList();
+        }
+
+       return accommodations;
     }
+
+    private Stream<List<ProductEntity>> getFilteredStream(AccommodationFilterDTO filter, List<AccommodationEntity> nearbyAccommodations) {
+        Stream<List<ProductEntity>> accommodations = nearbyAccommodations.stream()
+                .map(AccommodationEntity::getOpenProducts);
+
+
+
+
+        if (filter.checkInDate() != null && filter.checkOutDate() != null) accommodations =
+                accommodations.
+                        filter(openProducts -> isAvailableInDateRange(
+                                openProducts,
+                                filter.checkInDate(),
+                                filter.checkOutDate()));
+
+        if(filter.headCount() != null) accommodations =
+                accommodations
+                .filter(openProducts -> isAvailablePeopleCount(openProducts, filter.headCount()));
+
+        return accommodations;
+    }
+
+    private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
+        if (checkInDate != null && checkOutDate != null) {
+            openProducts = openProducts.stream()
+                    .filter(product -> product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
+                    .toList();
+        }
+        return (int) openProducts.stream()
+                .mapToInt(ProductEntity::getPrice)
+                .average()
+                .getAsDouble();
+    }
+
 
     public List<ProductEntity> getInDateRangeOfAccommodation(Long accommodationId, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
         if (isIllegalRequest(accommodationId, checkIn, checkOut, headCount)) {
