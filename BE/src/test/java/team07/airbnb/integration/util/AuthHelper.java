@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterAll;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.common.auth.jwt.JwtUserDetails;
@@ -14,6 +15,8 @@ import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.UserEntity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Transactional
@@ -25,8 +28,19 @@ public class AuthHelper {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private Map<Role, UserEntity> userInstances = new HashMap<>();
+
+    public UserEntity getUserInstanceByRole(Role role) {
+        return userInstances.get(role);
+    }
+
+
     public String login(Role role) throws JsonProcessingException {
         UserEntity dummyUser = new UserEntity(null, "", role.getTitle(), "test@test.com", role, "regTest", new ArrayList<>());
+        if (!userInstances.containsKey(role)) {
+            userInstances.put(role, dummyUser);
+        }
+
         entityManager.persist(dummyUser);
         entityManager.flush();
 

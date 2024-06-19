@@ -3,6 +3,8 @@ package team07.airbnb.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +21,10 @@ import team07.airbnb.common.util.GeometryHelper;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
+import team07.airbnb.data.booking.enums.BookingStatus;
+import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ProductEntity;
 import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.integration.util.AuthHelper;
@@ -33,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static team07.airbnb.data.user.enums.Role.HOST;
 import static team07.airbnb.data.user.enums.Role.USER;
@@ -99,6 +105,7 @@ class BookingApiTest {
     }
 
     @Test
+    @DisplayName("숙소 아이디, 체크인, 체크아웃, 인원수를 주면 가격이 응답되어야된다.")
     void getBookingPriceTest() throws JsonProcessingException {
         //given
         BookingRequest dummyRequest = monkey.giveMeBuilder(BookingRequest.class)
@@ -116,8 +123,24 @@ class BookingApiTest {
         assertThat(response.getDiscountPrice()).isEqualTo((int) (60000 * 0.04));
     }
 
+    @Test
+    void confirmBooking() throws JsonProcessingException {
+        //given
+        bookingCreateTest();
+
+        //when
+        Long response = hostRequest.post("/booking/1", Long.class);
+
+        //then
+        assertThat(response).isEqualTo(1L);
+
+        BookingEntity booking = dataBaseHelper.find(1L, BookingEntity.class);
+        assertThat(booking.getStatus()).isEqualTo(BookingStatus.CONFIRM);
+    }
+
     void createDummyAccommodation() {
         List<Object> dummies = new ArrayList<>();
+        AccommodationLocation accommodationLocation = monkey.giveMeOne(AccommodationLocation.class);
         AccommodationEntity dummyAC = monkey
                                         .giveMeBuilder(AccommodationEntity.class)
                                         .set("id", null)
