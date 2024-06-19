@@ -1,21 +1,22 @@
 package codesquad.team05.web.accommodation.dto.response;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@RequiredArgsConstructor
 public class AccommodationResponse {
 
-    private Long id;
-    private String name;
-    private int price;
-    private String address;
-    private int maxCapacity;
-    private int roomCount;
-    private int bedCount;
-    private String description;
-    private String amenity;
+    private final Long id;
+    private final String name;
+    private final int price;
+    private final String address;
+    private final int maxCapacity;
+    private final int roomCount;
+    private final int bedCount;
+    private final String description;
+    private final String amenity;
+    @Setter
     private List<PictureDto> pictures;
-
 }
