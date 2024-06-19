@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import LoginPagePopup from './LoginPagePopup.svelte';
 
   let isOpen = false;
@@ -29,6 +30,7 @@
     user.userEmail = null;
     user.username = null;
     user.profileImage = "/assets/profile.png"; // 기본 프로필 이미지로 되돌리기
+    localStorage.removeItem('jwt');
   }
 
   const toggleLoginModal = () => {
@@ -40,6 +42,26 @@
     login(userData.userEmail, userData.username, userData.profileImage);
     toggleLoginModal();
   }
+
+  onMount(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        // Extract payload part of JWT
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const decodedToken = JSON.parse(jsonPayload);
+
+        login(decodedToken.memberId, decodedToken.memberName, decodedToken.memberProfile);
+      } catch (error) {
+        console.error('Error decoding token on mount:', error);
+      }
+    }
+  });
 </script>
 
 <div class="relative inline-block text-left">
@@ -70,10 +92,10 @@
       </div>
     </div>
   {/if}
-
-  <!-- LoginPagePopup Modal -->
-  <LoginPagePopup show={showLoginModal} onClose={toggleLoginModal} on:login={handleLogin} />
 </div>
+
+<!-- LoginPagePopup Modal -->
+<LoginPagePopup show={showLoginModal} onClose={toggleLoginModal} on:login={handleLogin} />
 
 <style>
   /* Tailwind CSS 기본 설정을 사용하므로 별도 스타일 정의는 최소화 */
