@@ -36,7 +36,7 @@ public class FavoriteController {
     @Operation(summary = "위시리스트에 상품 추가")
     @Authenticated(Role.USER)
     @PostMapping("/{id}")
-    public void addFavorite(@PathVariable long id, TokenUserInfo user) {
+    public void addFavorite(@PathVariable Long id, TokenUserInfo user) {
         userService.addFavorite(user.id(), productService.findById(id));
     }
 
@@ -44,7 +44,7 @@ public class FavoriteController {
     @Operation(summary = "위시리스트에서 상품 삭제")
     @Authenticated(Role.USER)
     @DeleteMapping("/{id}")
-    public void removeFavorite(@PathVariable long id, TokenUserInfo user) {
+    public void removeFavorite(@PathVariable Long id, TokenUserInfo user) {
         userService.removeFavorite(user.id(), productService.findById(id));
 
     }

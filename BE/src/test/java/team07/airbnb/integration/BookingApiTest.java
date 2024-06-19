@@ -7,21 +7,27 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+import team07.airbnb.common.util.GeometryHelper;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.request.BookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.ProductEntity;
+import team07.airbnb.entity.embed.AccommodationLocation;
 import team07.airbnb.integration.util.AuthHelper;
 import team07.airbnb.integration.util.DataBaseHelper;
 import team07.airbnb.integration.util.Request;
 import team07.airbnb.integration.util.TestConfig;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +59,8 @@ class BookingApiTest {
 
     @Autowired
     FixtureMonkey monkey;
+    @Autowired
+    GeometryHelper geometryHelper;
 
     //settings
     @LocalServerPort
@@ -113,7 +121,11 @@ class BookingApiTest {
         AccommodationEntity dummyAC = monkey
                                         .giveMeBuilder(AccommodationEntity.class)
                                         .set("id", null)
+                                        .set("address",
+                                                new AccommodationLocation(null, null,
+                                                        geometryHelper.getPoint(1,1)))
                                         .sample();
+        System.out.println(dummyAC.getAddress());
         dummies.add(dummyAC);
         for (long i = 0; i < 10; i++) {
             dummies.add(ProductEntity.ofOpen(dummyAC, LocalDate.now().plusDays(i), 10000));

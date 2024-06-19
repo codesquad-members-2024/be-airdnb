@@ -1,4 +1,5 @@
 **/app_settings
+**/src/main/**/generated
 .jqwik-database
 
 HELP.md
