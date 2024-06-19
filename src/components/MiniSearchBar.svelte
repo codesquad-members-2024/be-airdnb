@@ -43,7 +43,7 @@
 </script>
 
 <div class="relative">
-  <div class="bg-white shadow-md rounded-full flex items-center w-full max-w-md p-2 border border-gray-300">
+  <div class="bg-white shadow-md rounded-full flex items-center w-full max-w-lg p-2 border border-gray-300">
     <button type="button" class="flex-grow px-4 py-2 border-r text-left" on:click={toggleDatePicker}>
       <div class="text-sm text-gray-600">{formattedDates}</div>
     </button>
