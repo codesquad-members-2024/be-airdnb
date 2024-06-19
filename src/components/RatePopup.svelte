@@ -1,16 +1,15 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    
+  
     export let minPrice = 100000;
     export let maxPrice = 1000000;
+    export let selectedMinPrice;
+    export let selectedMaxPrice;
     export let onClose;
-  
-    let minSelected = minPrice;
-    let maxSelected = maxPrice;
   
     const handleClickOutside = (event) => {
       if (!event.target.closest('.popup')) {
-        onClose(minSelected, maxSelected);
+        onClose(selectedMinPrice, selectedMaxPrice);
       }
     };
   
@@ -19,15 +18,15 @@
     };
   
     const handleMinChange = (event) => {
-      minSelected = roundToNearestThousand(Math.min(event.target.value, maxSelected - 1000));
+      selectedMinPrice = roundToNearestThousand(Math.min(event.target.value, selectedMaxPrice - 1000));
     };
   
     const handleMaxChange = (event) => {
-      maxSelected = roundToNearestThousand(Math.max(event.target.value, minSelected + 1000));
+      selectedMaxPrice = roundToNearestThousand(Math.max(event.target.value, selectedMinPrice + 1000));
     };
   
     const handleApply = () => {
-      onClose(minSelected, maxSelected);
+      onClose(selectedMinPrice, selectedMaxPrice);
     };
   
     onMount(() => {
@@ -44,11 +43,11 @@
       <div class="range-slider">
         <div class="text-lg font-bold mb-4">가격 범위</div>
         <div class="mb-6">평균 1박 요금은 ₩165,556원 입니다.</div>
-        <label for="min-price">최소 요금: ₩{minSelected.toLocaleString()}</label>
-        <label for="max-price">최대 요금: ₩{maxSelected.toLocaleString()}</label>
+        <label for="min-price">최소 요금: ₩{selectedMinPrice.toLocaleString()}</label>
+        <label for="max-price">최대 요금: ₩{selectedMaxPrice.toLocaleString()}</label>
         <div class="slider">
-          <input id="min-price" type="range" min={minPrice} max={maxPrice} bind:value={minSelected} on:input={handleMinChange} step="1000"/>
-          <input id="max-price" type="range" min={minPrice} max={maxPrice} bind:value={maxSelected} on:input={handleMaxChange} step="1000"/>
+          <input id="min-price" type="range" min={minPrice} max={maxPrice} bind:value={selectedMinPrice} on:input={handleMinChange} step="1000"/>
+          <input id="max-price" type="range" min={minPrice} max={maxPrice} bind:value={selectedMaxPrice} on:input={handleMaxChange} step="1000"/>
         </div>
       </div>
       <button class="apply-button" on:click={handleApply}>적용</button>
@@ -58,6 +57,7 @@
   <style>
     .popup {
       width: 300px;
+      z-index: 50; /* Ensure the popup is above other elements */
     }
     label {
       color: black;
@@ -95,35 +95,33 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       pointer-events: all;
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: black;
+      background: url("../../public/assets/toggleBtn.png");
+      background-repeat: no-repeat;
+      background-size: contain;
       cursor: pointer;
       position: relative;
       z-index: 2;
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0ic2l6ZS02Ij4KICA8cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGQ9Ik0xNSAxMkg5bTEyIDBhOSA5IDAgMSAxLTE4IDAgOSA5IDAgMCAxIDE4IDBaIi8+Cjwvc3ZnPgo=') no-repeat center;
-      background-size: contain;
     }
     input[type="range"]#max-price::-webkit-slider-thumb {
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0ic2l6ZS02Ij4KICA8cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGQ9Ik0xMiA5djZtMy0zaC02bTEyIDBhOSA5IDAgMSAxLTE4IDAgOSA5IDAgMCAxIDE4IDBaIi8+Cjwvc3ZnPgo=') no-repeat center;
+        background: url("../../public/assets/toggleBtn.png");
+      background-repeat: no-repeat;
       background-size: contain;
     }
     input[type="range"]::-moz-range-thumb {
       pointer-events: all;
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: black;
       cursor: pointer;
       position: relative;
       z-index: 2;
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0ic2l6ZS02Ij4KICA8cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGQ9Ik0xNSAxMkg5bTEyIDBhOSA5IDAgMSAxLTE4IDAgOSA5IDAgMCAxIDE4IDBaIi8+Cjwvc3ZnPgo=') no-repeat center;
-      background-size: contain;
     }
     input[type="range"]#max-price::-moz-range-thumb {
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBjbGFzcz0ic2l6ZS02Ij4KICA8cGF0aCBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGQ9Ik0xMiA5djZtMy0zaC02bTEyIDBhOSA5IDAgMSAxLTE4IDAgOSA5IDAgMCAxIDE4IDBaIi8+Cjwvc3ZnPgo=') no-repeat center;
-      background-size: contain;
+      background: black;
     }
     .apply-button {
       background-color: #4CAF50; /* 녹색 배경 */
@@ -134,6 +132,10 @@
       cursor: pointer; /* 커서 포인터 */
       font-size: 16px; /* 글자 크기 */
       font-weight: bold; /* 글자 두껍게 */
+      margin-top: 20px; /* 여백 추가 */
+      display: block; /* 버튼을 블록 요소로 만듦 */
+      width: 100%; /* 버튼이 부모 요소의 너비를 차지하도록 */
+      text-align: center; /* 텍스트 중앙 정렬 */
     }
     .apply-button:hover {
       background-color: #45a049; /* 호버 시 더 진한 녹색 */

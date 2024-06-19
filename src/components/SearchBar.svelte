@@ -5,14 +5,12 @@
 
   export let checkIn;
   export let checkOut;
+  export let selectedMinPrice;
+  export let selectedMaxPrice;
 
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
   let onRatePopup = false;
-  let minPrice = 100000;
-  let maxPrice = 1000000;
-  let selectedMinPrice = minPrice;
-  let selectedMaxPrice = maxPrice;
   const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
   const monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
@@ -84,7 +82,7 @@
 {/if}
 
 {#if onRatePopup}
-  <RatePopup {minPrice} {maxPrice} onClose={handleRateSelected} />
+  <RatePopup bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} onClose={handleRateSelected} />
 {/if}
 
 <style>

@@ -1,17 +1,25 @@
 <script>
   import { format } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
+  import RatePopup from './RatePopup.svelte';
 
   export let checkIn;
   export let checkOut;
+  export let selectedMinPrice;
+  export let selectedMaxPrice;
 
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
+  let onRatePopup = false;
   const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
   const monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
   const toggleDatePicker = () => {
     onDatePickerPopup = !onDatePickerPopup;
+  };
+
+  const toggleRatePopup = () => {
+    onRatePopup = !onRatePopup;
   };
 
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
@@ -26,6 +34,12 @@
     checkOut = endDate;
     toggleDatePicker();
   };
+
+  const handleRateSelected = (min, max) => {
+    selectedMinPrice = min;
+    selectedMaxPrice = max;
+    toggleRatePopup();
+  };
 </script>
 
 <div class="relative">
@@ -33,9 +47,9 @@
     <button type="button" class="flex-grow px-4 py-2 border-r text-left" on:click={toggleDatePicker}>
       <div class="text-sm text-gray-600">{formattedDates}</div>
     </button>
-    <div class="flex-grow px-4 py-2 border-r">
-      <div class="text-sm text-gray-600">금액대 입력</div>
-    </div>
+    <button type="button" class="flex-grow px-4 py-2 border-r text-left" on:click={toggleRatePopup}>
+      <div class="text-sm text-gray-600">₩{selectedMinPrice.toLocaleString()} - ₩{selectedMaxPrice.toLocaleString()}</div>
+    </button>
     <div class="flex-grow px-4 py-2 border-r">
       <div class="text-sm text-gray-600">인원 입력</div>
     </div>
@@ -49,15 +63,19 @@
   </div>
 
   {#if onDatePickerPopup}
-      <DatePickerComponent
-        bind:checkIn={checkIn}
-        bind:checkOut={checkOut}
-        {dowLabels}
-        {monthLabels}
-        {onDatePickerPopup}
-        on:dateSelected={handleDateSelected}
-        on:toggle={toggleDatePicker}
-      />
+    <DatePickerComponent
+      bind:checkIn={checkIn}
+      bind:checkOut={checkOut}
+      {dowLabels}
+      {monthLabels}
+      {onDatePickerPopup}
+      on:dateSelected={handleDateSelected}
+      on:toggle={toggleDatePicker}
+    />
+  {/if}
+
+  {#if onRatePopup}
+    <RatePopup bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} onClose={handleRateSelected} />
   {/if}
 </div>
 
