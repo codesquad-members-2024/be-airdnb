@@ -1,0 +1,6 @@
+spring:
+  config:
+    import:
+      - app_settings/oauth-config.yml
+      - app_settings/jwt-config.yml
+      - app_settings/test-db-config.yml

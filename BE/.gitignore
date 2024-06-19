@@ -1,4 +1,5 @@
 **/app_settings
+.jqwik-database
 
 HELP.md
 .gradle

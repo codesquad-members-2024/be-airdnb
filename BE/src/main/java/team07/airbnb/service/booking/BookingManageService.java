@@ -43,9 +43,6 @@ public class BookingManageService {
 
     public BookingCreateResponse createBooking(BookingInfoForPriceInfo bookingInfo, Long accId, UserEntity booker) {
         PriceInfo priceInfo = bookingPriceService.getPriceInfo(bookingInfo);
-        if (priceInfo.isEmpty()) {
-            throw new InvalidBookingRequestException(bookingInfo);
-        }
 
         PaymentEntity payment = paymentService.createNewPayment(priceInfo);
         LocalDate checkIn = bookingInfo.checkIn();

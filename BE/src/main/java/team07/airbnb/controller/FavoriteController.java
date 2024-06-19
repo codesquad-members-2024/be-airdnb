@@ -41,7 +41,7 @@ public class FavoriteController {
     }
 
     @Tag(name = "User")
-    @Operation(summary = "위시리스트에서 상품 추가")
+    @Operation(summary = "위시리스트에서 상품 삭제")
     @Authenticated(Role.USER)
     @DeleteMapping("/{id}")
     public void removeFavorite(@PathVariable long id, TokenUserInfo user) {

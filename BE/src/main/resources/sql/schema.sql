@@ -149,3 +149,7 @@ CREATE TABLE USER_LIKES_PRODUCT
     constraint user_id foreign key (user_id) references USERS (id)
 );
 
+ALTER TABLE ACCOMMODATION MODIFY point POINT NOT NULL SRID 4326;
+CREATE SPATIAL INDEX point_spatial_index ON ACCOMMODATION(point);
+
+insert into DISCOUNT_POLICY values (null, "주단위할인", 'weeklyRateDiscountPolicy', null, null);
