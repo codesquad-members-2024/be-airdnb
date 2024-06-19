@@ -14,9 +14,8 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationResponse get(Long id) {
+    public ReservationResponse findOneById(Long id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
         return reservation.toEntity();
-
     }
 }

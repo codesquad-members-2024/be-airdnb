@@ -32,15 +32,13 @@ public class AccommodationService {
     private String s3Url;
 
 
-    public void register(AccommodationSave form, List<String> pictures) {
-
+    public Long register(AccommodationSave form, List<String> pictures) {
         Accommodation accommodation = new Accommodation(form.getName(), form.getPrice(), form.getAddress(), form.getMaxCapacity(), form.getRoomCount(),
                 form.getBedCount(), form.getDescription(), form.getAmenity(), null);
 
         List<Picture> picture = toPicture(pictures, accommodation);
         accommodation.setPictures(picture);
-
-        accommodationRepository.save(accommodation);
+        return accommodationRepository.save(accommodation).getId();
     }
 
 
