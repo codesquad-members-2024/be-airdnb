@@ -2,6 +2,7 @@ package team07.airbnb.service.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.data.booking.dto.PriceInfo;
 import team07.airbnb.data.booking.dto.request.CreateBookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
@@ -24,6 +25,7 @@ import static team07.airbnb.data.booking.enums.BookingStatus.REQUESTED;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookingManageService {
 
     private final BookingInquiryService bookingInquiryService;

@@ -3,12 +3,16 @@ package team07.airbnb.service.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team07.airbnb.controller.ReviewController;
 import team07.airbnb.data.booking.enums.CheckAuthType;
+import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
+import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ReviewEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.exception.not_found.ReviewNotFoundException;
+import team07.airbnb.repository.BookingRepository;
 import team07.airbnb.repository.ReviewRepository;
 import team07.airbnb.service.booking.BookingAuthService;
 import team07.airbnb.service.booking.BookingInquiryService;
@@ -19,7 +23,9 @@ import team07.airbnb.service.booking.BookingInquiryService;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final BookingRepository bookingRepository;
     private final BookingAuthService bookingAuthService;
+    private final BookingInquiryService bookingInquiryService;
 
     public void addReplyTo(long reviewId, String content, TokenUserInfo writerInfo) {
         ReviewEntity review = getById(reviewId);
@@ -46,5 +52,23 @@ public class ReviewService {
 
     private ReviewEntity getById(Long id) {
         return reviewRepository.findById(id).orElseThrow(() -> new ReviewNotFoundException(id));
+    }
+
+    public void postReview(Long userId, Long bookingId, ReviewPostRequest request) {
+        BookingEntity booking = bookingInquiryService.findByBookingId(bookingId);
+        this.addReview(
+                bookingId,
+                userId,
+                new ReviewEntity(booking, request.content(), request.rating())
+        );
+    }
+
+
+    private void addReview(Long bookingId, Long writerId, ReviewEntity review) {
+        BookingEntity booking = bookingInquiryService.findByBookingId(bookingId);
+        if (!booking.getBooker().getId().equals(writerId))
+            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
+
+        bookingRepository.save(booking.addReview(review));
     }
 }

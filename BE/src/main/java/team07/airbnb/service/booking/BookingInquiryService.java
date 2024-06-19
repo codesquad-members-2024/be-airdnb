@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class BookingInquiryService {
 
     private final AccommodationService accommodationService;
@@ -54,23 +54,5 @@ public class BookingInquiryService {
                 .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
                 .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
                 .toList();
-    }
-
-    public void postReview(Long userId, Long bookingId, ReviewPostRequest request) {
-        BookingEntity booking = this.findByBookingId(bookingId);
-        this.addReview(
-                bookingId,
-                userId,
-                new ReviewEntity(booking, request.content(), request.rating())
-        );
-    }
-
-
-    private void addReview(Long bookingId, Long writerId, ReviewEntity review) {
-        BookingEntity booking = findByBookingId(bookingId);
-        if (!booking.getBooker().getId().equals(writerId))
-            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
-
-        bookingRepository.save(booking.addReview(review));
     }
 }

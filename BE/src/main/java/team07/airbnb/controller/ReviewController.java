@@ -52,7 +52,7 @@ public class ReviewController {
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
     public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        bookingInquiryService.postReview(user.id(), bookingId, request);
+        reviewService.postReview(user.id(), bookingId, request);
     }
 
     @Tag(name = "Host")
