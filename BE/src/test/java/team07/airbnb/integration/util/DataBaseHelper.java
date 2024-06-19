@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Profile("test")
 @Transactional
 public class DataBaseHelper {
 
