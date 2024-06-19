@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     export let show = false;
     export let onClose;
   
@@ -6,18 +7,57 @@
     let password = '';
     let name = '';
     let isLoginMode = true;
+    const dispatch = createEventDispatcher();
   
-    const handleLoginOrSignup = () => {
-      if (isLoginMode) {
-        // 로그인 처리 로직
-        console.log('Email:', email);
-        console.log('Password:', password);
-      } else {
-        // 회원가입 처리 로직
-        console.log('Signup Name:', name);
-        console.log('Signup Email:', email);
-        console.log('Signup Password:', password);
-      }
+    const handleLoginOrSignup = async () => {
+      const endpoint = isLoginMode ? '/api/login' : '/api/register';
+      const body = JSON.stringify({ email, password, name: !isLoginMode ? name : undefined });
+  
+      try {
+        const response = await fetch(`http://localhost:8080${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          const token = data.accessToken;
+          localStorage.setItem('jwt', token);
+  
+          try {
+            // Extract payload part of JWT
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+  
+            const decodedToken = JSON.parse(jsonPayload);
+  
+            const user = {
+              userEmail: decodedToken.memberId,
+              username: decodedToken.memberName,
+              profileImage: decodedToken.memberProfile
+            };
+  
+            alert("로그인 되었습니다.");
+            dispatch('login', user);
+            handleClose();
+          } catch (error) {
+            console.error('Error decoding token:', error);
+            alert('토큰 디코딩 중 오류가 발생했습니다.');
+          }
+        } else {
+          const errorData = await response.json();
+          alert(errorData.errorMessage);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('로그인 중 오류가 발생했습니다.');
+      } 
     };
   
     const handleSocialLogin = (provider) => {
@@ -49,19 +89,19 @@
         
         <div class="mb-4">
           <label for="email" class="block text-gray-700">이메일</label>
-          <input id="email" type="email" bind:value={email} class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="이메일을 입력하세요" />
+          <input id="email" type="email" bind:value={email} class="w-full p-2 border border-gray-300 rounded mt-1 text-gray-900" placeholder="이메일을 입력하세요" />
         </div>
   
         {#if !isLoginMode}
           <div class="mb-6">
             <label for="name" class="block text-gray-700">이름</label>
-            <input id="name" type="text" bind:value={name} class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="이름을 입력하세요" />
+            <input id="name" type="text" bind:value={name} class="w-full p-2 border border-gray-300 rounded mt-1 text-gray-900" placeholder="이름을 입력하세요" />
           </div>
         {/if}
     
         <div class="mb-4">
           <label for="password" class="block text-gray-700">비밀번호</label>
-          <input id="password" type="password" bind:value={password} class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="비밀번호를 입력하세요" />
+          <input id="password" type="password" bind:value={password} class="w-full p-2 border border-gray-300 rounded mt-1 text-gray-900" placeholder="비밀번호를 입력하세요" />
         </div>
     
         <button on:click={handleLoginOrSignup} class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">{isLoginMode ? '로그인' : '회원가입'}</button>

@@ -5,24 +5,28 @@
   let showLoginModal = false;
   
   let user = {
+    "userEmail": null,
     "username": null, // 초기에는 null로 설정
     "profileImage": "/assets/profile.png" // 기본 프로필 이미지 경로
   };
-  
+
   function togglePopup() {
     isOpen = !isOpen;
   }
-  
+
   function closePopup() {
     isOpen = false;
   }
-  
-  function login(username, profileImage) {
+
+  function login(userEmail, username, profileImage) {
+    user.userEmail = userEmail;
     user.username = username;
     user.profileImage = profileImage;
+    showLoginModal = false;
   }
-  
+
   function logout() {
+    user.userEmail = null;
     user.username = null;
     user.profileImage = "/assets/profile.png"; // 기본 프로필 이미지로 되돌리기
   }
@@ -30,8 +34,14 @@
   const toggleLoginModal = () => {
     showLoginModal = !showLoginModal;
   };
+
+  function handleLogin(event) {
+    const userData = event.detail;
+    login(userData.userEmail, userData.username, userData.profileImage);
+    toggleLoginModal();
+  }
 </script>
-  
+
 <div class="relative inline-block text-left">
   <div>
     <button on:click={togglePopup} class="inline-flex justify-center space-x-2 items-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -60,10 +70,10 @@
       </div>
     </div>
   {/if}
-</div>
 
-<!-- LoginPagePopup Modal -->
-<LoginPagePopup show={showLoginModal} onClose={toggleLoginModal} />
+  <!-- LoginPagePopup Modal -->
+  <LoginPagePopup show={showLoginModal} onClose={toggleLoginModal} on:login={handleLogin} />
+</div>
 
 <style>
   /* Tailwind CSS 기본 설정을 사용하므로 별도 스타일 정의는 최소화 */
