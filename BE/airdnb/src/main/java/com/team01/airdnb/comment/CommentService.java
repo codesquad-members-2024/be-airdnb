@@ -17,14 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class CommentService {
 
-  @Autowired
-  private CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
+  private final UserRepository userRepository;
+  private final AccommodationRepository accommodationRepository;
 
   @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private AccommodationRepository accommodationRepository;
+  public CommentService(CommentRepository commentRepository, UserRepository userRepository,
+      AccommodationRepository accommodationRepository) {
+    this.commentRepository = commentRepository;
+    this.userRepository = userRepository;
+    this.accommodationRepository = accommodationRepository;
+  }
 
   /**
    * 새로운 코멘트를 등록합니다.

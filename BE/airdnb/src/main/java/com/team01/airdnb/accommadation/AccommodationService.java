@@ -10,11 +10,10 @@ import com.team01.airdnb.comment.CommentService;
 import com.team01.airdnb.image.ImageService;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AccommodationService {
 
-  AccommodationRepository accommodationRepository;
-  UserService userService;
-  AmenityService amenityService;
-  ImageService imageService;
-  CommentService commentService;
-  AccommodationFilterRepository accommodationFilterRepository;
+  private final AccommodationRepository accommodationRepository;
+  private final UserService userService;
+  private final AmenityService amenityService;
+  private final ImageService imageService;
+  private final CommentService commentService;
 
+  @Autowired
   public AccommodationService(AccommodationRepository accommodationRepository,
       UserService userService, AmenityService amenityService, ImageService imageService,
       CommentService commentService) {

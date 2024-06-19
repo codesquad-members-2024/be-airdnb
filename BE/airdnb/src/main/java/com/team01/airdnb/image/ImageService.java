@@ -4,12 +4,14 @@ import com.team01.airdnb.image.dto.ImageListResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ImageService {
-    ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
+    @Autowired
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }

@@ -2,15 +2,18 @@ package com.team01.airdnb.amenity;
 
 import com.team01.airdnb.amenity.dto.AmenityShowResponse;
 import java.util.NoSuchElementException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AmenityService {
-    AmenityRepository amenityRepository;
 
-    public AmenityService(AmenityRepository amenityRepository) {
-        this.amenityRepository = amenityRepository;
-    }
+  private final AmenityRepository amenityRepository;
+
+  @Autowired
+  public AmenityService(AmenityRepository amenityRepository) {
+    this.amenityRepository = amenityRepository;
+  }
 
     public Amenity findAmenityById(Long id) {
         return amenityRepository.findByAccommodationId(id)
