@@ -1,0 +1,68 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@3.0.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - checkout
+
+      - run:
+          name: create properties
+          command: touch ./BE/airdnb/src/main/resources/application.yml
+      - run:
+          command: echo "${APPLICATION}" > ./BE/airdnb/src/main/resources/application.yml
+      - run:
+          name: grant gradlew
+          command: |
+            cd ./BE/airdnb
+            chmod +x ./gradlew
+      - run:
+          name: Build with gradle
+          command: |
+            cd ./BE/airdnb
+            ./gradlew clean build -x test
+      
+      - run:
+          name: Setup Docker Buildx
+          command: |
+            mkdir -p ~/.docker/cli-plugins/
+            curl -SL https://github.com/docker/buildx/releases/download/v0.8.2/buildx-v0.8.2.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+            chmod +x ~/.docker/cli-plugins/docker-buildx
+            docker buildx version
+      
+      - docker/login:
+          username: ${DOCKER_USERNAME}
+          password: ${DOCKER_PASSWORD}
+      
+      - run:
+          name: Docker image Processing
+          command: |
+            cd ./BE/airdnb
+            docker build -t seondays/airdnb:latest .
+            docker push seondays/airdnb:latest
+
+      - add_ssh_keys:
+          fingerprints:
+            - "${SSH_KEY_FINGERPRINT}"
+
+      - run:
+          name: SSH Processing
+          command: |
+            ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+              sudo docker pull seondays/airdnb:latest
+              sudo docker-compose down
+              sudo docker-compose up -d
+            EOF
+
+workflows:
+  Docker_Compose_run:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - release
