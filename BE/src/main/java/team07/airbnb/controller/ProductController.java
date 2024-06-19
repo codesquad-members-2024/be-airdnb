@@ -19,6 +19,10 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
+import team07.airbnb.data.user.enums.Role;
+import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.UserEntity;
+import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.product.ProductService;
 import team07.airbnb.service.user.UserService;
@@ -39,7 +43,6 @@ public class ProductController {
 
     private final AccommodationService accommodationService;
     private final ProductService productService;
-    private final UserService userService;
 
     @Tag(name = "User")
     @Operation(summary = "주변 예약 가능 상품 조회")
@@ -72,9 +75,9 @@ public class ProductController {
     @PostMapping("/close/{productId}")
     @ResponseStatus(OK)
     @Authenticated(HOST)
-    public void closeProduct(@PathVariable @NotNull Long productId, TokenUserInfo hostInfo) {
+    public void closeProduct(@PathVariable @NotNull Long productId, UserEntity hostInfo) {
 
-        productService.closeProduct(productId, hostInfo.id());
+        productService.closeProduct(productId, hostInfo.getId());
     }
 
     @PostMapping("/update/{productId}")
@@ -82,8 +85,8 @@ public class ProductController {
     @Authenticated(HOST)
     public void updatePrice(@PathVariable @NotNull Long productId,
                             @RequestParam @NotNull @Size Integer price,
-                            TokenUserInfo hostInfo) {
+                            UserEntity hostInfo) {
 
-        productService.updatePrice(productId, price, hostInfo.id());
+        productService.updatePrice(productId, price, hostInfo.getId());
     }
 }

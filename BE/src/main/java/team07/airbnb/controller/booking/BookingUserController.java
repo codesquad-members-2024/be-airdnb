@@ -56,8 +56,8 @@ public class BookingUserController {
     @PostMapping
     @Authenticated(USER)
     @ResponseStatus(CREATED)
-    public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request, TokenUserInfo user) {
-        return bookingManageService.createBooking(request, userService.getCompleteUser(user));
+    public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request, UserEntity user) {
+        return bookingManageService.createBooking(request, user);
     }
 
     @Tag(name = "User")
@@ -65,11 +65,11 @@ public class BookingUserController {
     @PostMapping("/cancel/{bookingId}")
     @Authenticated(USER)
     @ResponseStatus(OK)
-    public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity booker = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
+    public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, UserEntity user) {
+        bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         //취소 수수료 현재는 전체 결제 금액의 10%
-        Integer cancelFee = bookingManageService.cancelBooking(bookingId, booker);
+        Integer cancelFee = bookingManageService.cancelBooking(bookingId, user);
 
         return BookingCancelResponse.of(bookingId, cancelFee);
     }
@@ -79,16 +79,16 @@ public class BookingUserController {
     @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
     @GetMapping("/my-bookings")
     @Authenticated(USER)
-    public List<BookingDetailResponse> getMyBookingInfos(TokenUserInfo user) {
-        return bookingInquiryService.findBookingsByUser(userService.getCompleteUser(user));
+    public List<BookingDetailResponse> getMyBookingInfos(UserEntity user) {
+        return bookingInquiryService.findBookingsByUser(user);
     }
 
     @Operation(summary = "유저 예약 상세 조회", description = "유저가 예약 상세 정보를 조회합니다.")
     @GetMapping("/my-booking/{bookingId}")
     @Authenticated(USER)
     @ResponseStatus(OK)
-    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, TokenUserInfo userInfo) {
-        bookingAuthService.currentUserIsSameWith(bookingId, userInfo, CheckAuthType.USER);
+    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, UserEntity user) {
+        bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }

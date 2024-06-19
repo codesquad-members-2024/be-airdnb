@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 
 import java.util.ArrayList;
@@ -76,6 +77,15 @@ public class UserEntity extends BaseEntity {
 
     public void setRoleToUser() {
         this.role = Role.USER;
+    }
+
+    public static UserEntity ofToken(TokenUserInfo tokenUserInfo) {
+        return UserEntity.builder()
+                .id(tokenUserInfo.id())
+                .name(tokenUserInfo.name())
+                .picture(tokenUserInfo.profileImg())
+                .role(tokenUserInfo.role())
+                .build();
     }
 
     @Override

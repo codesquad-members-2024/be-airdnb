@@ -37,18 +37,18 @@ public class BookingHostController {
     @PostMapping("/confirm/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public Long confirmBooking(@PathVariable Long bookingId, TokenUserInfo user) {
-        UserEntity host = bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
+    public Long confirmBooking(@PathVariable Long bookingId, UserEntity user) {
+        bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         //컨펌한 예약의 아이디 리턴
-        return bookingManageService.confirmBooking(bookingId, host);
+        return bookingManageService.confirmBooking(bookingId, user);
     }
 
     @Tag(name = "Host")
     @Operation(summary = "예약 이용 완료", description = "예약을 이용 완료 처리합니다.")
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
-    public void completeBooking(@PathVariable Long bookingId, TokenUserInfo user) {
+    public void completeBooking(@PathVariable Long bookingId, UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
@@ -60,8 +60,8 @@ public class BookingHostController {
     @Authenticated(HOST)
     @GetMapping("/management")
     @ResponseStatus(OK)
-    public List<BookingDetailResponse> getBookingInfosOfHosting(TokenUserInfo host) {
-        return bookingInquiryService.getBookingInfoListByHost(userService.getCompleteUser(host));
+    public List<BookingDetailResponse> getBookingInfosOfHosting(UserEntity host) {
+        return bookingInquiryService.getBookingInfoListByHost(host);
     }
 
 
@@ -69,7 +69,7 @@ public class BookingHostController {
     @GetMapping("/management/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, TokenUserInfo host) {
+    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, UserEntity host) {
         bookingAuthService.currentUserIsSameWith(bookingId, host, CheckAuthType.HOST);
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }

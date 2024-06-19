@@ -15,11 +15,6 @@ import java.util.NoSuchElementException;
 public class UserService {
     private final UserRepository userRepository;
 
-    // JWT 토큰의 유저 정보로 부족할때 온전한 UserEntity 사용
-    public UserEntity getCompleteUser(TokenUserInfo user) {
-        return userRepository.getReferenceById(user.id());
-    }
-
     public void saveChanged(UserEntity user) {
         userRepository.save(user);
     }

@@ -15,11 +15,7 @@ public class BookingAuthService {
 
     private final BookingRepository bookingRepository;
 
-    private final UserService userService;
-
-    public UserEntity currentUserIsSameWith(Long bookingId, TokenUserInfo userInfo, CheckAuthType type) {
-        UserEntity user = userService.getCompleteUser(userInfo);
-
+    public void currentUserIsSameWith(Long bookingId, UserEntity user, CheckAuthType type) {
         boolean isPure = false;
         switch (type) {
             case ALL -> isPure = isUserHostOrBookerOf(bookingId, user);
@@ -30,8 +26,6 @@ public class BookingAuthService {
         if (!isPure) {
             throw new UnAuthorizedException(BookingAuthService.class, user.getId());
         }
-
-        return user;
     }
 
     private boolean isUserHostOrBookerOf(Long bookingId , UserEntity user){

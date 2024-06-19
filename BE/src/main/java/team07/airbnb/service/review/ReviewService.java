@@ -27,10 +27,10 @@ public class ReviewService {
     private final BookingAuthService bookingAuthService;
     private final BookingInquiryService bookingInquiryService;
 
-    public void addReplyTo(long reviewId, String content, TokenUserInfo writerInfo) {
+    public void addReplyTo(long reviewId, String content, UserEntity writer) {
         ReviewEntity review = getById(reviewId);
 
-        UserEntity writer = bookingAuthService.currentUserIsSameWith(review.getBooking().getId(), writerInfo, CheckAuthType.ALL);
+        bookingAuthService.currentUserIsSameWith(review.getBooking().getId(), writer, CheckAuthType.ALL);
 
         review.addReply(content, writer);
     }

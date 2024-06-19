@@ -24,6 +24,7 @@ import team07.airbnb.data.product.dto.response.SimpleProductResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.entity.embed.RoomInformation;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.user.UserService;
@@ -41,16 +42,15 @@ import static team07.airbnb.data.user.enums.Role.USER;
 @RequiredArgsConstructor
 public class AccommodationController {
     private final AccommodationService accommodationService;
-    private final UserService userService;
 
     @Tag(name = "Host")
     @Operation(summary = "숙소 등록", description = "스쿼드비엔비에 숙소를 등록합니다.")
     @PostMapping
     @Authenticated(USER)
     @ResponseStatus(OK)
-    public AccommodationListResponse createAccommodation(@RequestBody AccommodationCreateRequest createRequest, TokenUserInfo user) {
+    public AccommodationListResponse createAccommodation(@RequestBody AccommodationCreateRequest createRequest, UserEntity user) {
         return AccommodationListResponse.of(accommodationService.addAccommodation(
-                createRequest.toEntity(userService.getCompleteUser(user))
+                createRequest.toEntity(user)
         ));
     }
 
@@ -61,12 +61,12 @@ public class AccommodationController {
     @ResponseStatus(HttpStatus.OK)
     public AccommodationDetailResponse updateRoomInformation(@PathVariable Long id,
                                                              @RequestBody RoomInformation info,
-                                                             TokenUserInfo user) {
+                                                             UserEntity user) {
         return AccommodationDetailResponse.of(
                 accommodationService.updateAccommodation(
                         id,
                         info,
-                        userService.getCompleteUser(user)
+                        user
                 ));
     }
 
@@ -77,13 +77,13 @@ public class AccommodationController {
     @ResponseStatus(HttpStatus.OK)
     public AccommodationDetailResponse updateDescription(@PathVariable Long id,
                                                          @RequestBody AccommodationDescriptionRequest description,
-                                                         TokenUserInfo user) {
+                                                         UserEntity user) {
         return AccommodationDetailResponse.of(
                 accommodationService.updateAccommodation(
                         id,
                         description.name(),
                         description.description(),
-                        userService.getCompleteUser(user)
+                        user
                 ));
     }
 
@@ -94,14 +94,14 @@ public class AccommodationController {
     @ResponseStatus(HttpStatus.OK)
     public AccommodationDetailResponse updateBaseInformation(@PathVariable Long id,
                                                              @RequestBody BaseAccommodationInfoRequest baseInfo,
-                                                             TokenUserInfo user) {
+                                                             UserEntity user) {
 
         return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
                 id,
                 baseInfo.type(),
                 baseInfo.address(),
                 baseInfo.basePricePerDay(),
-                userService.getCompleteUser(user)
+                user
         ));
     }
 
@@ -112,11 +112,11 @@ public class AccommodationController {
     @ResponseStatus(HttpStatus.OK)
     public AccommodationDetailResponse updatePictures(@PathVariable Long id,
                                                       @RequestBody List<String> pictureUrls,
-                                                      TokenUserInfo user) {
+                                                      UserEntity user) {
         return AccommodationDetailResponse.of(accommodationService.updateAccommodation(
                 id,
                 pictureUrls,
-                userService.getCompleteUser(user)
+                user
         ));
     }
 
@@ -125,8 +125,8 @@ public class AccommodationController {
     @DeleteMapping("/{id}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public void deleteAccommodation(@PathVariable long id, TokenUserInfo user) {
-        accommodationService.deleteById(id, userService.getCompleteUser(user));
+    public void deleteAccommodation(@PathVariable long id, UserEntity user) {
+        accommodationService.deleteById(id, user);
     }
 
     @Tag(name = "User")
@@ -153,8 +153,8 @@ public class AccommodationController {
     @Operation(summary = "나의 숙소 조회", description = "내가 등록한 숙소를 조회합니다.")
     @Authenticated(HOST)
     @GetMapping("/my")
-    public List<AccommodationListResponse> myAccommodations(TokenUserInfo user) {
-        return previewOf(accommodationService.findByHost(userService.getCompleteUser(user)));
+    public List<AccommodationListResponse> myAccommodations(UserEntity user) {
+        return previewOf(accommodationService.findByHost(user));
     }
 
     @Tag(name = "User")
