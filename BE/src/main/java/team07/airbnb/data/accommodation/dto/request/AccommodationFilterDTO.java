@@ -1,4 +1,4 @@
-package team07.airbnb.controller;
+package team07.airbnb.data.accommodation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 

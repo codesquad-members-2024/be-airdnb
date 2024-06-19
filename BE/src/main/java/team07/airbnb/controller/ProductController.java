@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import team07.airbnb.common.auth.aop.Authenticated;
+import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
-import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.product.ProductService;
 
