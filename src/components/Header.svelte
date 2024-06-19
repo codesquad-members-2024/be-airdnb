@@ -10,6 +10,7 @@
   let checkOut = '';
   let selectedMinPrice = 100000;
   let selectedMaxPrice = 1000000;
+  let totalGuests = 0;
 
   onMount(() => {
     const handleScroll = () => {
@@ -43,7 +44,7 @@
         <button class="text-xl text-black bg-transparent hover:font-bold hover:underline transition duration-300">온라인 체험</button>
       {/if}
       {#if showMiniSearchBar}
-        <MiniSearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} />
+        <MiniSearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} bind:totalGuests={totalGuests} />
       {/if}
     </div>
 
@@ -57,7 +58,7 @@
   <div class="absolute w-full flex justify-center">
     {#if !showMiniSearchBar}
       <div class="w-full max-w-4xl">
-        <SearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} />
+        <SearchBar bind:checkIn={checkIn} bind:checkOut={checkOut} bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} bind:totalGuests={totalGuests} />
       </div>
     {/if}
   </div>

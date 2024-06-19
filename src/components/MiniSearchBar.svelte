@@ -2,15 +2,18 @@
   import { format } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
   import RatePopup from './RatePopup.svelte';
+  import GuestPopup from './GuestPopup.svelte';
 
   export let checkIn;
   export let checkOut;
-  export let selectedMinPrice;
-  export let selectedMaxPrice;
+  export let selectedMinPrice = 100000;
+  export let selectedMaxPrice = 1000000;
+  export let totalGuests = 0;
 
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
   let onRatePopup = false;
+  let onGuestPopup = false;
   const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
   const monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
@@ -20,6 +23,10 @@
 
   const toggleRatePopup = () => {
     onRatePopup = !onRatePopup;
+  };
+
+  const toggleGuestPopup = () => {
+    onGuestPopup = !onGuestPopup;
   };
 
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
@@ -40,6 +47,11 @@
     selectedMaxPrice = max;
     toggleRatePopup();
   };
+
+  const handleGuestsSelected = (total) => {
+    totalGuests = total;
+    toggleGuestPopup();
+  };
 </script>
 
 <div class="relative">
@@ -50,9 +62,9 @@
     <button type="button" class="flex-grow px-4 py-2 border-r text-left" on:click={toggleRatePopup}>
       <div class="text-sm text-gray-600">₩{selectedMinPrice.toLocaleString()} - ₩{selectedMaxPrice.toLocaleString()}</div>
     </button>
-    <div class="flex-grow px-4 py-2 border-r">
-      <div class="text-sm text-gray-600">인원 입력</div>
-    </div>
+    <button type="button" class="flex-grow px-4 py-2 border-r text-left" on:click={toggleGuestPopup}>
+      <div class="text-sm text-gray-600">게스트 {totalGuests}명</div>
+    </button>
     <div class="px-4 py-2">
       <button class="bg-red-500 text-white rounded-full p-2 focus:outline-none">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -76,6 +88,10 @@
 
   {#if onRatePopup}
     <RatePopup bind:selectedMinPrice={selectedMinPrice} bind:selectedMaxPrice={selectedMaxPrice} onClose={handleRateSelected} />
+  {/if}
+
+  {#if onGuestPopup}
+    <GuestPopup bind:total={totalGuests} onClose={handleGuestsSelected} />
   {/if}
 </div>
 
