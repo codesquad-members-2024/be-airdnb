@@ -34,7 +34,7 @@ public class ProductController {
     @GetMapping("/available")
     @ResponseStatus(OK)
     public List<ProductListResponse> findNearByAvailableProducts(
-            @RequestParam AccommodationFilterDTO filter
+            @ModelAttribute AccommodationFilterDTO filter
     ) {
         return productService.findWithFilter(filter);
     }
