@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-# be-airdnb
-
-마스터즈 2024 BE 프로젝트 숙박앱
-
-| team | members | repository URL |
-| ---- | ------- | -------------- |
-| 1    |         |                |
-| 2    |         |                |
-| 3    |         |                |
-| 4    |         |                |
-| 5    |         |                |
-| 6    | 시드, 다오 |[TEAM06 Airdnb](https://github.com/codesquad-masters2024-team6/be-airdnb)|
-| 7    |   Soap , Senna      |       [7팀 레포](https://github.com/CodeSquad24-Study/be-airdnb)         |
-| 8    |         |                |
-| 9    |  상추, Jayden       | [9팀 레포](https://github.com/codesquad-masters2024-team09-step2/be-airdnb)            |
-| 10   | Jin, Zoonmy | [10팀 레포](https://github.com/codesquad-masters2024-team10/be-airdnb) |
-| 11   |         |                |
-
-- 팀 정보를 업데이트해서 main 브랜치로 PR 보내 주세요.
-=======
 # Svelte + Vite
 
 This template should help get you started developing with Svelte in Vite.
@@ -66,4 +45,3 @@ If you have state that's important to retain within a component, consider creati
 import { writable } from 'svelte/store'
 export default writable(0)
 ```
->>>>>>> c3a6e50 (feat: 헤더 부분 구현)
