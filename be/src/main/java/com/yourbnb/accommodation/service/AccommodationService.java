@@ -1,17 +1,23 @@
 package com.yourbnb.accommodation.service;
 
+import com.yourbnb.accommodation.exception.AccommodationNotFoundException;
 import com.yourbnb.accommodation.model.Accommodation;
+import com.yourbnb.accommodation.model.AccommodationType;
 import com.yourbnb.accommodation.model.Amenity;
+import com.yourbnb.accommodation.model.dto.AccommodationCreateDto;
 import com.yourbnb.accommodation.model.dto.AccommodationResponse;
-import com.yourbnb.accommodation.repository.AccommodationAmenityRepository;
+import com.yourbnb.accommodation.model.dto.AccommodationUpdateDto;
 import com.yourbnb.accommodation.repository.AccommodationRepository;
-import com.yourbnb.accommodation.repository.AmenityRepository;
 import com.yourbnb.accommodation.util.AccommodationMapper;
-import com.yourbnb.image.util.S3Service;
+import com.yourbnb.global.exception.ResourceAccessDeniedException;
+import com.yourbnb.image.dto.AccommodationImageDto;
+import com.yourbnb.image.model.AccommodationImage;
+import com.yourbnb.image.service.AccommodationImageService;
+import com.yourbnb.image.util.ImageMapper;
+import com.yourbnb.member.model.Member;
+import com.yourbnb.member.service.MemberService;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,11 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 public class AccommodationService {
-    private final S3Service s3Service;
     private final AccommodationRepository accommodationRepository;
-    private final AmenityRepository amenityRepository;
-    private final AccommodationAmenityRepository accommodationAmenityRepository;
-
+    private final AccommodationTypeService typeService;
+    private final AccommodationImageService imageService;
+    private final AccommodationAmenityService accommodationAmenityService;
+    private final MemberService memberService;
 
     /**
      * 데이터베이스에 저장되어 있는 전체 숙소 리스트를 반환한다.
@@ -43,18 +49,103 @@ public class AccommodationService {
         return accommodationResponses;
     }
 
-    private AccommodationResponse mapAccommodationToResponse(Accommodation accommodation) {
-        Set<Long> amenityIds = getAmenityIds(accommodation);
-        Set<Amenity> amenities = amenityRepository.findAllByIdIsIn(amenityIds);
-        String url = s3Service.getImageUrl(accommodation.getAccommodationImages().getUploadName());
-        return AccommodationMapper.toAccommodationResponse(accommodation, amenities, url);
+    /**
+     * 숙소를 데이터베이스에 저장한다.
+     *
+     * @param createDto               생성할 숙소 정보를 담은 DTO
+     * @param accommodationAmenityIds 생성할 숙소의 어매니티들의 아이디 리스트
+     * @return 생성된 숙소 응답 DTO
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public AccommodationResponse createAccommodation(AccommodationCreateDto createDto,
+                                                     Set<Long> accommodationAmenityIds) {
+        Member member = memberService.getMemberByIdOrThrow(createDto.getHostId());
+        AccommodationType type = typeService.getAccommodationTypeByIdOrThrow(createDto.getAccommodationTypeId());
+        AccommodationImage image = imageService.getAccommodationImageByIdOrThrow(createDto.getAccommodationImageId());
+        List<Amenity> amenities = accommodationAmenityService.getAmenitiesByIdOrThrow(accommodationAmenityIds);
+
+        Accommodation accommodation = AccommodationMapper.toAccommodation(createDto, member, type, image);
+        accommodationRepository.save(accommodation);
+        accommodationAmenityService.saveAccommodationAmenity(accommodation, amenities);
+
+        log.info("숙소 생성 성공 - {}", accommodation.getId());
+        return mapAccommodationToResponse(accommodation); // 생성된 숙소를 응답 DTO로 매핑하여 반환
     }
 
-    private Set<Long> getAmenityIds(Accommodation accommodation) {
-        return accommodationAmenityRepository.findAllByAccommodations_Id(accommodation.getId())
-                .stream()
-                .filter(mapping -> Objects.nonNull(mapping.getAmenities())) // Amenity가 null이 아닌 경우에만 필터링
-                .map(mapping -> mapping.getAmenities().getId())
-                .collect(Collectors.toUnmodifiableSet());
+    /**
+     * 호스트의 숙소 중 특정 ID의 숙소를 조회한다.
+     *
+     * @param id     조회할 숙소의 ID
+     * @param hostId 조회를 요청한 호스트의 ID
+     * @return 조회된 숙소 객체
+     * @throws AccommodationNotFoundException 요청한 ID에 해당하는 숙소가 없을 경우
+     * @throws ResourceAccessDeniedException  다른 호스트의 숙소를 수정/삭제하려고 할 경우
+     */
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
+    public Accommodation getAccommodationByIdForHost(Long id, String hostId) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new AccommodationNotFoundException(id));
+
+        if (!accommodation.getHost().getMemberId().equals(hostId)) {
+            throw new ResourceAccessDeniedException("다른 호스트의 숙소는 수정/삭제할 수 없습니다.");
+        }
+        return accommodation;
+    }
+
+    /**
+     * 숙소 정보를 업데이트한다.
+     *
+     * @param accommodation 업데이트할 기존 숙소 객체
+     * @param updateDto     업데이트할 새로운 정보가 담긴 DTO 객체
+     * @return 업데이트된 숙소 응답 DTO
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public AccommodationResponse updateAccommodation(Accommodation accommodation, AccommodationUpdateDto updateDto) {
+        AccommodationType type = getAccommodationType(updateDto);
+        AccommodationImage image = getAccommodationImage(updateDto);
+        Accommodation newAccommodation = AccommodationMapper.toNewAccommodation(accommodation, updateDto, type, image);
+        Accommodation updatedAccommodation = accommodationRepository.save(newAccommodation);
+
+        Set<Long> accommodationAmenityIds = updateDto.getAccommodationAmenityIds();
+        if (accommodationAmenityIds != null && !accommodationAmenityIds.isEmpty()) {
+            accommodationAmenityService.updateAccommodationAmenity(updatedAccommodation, accommodationAmenityIds);
+        }
+        return mapAccommodationToResponse(updatedAccommodation);
+    }
+
+    /**
+     * 주어진 ID에 해당하는 숙소를 삭제한다.
+     *
+     * @param id 삭제할 숙소의 ID
+     * @throws AccommodationNotFoundException 요청한 ID에 해당하는 숙소가 없을 경우
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void deleteAccommodation(Long id) {
+        try {
+            accommodationRepository.deleteById(id);
+        } catch (IllegalArgumentException e) {
+            throw new AccommodationNotFoundException(id);
+        }
+    }
+
+    private AccommodationImage getAccommodationImage(AccommodationUpdateDto updateDto) {
+        if (updateDto.getAccommodationImageId() != null) {
+            return imageService.getAccommodationImageByIdOrThrow(updateDto.getAccommodationImageId());
+        }
+        return null;
+    }
+
+    private AccommodationType getAccommodationType(AccommodationUpdateDto updateDto) {
+        if (updateDto.getAccommodationTypeId() != null) {
+            return typeService.getAccommodationTypeByIdOrThrow(updateDto.getAccommodationTypeId());
+        }
+        return null;
+    }
+
+    private AccommodationResponse mapAccommodationToResponse(Accommodation accommodation) {
+        Set<Long> amenityIds = accommodationAmenityService.findAmenityIdsByAccommodationId(accommodation.getId());
+        Set<Amenity> amenities = accommodationAmenityService.findAllByIdIsIn(amenityIds);
+        AccommodationImageDto imageDto = ImageMapper.toAccommodationImageDto(accommodation.getAccommodationImages());
+        return AccommodationMapper.toAccommodationResponse(accommodation, amenities, imageDto);
     }
 }
