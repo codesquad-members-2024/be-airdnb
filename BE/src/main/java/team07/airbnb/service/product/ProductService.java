@@ -74,10 +74,11 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public boolean isHostOf(Long id, UserEntity userInfo) {
-        ProductEntity product = findById(id);
-        return product.getAccommodation().getHost().equals(userInfo);
+    public void setProductStatusBooked(Long accId, LocalDate checkIn, LocalDate checkOut, Integer headCount, BookingEntity booking) {
+        this.getInDateRangeOfAccommodation(accId, checkIn, checkOut, headCount)
+                .forEach(product -> product.book(booking));
     }
+
 
     private ProductEntity getProductById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));

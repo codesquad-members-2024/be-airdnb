@@ -44,36 +44,44 @@ public class BookingManageService {
         bookingRepository.save(booking);
     }
 
-    public BookingCreateResponse createBooking(BookingInfoForPriceInfo bookingInfo, Long accId, UserEntity booker) {
-        PriceInfo priceInfo = bookingPriceService.getPriceInfo(bookingInfo);
+    public BookingCreateResponse createBooking(CreateBookingRequest request, UserEntity booker) {
+        BookingEntity booking = buildBookingByCreateRequest(request, booker);
 
-        PaymentEntity payment = paymentService.createNewPayment(priceInfo);
-        Long accId = request.accommodationId();
-        LocalDate checkIn = request.checkIn();
-        LocalDate checkOut = request.checkOut();
-        Integer headCount = request.headCount();
-
-        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
-
-        BookingEntity booking = BookingEntity.builder()
-                .host(host)
-                .booker(booker)
-                .checkin(checkIn)
-                .checkout(checkOut)
-                .headCount(headCount)
-                .payment(payment)
-                .status(REQUESTED)
-                .build();
-
-        productService.getInDateRangeOfAccommodation(accId, checkIn, checkOut, headCount)
-                .forEach(product -> product.book(booking));
-
-        String accName = accommodationService.findById(accId).getName();
+        productService.setProductStatusBooked(
+                request.accommodationId(),
+                request.checkIn(),
+                request.checkOut(),
+                request.headCount(),
+                booking
+        );
 
         bookingRepository.save(booking);
 
-        return new BookingCreateResponse(accName, booking.getId(), checkIn, checkOut, headCount);
+        return new BookingCreateResponse(
+                accommodationService.findById(request.accommodationId()).getName(),
+                booking.getId(),
+                request.checkIn(),
+                request.checkOut(),
+                request.headCount()
+        );
     }
+
+    private BookingEntity buildBookingByCreateRequest(CreateBookingRequest request, UserEntity booker) {
+        PaymentEntity payment = paymentService.createNewPaymentByRequest(request);
+
+        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
+
+        return BookingEntity.builder()
+                .host(host)
+                .booker(booker)
+                .checkin(request.checkIn())
+                .checkout(request.checkOut())
+                .headCount(request.headCount())
+                .payment(payment)
+                .status(REQUESTED)
+                .build();
+    }
+
 
     public Long confirmBooking(Long bookingId, UserEntity requestedHost) {
         BookingEntity booking = bookingInquiryService.findByBookingId(bookingId);

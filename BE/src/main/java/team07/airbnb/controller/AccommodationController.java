@@ -119,7 +119,7 @@ public class AccommodationController {
                 userService.getCompleteUser(user)
         ));
     }
-    
+
     @Tag(name = "Host")
     @Operation(summary = "숙소 삭제", description = "등록한 숙소를 삭제합니다.")
     @DeleteMapping("/{id}")
