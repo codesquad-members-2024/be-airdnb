@@ -1,7 +1,7 @@
 package codesquad.team05.web.accommodation;
 
-import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.service.AccommodationService;
+import codesquad.team05.util.AccommodationMapper;
 import codesquad.team05.web.accommodation.dto.request.AccommodationSave;
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
 import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
@@ -29,20 +29,23 @@ public class AccommodationController {
 
     @GetMapping({"/{id}"})
     public ResponseEntity<AccommodationResponse> accommodationDetails(@PathVariable Long id) {
-        Accommodation accommodation = accommodationService.getAccommodation(id);
         return ResponseEntity
-                .ok(accommodation.toEntity());
+                .ok(accommodationService.getAccommodationById(id));
     }
 
     @PostMapping
     public ResponseEntity<Long> register(
-            @RequestParam("files") List<MultipartFile> files,
-            @RequestParam("form") String form,
+            @RequestParam List<MultipartFile> files,
+            @RequestParam String form,
             UriComponentsBuilder uriComponentsBuilder
     ) throws JsonProcessingException {
-        AccommodationSave accommodationSave = objectMapper.readValue(form, AccommodationSave.class);
         List<String> pictureUrls = files.stream().map(this::uploadFile).toList();
-        Long accommodationId = accommodationService.register(accommodationSave, pictureUrls);
+        Long accommodationId = accommodationService.register(
+                AccommodationMapper.toSaveService(
+                        objectMapper.readValue(form, AccommodationSave.class)
+                ),
+                pictureUrls
+        );
         URI location = uriComponentsBuilder.path("/accommodations/{id}")
                 .buildAndExpand(accommodationId)
                 .toUri();
@@ -55,18 +58,18 @@ public class AccommodationController {
     public ResponseEntity<Void> update(
             @PathVariable Long id,
             @RequestParam List<MultipartFile> files,
-            @RequestParam("form") String form
+            @RequestParam String form
     ) throws JsonProcessingException {
         AccommodationUpdate accommodationUpdate = objectMapper.readValue(form, AccommodationUpdate.class);
         List<String> url = files.stream().map(this::uploadFile).toList();
-        accommodationService.updateAccommodation(id, accommodationUpdate, url);
+        accommodationService.updateAccommodation(id, AccommodationMapper.toUpdateService(accommodationUpdate), url);
         return ResponseEntity
                 .noContent()
                 .build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         accommodationService.delete(id);
         return ResponseEntity
                 .noContent()
