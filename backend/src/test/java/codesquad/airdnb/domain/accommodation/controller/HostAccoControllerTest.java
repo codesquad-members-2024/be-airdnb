@@ -74,7 +74,7 @@ class HostAccoControllerTest {
                     "100000동 100004호", "05794", geometryHelper.createPoint(11.111, 22.222)))
             .floorPlanData(new FloorPlanData(2, 3, 5, 6, 7))
             .imageUrls(List.of("1111", "22222", "33333", "44444", "55555"))
-            .amenities(List.of(1L, 2L, 3L, 4L, 5L))
+            .amenityNames(List.of("a", "b", "c", "d", "e"))
             .build();
 
     @Test
