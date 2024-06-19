@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/reservations")
@@ -21,14 +24,23 @@ public class ReservationController {
     private final ReservationBusinessService reservationBusinessService;
 
     @PostMapping("/{id}")
-    public void reserve(@PathVariable Long id, @RequestBody ReservationSave requestForm) {
-        reservationBusinessService.reservation(1L, id, requestForm.toServiceDto());
-
+    public ResponseEntity<Long> reserve(
+            @PathVariable Long id,
+            @RequestBody ReservationSave requestForm,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
+        Long reservationId = reservationBusinessService.reserveAccommodation(1L, id, requestForm.toServiceDto());
+        URI location = uriComponentsBuilder.path("/reservations/{id}")
+                .buildAndExpand(reservationId)
+                .toUri();
+        return ResponseEntity
+                .created(location)
+                .body(reservationId);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponse> get(@PathVariable Long id) {
-        ReservationResponse reservationResponse = reservationService.get(id);
-        return ResponseEntity.ok(reservationResponse);
+    public ResponseEntity<ReservationResponse> reservationDetails(@PathVariable Long id) {
+        return ResponseEntity
+                .ok(reservationService.findOneById(id));
     }
 }
