@@ -8,7 +8,6 @@ import com.team01.airdnb.wishlist.dto.WishlistCreateRequest;
 import com.team01.airdnb.wishlist.dto.WishlistListResponse;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +36,7 @@ public class WishlistService {
   /**
    * 리스트
    */
+  @Transactional(readOnly = true)
   public List<WishlistListResponse> wishlistList(String userId){
     return wishlistRepository.findWishlistByUserId(userId);
   }
@@ -44,7 +44,6 @@ public class WishlistService {
   /**
    * 삭제
    */
-  @Transactional
   public void deleteWishlist(Long wishlistId) {
     wishlistRepository.deleteById(wishlistId);
   }

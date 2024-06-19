@@ -92,18 +92,16 @@ public class AccommodationService {
     accommodationRepository.deleteById(id);
   }
 
-  private Accommodation findById(Long id) {
+  @Transactional(readOnly = true)
+  public Accommodation findById(Long id) {
     return accommodationRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("해당하는 숙소가 존재하지 않습니다."));
-  }
-
-  public Accommodation findAccommodation(Long id) {
-    return accommodationRepository.findById(id).orElseThrow();
   }
 
   /**
    * 숙소 검색을 위해 필터를 적용하여 조건에 맞는 결과를 가져옵니다.
    */
+  @Transactional(readOnly = true)
   public List<AccommodationSearchResponse> searchFilteredAccommodations(
       AccommodationFilterRequest accommodationFilterRequest) {
     return accommodationRepository.filterAccommodation(

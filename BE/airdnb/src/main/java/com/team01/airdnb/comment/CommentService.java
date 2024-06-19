@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Transactional
 public class CommentService {
 
   private final CommentRepository commentRepository;
@@ -52,6 +53,7 @@ public class CommentService {
    * @param  id 숙소 id
    * @return 코멘트 조회 dto 목록
    */
+  @Transactional(readOnly = true)
   public List<CommentShowResponse> showAllComment(Long id) {
     findExistAccommodation(id);
     return commentRepository.findAllByAccommodationId(id);
@@ -82,6 +84,11 @@ public class CommentService {
         target.getCreatedAt(), target.getUser());
   }
 
+  /**
+   * 해당 숙소의 코멘트 평점의 합계를 반환합니다.
+   * @param id
+   * @return
+   */
   public Double findAverageScoreByAccommodationId(Long id) {
     return commentRepository.findAverageScoreByAccommodationId(id);
   }

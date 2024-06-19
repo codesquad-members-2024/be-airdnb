@@ -5,8 +5,10 @@ import com.team01.airdnb.user.dto.UserHostResponse;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
   private final UserRepository userRepository;
   private final CommentRepository commentRepository;
