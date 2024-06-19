@@ -1,3 +1,27 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@import 'filepond/dist/filepond.css';
+@import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.html {
+    @apply text-airbnb-text-normal
+}
+
+.grid {
+    @apply items-center justify-center
+}
+
+.card {
+    transition: all 0.1s ease
+}

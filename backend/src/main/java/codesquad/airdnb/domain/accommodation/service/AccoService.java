@@ -54,6 +54,7 @@ public class AccoService {
 
         Accommodation savedAcco = accoRepository.save(accommodation);
         createYearlyProduct(savedAcco.getId());
+
         return AccoContentResponse.of(savedAcco);
     }
 

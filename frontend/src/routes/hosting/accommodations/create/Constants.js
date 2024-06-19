@@ -1,0 +1,1 @@
+export let urlPrefix = "/hosting/accommodations/create"
