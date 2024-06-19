@@ -60,6 +60,8 @@ workflows:
   Docker_Compose_run:
     jobs:
       - build:
+          context:
+            - airbnb
           filters:
             branches:
               only:
