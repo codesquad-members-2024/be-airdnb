@@ -1,5 +1,5 @@
 <script>
-  import { format } from 'date-fns';
+  import { format, differenceInDays } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
   import RatePopup from './RatePopup.svelte';
   import GuestPopup from './GuestPopup.svelte';
@@ -11,6 +11,7 @@
   export let totalGuests = 0;
 
   let dateFormat = 'M월 d일';
+  let urlDateFormat = 'yyyy-MM-dd';
   let onDatePickerPopup = false;
   let onRatePopup = false;
   let onGuestPopup = false;
@@ -30,9 +31,14 @@
   };
 
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
+  const formatUrlDate = (dateString) => (dateString && format(new Date(dateString), 'yyyy-MM-dd')) || '';
 
+
+  $: urlFormmattedCheckIn = formatUrlDate(checkIn);
+  $: urlFormmattedCheckOut = formatUrlDate(checkOut);
   $: formattedCheckIn = formatDate(checkIn);
   $: formattedCheckOut = formatDate(checkOut);
+  
 
   const handleDateSelected = (e) => {
     const { startDate, endDate } = e.detail;
@@ -50,6 +56,14 @@
   const handleGuestsSelected = (total) => {
     totalGuests = total;
     toggleGuestPopup();
+  };
+
+  const handleSearch = () => {
+    const checkInDate = urlFormmattedCheckIn;
+    const checkOutDate = urlFormmattedCheckOut;
+    const length = differenceInDays(new Date(checkOut), new Date(checkIn));
+    const url = `/homes?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
+    window.location.href = url;
   };
 </script>
 
@@ -72,7 +86,7 @@
       <div class="text-sm text-gray-800">게스트 {totalGuests}명</div>
     </button>
     <div class="px-4 py-4">
-      <button class="bg-red-500 text-white rounded-full p-2 focus:outline-none">
+      <button class="bg-red-500 text-white rounded-full p-2 focus:outline-none" on:click={handleSearch}>
         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.294 4.294-1.414 1.414-4.294-4.294zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"></path>
         </svg>
