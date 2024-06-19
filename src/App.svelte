@@ -1,14 +1,6 @@
 <script>
-  import Header from './components/Header.svelte';
-  import BackGround from './components/BackGround.svelte';
-  import HomeContents from './components/HomeContents.svelte';
-  import Footer from './components/Footer.svelte';
+  import { Route } from 'tinro';
+  import Main from './pages/Main.svelte';
 </script>
 
-<Header />
-
-<BackGround />
-
-<HomeContents />
-
-<Footer />
+<Route path="/"><Main /></Route>
