@@ -1,17 +1,27 @@
 <script>
   import { format } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
+  import RatePopup from './RatePopup.svelte';
 
   export let checkIn;
   export let checkOut;
 
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
+  let onRatePopup = false;
+  let minPrice = 100000;
+  let maxPrice = 1000000;
+  let selectedMinPrice = minPrice;
+  let selectedMaxPrice = maxPrice;
   const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
   const monthLabels = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
   const toggleDatePicker = () => {
     onDatePickerPopup = !onDatePickerPopup;
+  };
+
+  const toggleRatePopup = () => {
+    onRatePopup = !onRatePopup;
   };
 
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
@@ -25,6 +35,12 @@
     checkOut = endDate;
     toggleDatePicker();
   };
+
+  const handleRateSelected = (min, max) => {
+    selectedMinPrice = min;
+    selectedMaxPrice = max;
+    toggleRatePopup();
+  };
 </script>
 
 <div class="fixed top-24 left-1/2 transform -translate-x-1/2 w-full max-w-4xl">
@@ -37,10 +53,10 @@
       <div class="text-xs font-semibold text-gray-600">체크아웃</div>
       <div class="text-sm text-gray-800">{formattedCheckOut || '날짜 입력'}</div>
     </button>
-    <div class="flex-grow px-6 py-4 border-r">
+    <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleRatePopup}>
       <div class="text-xs font-semibold text-gray-600">요금</div>
-      <div class="text-sm text-gray-800">금액대 설정</div>
-    </div>
+      <div class="text-sm text-gray-800">₩{selectedMinPrice.toLocaleString()} - ₩{selectedMaxPrice.toLocaleString()}</div>
+    </button>
     <div class="flex-grow px-6 py-4 border-r">
       <div class="text-xs font-semibold text-gray-600">인원</div>
       <div class="text-sm text-gray-800">게스트 추가</div>
@@ -65,6 +81,10 @@
     on:dateSelected={handleDateSelected}
     on:toggle={toggleDatePicker}
   />
+{/if}
+
+{#if onRatePopup}
+  <RatePopup {minPrice} {maxPrice} onClose={handleRateSelected} />
 {/if}
 
 <style>
