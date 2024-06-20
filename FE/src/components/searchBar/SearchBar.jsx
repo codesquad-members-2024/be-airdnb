@@ -65,13 +65,16 @@ const SearchBar = () => {
   };
 
   const handleSearch = () => {
-    const checkInDate = urlFormmattedCheckIn;
-    const checkOutDate = urlFormmattedCheckOut;
-    const length = differenceInDays(new Date(checkOut), new Date(checkIn));
-    const url = `/homes?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
+    const checkInDate = encodeURIComponent(urlFormmattedCheckIn);
+    const checkOutDate = encodeURIComponent(urlFormmattedCheckOut);
+    const headCount = encodeURIComponent(totalGuests);
+    const minPrice = encodeURIComponent(selectedMinPrice);
+    const maxPrice = encodeURIComponent(selectedMaxPrice);
+
+    const url = `/api/products/available?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&headCount=${headCount}&minPrice=${minPrice}&maxPrice=${maxPrice}&latitude=37.7749&longitude=122.4&distance=10`;
+
     window.location.href = url;
   };
-
   return (
     <div className="search-bar-container">
       <div className="search-bar">
