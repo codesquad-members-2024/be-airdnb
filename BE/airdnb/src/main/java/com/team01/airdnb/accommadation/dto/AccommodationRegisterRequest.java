@@ -31,8 +31,8 @@ public record AccommodationRegisterRequest(
     Integer bathrooms,
     Long userId
 
-
 ) {
+
   public AccommodationRegisterRequest {
     if (discount == null) discount = 0;
     if (maxAdults == null) maxAdults = 1;
@@ -52,7 +52,7 @@ public record AccommodationRegisterRequest(
   }
 
   public Accommodation toAccommodationEntity(User user) {
-    return Accommodation.builder()
+    Accommodation accommodation = Accommodation.builder()
         .title(this.title)
         .content(this.content)
         .price(this.price)
@@ -64,6 +64,10 @@ public record AccommodationRegisterRequest(
         .address(this.address)
         .user(user)
         .build();
+
+    accommodation.setAmenityMapping(toAmenityEntity());
+    accommodation.setImageMapping(toImageEntity());
+    return accommodation;
   }
 
   public List<Image> toImageEntity() {
