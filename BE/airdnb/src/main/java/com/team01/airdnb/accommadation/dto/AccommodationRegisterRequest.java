@@ -29,7 +29,7 @@ public record AccommodationRegisterRequest(
     AmenityStatus wireless_internet,
     Integer beds,
     Integer bathrooms,
-    String userId
+    Long userId
 
 ) {
 
