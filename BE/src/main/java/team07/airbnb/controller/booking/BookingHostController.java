@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
@@ -25,6 +26,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static team07.airbnb.data.user.enums.Role.HOST;
 
 @RestController
+@RequestMapping("/booking")
 @RequiredArgsConstructor
 public class BookingHostController {
 
