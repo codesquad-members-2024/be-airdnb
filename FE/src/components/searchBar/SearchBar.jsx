@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { format, differenceInDays } from "date-fns";
+import { format } from "date-fns";
 import DatePopup from "./DatePopup";
 import RatePopup from "./RatePopup";
 import GuestPopup from "./GuestPopup";
 import "./searchbar.css";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const [checkIn, setCheckIn] = useState(null);
@@ -15,40 +16,16 @@ const SearchBar = () => {
   const [onRatePopup, setOnRatePopup] = useState(false);
   const [onGuestPopup, setOnGuestPopup] = useState(false);
 
+  const navigate = useNavigate();
+
   const dateFormat = "M월 d일";
-  const urlDateFormat = "yyyy-MM-dd";
-  const dowLabels = ["일", "월", "화", "수", "목", "금", "토"];
-  const monthLabels = [
-    "1월",
-    "2월",
-    "3월",
-    "4월",
-    "5월",
-    "6월",
-    "7월",
-    "8월",
-    "9월",
-    "10월",
-    "11월",
-    "12월",
-  ];
-
-  const toggleDatePicker = () => setOnDatePickerPopup(!onDatePickerPopup);
-  const toggleRatePopup = () => setOnRatePopup(!onRatePopup);
-  const toggleGuestPopup = () => setOnGuestPopup(!onGuestPopup);
-
   const formatDate = (dateString) =>
     (dateString && format(new Date(dateString), dateFormat)) || "";
-  const formatUrlDate = (dateString) =>
-    (dateString && format(new Date(dateString), "yyyy-MM-dd")) || "";
 
-  const urlFormmattedCheckIn = formatUrlDate(checkIn);
-  const urlFormmattedCheckOut = formatUrlDate(checkOut);
   const formattedCheckIn = formatDate(checkIn);
   const formattedCheckOut = formatDate(checkOut);
 
   const handleDateSelected = ({ startDate, endDate }) => {
-    // setOnDatePickerPopup(!onDatePickerPopup);
     setCheckIn(startDate);
     setCheckOut(endDate);
   };
@@ -65,23 +42,27 @@ const SearchBar = () => {
   };
 
   const handleSearch = () => {
-    const checkInDate = encodeURIComponent(urlFormmattedCheckIn);
-    const checkOutDate = encodeURIComponent(urlFormmattedCheckOut);
-    const headCount = encodeURIComponent(totalGuests);
-    const minPrice = encodeURIComponent(selectedMinPrice);
-    const maxPrice = encodeURIComponent(selectedMaxPrice);
+    const checkInDate = format(new Date(checkIn), "yyyy-MM-dd");
+    const checkOutDate = format(new Date(checkOut), "yyyy-MM-dd");
 
-    const url = `/api/products/available?checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&headCount=${headCount}&minPrice=${minPrice}&maxPrice=${maxPrice}&latitude=37.7749&longitude=122.4&distance=10`;
+    const filters = {
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+      minPrice: selectedMinPrice,
+      maxPrice: selectedMaxPrice,
+      capacity: totalGuests,
+    };
 
-    window.location.href = url;
+    navigate("/search", { state: { filters } });
   };
+
   return (
     <div className="search-bar-container">
       <div className="search-bar">
         <button
           type="button"
           className="search-bar-button"
-          onClick={toggleDatePicker}
+          onClick={() => setOnDatePickerPopup(!onDatePickerPopup)}
         >
           <div className="label">체크인</div>
           <div className="value">{formattedCheckIn || "날짜 입력"}</div>
@@ -89,7 +70,7 @@ const SearchBar = () => {
         <button
           type="button"
           className="search-bar-button"
-          onClick={toggleDatePicker}
+          onClick={() => setOnDatePickerPopup(!onDatePickerPopup)}
         >
           <div className="label">체크아웃</div>
           <div className="value">{formattedCheckOut || "날짜 입력"}</div>
@@ -97,7 +78,7 @@ const SearchBar = () => {
         <button
           type="button"
           className="search-bar-button"
-          onClick={toggleRatePopup}
+          onClick={() => setOnRatePopup(!onRatePopup)}
         >
           <div className="label">요금</div>
           <div className="value">
@@ -108,7 +89,7 @@ const SearchBar = () => {
         <button
           type="button"
           className="search-bar-button"
-          onClick={toggleGuestPopup}
+          onClick={() => setOnGuestPopup(!onGuestPopup)}
         >
           <div className="label">인원</div>
           <div className="value">게스트 {totalGuests}명</div>
@@ -134,10 +115,8 @@ const SearchBar = () => {
           <DatePopup
             checkIn={checkIn}
             checkOut={checkOut}
-            dowLabels={dowLabels}
-            monthLabels={monthLabels}
             onDateSelected={handleDateSelected}
-            onToggle={toggleDatePicker}
+            onToggle={() => setOnDatePickerPopup(!onDatePickerPopup)}
           />
         )}
       </div>

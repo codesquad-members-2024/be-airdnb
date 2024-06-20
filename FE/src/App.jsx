@@ -3,6 +3,7 @@ import Layout from "./components/global/layout";
 import IntroductionPage from "./pages/inroduction";
 import MainPage from "./pages/main";
 import RedirectPage from "./services/redirect.jsx";
+import SearchPage from "./pages/SearchPage.jsx";
 
 const App = () => {
   return (
@@ -11,11 +12,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
+            <Route path="search" element={<SearchPage />} />
           </Route>
-        </Routes>
 
-        {/*-- ETC --*/}
-        <Routes>
+          {/*-- ETC --*/}
           <Route
             path="/oauth/redirected/github"
             element={<RedirectPage provider="github" />}
