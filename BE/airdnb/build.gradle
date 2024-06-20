@@ -43,6 +43,8 @@ dependencies {
 	// oauth
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	implementation 'com.h2database:h2'
+
 	//security
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
