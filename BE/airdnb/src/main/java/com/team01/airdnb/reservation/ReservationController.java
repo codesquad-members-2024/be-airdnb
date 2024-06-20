@@ -30,8 +30,8 @@ public class ReservationController {
 
   @PutMapping("/{reservationId}")
   public void updateReservation(@PathVariable Long reservationId,
-      @RequestBody ReservationUpdateRequest reservationUpdateRequest){
-    reservationService.updateReservation(reservationId, reservationUpdateRequest);
+      @RequestBody ReservationRequest reservationRequest){
+    reservationService.updateReservation(reservationId, reservationRequest);
   }
 
   @DeleteMapping("/{reservationId}")

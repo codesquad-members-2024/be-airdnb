@@ -6,17 +6,16 @@ import com.team01.airdnb.user.User;
 import java.time.LocalDate;
 import lombok.Getter;
 
-@Getter
-public class ReservationCreateRequest {
-  private Integer adults;
-  private Integer children;
-  private Integer infants;
-  private Integer pets;
-  private Long price;
-  private LocalDate startDate;
-  private LocalDate endDate;
-  private Long userId;
-  private Long accommodationId;
+public record ReservationRequest(
+    Integer adults,
+    Integer children,
+    Integer infants,
+    Integer pets,
+    Long price,
+    LocalDate startDate,
+    LocalDate endDate,
+    Long userId,
+    Long accommodationId) {
 
   public Reservation toEntity(User user, Accommodation accommodation) {
     return Reservation.builder()

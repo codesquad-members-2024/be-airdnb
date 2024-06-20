@@ -53,6 +53,14 @@ public class ReservationService {
   }
 
   public void updateReservation(Long reservationId,
-      ReservationUpdateRequest reservationUpdateRequest) {
+      ReservationRequest reservationRequest) {
+    Reservation reservation = reservationRepository.findById(reservationId)
+        .orElseThrow(() -> new NoSuchElementException("존재하지 않는 예약입니다."));
+
+    if (checkAvailability(reservationRequest)) {
+      throw new IllegalArgumentException("예약이 불가능합니다.");
+    }
+
+    reservation.update(reservationRequest);
   }
 }
