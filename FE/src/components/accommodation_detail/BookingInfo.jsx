@@ -7,17 +7,18 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
   const [showPricing, setShowPricing] = useState(false);
 
   const fetchPricing = async () => {
-    const response = await fetch('https://squadbnb.site/api/booking', {
+    const params = new URLSearchParams({
+      accommodationId,
+      checkIn,
+      checkOut,
+      headCount,
+    });
+  
+    const response = await fetch(`https://squadbnb.site/api/booking?${params.toString()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        accommodationId,
-        checkIn,
-        checkOut,
-        headCount,
-      }),
     });
     const data = await response.json();
     setPricingData(data);
