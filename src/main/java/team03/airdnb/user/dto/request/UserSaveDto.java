@@ -2,11 +2,9 @@ package team03.airdnb.user.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import team03.airdnb.user.User;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class UserSaveDto {
 
@@ -20,5 +18,9 @@ public class UserSaveDto {
                 .password(this.password)
                 .profileImg(this.profileImg)
                 .build();
+    }
+
+    public UserSaveDto withEncodedPassword(String encodedPassword) {
+        return new UserSaveDto(this.name, encodedPassword, this.profileImg);
     }
 }

@@ -13,24 +13,7 @@ public record OAuthAttributes(
 ) {
 
     public static OAuthAttributes of(String registrationId, Map<String, Object> attributes) {
-        return switch (registrationId) { // registration id별로 userInfo 생성
-            case "google" -> ofGoogle(attributes);
-            default -> ofGithub(attributes);
-        };
-    }
-
-    private static OAuthAttributes ofGoogle(Map<String, Object> attributes) {
-        return OAuthAttributes.builder()
-                .name((String) attributes.get("name"))
-                .profileImg((String) attributes.get("picture"))
-                .build();
-    }
-
-    private static OAuthAttributes ofGithub(Map<String, Object> attributes) {
-        return OAuthAttributes.builder()
-                .name((String) attributes.get("login"))
-                .profileImg((String) attributes.get("avatar_url"))
-                .build();
+        return OAuthProvider.from(registrationId).extract(attributes);
     }
 
     public User toEntity() {

@@ -38,6 +38,8 @@ public class Accommodation extends BaseEntity {
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
+    private double longitude; // 경도
+    private double latitude; // 위도
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();

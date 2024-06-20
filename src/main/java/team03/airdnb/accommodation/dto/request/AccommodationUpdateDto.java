@@ -6,6 +6,8 @@ import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.Address;
 import team03.airdnb.user.User;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class AccommodationUpdateDto {
@@ -20,8 +22,9 @@ public class AccommodationUpdateDto {
     private int bedroomCount;
     private int bathroomCount;
     private Long hostId;
+    private List<Long> amenityIds;
 
-    public Accommodation toEntity(User host, double averageGrade){
+    public Accommodation toEntity(User host, double averageGrade) {
         return Accommodation.builder()
                 .id(this.id)
                 .name(this.name)

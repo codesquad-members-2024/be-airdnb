@@ -2,6 +2,7 @@ package team03.airdnb.reservation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.AccommodationRepository;
 import team03.airdnb.reservation.dto.request.ReservationSaveDto;
@@ -10,6 +11,7 @@ import team03.airdnb.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;

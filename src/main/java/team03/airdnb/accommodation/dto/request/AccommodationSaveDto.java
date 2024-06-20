@@ -6,6 +6,8 @@ import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.Address;
 import team03.airdnb.user.User;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class AccommodationSaveDto {
@@ -18,7 +20,10 @@ public class AccommodationSaveDto {
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
+    private double longitude; // 경도
+    private double latitude; // 위도
     private Long hostId;
+    private List<Long> amenityIds;
 
     public Accommodation toEntity(User host){
         return Accommodation.builder()
@@ -30,6 +35,8 @@ public class AccommodationSaveDto {
                 .bedCount(this.bedCount)
                 .bedroomCount(this.bedroomCount)
                 .bathroomCount(this.bathroomCount)
+                .longitude(this.longitude)
+                .latitude(this.latitude)
                 .host(host)
                 .build();
     }

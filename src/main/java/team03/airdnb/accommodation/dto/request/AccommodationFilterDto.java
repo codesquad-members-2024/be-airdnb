@@ -1,8 +1,9 @@
 package team03.airdnb.accommodation.dto.request;
 
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -12,5 +13,6 @@ public class AccommodationFilterDto {
     private Double minPrice;
     private Double maxPrice;
     private Integer capacity;
-
+    private Double currentLongitude; // 경도
+    private Double currentLatitude; // 위도
 }

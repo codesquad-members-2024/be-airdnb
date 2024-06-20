@@ -39,5 +39,4 @@ public class FavoriteController {
                .noContent()
                .build();
     }
-
 }

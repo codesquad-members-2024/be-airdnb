@@ -1,28 +1,36 @@
 package team03.airdnb.accommodation;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
 import team03.airdnb.accommodation.dto.request.AccommodationSaveDto;
 import team03.airdnb.accommodation.dto.request.AccommodationUpdateDto;
 import team03.airdnb.accommodation.dto.response.AccommodationListDto;
 import team03.airdnb.accommodation.dto.response.AccommodationShowDto;
+import team03.airdnb.accommodationAmenity.AccommodationAmenityService;
 import team03.airdnb.user.User;
 import team03.airdnb.user.UserRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
+    private final AccommodationAmenityService accommodationAmenityService;
 
-    public Long createAccommodation(AccommodationSaveDto saveDto) {
-        User host = userRepository.findById(saveDto.getHostId()).get(); // 예외처리 추가할 예정입니다!
-        Accommodation savedAccommodation = accommodationRepository.save(saveDto.toEntity(host));
-        return savedAccommodation.getId();
+    public Long createAccommodation(AccommodationSaveDto accommodationSaveDto) {
+        User host = userRepository.findById(accommodationSaveDto.getHostId()).get(); // 예외처리 추가할 예정입니다!
+        Long createdAccommodationId = accommodationRepository.save(accommodationSaveDto.toEntity(host)).getId();
+
+        accommodationAmenityService.createAccommodationAmenity(accommodationSaveDto.getAmenityIds(), createdAccommodationId);
+
+        return createdAccommodationId;
     }
 
     public List<AccommodationListDto> showAccommodationList() {
@@ -40,10 +48,12 @@ public class AccommodationService {
         return AccommodationShowDto.of(accommodation, 10000L, accommodation.getAccommodationAmenities());
     }
 
-    public void updateAccommodation(AccommodationUpdateDto updateDto) {
-        Accommodation accommodation = accommodationRepository.findById(updateDto.getId()).get();
-        User host = userRepository.findById(updateDto.getHostId()).get(); // 예외처리 추가할 예정입니다!
-        accommodationRepository.save(updateDto.toEntity(host, accommodation.getAverageGrade()));
+    public void updateAccommodation(AccommodationUpdateDto accommodationUpdateDto) {
+        Accommodation accommodation = accommodationRepository.findById(accommodationUpdateDto.getId()).get();
+        User host = userRepository.findById(accommodationUpdateDto.getHostId()).get(); // 예외처리 추가할 예정입니다!
+
+        accommodationRepository.save(accommodationUpdateDto.toEntity(host, accommodation.getAverageGrade()));
+        accommodationAmenityService.updateAccommodationAmenity(accommodationUpdateDto.getAmenityIds(), accommodationUpdateDto.getId());
     }
 
     public void deleteAccommodation(Long accommodationId) {

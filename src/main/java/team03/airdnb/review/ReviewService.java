@@ -2,6 +2,7 @@ package team03.airdnb.review;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.AccommodationRepository;
 import team03.airdnb.accommodation.AccommodationService;
@@ -12,6 +13,7 @@ import team03.airdnb.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;

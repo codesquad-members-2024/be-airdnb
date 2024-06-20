@@ -5,3 +5,8 @@ spring:
     import:
         - db-config.yml
         - authentication-config.yml
+  oauth2:
+    login:
+      success-url: "http://airdnb-bucket.s3-website.ap-northeast-2.amazonaws.com/loginSuccess?token="
+  cors:
+    allowed-origins: "http://airdnb-bucket.s3-website.ap-northeast-2.amazonaws.com"

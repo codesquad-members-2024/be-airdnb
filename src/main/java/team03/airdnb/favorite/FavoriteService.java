@@ -2,6 +2,7 @@ package team03.airdnb.favorite;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.AccommodationRepository;
@@ -11,6 +12,7 @@ import team03.airdnb.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;

@@ -2,9 +2,9 @@ package team03.airdnb.accommodation.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import team03.airdnb.accommodationAmenity.AccommodationAmenity;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.Address;
+import team03.airdnb.accommodationAmenity.AccommodationAmenity;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,8 @@ public class AccommodationListDto {
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
+    private double longitude; // 경도
+    private double latitude; // 위도
     private List<String> amenities;
     private double averageGrade;
     private int reviewCount;
@@ -37,6 +39,8 @@ public class AccommodationListDto {
                 accommodation.getBedCount(),
                 accommodation.getBedroomCount(),
                 accommodation.getBathroomCount(),
+                accommodation.getLongitude(),
+                accommodation.getLatitude(),
                 amenitiesToStringList(accommodationAmenities),
                 accommodation.getAverageGrade(),
                 accommodation.getReviews().size()
