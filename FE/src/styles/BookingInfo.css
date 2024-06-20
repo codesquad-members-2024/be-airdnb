@@ -1,0 +1,130 @@
+.booking-info {
+    position: relative;
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .booking-info button {
+    padding: 10px 20px;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .booking-info button:hover {
+    background-color: #e04850;
+  }
+  
+  .pricing-details {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px 0 0 10px;
+    animation: slideIn 0.3s forwards;
+    z-index: 10;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  .close-button:hover {
+    color: #e04850;
+  }
+  
+  .pricing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .price-info {
+    margin-bottom: 20px;
+  }
+  
+  .price-item {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .price-item.green {
+    color: #28a745;
+  }
+  
+  .price-item.red {
+    color: #dc3545;
+  }
+  
+  .total-price, .average-price {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .book-now {
+    padding: 10px 20px;
+    background-color: #ff5a5f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .book-now:hover {
+    background-color: #e04850;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  .slide-enter {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .slide-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 300ms, opacity 300ms;
+  }
+  
+  .slide-exit {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  
+  .slide-exit-active {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 300ms, opacity 300ms;
+  }

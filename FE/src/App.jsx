@@ -4,6 +4,7 @@ import IntroductionPage from "./pages/inroduction";
 import MainPage from "./pages/main";
 import RedirectPage from "./services/redirect.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
+import AccommodationDetail from "./pages/AccommodationDetail";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
             <Route path="search" element={<SearchPage />} />
+            <Route path="accommodation-detail" element={<AccommodationDetail />}/>
           </Route>
 
           {/*-- ETC --*/}
