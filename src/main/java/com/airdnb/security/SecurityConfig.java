@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class SecurityConfig {
 
     private final LogoutHandler logoutHandler;
+    private final OAuth2UserService oAuth2UserService;
+    private final OAuthSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter)
@@ -34,6 +36,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                .successHandler(successHandler))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .logout(logout ->
                 logout.logoutUrl("/api/members/logout")
