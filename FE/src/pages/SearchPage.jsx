@@ -24,7 +24,7 @@ const SearchPage = () => {
         const params = {
           latitude: latitude,
           longitude: longitude,
-          distance: 10,
+          distance: 100000,
         };
 
         if (filters) {
