@@ -11,13 +11,12 @@
 
   const handleLoginOrSignup = async () => {
     const endpoint = isLoginMode ? '/api/login' : '/api/register';
-    const apiUrl = import.meta.env.VITE_API_URL;
     const body = JSON.stringify({ email, password, name: !isLoginMode ? name : undefined });
 
     console.log(isLoginMode);
 
     try {
-      const response = await fetch(`${apiUrl}${endpoint}`, {
+      const response = await fetch(`${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
