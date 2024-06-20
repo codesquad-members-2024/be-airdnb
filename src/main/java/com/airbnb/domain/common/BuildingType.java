@@ -1,7 +1,10 @@
-package com.airbnb.domain.accommodation.entity;
+package com.airbnb.domain.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @Getter
 @RequiredArgsConstructor
@@ -12,4 +15,11 @@ public enum BuildingType {
 
     private final String name;
     private final String description;
+
+    // TODO: 예외 처리
+    public static BuildingType of(String buildingType) {
+        return Arrays.stream(BuildingType.values())
+                .filter(b -> b.getName().equals(buildingType) || b.name().equalsIgnoreCase(buildingType))
+                .findAny().orElseThrow(() -> new NoSuchElementException("해당 건물 유형이 존재하지 않습니다."));
+    }
 }
