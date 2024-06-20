@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReservationService {
 
-  private ReservationRepository reservationRepository;
-  private UserService userService;
-  private AccommodationService accommodationService;
+  private final ReservationRepository reservationRepository;
+  private final UserService userService;
+  private final AccommodationService accommodationService;
 
   @Autowired
   public ReservationService(ReservationRepository reservationRepository, UserService userService,
@@ -28,20 +28,24 @@ public class ReservationService {
 
   public void createReservation(ReservationCreateRequest reservationCreateRequest) {
     User user = userService.FindUserById(reservationCreateRequest.getUserId());
-    Accommodation accommodation = accommodationService.findAccommodation(
+    Accommodation accommodation = accommodationService.findById(
         reservationCreateRequest.getAccommodationId());
 
-    if (checkAvailability(reservationCreateRequest)){
-      Reservation reservation = reservationCreateRequest.toEntity(user, accommodation);
-      reservationRepository.save(reservation);
+    if (!checkAvailability(reservationCreateRequest)) {
+      throw new IllegalArgumentException("예약이 불가능합니다.");
     }
+
+    Reservation reservation = reservationCreateRequest.toEntity(user, accommodation);
+    reservationRepository.save(reservation);
   }
 
   private boolean checkAvailability(ReservationCreateRequest reservationCreateRequest) {
-    Integer count = reservationRepository.countReservationById(reservationCreateRequest.getAccommodationId(),
-        reservationCreateRequest.getStartDate(),reservationCreateRequest.getEndDate());
-    if (count == 0) return true;
-    return false;
+    Integer count = reservationRepository.countReservationById(
+        reservationCreateRequest.getAccommodationId(),
+        reservationCreateRequest.getStartDate(), reservationCreateRequest.getEndDate(),
+        reservationCreateRequest.getAdults(), reservationCreateRequest.getChildren(),
+        reservationCreateRequest.getInfants(), reservationCreateRequest.getPets());
+    return count == 0;
   }
 
   public void deleteReservation(Long reservationId) {
