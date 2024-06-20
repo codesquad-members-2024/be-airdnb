@@ -1,11 +1,13 @@
 package com.airdnb.coupon;
 
+import com.airdnb.coupon.dto.CouponDetail;
 import com.airdnb.coupon.entity.Coupon;
 import com.airdnb.coupon.entity.CouponStatus;
 import com.airdnb.coupon.repository.AppliedMemberRepository;
 import com.airdnb.coupon.repository.CouponCountRepository;
 import com.airdnb.coupon.repository.CouponRepository;
 import com.airdnb.global.exception.InvalidRequestException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +39,13 @@ public class CouponService {
         Coupon coupon = new Coupon(DISCOUNT_RATE, CouponStatus.ACTIVE, memberId);
         couponRepository.save(coupon);
         return coupon.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CouponDetail> queryCoupons(String memberId) {
+        List<Coupon> coupons = couponRepository.findAllByMemberId(memberId);
+        return coupons.stream()
+                .map(CouponDetail::from)
+                .toList();
     }
 }
