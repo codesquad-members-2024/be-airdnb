@@ -44,6 +44,8 @@ public class ProductService {
                         )
                 ).toList();
 
+        System.out.println(accommodations);
+
         if (filter.minPrice() != null){
             accommodations = accommodations.stream()
                     .filter(accommodation -> accommodation.price() >= filter.minPrice())
@@ -83,13 +85,13 @@ public class ProductService {
     private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
         if (checkInDate != null && checkOutDate != null) {
             openProducts = openProducts.stream()
-                    .filter(product -> product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
+                    .filter(product -> !product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
                     .toList();
         }
         return (int) openProducts.stream()
                 .mapToInt(ProductEntity::getPrice)
                 .average()
-                .getAsDouble();
+                .orElseGet(()->0);
     }
 
 

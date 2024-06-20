@@ -43,7 +43,7 @@ public class UserEntity extends BaseEntity {
 
     private String registrationId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<LikeEntity> favorites = new ArrayList<>();
 
