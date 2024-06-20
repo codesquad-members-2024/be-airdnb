@@ -12,7 +12,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
   List<Reservation> findAllByAccommodationId(Long reservationId);
 
-  @Query("SELECT COUNT(r) FROM Reservation r where r.id = :id and r.startDate >= :startDate and r.endDate <= :endDate")
+  @Query("SELECT count(a) FROM Accommodation a LEFT JOIN Reservation r ON a.id = r.accommodation.id "
+      + "where a.id = :id AND (r.startDate between :startDate and :endDate "
+      + "or r.endDate between :startDate and : endDate "
+      + "or (r.startDate <= :startDate and r.endDate >= :endDate)"
+      + "or (a.maxPets < :pets or a.maxInfants < :infants or a.maxChildren < :children or a.maxAdults < :adults))")
   Integer countReservationById(@Param("id") Long id, @Param("startDate") LocalDate startDate,
-      @Param("endDate") LocalDate endDate);
+      @Param("endDate") LocalDate endDate, @Param("adults") Integer adults, @Param("children") Integer children,
+      @Param("infants") Integer infants, @Param("pets") Integer pets);
 }

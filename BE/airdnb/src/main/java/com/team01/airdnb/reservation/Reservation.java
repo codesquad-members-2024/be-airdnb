@@ -1,6 +1,7 @@
 package com.team01.airdnb.reservation;
 
 import com.team01.airdnb.accommadation.Accommodation;
+import com.team01.airdnb.reservation.dto.ReservationRequest;
 import com.team01.airdnb.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -47,5 +48,13 @@ public class Reservation {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "accommodation_id")
   private Accommodation accommodation;
-  
+
+  public void update(ReservationRequest reservationRequest) {
+    startDate = reservationRequest.startDate();
+    endDate = reservationRequest.endDate();
+    adults = reservationRequest.adults();
+    children = reservationRequest.children();
+    infants = reservationRequest.infants();
+    pets = reservationRequest.pets();
+  }
 }
