@@ -48,8 +48,8 @@ jobs:
       - name: Docker build & push to Docker repo
         run: |
           cd ./airdnb
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest
+          docker build -t ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest .
+          docker push ${{ secrets.DOCKER_USER_NAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest
 
       - name: Deploy to Prod Server
         uses: appleboy/ssh-action@master
