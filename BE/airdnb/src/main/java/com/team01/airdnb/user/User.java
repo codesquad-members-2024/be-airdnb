@@ -6,7 +6,6 @@ import com.team01.airdnb.host.Host;
 import com.team01.airdnb.reservation.Reservation;
 import com.team01.airdnb.wishlist.Wishlist;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 import lombok.*;
@@ -22,21 +21,17 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @NotBlank(message = "이름이 비어있습니다")
   private String username;
-
-  @NotBlank(message = "이메일이 없습니다")
   private String email;
-
-  @NotBlank(message = "프로필이 없습니다")
   private String profile;
-
-  @NotBlank(message = "프로바이더가 비어있습니다")
-  private String provider;
 
   @Enumerated(value = EnumType.STRING)
   private Role role;
+
+  @Enumerated(value = EnumType.STRING)
+  private SocialType socialType;
+
+  private String socialId;
 
   //연관 관계
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
