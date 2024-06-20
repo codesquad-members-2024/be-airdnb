@@ -18,6 +18,7 @@ public record MemberCreationRequest(
                         .email(email)
                         .memberName(name)
                         .password(password)
+                        .profile("https://airdnb-storage.s3.ap-northeast-2.amazonaws.com/profile/profile.jpg")
                         .build();
         }
 }

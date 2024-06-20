@@ -36,7 +36,9 @@ public class MemberRestController {
 
         log.info("Member 생성 완료 : #{}", createdMember.getId());
 
-        return ResponseEntity.ok(createdMember);
+        JwtTokenDto jwtResponse = tokenManager.createJwtTokenDto(createdMember);
+
+        return ResponseEntity.ok(jwtResponse);
     }
 
     @PostMapping("/api/login")
