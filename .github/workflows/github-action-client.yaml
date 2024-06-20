@@ -24,12 +24,13 @@ jobs:
         touch .env
         echo "${{ secrets.FRONT_ENV }}" > .env
 
-    - name: Build React App
+    - name: Build Svelte App
       run: | 
         cd ./fe
-        mkdir routes
-        npm install
+        mkdir -p src/routes  
+        npm install --legacy-peer-deps
         npm run build
+        
     - name: Deploy to Prod Server
       uses: appleboy/scp-action@master
       with:
