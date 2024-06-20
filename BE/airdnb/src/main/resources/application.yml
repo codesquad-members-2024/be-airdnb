@@ -6,3 +6,4 @@ spring:
       - db-config.yml
       - jwt-config.yml
       - oauth2-config.yml
+

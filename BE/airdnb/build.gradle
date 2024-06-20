@@ -43,6 +43,9 @@ dependencies {
 	// oauth
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	//security
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
 	// Spring boot 3.0 querydsl 설정
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
