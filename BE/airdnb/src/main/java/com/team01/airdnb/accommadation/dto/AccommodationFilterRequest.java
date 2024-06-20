@@ -9,7 +9,8 @@ public record AccommodationFilterRequest(
     Long maxPrice,
     Integer adultCount,
     Integer childrenCount,
-    Integer infantsCount
+    Integer infantsCount,
+    String location
 ) {
 
 }
