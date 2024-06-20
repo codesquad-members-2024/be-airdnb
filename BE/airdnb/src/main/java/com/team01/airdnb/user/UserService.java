@@ -13,7 +13,6 @@ public class UserService {
   public UserService(UserRepository userRepository, CommentRepository commentRepository){
     this. userRepository = userRepository;
     this.commentRepository = commentRepository;
-
   }
 
   public User FindUserById(String userId){

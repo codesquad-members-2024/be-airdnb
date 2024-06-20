@@ -7,17 +7,26 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  sql:
+    init:
+      mode: always  # 데이터베이스 초기화 모드를 항상으로 설정합니다.
+
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
         format_sql: true
+    defer-datasource-initialization: true  # 데이터베이스 초기화를 Hibernate 초기화 이후로 지연시킵니다.
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://my-auth-server.com
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-

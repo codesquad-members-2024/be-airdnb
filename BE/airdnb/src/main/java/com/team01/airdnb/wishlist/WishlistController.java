@@ -1,6 +1,5 @@
 package com.team01.airdnb.wishlist;
 
-import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.wishlist.dto.WishlistCreateRequest;
 import com.team01.airdnb.wishlist.dto.WishlistListResponse;
 import java.util.List;
