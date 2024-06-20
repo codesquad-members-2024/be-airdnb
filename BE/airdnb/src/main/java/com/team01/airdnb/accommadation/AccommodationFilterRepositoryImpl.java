@@ -1,6 +1,7 @@
 package com.team01.airdnb.accommadation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
@@ -30,7 +31,7 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
   public List<AccommodationSearchResponse> filterAccommodation(LocalDate checkin,
       LocalDate checkout,
       Long minPrice, Long maxPrice, Integer adultCount, Integer childrenCount,
-      Integer infantsCount) {
+      Integer infantsCount, String location) {
     return jpaQueryFactory
         .select(new QAccommodationSearchResponse(
             accommodation.id,
@@ -60,9 +61,22 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
             betweenPrice(minPrice, maxPrice),
             checkAdult(adultCount),
             checkChildren(childrenCount),
-            checkInfants(infantsCount)
-        )
+            checkInfants(infantsCount),
+            address(location))
         .fetch();
+  }
+
+  private BooleanExpression address(String location) {
+    BooleanExpression locationCondition = Expressions.asBoolean(true).isTrue();
+
+    if (location != null) {
+      String[] locations = location.split(" ");
+      for (String keyword : locations) {
+        locationCondition = locationCondition.and(accommodation.address.contains(keyword));
+      }
+    }
+
+    return locationCondition;
   }
 
   private BooleanExpression notReservation() {

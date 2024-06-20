@@ -111,6 +111,7 @@ public class AccommodationService {
         accommodationFilterRequest.maxPrice(),
         accommodationFilterRequest.adultCount(),
         accommodationFilterRequest.childrenCount(),
-        accommodationFilterRequest.infantsCount());
+        accommodationFilterRequest.infantsCount(),
+        accommodationFilterRequest.location());
   }
 }
