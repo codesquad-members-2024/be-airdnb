@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
 import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
+import team10.airdnb.accommodation.dto.SearchAccommodationDto;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
@@ -20,6 +21,7 @@ import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -78,8 +80,9 @@ public class AccommodationService {
         return null;
     }
 
-    public List<Accommodation> getFilteredAccommodations(Long maxCapacity, BigDecimal minDayRate, BigDecimal maxDayRate, LocalDate checkInDate, LocalDate checkOutDate) {
-        return accommodationRepository.findAvailableAccommodations(maxCapacity, minDayRate, maxDayRate, checkInDate, checkOutDate);
+    public List<SearchAccommodationDto> getFilteredAccommodations(Long maxCapacity, BigDecimal minDayRate, BigDecimal maxDayRate, LocalDate checkInDate, LocalDate checkOutDate) {
+        List<Accommodation> accommodations = accommodationRepository.findAvailableAccommodations(maxCapacity, minDayRate, maxDayRate, checkInDate, checkOutDate);
+        return accommodations.stream().map(SearchAccommodationDto::from).collect(Collectors.toList());
     }
 
 
