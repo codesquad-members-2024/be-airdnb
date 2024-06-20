@@ -1,0 +1,39 @@
+name: CI/CD Front Pipeline
+
+on:
+  push:
+    branches:
+      - fe-svelte
+
+jobs:
+  Front-Build-Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        
+    - name: Add .env
+      run: |
+        cd ./fe
+        echo "${{ secrets.FRONT_ENV }}" | base64 --decode > ./.env
+
+    - name: Build React App
+      run: | 
+        cd ./fe
+        mkdir routes
+        npm install
+        npm run build
+    - name: Deploy to Prod Server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST_PROD }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "fe/dist/client/*"
+        target: "/home/ubuntu/nginx-vol/"
