@@ -14,7 +14,7 @@ const App = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
             <Route path="search" element={<SearchPage />} />
-            <Route path="accommodation-detail" element={<AccommodationDetail />}/>
+            <Route path="accommodation-detail/:id" element={<AccommodationDetail />}/>
           </Route>
 
           {/*-- ETC --*/}

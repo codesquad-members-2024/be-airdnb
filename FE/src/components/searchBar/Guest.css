@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
 }
-
+/* 
 .popup {
   background: white;
   padding: 24px;
@@ -18,6 +18,30 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 320px;
+} */
+
+.popup{
+  position: absolute;
+  top: 100%; /* Place below the search bar */
+  left: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9; /* Ensure popups are below the search bar */
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.guest-popup{
+  position: absolute;
+  top: 100%; /* Place below the search bar */
+  right: 0;
+  width: 100%;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9; /* Ensure popups are below the search bar */
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 .space-y-6 > * + * {

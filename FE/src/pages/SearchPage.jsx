@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SearchPage.css"; // CSS 파일 임포트
 import SearchBar from "../components/searchBar/SearchBar.jsx"; // SearchBar 컴포넌트 임포트
@@ -7,6 +7,7 @@ import useDebounce from "../hooks/useDebounce.js"; // useDebounce 훅 임포트
 
 const SearchPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { filters } = location.state || {};
   const [accommodations, setAccommodations] = useState([]);
 
@@ -139,6 +140,17 @@ const SearchPage = () => {
     }
   }, [currentPosition, accommodations, mapLevel]);
 
+  const handleItemClick = (acc) => {
+    navigate(`/accommodation-detail/${acc.accommodation.id}`, {
+      state: {
+        accommodationId: acc.accommodation.id,
+        checkIn: filters.checkIn,
+        checkOut: filters.checkOut,
+        headCount: filters.capacity,
+      },
+    });
+  };
+
   return (
     <div className="search-page-container">
       <div className="search-bar-wrapper">
@@ -148,7 +160,11 @@ const SearchPage = () => {
         <div className="accommodation-list">
           <ul>
             {accommodations.map((acc) => (
-              <li key={acc.accommodation.id} className="accommodation-item">
+              <li
+                key={acc.accommodation.id}
+                className="accommodation-item"
+                onClick={() => handleItemClick(acc)}
+              >
                 <div className="accommodation-details">
                   <h3>{acc.accommodation.name}</h3>
                   <p>{acc.accommodation.location.address}</p>

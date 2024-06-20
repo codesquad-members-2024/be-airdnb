@@ -40,7 +40,7 @@ const GuestPopup = ({ totalGuests, onClose }) => {
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center text-black">
       <div
         ref={modalRef}
-        className="popup bg-white p-6 rounded-lg shadow-lg w-80"
+        className="guest-popup bg-white p-6 rounded-lg shadow-lg w-80"
       >
         <div className="space-y-6">
           <div className="flex justify-between items-center">

@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../components/accommodation_detail/Header';
 import ImageGallery from '../components/accommodation_detail/ImageGallery';
 import Description from '../components/accommodation_detail/Description';
 import HostInfo from '../components/accommodation_detail/HostInfo';
 import BookingInfo from '../components/accommodation_detail/BookingInfo';
 import '../styles/AccommodationDetail.css';
-import { da } from 'date-fns/locale';
 
 const AccommodationDetail = () => {
+  const { state } = useLocation();
+  const { accommodationId, checkIn, checkOut, headCount } = state;
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://squadbnb.site/api/accommodation/1');
+        const response = await fetch(`https://squadbnb.site/api/accommodation/${accommodationId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
         }
@@ -26,7 +28,7 @@ const AccommodationDetail = () => {
     };
 
     fetchData();
-  }, []);
+  }, [accommodationId]);
 
   if (!data) return <div>Loading...</div>;
 
@@ -37,10 +39,10 @@ const AccommodationDetail = () => {
       <Description description={data.description} roomInformation={data.roomInformation} location={data.location} />
       <HostInfo host={data.host} />
       <BookingInfo 
-        accommodationId={data.accommodationId} 
-        checkIn={data.checkIn}
-        checkOut={data.checkOut}
-        headCount={data.headCount} 
+        accommodationId={accommodationId} 
+        checkIn={checkIn}
+        checkOut={checkOut}
+        headCount={headCount} 
       />
     </div>
   );

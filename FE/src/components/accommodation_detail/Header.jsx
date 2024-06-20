@@ -1,4 +1,5 @@
 import React from 'react';
+import './Header.css';
 
 const Header = ({ name, rating, numOfReviews }) => (
   <div className="header">
