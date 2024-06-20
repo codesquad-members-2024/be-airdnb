@@ -59,7 +59,10 @@ public class BookingUserController {
     @ResponseStatus(CREATED)
     public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request,
                                                       @Parameter(hidden = true) UserEntity user) {
-        return bookingManageService.createBooking(request, user);
+        log.info("예약 생성 들어옴");
+        BookingCreateResponse response = bookingManageService.createBooking(request, user);
+        log.info("예약 생성됨. id = {%d}".formatted(response.bookingId()));
+        return response;
     }
 
     @Tag(name = "User")
