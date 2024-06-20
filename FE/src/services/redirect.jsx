@@ -13,11 +13,14 @@ const RedirectPage = (provider) => {
 
     if (code) {
       handleOAuth(code, state, provider, navigate);
-      // navigate("/");
     }
   }, [location, navigate, provider]);
 
-  return null;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-lg font-semibold">Processing</div>
+    </div>
+  );
 };
 
 export default RedirectPage;

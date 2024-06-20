@@ -10,15 +10,15 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<IntroductionPage />} />
-            <Route
-              path="/oauth/redirected/github"
-              element={<RedirectPage provider="github" />}
-            />
-            <Route
-              path="/oauth/redirected/google"
-              element={<RedirectPage provider="google" />}
-            />
           </Route>
+          <Route
+            path="/oauth/redirected/github"
+            element={<RedirectPage provider="github" />}
+          />
+          <Route
+            path="/oauth/redirected/google"
+            element={<RedirectPage provider="google" />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
