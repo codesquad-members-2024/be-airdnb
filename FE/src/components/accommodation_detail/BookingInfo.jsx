@@ -8,7 +8,7 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
 
   const fetchPricing = async () => {
     const response = await fetch('https://squadbnb.site/api/booking', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
