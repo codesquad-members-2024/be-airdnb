@@ -37,6 +37,14 @@ public class MemberService {
 
     @Transactional
     public void register(MemberRegistration memberRegistration) {
+        if (memberRepository.existsById(memberRegistration.getId())) {
+            throw new IllegalArgumentException("이미 존재하는 id입니다.");
+        }
+
+        if (memberRepository.existsByName(memberRegistration.getName())) {
+            throw new IllegalArgumentException("이미 존재하는 이름입니다.");
+        }
+
         Member member = memberMapper.toMember(memberRegistration);
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberRepository.save(member);
