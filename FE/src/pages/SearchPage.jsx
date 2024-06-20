@@ -86,32 +86,32 @@ const SearchPage = () => {
           };
           const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-          // accommodations.forEach((acc) => {
-          //   const markerPosition = new window.kakao.maps.LatLng(
-          //     acc.accommodation.latitude,
-          //     acc.longitude
-          //   );
-          //   const marker = new window.kakao.maps.Marker({
-          //     position: markerPosition,
-          //     title: acc.name,
-          //   });
-          //   marker.setMap(map);
+          accommodations.forEach((acc) => {
+            const markerPosition = new window.kakao.maps.LatLng(
+              acc.accommodation.location.point[1], // latitude
+              acc.accommodation.location.point[0] // longitude
+            );
+            const marker = new window.kakao.maps.Marker({
+              position: markerPosition,
+              title: acc.accommodation.name,
+            });
+            marker.setMap(map);
 
-          //   const overlayContent = document.createElement("div");
-          //   overlayContent.className = "customoverlay";
-          //   overlayContent.innerHTML = `
-          //     <h4>${acc.name}</h4>
-          //     <p>${acc.price.toLocaleString()}원</p>
-          //   `;
+            const overlayContent = document.createElement("div");
+            overlayContent.className = "customoverlay";
+            overlayContent.innerHTML = `
+              <h4>${acc.accommodation.name}</h4>
+              <p>${acc.price.toLocaleString()}원</p>
+            `;
 
-          //   const customOverlay = new window.kakao.maps.CustomOverlay({
-          //     position: markerPosition,
-          //     content: overlayContent,
-          //     yAnchor: 1,
-          //   });
+            const customOverlay = new window.kakao.maps.CustomOverlay({
+              position: markerPosition,
+              content: overlayContent,
+              yAnchor: 1,
+            });
 
-          //   customOverlay.setMap(map);
-          // });
+            customOverlay.setMap(map);
+          });
 
           window.kakao.maps.event.addListener(map, "dragend", () => {
             const latlng = map.getCenter();
@@ -143,31 +143,31 @@ const SearchPage = () => {
       </div>
       <div className="filtered-results">
         <div className="accommodation-list">
-          {/* <ul>
+          <ul>
             {accommodations.map((acc) => (
-              <li key={acc.id} className="accommodation-item">
-                <img src={acc.profileImg} alt={acc.name} />
+              <li key={acc.accommodation.id} className="accommodation-item">
                 <div className="accommodation-details">
-                  <h3>{acc.name}</h3>
-                  <p>{acc.address.fullAddress}</p>
-                  <p>최대 인원: {acc.maxHeadCount}명</p>
-                  <p>
+                  <h3>{acc.accommodation.name}</h3>
+                  <p>{acc.accommodation.location.address}</p>
+                  {/* <p>최대 인원: {acc.maxHeadCount}명</p> */}
+                  {/* <p>
                     침대: {acc.bedCount}, 침실: {acc.bedroomCount}, 욕실:{" "}
                     {acc.bathroomCount}
-                  </p>
+                  </p> */}
                   <p className="accommodation-price">
                     {acc.price.toLocaleString()}원 / 박
                   </p>
                   <div className="accommodation-rating">
                     <span>⭐</span>
                     <span>
-                      {acc.averageGrade} ({acc.reviewCount} 리뷰)
+                      {acc.accommodation.rating} (
+                      {acc.accommodation.numOrReviews} 리뷰)
                     </span>
                   </div>
                 </div>
               </li>
             ))}
-          </ul> */}
+          </ul>
         </div>
         <div className="map-container">
           {currentPosition.latitude && currentPosition.longitude ? (
