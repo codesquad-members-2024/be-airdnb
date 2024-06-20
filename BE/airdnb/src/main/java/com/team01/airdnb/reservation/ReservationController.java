@@ -2,7 +2,6 @@ package com.team01.airdnb.reservation;
 
 import com.team01.airdnb.reservation.dto.ReservationRequest;
 import com.team01.airdnb.reservation.dto.ReservationShowResponse;
-import com.team01.airdnb.reservation.dto.ReservationUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
