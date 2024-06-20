@@ -7,7 +7,7 @@ import useDebounce from "../hooks/useDebounce.js"; // useDebounce 훅 임포트
 
 const SearchPage = () => {
   const location = useLocation();
-  const { filters } = location.state;
+  const { filters } = location.state || {};
   const [accommodations, setAccommodations] = useState([]);
 
   const [currentPosition, setCurrentPosition] = useState({
@@ -16,23 +16,26 @@ const SearchPage = () => {
   });
   const [mapLevel, setMapLevel] = useState(5); // 지도 레벨 상태 추가
 
-  const debouncedPosition = useDebounce(currentPosition, 500); // 500ms 디바운스 적용
+  const debouncedPosition = useDebounce(currentPosition, 1000); // 1000ms 디바운스 적용
 
   const fetchFilteredAccommodations = useCallback(
     async (latitude, longitude) => {
       try {
-        const response = await axios.get("/api/products/available", {
-          params: {
-            checkInDate: filters.checkIn,
-            checkOutDate: filters.checkOut,
-            minPrice: filters.minPrice,
-            maxPrice: filters.maxPrice,
-            headCount: filters.capacity,
-            latitude: latitude,
-            longitude: longitude,
-            distance: 10,
-          },
-        });
+        const params = {
+          latitude: latitude,
+          longitude: longitude,
+          distance: 10,
+        };
+
+        if (filters) {
+          params.checkInDate = filters.checkIn;
+          params.checkOutDate = filters.checkOut;
+          params.minPrice = filters.minPrice;
+          params.maxPrice = filters.maxPrice;
+          params.headCount = filters.capacity;
+        }
+
+        const response = await axios.get("/api/products/available", { params });
         setAccommodations(response.data);
       } catch (error) {
         console.error("Failed to fetch filtered accommodations:", error);
@@ -149,11 +152,6 @@ const SearchPage = () => {
                 <div className="accommodation-details">
                   <h3>{acc.accommodation.name}</h3>
                   <p>{acc.accommodation.location.address}</p>
-                  {/* <p>최대 인원: {acc.maxHeadCount}명</p> */}
-                  {/* <p>
-                    침대: {acc.bedCount}, 침실: {acc.bedroomCount}, 욕실:{" "}
-                    {acc.bathroomCount}
-                  </p> */}
                   <p className="accommodation-price">
                     {acc.price.toLocaleString()}원 / 박
                   </p>
