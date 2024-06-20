@@ -1,6 +1,7 @@
 package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,17 +37,19 @@ public class FavoriteController {
     @Tag(name = "User")
     @Operation(summary = "위시리스트에 상품 추가")
     @Authenticated(Role.USER)
-    @PostMapping("/{id}")
-    public void addFavorite(@PathVariable long id, UserEntity user) {
-        userService.addFavorite(user.getId(), productService.findById(id));
+    @PostMapping("/{productId}")
+    public void addFavorite(@PathVariable long productId,
+                            @Parameter(hidden = true) UserEntity user) {
+        userService.addFavorite(user.getId(), productService.findById(productId));
     }
 
     @Tag(name = "User")
     @Operation(summary = "위시리스트에서 상품 삭제")
     @Authenticated(Role.USER)
-    @DeleteMapping("/{id}")
-    public void removeFavorite(@PathVariable long id, UserEntity user) {
-        userService.removeFavorite(user.getId(), productService.findById(id));
+    @DeleteMapping("/{productId}")
+    public void removeFavorite(@PathVariable long productId,
+                               @Parameter(hidden = true) UserEntity user) {
+        userService.removeFavorite(user.getId(), productService.findById(productId));
 
     }
 
@@ -54,7 +57,7 @@ public class FavoriteController {
     @Operation(summary = "내 위시리스트 조회")
     @Authenticated(Role.USER)
     @GetMapping("my")
-    public FavoritesResponse getMyWishList(UserEntity user) {
+    public FavoritesResponse getMyWishList(@Parameter(hidden = true) UserEntity user) {
         List<ProductEntity> available = new ArrayList<>();
         List<ProductEntity> nonAvailable = new ArrayList<>();
 

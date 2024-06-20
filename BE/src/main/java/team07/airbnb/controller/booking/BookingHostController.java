@@ -1,6 +1,7 @@
 package team07.airbnb.controller.booking;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,8 @@ public class BookingHostController {
     @PostMapping("/confirm/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public Long confirmBooking(@PathVariable Long bookingId, UserEntity user) {
+    public Long confirmBooking(@PathVariable Long bookingId,
+                               @Parameter(hidden = true) UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         //컨펌한 예약의 아이디 리턴
@@ -48,7 +50,8 @@ public class BookingHostController {
     @Operation(summary = "예약 이용 완료", description = "예약을 이용 완료 처리합니다.")
     @PostMapping("/complete/{bookingId}")
     @Authenticated(HOST)
-    public void completeBooking(@PathVariable Long bookingId, UserEntity user) {
+    public void completeBooking(@PathVariable Long bookingId,
+                                @Parameter(hidden = true) UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
         // 예약 종료 일자 전 예약 이용 완료 -> 남은 일자에 대해서 상품 재생성, 환불 X
@@ -60,7 +63,8 @@ public class BookingHostController {
     @Authenticated(HOST)
     @GetMapping("/management")
     @ResponseStatus(OK)
-    public List<BookingDetailResponse> getBookingInfosOfHosting(UserEntity host) {
+    public List<BookingDetailResponse> getBookingInfosOfHosting(
+            @Parameter(hidden = true) UserEntity host) {
         return bookingInquiryService.getBookingInfoListByHost(host);
     }
 
@@ -69,7 +73,8 @@ public class BookingHostController {
     @GetMapping("/management/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId, UserEntity host) {
+    public BookingDetailResponse getBookingDetail(@PathVariable Long bookingId,
+                                                  @Parameter(hidden = true) UserEntity host) {
         bookingAuthService.currentUserIsSameWith(bookingId, host, CheckAuthType.HOST);
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
     }

@@ -1,6 +1,7 @@
 package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -52,24 +53,26 @@ public class AccommodationInquiryController {
     @Operation(summary = "나의 숙소 조회", description = "내가 등록한 숙소를 조회합니다.")
     @Authenticated(HOST)
     @GetMapping("/my")
-    public List<AccommodationListResponse> myAccommodations(UserEntity user) {
+    public List<AccommodationListResponse> myAccommodations(
+            @Parameter(hidden = true)UserEntity user) {
         return previewOf(accommodationService.findByHost(user));
     }
 
     @Tag(name = "User")
     @Operation(summary = "숙소 상세 조회", description = "숙소의 상세 정보를 조회합니다.")
-    @GetMapping("/{id}")
+    @GetMapping("/{accommodationId}")
     @ResponseStatus(OK)
-    public AccommodationDetailResponse accommodationDetail(@PathVariable long id) {
-        return AccommodationDetailResponse.of(accommodationService.findById(id));
+    public AccommodationDetailResponse accommodationDetail(@PathVariable long accommodationId) {
+        return AccommodationDetailResponse.of(accommodationService.findById(accommodationId));
     }
 
     @Tag(name = "User")
     @Operation(summary = "예약 가능 일자 조회", description = "지정 년월 중 숙소의 예약 가능 일자와 가격을 조회합니다.")
-    @GetMapping("/available/{id}/{date}")
+    @GetMapping("/available/{accommodationId}/{date}")
     @ResponseStatus(OK)
-    public List<SimpleProductResponse> availableProducts(@PathVariable LocalDate date, @PathVariable Long id) {
-        return accommodationService.findAvailableProductsInMonth(date, id)
+    public List<SimpleProductResponse> availableProducts(@PathVariable LocalDate date,
+                                                         @PathVariable Long accommodationId) {
+        return accommodationService.findAvailableProductsInMonth(date, accommodationId)
                 .stream()
                 .map(SimpleProductResponse::of)
                 .toList();

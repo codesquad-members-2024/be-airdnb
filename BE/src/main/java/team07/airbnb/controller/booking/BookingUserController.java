@@ -1,6 +1,7 @@
 package team07.airbnb.controller.booking;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,8 @@ public class BookingUserController {
     @PostMapping
     @Authenticated(USER)
     @ResponseStatus(CREATED)
-    public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request, UserEntity user) {
+    public BookingCreateResponse createBookingRequest(@RequestBody @Valid CreateBookingRequest request,
+                                                      @Parameter(hidden = true) UserEntity user) {
         return bookingManageService.createBooking(request, user);
     }
 
@@ -65,7 +67,8 @@ public class BookingUserController {
     @PostMapping("/cancel/{bookingId}")
     @Authenticated(USER)
     @ResponseStatus(OK)
-    public BookingCancelResponse cancelBooking(@PathVariable Long bookingId, UserEntity user) {
+    public BookingCancelResponse cancelBooking(@PathVariable Long bookingId,
+                                               @Parameter(hidden = true) UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         //취소 수수료 현재는 전체 결제 금액의 10%
@@ -79,7 +82,7 @@ public class BookingUserController {
     @Operation(summary = "내 예약 조회", description = "내 예약을 조회합니다.")
     @GetMapping("/my-bookings")
     @Authenticated(USER)
-    public List<BookingDetailResponse> getMyBookingInfos(UserEntity user) {
+    public List<BookingDetailResponse> getMyBookingInfos(@Parameter(hidden = true) UserEntity user) {
         return bookingInquiryService.findBookingsByUser(user);
     }
 
@@ -87,7 +90,8 @@ public class BookingUserController {
     @GetMapping("/my-booking/{bookingId}")
     @Authenticated(USER)
     @ResponseStatus(OK)
-    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId, UserEntity user) {
+    public BookingDetailResponse getDetailMyBooking(@PathVariable Long bookingId,
+                                                    @Parameter(hidden = true) UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.USER);
 
         return BookingDetailResponse.of(bookingInquiryService.findByBookingId(bookingId));
