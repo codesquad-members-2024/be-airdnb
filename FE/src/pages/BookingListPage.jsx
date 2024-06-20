@@ -4,21 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '/src/styles/BookingListPage.module.css';
 
-const BookingListPage = ({ token }) => {
+const BookingListPage = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login'); // 로그인 페이지로 이동
-      return;
-    }
-
     const fetchBookings = async () => {
       try {
         const response = await axios.get('https://squadbnb.site/api/booking/my-bookings', {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
         });
         setBookings(response.data);
