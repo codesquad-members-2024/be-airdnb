@@ -56,7 +56,7 @@
   const handleGuestsSelected = (total) => {
     totalGuests = total;
     toggleGuestPopup();
-  };
+  }; 
 
   const handleSearch = () => {
     const checkInDate = urlFormmattedCheckIn;
