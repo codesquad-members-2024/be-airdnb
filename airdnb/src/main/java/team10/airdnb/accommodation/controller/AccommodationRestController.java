@@ -53,7 +53,7 @@ public class AccommodationRestController {
     }
 
     @GetMapping("/api/accommodation/search")
-    public ResponseEntity<?> searchAccommodations(
+    public ResponseEntity<List<Accommodation>> searchAccommodations(
             @RequestParam(name = "max_capacity", required = false) Long maxCapacity,
             @RequestParam(name = "min_dayrate", required = false) BigDecimal minDayRate,
             @RequestParam(name = "max_dayrate", required = false) BigDecimal maxDayRate,
