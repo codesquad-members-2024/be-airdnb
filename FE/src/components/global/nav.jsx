@@ -57,67 +57,67 @@ const Nav = () => {
 
   return (
     <div className="App">
-      <div className={styles.container}>
-        <nav className={styles.navbar}>
-          <Link to="/" className={styles.navLogo}>
-            <img src={logo} alt="Logo" />
-          </Link>
-          <div className={styles.navItems}>
-            <a
-              href="#"
-              className={`${styles.navItem} ${
-                activeItem === "숙소" ? styles.active : ""
-              }`}
-              onClick={() => handleItemClick("숙소")}
-            >
-              숙소
-            </a>
-            <a
-              href="#"
-              className={`${styles.navItem} ${
-                activeItem === "체험" ? styles.active : ""
-              }`}
-              onClick={() => handleItemClick("체험")}
-            >
-              체험
-            </a>
-            <a
-              href="#"
-              className={`${styles.navItem} ${
-                activeItem === "온라인 체험" ? styles.active : ""
-              }`}
-              onClick={() => handleItemClick("온라인 체험")}
-            >
-              온라인 체험
-            </a>
-          </div>
-          <div className={styles.navMenu}>
-            <button className={styles.navMenuButton} onClick={toggleMenu}>
-              <img src={menuIcon} alt="Menu" />
-              <img src={profileImage} alt="Profile" />
-            </button>
-            <div
-              className={`${styles.navMenuContent} ${
-                menuOpen ? styles.show : ""
-              }`}
-            >
-              {isLoggedIn ? (
-                <>
-                  <div className={styles.navMenuItem}>예약 취소</div>
-                  <div className={styles.navMenuItem}>위시리스트</div>
-                  <div className={styles.navMenuItem} onClick={handleLogout}>
-                    로그아웃
-                  </div>
-                </>
-              ) : (
-                <div className={styles.navMenuItem} onClick={toggleLogin}>
-                  로그인
+      {/* <div className={styles.container}> */}
+      <nav className={styles.navbar}>
+        <Link to="/" className={styles.navLogo}>
+          <img src={logo} alt="Logo" />
+        </Link>
+        <div className={styles.navItems}>
+          <a
+            href="#"
+            className={`${styles.navItem} ${
+              activeItem === "숙소" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("숙소")}
+          >
+            숙소
+          </a>
+          <a
+            href="#"
+            className={`${styles.navItem} ${
+              activeItem === "체험" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("체험")}
+          >
+            체험
+          </a>
+          <a
+            href="#"
+            className={`${styles.navItem} ${
+              activeItem === "온라인 체험" ? styles.active : ""
+            }`}
+            onClick={() => handleItemClick("온라인 체험")}
+          >
+            온라인 체험
+          </a>
+        </div>
+        <div className={styles.navMenu}>
+          <button className={styles.navMenuButton} onClick={toggleMenu}>
+            <img src={menuIcon} alt="Menu" />
+            <img src={profileImage} alt="Profile" />
+          </button>
+          <div
+            className={`${styles.navMenuContent} ${
+              menuOpen ? styles.show : ""
+            }`}
+          >
+            {isLoggedIn ? (
+              <>
+                <div className={styles.navMenuItem}>예약 취소</div>
+                <div className={styles.navMenuItem}>위시리스트</div>
+                <div className={styles.navMenuItem} onClick={handleLogout}>
+                  로그아웃
                 </div>
-              )}
-            </div>
+              </>
+            ) : (
+              <div className={styles.navMenuItem} onClick={toggleLogin}>
+                로그인
+              </div>
+            )}
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
+      {/* </div> */}
       <LoginModal show={showModal} onClose={handleCloseModal} />
     </div>
   );
