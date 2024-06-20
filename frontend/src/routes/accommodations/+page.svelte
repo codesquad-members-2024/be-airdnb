@@ -6,6 +6,8 @@
     import {goto} from "$app/navigation";
     import LoginModal from "./LoginModal.svelte";
     import ReservationModal from "./ReservationModal.svelte";
+    import ProfilePopup from "../../components/ProfilePopup.svelte";
+    import { isLoggedIn } from "../../store/auth.js";
 
     onMount(() => {
         const container = document.getElementById('map');
@@ -42,14 +44,14 @@
         isLoginBtnClicked = !isLoginBtnClicked;
     }
 
+    $: isProfileBtnClicked = false;
+    const handleProfileBtnClick = () => {
+        isProfileBtnClicked = !isProfileBtnClicked;
+    }
+
     $: isAccoCardClicked = false;
     const handleAccoCardClick = () => {
         isAccoCardClicked = !isAccoCardClicked;
-    }
-
-    const login = () => {
-        goto('http://localhost:8080/oauth/kakao')
-
     }
 
     let items = Array.from({ length: 10 });
@@ -59,7 +61,7 @@
 <div class="flex flex-col h-screen">
     <header class="flex flex-col relative z-2 mb-10">
         <div id="logo" class="max-w-[1440px] mx-auto w-full flex items-center justify-between p-4 py-6 border-b ">
-            <a class="text-2xl font-semibold" href="/hosting">Airdnb</a>
+            <a class="text-2xl font-semibold" href="/accommodations">Airdnb</a>
             <nav class="hidden md:flex items-center gap-[30px] lg:gap-6">
                 <div class="flex gap-4 w-[500px] border-b-airbnb-text-bold h-[50px]">
                     <div class="flex flex-grow items-center justify-around bg-white border border-[#BDBDBD] rounded-full p-2
@@ -79,16 +81,19 @@
                     </div>
                 </div>
             </nav>
-            <div class="border border-gray-300 rounded-full flex gap-2">
+            <div class="border border-gray-300 rounded-full flex gap-2 relative">
                 <button class="hidden md:flex place-items-center m-1 pl-3">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <button class="md:hidden place-items-center m-1 px-3">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <button class="hidden md:flex m-0.5" on:click={handleLoginBtnClick}>
+                <button class="hidden md:flex m-0.5" on:click={$isLoggedIn ? handleProfileBtnClick : handleLoginBtnClick}>
                     <img src="{profile_icon}" alt="User Profile Icon">
                 </button>
+                {#if isProfileBtnClicked && $isLoggedIn}
+                    <ProfilePopup bind:isProfileBtnClicked="{isProfileBtnClicked}"/>
+                {/if}
             </div>
         </div>
     </header>
@@ -103,7 +108,7 @@
             <div id="clickLatlng" class="mt-4"></div>
         </section>
     </section>
-    {#if isLoginBtnClicked}
+    {#if isLoginBtnClicked && !$isLoggedIn}
         <LoginModal bind:isLoginBtnClicked="{isLoginBtnClicked}"/>
     {/if}
     {#if isAccoCardClicked}
