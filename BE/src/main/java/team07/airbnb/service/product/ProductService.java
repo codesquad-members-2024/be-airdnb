@@ -33,7 +33,7 @@ public class ProductService {
         List<AccommodationEntity> nearbyAccommodations = accommodationService.findNearbyAccommodations(
                 filter.longitude(),
                 filter.latitude(),
-                filter.distance() * 1000);
+                filter.distance());
 
         Stream<List<ProductEntity>> filteredStream = getFilteredStream(filter, nearbyAccommodations);
 

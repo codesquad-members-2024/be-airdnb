@@ -94,7 +94,7 @@ public class AccommodationService {
     public List<AccommodationEntity> findNearbyAccommodations(double longitude, double latitude, double distance) {
         Point center = geometryHelper.getPoint(longitude, latitude);
 
-        return accommodationRepository.findByLocationWithinDistance(center, distance);
+        return accommodationRepository.findByLocationWithinDistance(center, distance * 1000); // km
     }
 
     public List<AccommodationEntity> findAllAccommodations() {

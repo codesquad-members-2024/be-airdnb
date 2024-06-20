@@ -46,7 +46,7 @@ public class AccommodationInquiryController {
             @RequestParam double latitude,
             @RequestParam double distance) {
 
-        return previewOf(accommodationService.findNearbyAccommodations(longitude, latitude, distance * 1000));
+        return previewOf(accommodationService.findNearbyAccommodations(longitude, latitude, distance));
     }
 
     @Tag(name = "Host")
