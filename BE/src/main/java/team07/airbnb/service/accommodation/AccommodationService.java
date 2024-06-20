@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.common.util.DateHelper;
 import team07.airbnb.common.util.GeometryHelper;
+import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.accommodation.enums.AccommodationType;
 import team07.airbnb.data.user.enums.Role;
 import team07.airbnb.entity.AccommodationEntity;
@@ -50,15 +51,15 @@ public class AccommodationService {
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id, RoomInformation roomInformation, Long userId) {
-        AccommodationEntity accommodation = authorize(id, userId);
+    public AccommodationEntity updateAccommodation(Long id, RoomInformation roomInformation, UserEntity user) {
+        AccommodationEntity accommodation = authorize(id, user.getId());
         accommodation.updateRoomInfo(roomInformation);
         return accommodationRepository.save(accommodation);
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id,String name, String description, Long userId) {
-        AccommodationEntity accommodation = authorize(id, userId);
+    public AccommodationEntity updateAccommodation(Long id,String name, String description, UserEntity user) {
+        AccommodationEntity accommodation = authorize(id, user.getId());
         accommodation.updateDescription(name, description);
         return accommodationRepository.save(accommodation);
     }
@@ -68,16 +69,16 @@ public class AccommodationService {
                                                    AccommodationType type,
                                                    AccommodationLocation address,
                                                    int basePricePerDay,
-                                                   Long userId)
+                                                   UserEntity user)
     {
-        AccommodationEntity accommodation = authorize(id, userId);
+        AccommodationEntity accommodation = authorize(id, user.getId());
         accommodation.updateBaseInfo(type, address, basePricePerDay);
         return accommodationRepository.save(accommodation);
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id, List<String> pictures, Long userId) {
-        AccommodationEntity accommodation = authorize(id, userId);
+    public AccommodationEntity updateAccommodation(Long id, List<String> pictures, UserEntity user) {
+        AccommodationEntity accommodation = authorize(id, user.getId());
         accommodation.updatePictures(
                 pictures.stream().map(url -> new Pictures(accommodation, url)).toList()
         );
@@ -130,5 +131,9 @@ public class AccommodationService {
         if (!accommodation.getHost().getId().equals(id)) throw new UnAuthorizedException(this.getClass(), userId);
 
         return accommodation;
+    }
+
+    public List<AccommodationEntity> findWithFilter(AccommodationFilterDTO filter) {
+        return null;
     }
 }

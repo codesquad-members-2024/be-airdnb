@@ -1,14 +1,13 @@
 package team07.airbnb.service.booking;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.controller.ReviewController;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.dto.transfer.DateInfo;
 import team07.airbnb.data.booking.dto.transfer.DistanceInfo;
-import team07.airbnb.data.booking.enums.BookingStatus;
+import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.entity.AccommodationEntity;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.ProductEntity;
@@ -20,46 +19,22 @@ import team07.airbnb.repository.BookingRepository;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.product.ProductService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class BookingInquiryService {
 
     private final AccommodationService accommodationService;
     private final ProductService productService;
-
     private final BookingRepository bookingRepository;
-
-    /**
-     * 정오마다 오늘이 체크아웃 날짜인 모든 예약을 이용 완료 상태로 변경
-     */
-    @Scheduled(cron = "0 0 12 * * ?")
-    public void completeAllBookings() {
-        LocalDate now = LocalDate.now();
-
-        List<BookingEntity> bookings = bookingRepository.findAllByCheckout(now);
-
-        bookings.forEach(booking -> {
-            booking.setStatus(BookingStatus.COMPLETE);
-            booking.getProducts().stream().close();
-        });
-    }
 
 
     public List<BookingDetailResponse> findBookingsByUser(UserEntity booker) {
         return bookingRepository.findAllByBooker(booker).stream().map(BookingDetailResponse::of).toList();
     }
 
-    public void addReview(Long bookingId, Long writerId, ReviewEntity review) {
-        BookingEntity booking = findByBookingId(bookingId);
-        if (!booking.getBooker().getId().equals(writerId))
-            throw new UnAuthorizedException(ReviewController.class, writerId, "%d 번 예약의 예약자만 리뷰를 작성할 수 있습니다!".formatted(bookingId));
-
-        bookingRepository.save(booking.addReview(review));
-    }
 
     public BookingEntity findByBookingId(Long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
@@ -76,8 +51,8 @@ public class BookingInquiryService {
                 accommodationService.findNearbyAccommodations(distanceInfo.longitude(), distanceInfo.latitude(), distanceInfo.distance());
 
         return nearbyAccommodations.stream()
-                    .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
-                    .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
-                    .toList();
+                .map(accommodationEntity -> productService.getInDateRangeOfAccommodation(accommodationEntity.getId(), dateInfo.checkIn(), dateInfo.checkOut(), null))
+                .map(productEntities -> productEntities.stream().mapToInt(ProductEntity::getPrice).average().orElseGet(() -> -1.0))
+                .toList();
     }
 }

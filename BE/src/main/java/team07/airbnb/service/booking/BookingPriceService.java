@@ -24,8 +24,8 @@ public class BookingPriceService {
     private final ServiceFee serviceFee;
     private final AccommodationFee accommodationFee;
 
-    public PriceInfo getPriceInfo(BookingInfoForPriceInfo requestInfo) {
-        int roughTotalPrice = getRoughTotalPrice(requestInfo.accId(), requestInfo.checkIn(), requestInfo.checkOut(), requestInfo.headCount());
+    public PriceInfo getPriceInfo(Long accId, LocalDate checkIn, LocalDate checkOut, Integer headCount) {
+        int roughTotalPrice = getRoughTotalPrice(accId, checkIn, checkOut, headCount);
         int discountPrice = getDiscountPrice(roughTotalPrice);
         int serviceFee = getServiceFee(roughTotalPrice, discountPrice);
         int accommodationFee = getAccommodationFee(serviceFee);

@@ -6,6 +6,7 @@ spring:
       - app_settings/dev-db-config.yml
       - app_settings/oauth-config.yml
       - app_settings/jwt-config.yml
+      - app_settings/s3.yml
 
   jpa:
     hibernate:

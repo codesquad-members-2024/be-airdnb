@@ -9,13 +9,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
+import team07.airbnb.entity.UserEntity;
 
 @Component
 public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(TokenUserInfo.class);
+        return parameter.getParameterType().equals(UserEntity.class);
     }
 
     @Override
@@ -23,7 +24,8 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getPrincipal();
+
+            return UserEntity.ofToken((TokenUserInfo) authentication.getPrincipal());
         }
         return null;
     }

@@ -3,7 +3,9 @@ package team07.airbnb.integration.util;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Profile("test")
 @Transactional
 public class DataBaseHelper {
 
@@ -25,6 +26,9 @@ public class DataBaseHelper {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @SuppressWarnings("unchecked")
     @PostConstruct
@@ -39,6 +43,11 @@ public class DataBaseHelper {
         names.add("USERS"); // 유저 테이블은 초기화 제외
         names.add("DISCOUNT_POLICY");
         truncate(names);
+    }
+
+    public <T> T find(Long id, Class<T> tClass) {
+        entityManager.clear();
+        return entityManager.find(tClass, id);
     }
 
     public void put(List<Object> dummies) {

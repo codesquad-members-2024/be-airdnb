@@ -16,7 +16,7 @@ import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.review.dto.request.ReviewPostRequest;
 import team07.airbnb.data.review.dto.response.ReviewWithReplyResponse;
 import team07.airbnb.data.user.dto.response.TokenUserInfo;
-import team07.airbnb.entity.ReviewEntity;
+import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.booking.BookingInquiryService;
 import team07.airbnb.service.review.ReviewService;
@@ -34,9 +34,7 @@ import static team07.airbnb.data.user.enums.Role.*;
 public class ReviewController {
 
     private final AccommodationService accommodationService;
-    private final BookingInquiryService bookingInquiryService;
     private final ReviewService reviewService;
-    private final UserService userService;
 
     @Operation(summary = "숙소 리뷰 조회")
     @GetMapping("/{accommodationId}")
@@ -52,8 +50,8 @@ public class ReviewController {
     @Authenticated(USER)
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
-    public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, TokenUserInfo user) {
-        bookingInquiryService.addReview(bookingId, user.id(), new ReviewEntity(bookingInquiryService.findByBookingId(bookingId), request.content(), request.rating()));
+    public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, UserEntity user) {
+        reviewService.postReview(user.getId(), bookingId, request);
     }
 
     @Tag(name = "Host")
@@ -61,7 +59,7 @@ public class ReviewController {
     @Authenticated(HOST)
     @PostMapping("/{reviewId}/reply")
     @ResponseStatus(OK)
-    public void replyToReview(@PathVariable Long reviewId, @RequestBody String content, TokenUserInfo user) {
+    public void replyToReview(@PathVariable Long reviewId, @RequestBody String content, UserEntity user) {
         reviewService.addReplyTo(reviewId, content, user);
     }
 

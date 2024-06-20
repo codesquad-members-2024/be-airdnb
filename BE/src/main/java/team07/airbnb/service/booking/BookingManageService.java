@@ -2,7 +2,9 @@ package team07.airbnb.service.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.request.CreateBookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
 import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.entity.BookingEntity;
@@ -23,6 +25,7 @@ import static team07.airbnb.data.booking.enums.BookingStatus.REQUESTED;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookingManageService {
 
     private final BookingInquiryService bookingInquiryService;
@@ -41,35 +44,44 @@ public class BookingManageService {
         bookingRepository.save(booking);
     }
 
-    public BookingCreateResponse createBooking(BookingInfoForPriceInfo bookingInfo, Long accId, UserEntity booker) {
-        PriceInfo priceInfo = bookingPriceService.getPriceInfo(bookingInfo);
+    public BookingCreateResponse createBooking(CreateBookingRequest request, UserEntity booker) {
+        BookingEntity booking = buildBookingByCreateRequest(request, booker);
 
-        PaymentEntity payment = paymentService.createNewPayment(priceInfo);
-        LocalDate checkIn = bookingInfo.checkIn();
-        LocalDate checkOut = bookingInfo.checkOut();
-        Integer headCount = bookingInfo.headCount();
-
-        UserEntity host = accommodationService.getHostIdById(accId);
-
-        BookingEntity booking = BookingEntity.builder()
-                .host(host)
-                .booker(booker)
-                .checkin(checkIn)
-                .checkout(checkOut)
-                .headCount(headCount)
-                .payment(payment)
-                .status(REQUESTED)
-                .build();
-
-        productService.getInDateRangeOfAccommodation(accId, checkIn, checkOut, headCount)
-                .forEach(product -> product.book(booking));
-
-        String accName = accommodationService.findById(accId).getName();
+        productService.setProductStatusBooked(
+                request.accommodationId(),
+                request.checkIn(),
+                request.checkOut(),
+                request.headCount(),
+                booking
+        );
 
         bookingRepository.save(booking);
 
-        return new BookingCreateResponse(accName, booking.getId(), checkIn, checkOut, headCount);
+        return new BookingCreateResponse(
+                accommodationService.findById(request.accommodationId()).getName(),
+                booking.getId(),
+                request.checkIn(),
+                request.checkOut(),
+                request.headCount()
+        );
     }
+
+    private BookingEntity buildBookingByCreateRequest(CreateBookingRequest request, UserEntity booker) {
+        PaymentEntity payment = paymentService.createNewPaymentByRequest(request);
+
+        UserEntity host = accommodationService.getHostIdById(request.accommodationId());
+
+        return BookingEntity.builder()
+                .host(host)
+                .booker(booker)
+                .checkin(request.checkIn())
+                .checkout(request.checkOut())
+                .headCount(request.headCount())
+                .payment(payment)
+                .status(REQUESTED)
+                .build();
+    }
+
 
     public Long confirmBooking(Long bookingId, UserEntity requestedHost) {
         BookingEntity booking = bookingInquiryService.findByBookingId(bookingId);
