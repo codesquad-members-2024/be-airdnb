@@ -7,7 +7,6 @@ import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Transactional
 public class CommentService {
 
-  @Autowired
-  private CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
+  private final UserRepository userRepository;
+  private final AccommodationRepository accommodationRepository;
 
   @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private AccommodationRepository accommodationRepository;
+  public CommentService(CommentRepository commentRepository, UserRepository userRepository,
+      AccommodationRepository accommodationRepository) {
+    this.commentRepository = commentRepository;
+    this.userRepository = userRepository;
+    this.accommodationRepository = accommodationRepository;
+  }
 
   /**
    * 새로운 코멘트를 등록합니다.
@@ -50,7 +53,9 @@ public class CommentService {
    * @param  id 숙소 id
    * @return 코멘트 조회 dto 목록
    */
+  @Transactional(readOnly = true)
   public List<CommentShowResponse> showAllComment(Long id) {
+    findExistAccommodation(id);
     return commentRepository.findAllByAccommodationId(id);
   }
 
@@ -79,7 +84,20 @@ public class CommentService {
         target.getCreatedAt(), target.getUser());
   }
 
+  /**
+   * 해당 숙소의 코멘트 평점의 합계를 반환합니다.
+   * @param id
+   * @return
+   */
   public Double findAverageScoreByAccommodationId(Long id) {
     return commentRepository.findAverageScoreByAccommodationId(id);
+  }
+
+  /**
+   * 존재하지 않는 숙소의 코멘트를 조회하려고 하는 경우를 체크합니다.
+   * @param id
+   */
+  private void findExistAccommodation(Long id) {
+    accommodationRepository.findById(id).orElseThrow();
   }
 }

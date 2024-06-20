@@ -7,7 +7,7 @@ import com.team01.airdnb.user.User;
 public record CommentRegisterRequest(
     Double score,
     String content,
-    String user,
+    Long user,
     Long accommodation
 ) {
 
