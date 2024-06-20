@@ -5,7 +5,6 @@ on:
     branches:
       - deploy
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,22 +13,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
           java-version: '17'
 
       - name: Make application.yaml
         run: |
-          cd ./airdnb//src/main
+          cd ./airdnb/src/main
           mkdir -p resources
           cd resources
           touch application.yaml
           echo "${{ secrets.EC2_YAML }}" > application.yaml
-          shell: bash
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Grant execute permission for gradlew
         run: |
@@ -54,7 +52,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest
 
       - name: Deploy to Prod Server
-        uses: appleboy/ssh-action@v0.1.5
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -62,5 +60,3 @@ jobs:
           script: |
             cd /home/ubuntu
             sudo ./deploy_server.sh -y
-
-
