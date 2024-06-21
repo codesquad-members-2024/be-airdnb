@@ -1,4 +1,4 @@
-package com.airdnb.security;
+package com.airdnb.security.oauth;
 
 import com.airdnb.member.MemberRepository;
 import com.airdnb.member.entity.Member;
@@ -25,7 +25,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = super.loadUser(userRequest).getAttributes();
 
         OAuthUserInfo oAuthUserInfo = OAuthUserInfo.ofGoogle(attributes);
-        
+
         oauthVerify(oAuthUserInfo);
 
         return super.loadUser(userRequest);

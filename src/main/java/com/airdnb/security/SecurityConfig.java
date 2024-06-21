@@ -1,6 +1,8 @@
 package com.airdnb.security;
 
 import com.airdnb.security.jwt.JwtAuthenticationFilter;
+import com.airdnb.security.oauth.OAuth2UserService;
+import com.airdnb.security.oauth.OAuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

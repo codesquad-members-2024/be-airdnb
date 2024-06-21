@@ -1,4 +1,4 @@
-package com.airdnb.security;
+package com.airdnb.security.oauth;
 
 import com.airdnb.security.jwt.JwtUtil;
 import jakarta.servlet.ServletException;
