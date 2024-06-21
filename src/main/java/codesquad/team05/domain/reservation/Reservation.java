@@ -1,9 +1,9 @@
-package codesquad.team05.domain.accommodation.reservation;
+package codesquad.team05.domain.reservation;
 
-import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.accomodation.Accommodation;
 import codesquad.team05.domain.user.User;
-import codesquad.team05.web.dto.request.reservation.ReservationUpdate;
-import codesquad.team05.web.dto.response.reservation.ReservationResponse;
+import codesquad.team05.web.reservation.dto.request.ReservationUpdate;
+import codesquad.team05.web.reservation.dto.response.ReservationResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,8 +54,8 @@ public class Reservation {
         return reservationResponse;
     }
 
-
     public void update(ReservationUpdate reservationUpdate) {
+
         this.amount = reservationUpdate.getAmount();
         this.personCount = reservationUpdate.getPersonCount();
         this.checkIn = reservationUpdate.getCheckIn();
