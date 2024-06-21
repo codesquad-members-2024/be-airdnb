@@ -21,14 +21,14 @@ public class AccommodationRestController {
 
     private final AccommodationService accommodationService;
 
-    @GetMapping("/api/accommodations")
+    @GetMapping("/accommodations")
     public ResponseEntity<?> getAccommodations() {
         log.info("전체 숙소 조회");
 
         return ResponseEntity.ok(accommodationService.getAccommodations());
     }
 
-    @GetMapping("/api/accommodation/{accommodationId}")
+    @GetMapping("/accommodation/{accommodationId}")
     public ResponseEntity<Accommodation> getAccommodation(@PathVariable(name = "accommodationId") Long accommodationId) {
 
         Accommodation accommodation = accommodationService.getAccommodation(accommodationId);
@@ -38,7 +38,7 @@ public class AccommodationRestController {
         return ResponseEntity.ok(accommodation);
     }
 
-    @PostMapping("/api/accommodation")
+    @PostMapping("/accommodation")
     public ResponseEntity<?> createAccommodation(@RequestBody @Valid AccommodationCreateRequest request) {
 
         AccommodationCreateResponse response = accommodationService.createAccommodation(request);
@@ -51,7 +51,7 @@ public class AccommodationRestController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/accommodation/search")
+    @GetMapping("/accommodation/search")
     public ResponseEntity<List<SearchAccommodationDto>> searchAccommodations(SearchAccommodationRequest request) {
         List<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(request);
 

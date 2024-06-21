@@ -1,4 +1,4 @@
-package team10.airdnb.amenity.Controller.request;
+package team10.airdnb.amenity.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import team10.airdnb.amenity.entity.Amenity;

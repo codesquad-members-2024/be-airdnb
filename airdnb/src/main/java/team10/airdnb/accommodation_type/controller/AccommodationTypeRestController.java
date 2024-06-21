@@ -19,14 +19,14 @@ public class AccommodationTypeRestController {
 
     private final AccommodationTypeService accommodationTypeService;
 
-    @GetMapping("/api/accommodation-types")
+    @GetMapping("/accommodation-types")
     public List<AccommodationType> getAllAccommodationTypes() {
         log.info("저장된 전체 숙소 유형 목록 로드");
 
         return accommodationTypeService.getAllAccommodationTypes();
     }
 
-    @PatchMapping("/api/accommodation-type/{accommodationTypeId}")
+    @PatchMapping("/accommodation-type/{accommodationTypeId}")
     public ResponseEntity<?> updateAccommodationType(@RequestBody @Valid AccommodationTypeUpdateRequest request,
                                                      @PathVariable("accommodationTypeId") long accommodationTypeId) {
         AccommodationType updatedAccommodationType = accommodationTypeService.updateAccommodationType(accommodationTypeId, request);
@@ -36,7 +36,7 @@ public class AccommodationTypeRestController {
         return ResponseEntity.ok(updatedAccommodationType);
     }
 
-    @DeleteMapping("/api/accommodation-type/{accommodationTypeId}")
+    @DeleteMapping("/accommodation-type/{accommodationTypeId}")
     public ResponseEntity<?> deleteAccommodationType(@PathVariable("accommodationTypeId") long accommodationTypeId) {
         AccommodationType deletedAccommodationType = accommodationTypeService.deleteAccommodationType(accommodationTypeId);
 
@@ -45,7 +45,7 @@ public class AccommodationTypeRestController {
         return ResponseEntity.ok(deletedAccommodationType);
     }
 
-    @PostMapping("/api/accommodation-type")
+    @PostMapping("/accommodation-type")
     public ResponseEntity<?> saveAccommodationType(@RequestBody @Valid AccommodationTypeCreateRequest request) {
         AccommodationType savedAccommodationType = accommodationTypeService.saveAccommodationType(request);
 

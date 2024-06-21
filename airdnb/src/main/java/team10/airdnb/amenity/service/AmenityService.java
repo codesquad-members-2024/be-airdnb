@@ -1,10 +1,9 @@
-package team10.airdnb.amenity.Service;
+package team10.airdnb.amenity.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import team10.airdnb.amenity.Controller.request.AmenityRequest;
+import team10.airdnb.amenity.controller.request.AmenityRequest;
 import team10.airdnb.amenity.entity.Amenity;
 import team10.airdnb.amenity.exception.AmenityIdNotFoundException;
 import team10.airdnb.amenity.exception.AmenityNameDuplicateException;
