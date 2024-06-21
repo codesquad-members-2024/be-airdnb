@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.entity.QAccommodation;
 import team10.airdnb.accommodation.entity.embedded.QAccommodationFee;
@@ -20,14 +21,19 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Accommodation> findAvailableAccommodations(Long maxCapacity, BigDecimal minDayRate,BigDecimal maxDayRate, LocalDate checkInDate, LocalDate checkOutDate) {
+    public List<Accommodation> findAvailableAccommodations(SearchAccommodationRequest request) {
         QAccommodation accommodation = QAccommodation.accommodation;
         QAccommodationFee accommodationFee = accommodation.accommodationFee;
         QReservation reservation = QReservation.reservation;
 
-
         //동적으로 where절 생성
         BooleanBuilder builder = new BooleanBuilder();
+
+        Long maxCapacity = request.maxCapacity();
+        BigDecimal minDayRate = request.minDayRate();
+        BigDecimal maxDayRate = request.maxDayRate();
+        LocalDate checkInDate = request.checkInDate();
+        LocalDate checkOutDate = request.checkOutDate();
 
         if (maxCapacity != null && maxCapacity > 0) {
             builder.and(accommodation.maxCapacity.loe(maxCapacity));

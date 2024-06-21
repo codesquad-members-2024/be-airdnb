@@ -7,13 +7,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
+import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
 import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
 import team10.airdnb.accommodation.dto.SearchAccommodationDto;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.service.AccommodationService;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -54,16 +53,9 @@ public class AccommodationRestController {
     }
 
     @GetMapping("/api/accommodation/search")
-    public ResponseEntity<List<SearchAccommodationDto>> searchAccommodations(
-            @RequestParam(name = "max_capacity", required = false) Long maxCapacity,
-            @RequestParam(name = "min_dayrate", required = false) BigDecimal minDayRate,
-            @RequestParam(name = "max_dayrate", required = false) BigDecimal maxDayRate,
-            @RequestParam(name = "checkin_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
-            @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate) {
+    public ResponseEntity<List<SearchAccommodationDto>> searchAccommodations(SearchAccommodationRequest request) {
+        List<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(request);
 
-        List<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(maxCapacity, minDayRate, maxDayRate, checkInDate, checkOutDate);
         return ResponseEntity.ok(accommodations);
-
     }
-
 }
