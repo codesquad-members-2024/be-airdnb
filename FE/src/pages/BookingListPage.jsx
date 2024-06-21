@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '/src/styles/BookingListPage.module.css';
 
-const BookingListPage = () => {
+const BookingListPage = ({ token }) => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (!token) {
@@ -52,6 +52,10 @@ const BookingListPage = () => {
       )}
     </div>
   );
+};
+
+BookingListPage.propTypes = {
+  token: PropTypes.string,
 };
 
 export default BookingListPage;

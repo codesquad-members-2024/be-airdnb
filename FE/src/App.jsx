@@ -16,7 +16,7 @@ const App = () => {
             <Route index element={<MainPage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="accommodation-detail/:id" element={<AccommodationDetail />}/>
-            <Route path="/my-bookings" element={<BookingListPage />} />
+            <Route path="/my-bookings" element={<BookingListPage token={token} />} />
           </Route>
 
           {/*-- ETC --*/}
