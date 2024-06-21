@@ -1,4 +1,4 @@
-package codesquad.team05.web.dto.response.accommodation;
+package codesquad.team05.web.picture.dto.response;
 
 import lombok.Data;
 
