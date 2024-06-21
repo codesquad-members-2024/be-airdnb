@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "/src/styles/nav.module.css";
 import logo from "/images/logo.png"; // 로고 이미지 경로
 import menuIcon from "/images/menu.png"; // 메뉴 아이콘 이미지 경로
@@ -15,6 +15,7 @@ const Nav = () => {
   const [showModal, setShowModal] = useState(false);
   const [userName, setUserName] = useState("");
   const [profileImage, setProfileImage] = useState(placeholderIcon);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -55,9 +56,12 @@ const Nav = () => {
     setProfileImage(placeholderIcon);
   };
 
+  const goToBookings = () => {
+    navigate('/my-bookings');
+  };
+
   return (
     <div className="App">
-      {/* <div className={styles.container}> */}
       <nav className={styles.navbar}>
         <Link to="/" className={styles.navLogo}>
           <img src={logo} alt="Logo" />
@@ -103,7 +107,8 @@ const Nav = () => {
           >
             {isLoggedIn ? (
               <>
-                <div className={styles.navMenuItem}>예약 취소</div>
+                <div className={styles.navMenuItem} onClick={goToBookings}>내 예약</div>
+                {/* <div className={styles.navMenuItem}>예약 취소</div> */}
                 <div className={styles.navMenuItem}>위시리스트</div>
                 <div className={styles.navMenuItem} onClick={handleLogout}>
                   로그아웃
@@ -117,7 +122,6 @@ const Nav = () => {
           </div>
         </div>
       </nav>
-      {/* </div> */}
       <LoginModal show={showModal} onClose={handleCloseModal} />
     </div>
   );
