@@ -54,6 +54,7 @@ public class TokenManager {
                 .setExpiration(expirationTime)          // 토큰 만료 시간
                 .claim("memberId", member.getId())      // 회원 아이디
                 .claim("memberProfile", member.getProfile())
+                .claim("memberName", member.getMemberName())
                 .signWith(SignatureAlgorithm.HS512, tokenSecret.getBytes(StandardCharsets.UTF_8))
                 .setHeaderParam("typ", "JWT")
                 .compact();
