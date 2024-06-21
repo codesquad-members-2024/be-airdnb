@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class AccoService {
 
     private final AccoProductRepository accoProductRepository;
 
-    private final ReservationRepository reservationRepositry;
+    private final ReservationRepository reservationRepository;
 
     private final ReservationProductRepository reservationProductRepository;
 
@@ -54,14 +53,13 @@ public class AccoService {
 
         Accommodation savedAcco = accoRepository.save(accommodation);
         createYearlyProduct(savedAcco.getId());
+
         return AccoContentResponse.of(savedAcco);
     }
 
     public AccoContentResponse get(Long accoId) {
-        Accommodation accommodation = accoRepository.findById(accoId)
-                .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 숙소가 없습니다."));
 
-        return AccoContentResponse.of(accommodation);
+        return accoRepository.getAccoContentOf(accoId);
     }
 
     public AccoListResponse getList(Long hostId) {
@@ -104,7 +102,7 @@ public class AccoService {
                 .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 멤버가 존재하지 않습니다."));
 
         Reservation reservation = request.toReservation(member, accoProducts.getTotalRoomCharge());
-        reservationRepositry.save(reservation);
+        reservationRepository.save(reservation);
 
         List<ReservationProduct> reservationProducts = accoProducts.toReservationProducts(reservation);
         reservationProductRepository.saveAll(reservationProducts);

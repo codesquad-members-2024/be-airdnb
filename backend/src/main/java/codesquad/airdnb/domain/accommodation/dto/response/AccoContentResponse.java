@@ -31,7 +31,7 @@ public record AccoContentResponse (
 
         FloorPlanData floorPlanData,
 
-        List<Long> amenities,
+        List<String> amenityNames,
 
         List<String> imageUrls
 ) {
@@ -47,7 +47,7 @@ public record AccoContentResponse (
                 .checkOutTime(accommodation.getCheckOutTime())
                 .locationData(LocationData.of(accommodation.getLocation()))
                 .floorPlanData(FloorPlanData.of(accommodation.getFloorPlan()))
-                .amenities(accommodation.getAmenities().stream().map(a -> a.getAmenity().getId()).toList())
+                .amenityNames(accommodation.getAmenities().stream().map(a -> a.getAmenity().getName()).toList())
                 .imageUrls(accommodation.getImages().stream().map(AccoImage::getUrl).toList())
                 .build();
     }

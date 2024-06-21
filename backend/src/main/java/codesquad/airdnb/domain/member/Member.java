@@ -35,4 +35,22 @@ public class Member {
     @Length(min = 4, max = 50)
     @Column(name = "NICKNAME")
     private String nickname;
+
+    @Column(name = "REFRESH_TOKEN")
+    private String refreshToken;
+
+    @Column(name = "REGISTERED_BY_OAUTH")
+    private boolean registeredByOauth;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void expireRefreshToken() {
+        this.refreshToken = null;
+    }
+
+    public boolean isPasswordInvalid(String passwordInput) {
+        return !loginPassword.equals(passwordInput);
+    }
 }
