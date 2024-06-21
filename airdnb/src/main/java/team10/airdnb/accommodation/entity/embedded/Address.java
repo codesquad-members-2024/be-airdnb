@@ -20,10 +20,10 @@ public class Address {
     @Column(name = "district", nullable = false)
     private String district;
 
-    @Column(name = "neighborhood", nullable = false) // 동
+    @Column(name = "neighborhood", nullable = true) // 동
     private String neighborhood;
 
-    @Column(name = "street_name", nullable = false) //도로명 주소
+    @Column(name = "street_name", nullable = true) //도로명 주소
     private String streetName;
 
     @Column(name = "detailed_address", nullable = false)

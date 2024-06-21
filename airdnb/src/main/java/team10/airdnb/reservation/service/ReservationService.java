@@ -3,6 +3,8 @@ package team10.airdnb.reservation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
@@ -14,9 +16,9 @@ import team10.airdnb.reservation.controller.response.ReservationSummaryResponse;
 import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
 import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
+import team10.airdnb.reservation.exception.ReservationUnavailableException;
 import team10.airdnb.reservation.repository.ReservationRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +43,10 @@ public class ReservationService {
         return ReservationInformationResponse.from(reservation);
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ReservationSummaryResponse createReservation(ReservationCreateRequest request) {
+        validateReservationAvailable(request); // 중복 체크
+
         Member member = getMemberById(request.memberId());
 
         Accommodation accommodation = getAccommodationById(request.accommodationId());
@@ -53,12 +58,25 @@ public class ReservationService {
         return ReservationSummaryResponse.from(reservation);
     }
 
+    @Transactional
     public ReservationSummaryResponse deleteReservation(long reservationId) {
         Reservation reservation = getReservationById(reservationId);
 
         reservationRepository.delete(reservation);
 
         return ReservationSummaryResponse.from(reservation);
+    }
+
+    private void validateReservationAvailable(ReservationCreateRequest request) {
+        boolean isAvailable = reservationRepository.isDateRangeAvailable(
+                request.accommodationId(),
+                request.checkInDate(),
+                request.checkOutDate()
+        );
+
+        if (!isAvailable) {
+            throw new ReservationUnavailableException();
+        }
     }
 
     private Reservation getReservationById(long reservationId) {

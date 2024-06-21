@@ -36,6 +36,7 @@ public enum ErrorCode {
 
     // 예약
     RESERVATION_NOT_EXISTS(HttpStatus.BAD_REQUEST, "R-001", "해당 예약은 존재하지 않습니다."),
+    RESERVATION_NOT_AVAILABLE(HttpStatus.CONFLICT, "R-002", "예약 날짜가 이미 존재합니다."),
 
     // 북마크
     BOOKMARK_NOT_EXISTS(HttpStatus.BAD_REQUEST, "B-001", "해당 북마크는 존재하지 않습니다."),

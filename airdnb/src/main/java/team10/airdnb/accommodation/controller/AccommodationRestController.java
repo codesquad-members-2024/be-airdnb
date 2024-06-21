@@ -4,17 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
-import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
+import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
 import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
+import team10.airdnb.accommodation.dto.SearchAccommodationDto;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.service.AccommodationService;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -53,4 +51,10 @@ public class AccommodationRestController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/api/accommodation/search")
+    public ResponseEntity<List<SearchAccommodationDto>> searchAccommodations(SearchAccommodationRequest request) {
+        List<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(request);
+
+        return ResponseEntity.ok(accommodations);
+    }
 }
