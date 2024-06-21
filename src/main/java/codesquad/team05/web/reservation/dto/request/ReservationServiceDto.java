@@ -1,7 +1,7 @@
-package codesquad.team05.web.dto.request.reservation;
+package codesquad.team05.web.reservation.dto.request;
 
 
-import codesquad.team05.domain.accommodation.reservation.Reservation;
+import codesquad.team05.domain.reservation.Reservation;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +16,7 @@ public class ReservationServiceDto {
     private int personCount;
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private Long couponsToUse;
 
     public Reservation toEntityForSave(int amount) {
         Reservation reservation = new Reservation();

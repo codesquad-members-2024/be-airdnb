@@ -1,7 +1,7 @@
-package codesquad.team05.web.dto.response.reservation;
+package codesquad.team05.web.reservation.dto.response;
 
-import codesquad.team05.web.dto.response.accommodation.AccommodationResponse;
-import codesquad.team05.web.dto.response.user.UserResponse;
+import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
+import codesquad.team05.web.user.dto.response.UserResponse;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 

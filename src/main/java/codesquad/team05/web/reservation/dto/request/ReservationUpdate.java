@@ -1,4 +1,4 @@
-package codesquad.team05.web.dto.request.reservation;
+package codesquad.team05.web.reservation.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
