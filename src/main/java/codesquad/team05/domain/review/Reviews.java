@@ -1,14 +1,13 @@
-package codesquad.team05.domain.accommodation.reservation.review;
+package codesquad.team05.domain.review;
 
-import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.accomodation.Accommodation;
 import codesquad.team05.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Setter;
 
 @Entity
 @Setter
-@Table(name = "reviews")
-public class Review {
+public class Reviews {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
