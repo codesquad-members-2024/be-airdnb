@@ -1,9 +1,11 @@
 package codesquad.team05.web.accommodation.dto.response;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class PictureDto {
-    private String url;
 
+    private final String url;
 }
