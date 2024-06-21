@@ -36,7 +36,7 @@ public class SecurityConfig {
     private final Set<String> ALLOWURLS = Set.of(
             "http://localhost:3000", // LOCALHOST_REACT
             "https://squadbnb.site:3000", // PROD_REACT
-            "https://squadbnb.site:80", // PROD_HTTP
+            "http://squadbnb.site:80", // PROD_HTTP
             "https://squadbnb.site:443" // PROD_HTTPS
     );
 
