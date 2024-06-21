@@ -6,7 +6,7 @@
 
   </script>
   
-  <Header />
+  <Header state={false} />
   
   <BackGround />
   

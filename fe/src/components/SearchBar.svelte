@@ -62,7 +62,7 @@
     const checkInDate = urlFormmattedCheckIn;
     const checkOutDate = urlFormmattedCheckOut;
     const length = differenceInDays(new Date(checkOut), new Date(checkIn));
-    const url = `/homes?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
+    const url = `/accommodations?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
     window.location.href = url;
   };
 </script>

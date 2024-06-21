@@ -1,14 +1,16 @@
 <script>
-  import { format } from 'date-fns';
+  import { format, differenceInDays } from 'date-fns'; // differenceInDays 추가
   import DatePickerComponent from './DatePickerComponent.svelte';
   import RatePopup from './RatePopup.svelte';
   import GuestPopup from './GuestPopup.svelte';
+  import { onMount } from 'svelte';
 
   export let checkIn;
   export let checkOut;
   export let selectedMinPrice = 100000;
   export let selectedMaxPrice = 1000000;
   export let totalGuests = 0;
+  export let state = false;
 
   let dateFormat = 'M월 d일';
   let onDatePickerPopup = false;
@@ -33,7 +35,7 @@
 
   $: formattedCheckIn = formatDate(checkIn);
   $: formattedCheckOut = formatDate(checkOut);
-  $: formattedDates = formattedCheckIn && formattedCheckOut ? `${formattedCheckIn} - ${formattedCheckOut}` : '일정 입력';
+  $: formattedDates = state ? '언제든지' : (formattedCheckIn && formattedCheckOut ? `${formattedCheckIn} - ${formattedCheckOut}` : '일정 입력');
 
   const handleDateSelected = (e) => {
     const { startDate, endDate } = e.detail;
@@ -52,6 +54,14 @@
     totalGuests = total;
     toggleGuestPopup();
   };
+
+  const handleSearch = () => {
+    const checkInDate = checkIn ? format(new Date(checkIn), 'yyyy-MM-dd') : '';
+    const checkOutDate = checkOut ? format(new Date(checkOut), 'yyyy-MM-dd') : '';
+    const length = checkIn && checkOut ? differenceInDays(new Date(checkOut), new Date(checkIn)) : 0;
+    const url = `/accommodations?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
+    window.location.href = url;
+  };
 </script>
 
 <div class="relative">
@@ -66,7 +76,7 @@
       <div class="text-sm text-gray-600">게스트 {totalGuests}명</div>
     </button>
     <div class="px-4 py-2">
-      <button class="bg-red-500 text-white rounded-full p-2 focus:outline-none">
+      <button class="bg-red-500 text-white rounded-full p-2 focus:outline-none" on:click={handleSearch}>
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.294 4.294-1.414 1.414-4.294-4.294zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"></path>
         </svg>
