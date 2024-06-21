@@ -35,7 +35,7 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
         if (StringUtils.isEmpty(region)) {
             return qAccommodation.id.isNotNull();
         }
-        return qAccommodation.address.likeIgnoreCase("%" + region + "%");
+        return qAccommodation.address.likeIgnoreCase(region + "%");
     }
 
     private BooleanExpression goeGuestNum(Integer guestNum) {
