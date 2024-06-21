@@ -1,4 +1,4 @@
-package codesquad.team05.web.dto.response.user;
+package codesquad.team05.web.user.dto.response;
 
 import lombok.Data;
 
