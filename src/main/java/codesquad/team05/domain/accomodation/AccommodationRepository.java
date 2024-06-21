@@ -1,4 +1,4 @@
-package codesquad.team05.domain.accommodation;
+package codesquad.team05.domain.accomodation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
