@@ -1,21 +1,17 @@
 package codesquad.team05.domain.picture;
 
-import codesquad.team05.domain.accommodation.Accommodation;
-import codesquad.team05.web.dto.response.accommodation.PictureDto;
+import codesquad.team05.domain.accomodation.Accommodation;
+import codesquad.team05.web.picture.dto.response.PictureDto;
 import jakarta.persistence.*;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
 @Setter
+@Getter
 public class Picture {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
