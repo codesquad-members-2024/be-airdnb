@@ -30,7 +30,7 @@ public class MemberRestController {
     private final MemberService memberService;
     private final TokenManager tokenManager;
 
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody @Valid MemberCreationRequest request) {
         Member createdMember = memberService.createMember(request);
 
@@ -41,7 +41,7 @@ public class MemberRestController {
         return ResponseEntity.ok(jwtResponse);
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<?> loginMember(@RequestBody @Valid MemberLoginRequest request) {
         Member loggedInMember = memberService.loginMember(request);
 

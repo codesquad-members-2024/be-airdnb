@@ -20,7 +20,7 @@ public class BookmarkRestController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/api/bookmark")
+    @PostMapping("/bookmark")
     public ResponseEntity<?> createBookmark(@RequestBody @Valid BookmarkRequest request) {
         BookmarkSummaryResponse response = bookmarkService.createBookmark(request);
 
@@ -33,7 +33,7 @@ public class BookmarkRestController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/api/bookmark")
+    @DeleteMapping("/bookmark")
     public ResponseEntity<?> deleteBookmark(@RequestBody @Valid BookmarkRequest request) {
         BookmarkSummaryResponse response = bookmarkService.deleteBookmark(request);
 
@@ -46,7 +46,7 @@ public class BookmarkRestController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/bookmark/exists")
+    @GetMapping("/bookmark/exists")
     public ResponseEntity<Boolean> isBookmarked(@RequestBody @Valid BookmarkRequest request) {
         boolean isBookmarked = bookmarkService.checkBookmarked(request);
 
