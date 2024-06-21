@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import axios from 'axios';
 import '../../styles/BookingInfo.css';
 
 const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
@@ -7,22 +8,23 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
   const [showPricing, setShowPricing] = useState(false);
 
   const fetchPricing = async () => {
-    const params = new URLSearchParams({
-      accommodationId,
-      checkIn,
-      checkOut,
-      headCount,
-    });
-  
-    const response = await fetch(`https://squadbnb.site/api/booking?${params.toString()}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await response.json();
-    setPricingData(data);
-    setShowPricing(true);
+    try {
+      const response = await axios.get('https://squadbnb.site/api/booking', {
+        params: {
+          accommodationId,
+          checkIn,
+          checkOut,
+          headCount,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setPricingData(response.data);
+      setShowPricing(true);
+    } catch (error) {
+      console.error('Error fetching pricing:', error);
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -34,6 +36,41 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
     const totalPrice = calculateTotalPrice();
     const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
     return totalPrice / nights;
+  };
+
+  const handleBooking = async () => {
+    const bookingData = {
+      accommodationId,
+      checkIn,
+      checkOut,
+      headCount,
+    };
+
+    try {
+      const response = await axios.post('https://squadbnb.site/api/booking', bookingData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 201) {
+        throw new Error('Network response was not created');
+      }
+
+      const data = response.data;
+      // Handle success - you can add any success handling logic here
+      alert(`예약 성공!
+      숙소 이름: ${data.accName}
+      예약 번호: ${data.bookingId}
+      체크인: ${data.checkIn}
+      체크아웃: ${data.checkOut}
+      인원: ${data.headCount}명`);
+      
+      window.location.href = 'https://squadbnb.site';
+    } catch (error) {
+      console.error('Error booking accommodation:', error);
+      alert('Failed to book the accommodation.');
+    }
   };
 
   return (
@@ -58,7 +95,7 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
               </div>
               <div className="total-price">결제 금액 : ₩{calculateTotalPrice()}</div>
               <div className="average-price">1박당 평균 요금 : ₩{calculateAveragePricePerNight()}</div>
-              <button className="book-now">예약하기</button>
+              <button className="book-now" onClick={handleBooking}>예약하기</button>
             </div>
           )}
         </div>
