@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import team8.airbnb.user.jwtToken.JwtUtil;
-import team8.airbnb.user.loginDto.LoginRequest;
+import team8.airbnb.jwt.jwtToken.JwtUtil;
+import team8.airbnb.jwt.loginDto.LoginRequest;
 
 @RestController
 @RequestMapping("/auth")

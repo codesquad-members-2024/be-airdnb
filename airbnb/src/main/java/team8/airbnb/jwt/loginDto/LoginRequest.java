@@ -1,4 +1,4 @@
-package team8.airbnb.user.loginDto;
+package team8.airbnb.jwt.loginDto;
 
 public record LoginRequest(
     String username,
