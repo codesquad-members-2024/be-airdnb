@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
-import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
+import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
 import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
+import team10.airdnb.accommodation.dto.SearchAccommodationDto;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
 import team10.airdnb.accommodation_amenity.dto.AccommodationAmenityDto;
-import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
-import team10.airdnb.accommodation_amenity.repository.AccommodationAmenityRepository;
 import team10.airdnb.accommodation_amenity.service.AccommodationAmenityService;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_room_type.exception.AccommodationRoomTypeNotFoundException;
@@ -19,12 +18,8 @@ import team10.airdnb.accommodation_room_type.repository.AccommodationRoomTypeRep
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 import team10.airdnb.accommodation_type.exception.AccommodationTypeNotFoundException;
 import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
-import team10.airdnb.amenity.entity.Amenity;
-import team10.airdnb.amenity.repository.AmenityRepository;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,6 +77,11 @@ public class AccommodationService {
                     .orElseThrow(AccommodationRoomTypeNotFoundException::new);
         }
         return null;
+    }
+
+    public List<SearchAccommodationDto> getFilteredAccommodations(SearchAccommodationRequest request) {
+        List<Accommodation> accommodations = accommodationRepository.findAvailableAccommodations(request);
+        return accommodations.stream().map(SearchAccommodationDto::from).collect(Collectors.toList());
     }
 
 
