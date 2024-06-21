@@ -27,6 +27,4 @@ public class AccommodationSave {
     private final int bedCount;
     private final String description;
     private final String amenity;
-    @NotBlank
-    private final Long hostId;
 }
