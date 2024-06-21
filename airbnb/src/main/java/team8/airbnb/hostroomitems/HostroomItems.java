@@ -1,5 +1,6 @@
-package team8.airbnb.entity;
+package team8.airbnb.hostroomitems;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,6 +11,8 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import team8.airbnb.hostroom.Hostroom;
+import team8.airbnb.offereditems.OfferedItem;
 
 @Entity
 @Getter
@@ -20,22 +23,20 @@ public class HostroomItems {
 
   @Id
   @Column(name = "hostroom_id")
-  private Long hostroomId;
+  private Long hostroom_id;
 
   @Id
   @Column(name = "item_id")
-  private Long itemId;
+  private Long item_id;
 
-  //많은 HostroomItems가 하나의 Hostroom에 속한다
   @ManyToOne
-  @MapsId("hostroomId")
+  @MapsId("hostroom_id")
   @JoinColumn(name = "hostroom_id")
+  @JsonBackReference
   private Hostroom hostroom;
 
   @ManyToOne
-  @MapsId("itemId")
+  @MapsId("item_id")
   @JoinColumn(name = "item_id")
   private OfferedItem offeredItem;
-
-
 }

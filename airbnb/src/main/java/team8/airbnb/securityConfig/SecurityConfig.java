@@ -32,9 +32,9 @@ public class SecurityConfig {
     http.formLogin((auth) -> auth.disable());
     http.httpBasic((auth) -> auth.disable());
     http.authorizeHttpRequests((requests) -> requests
-        .requestMatchers(POST, "/auth/login", "/auth/registration").permitAll()
-        .requestMatchers(GET, "/", "/total/login","/success").permitAll()
-        .anyRequest().authenticated()
+//        .requestMatchers(POST, "/auth/login", "/auth/registration").permitAll()
+//        .requestMatchers(GET, "/", "/total/login","/success").permitAll()
+        .anyRequest().permitAll()
     );
     http
         .sessionManagement(

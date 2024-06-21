@@ -1,4 +1,4 @@
-package team8.airbnb.entity;
+package team8.airbnb.reservedroom;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import team8.airbnb.hostroom.Hostroom;
+import team8.airbnb.user.User;
 
 @Entity
 @Setter

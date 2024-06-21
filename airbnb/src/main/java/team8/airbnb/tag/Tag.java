@@ -1,4 +1,4 @@
-package team8.airbnb.entity;
+package team8.airbnb.tag;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +19,6 @@ public class Tag {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "tag")
-  private String tag_name;
+  @Column(name = "tag_name")
+  private String tagName;
 }

@@ -1,4 +1,4 @@
-package team8.airbnb.entity;
+package team8.airbnb.hostroomitems;
 
 import java.io.Serializable;
 import lombok.EqualsAndHashCode;
@@ -12,11 +12,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HostroomItemsId implements Serializable {
 
-  private Long hostroomId;
-  private Long itemId;
+  private Long hostroom_id;
+  private Long item_id;
 
-  public HostroomItemsId(Long hostroomId, Long itemId) {
-    this.hostroomId = hostroomId;
-    this.itemId = itemId;
+  public HostroomItemsId(Long hostroom_id, Long item_id) {
+    this.hostroom_id = hostroom_id;
+    this.item_id = item_id;
   }
 }

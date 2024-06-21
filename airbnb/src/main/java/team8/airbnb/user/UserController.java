@@ -1,4 +1,4 @@
-package team8.airbnb.controller;
+package team8.airbnb.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import team8.airbnb.entity.User;
-import team8.airbnb.service.UserService;
 import team8.airbnb.jwt.jwtToken.JwtUtil;
 import team8.airbnb.jwt.loginDto.LoginRequest;
 
