@@ -1,10 +1,10 @@
 package codesquad.team05.service;
 
-import codesquad.team05.domain.accommodation.Accommodation;
-import codesquad.team05.domain.accommodation.AccommodationRepository;
+import codesquad.team05.domain.accomodation.Accommodation;
+import codesquad.team05.domain.accomodation.AccommodationRepository;
 import codesquad.team05.domain.picture.Picture;
-import codesquad.team05.web.dto.request.accommodation.AccommodationSave;
-import codesquad.team05.web.dto.request.accommodation.AccommodationUpdate;
+import codesquad.team05.web.accommodation.dto.request.AccommodationSave;
+import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,15 +33,16 @@ public class AccommodationService {
     private String s3Url;
 
 
-    public void register(AccommodationSave form, List<String> pictures) {
+    public Long register(AccommodationSave form, List<String> pictures) {
 
         Accommodation accommodation = new Accommodation(form.getName(), form.getPrice(), form.getAddress(), form.getMaxCapacity(), form.getRoomCount(),
-                form.getBedCount(), form.getDescription(), form.getAmenity(), null);
+                form.getBedCount(), form.getDescription(), form.getAmenity(), form.getHostId(), form.getAccommodationType());
 
         List<Picture> picture = toPicture(pictures, accommodation);
         accommodation.setPictures(picture);
 
-        accommodationRepository.save(accommodation);
+        Accommodation saved = accommodationRepository.save(accommodation);
+        return saved.getId();
     }
 
 
@@ -66,16 +68,21 @@ public class AccommodationService {
 
     @Transactional(readOnly = true)
     public Accommodation getAccommodation(Long accommodationId) {
-        return accommodationRepository.findById(accommodationId).orElseThrow();
+        Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
+        return accommodation;
     }
 
     public void updateAccommodation(Long accommodationId, AccommodationUpdate newAccommodation, List<String> url) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
         accommodation.update(newAccommodation);
-
     }
 
     private List<Picture> toPicture(List<String> pictures, Accommodation accommodation) {
+
+        if (pictures == null || pictures.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return pictures.stream().map(url -> {
             Picture picture = new Picture(url);
             picture.setAccommodation(accommodation);
@@ -87,4 +94,6 @@ public class AccommodationService {
     public void delete(Long id) {
         accommodationRepository.deleteById(id);
     }
+
+
 }
