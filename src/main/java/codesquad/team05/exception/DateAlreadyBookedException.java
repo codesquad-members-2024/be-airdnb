@@ -1,4 +1,4 @@
-package codesquad.team05.domain.exception;
+package codesquad.team05.exception;
 
 public class DateAlreadyBookedException extends RuntimeException {
     public DateAlreadyBookedException() {
