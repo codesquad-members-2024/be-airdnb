@@ -1,6 +1,5 @@
 package codesquad.team05.domain.user;
 
-import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.reservation.Reservation;
@@ -30,20 +29,16 @@ public class User {
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Accommodation> accommodations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     List<Reservation> reservation = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     List<Like> likes = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Host host;
-
 
     public void enrollHost() {
         if (this.host == null) {
