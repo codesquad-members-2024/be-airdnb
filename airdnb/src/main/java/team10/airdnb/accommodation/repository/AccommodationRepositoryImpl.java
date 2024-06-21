@@ -29,14 +29,14 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
         //동적으로 where절 생성
         BooleanBuilder builder = new BooleanBuilder();
 
-        Long maxCapacity = request.maxCapacity();
+        Long capacity = request.capacity();
         BigDecimal minDayRate = request.minDayRate();
         BigDecimal maxDayRate = request.maxDayRate();
         LocalDate checkInDate = request.checkInDate();
         LocalDate checkOutDate = request.checkOutDate();
 
-        if (maxCapacity != null && maxCapacity > 0) {
-            builder.and(accommodation.maxCapacity.loe(maxCapacity));
+        if (capacity != null && capacity > 0) {
+            builder.and(accommodation.maxCapacity.goe(capacity));
         }
 
         if (minDayRate != null && minDayRate.compareTo(BigDecimal.ZERO) > 0) {
