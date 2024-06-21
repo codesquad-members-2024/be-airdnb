@@ -5,6 +5,7 @@ import com.team01.airdnb.authorization.jwt.utils.JwtConstants;
 import com.team01.airdnb.authorization.jwt.utils.JwtUtils;
 import com.team01.airdnb.user.PrincipalDetail;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +27,21 @@ public class CommonLoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("authentication.getPrincipal() = {}", principal);
 
         Map<String, Object> responseMap = principal.getMemberInfo();
-        responseMap.put("accessToken", JwtUtils.generateToken(responseMap, JwtConstants.ACCESS_EXP_TIME));
-        responseMap.put("refreshToken", JwtUtils.generateToken(responseMap, JwtConstants.REFRESH_EXP_TIME));
+        String jwt = JwtUtils.generateToken(responseMap, JwtConstants.ACCESS_EXP_TIME);
+
+        Cookie accessTokenCookie = new Cookie("jwt", jwt);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setMaxAge((int) JwtConstants.ACCESS_EXP_TIME); // set max age based on token expiration time
+
+        // Add cookies to the response
+        response.addCookie(accessTokenCookie);
 
         Gson gson = new Gson();
         String json = gson.toJson(responseMap);
 
         response.setContentType("application/json; charset=UTF-8");
+        response.sendRedirect("http://localhost:8077/callback");
 
         PrintWriter writer = response.getWriter();
         writer.println(json);
