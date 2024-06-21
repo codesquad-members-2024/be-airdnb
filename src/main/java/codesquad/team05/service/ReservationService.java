@@ -5,6 +5,8 @@ import codesquad.team05.domain.accomodation.AccommodationRepository;
 import codesquad.team05.domain.accomodation.AccommodationType;
 import codesquad.team05.domain.coupon.UserCoupon;
 import codesquad.team05.domain.coupon.UserCouponRepository;
+import codesquad.team05.domain.discount.DiscountPolicy;
+import codesquad.team05.domain.discount.DiscountPolicyRepository;
 import codesquad.team05.domain.reservation.Reservation;
 import codesquad.team05.domain.reservation.ReservationRepository;
 import codesquad.team05.domain.servicecharge.ServiceCharge;
@@ -36,6 +38,7 @@ public class ReservationService {
     private final AccommodationRepository accommodationRepository;
     private final ServiceChargeRepository serviceChargeRepository;
     private final UserCouponRepository userCouponRepository;
+    private final DiscountPolicyRepository discountPolicyRepository;
 
 
     public Long createReservation(Long userId, Long accommodationId, ReservationServiceDto serviceDto) {
@@ -199,7 +202,10 @@ public class ReservationService {
 
 
     private int calculateDiscountAmount(Accommodation accommodation) {
-        return (int) (accommodation.getPrice() * accommodation.getDiscountRate());
+        DiscountPolicy discountPolicy = discountPolicyRepository.findByAccommodationId(accommodation.getId());
+
+
+        return (int) (accommodation.getPrice() * discountPolicy.getDiscountRate());
     }
 
     private int plusServiceCharge(List<ServiceCharge> chargeList, int days) {
