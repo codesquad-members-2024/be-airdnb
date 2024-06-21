@@ -19,6 +19,11 @@ public class CouponCountRepository {
                 .increment(COUPON_COUNT_KEY);
     }
 
+    public Long size() {
+        return redisTemplate.opsForValue()
+                .size(COUPON_COUNT_KEY);
+    }
+
     public void clear() {
         redisTemplate.delete(COUPON_COUNT_KEY);
     }

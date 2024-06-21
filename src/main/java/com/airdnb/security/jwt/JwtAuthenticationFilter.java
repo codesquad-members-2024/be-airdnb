@@ -26,8 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
-
+            throws ServletException, IOException {
         String token = jwtUtil.getToken(request.getHeader(SecurityConstants.AUTHORIZATION_HEADER));
 
         if (token == null) {
@@ -47,8 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String id = jwtUtil.getId(token);
             SecurityMember securityMember = memberSecurityService.loadUserByUsername(id);
             if (securityMember != null) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityMember, null,
-                    securityMember.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        securityMember, null,
+                        securityMember.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("Security Context에 '{}' 인증 정보를 저장했습니다.", id);
             }
