@@ -6,11 +6,15 @@ import codesquad.team05.web.accommodation.dto.request.AccommodationSaveServiceRe
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdateServiceRequest;
 import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
+import codesquad.team05.web.accommodation.dto.response.PictureDto;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public class AccommodationMapper {
 
-    public static AccommodationSaveServiceRequest toSaveService(AccommodationSave saveRequest) {
-        return new AccommodationSaveServiceRequest(
+    public static AccommodationSaveServiceRequest toSaveService(AccommodationSave saveRequest, List<MultipartFile> files) {
+        AccommodationSaveServiceRequest accommodationSaveServiceRequest = new AccommodationSaveServiceRequest(
                 saveRequest.getName(),
                 saveRequest.getPrice(),
                 saveRequest.getAddress(),
@@ -18,12 +22,15 @@ public class AccommodationMapper {
                 saveRequest.getRoomCount(),
                 saveRequest.getBedCount(),
                 saveRequest.getDescription(),
-                saveRequest.getAmenity(),
-                saveRequest.getHostId()
+                saveRequest.getAmenity()
         );
+        files.forEach(
+                file -> accommodationSaveServiceRequest.getFiles().add(file)
+        );
+        return accommodationSaveServiceRequest;
     }
 
-    public static AccommodationUpdateServiceRequest toUpdateService(AccommodationUpdate updateRequest) {
+    public static AccommodationUpdateServiceRequest toUpdateService(AccommodationUpdate updateRequest, List<MultipartFile> files) {
         return new AccommodationUpdateServiceRequest(
                 updateRequest.getName(),
                 updateRequest.getPrice(),
@@ -32,7 +39,8 @@ public class AccommodationMapper {
                 updateRequest.getRoomCount(),
                 updateRequest.getBedCount(),
                 updateRequest.getDescription(),
-                updateRequest.getAmenity()
+                updateRequest.getAmenity(),
+                files
         );
     }
 
@@ -45,13 +53,11 @@ public class AccommodationMapper {
                 serviceRequest.getRoomCount(),
                 serviceRequest.getBedCount(),
                 serviceRequest.getDescription(),
-                serviceRequest.getAmenity(),
-                serviceRequest.getHostId()
+                serviceRequest.getAmenity()
         );
     }
 
     public static AccommodationResponse toResponse(Accommodation accommodation) {
-        // setPictures(pictures.stream().map(Picture::toEntity).toList())
         return new AccommodationResponse(
                 accommodation.getId(),
                 accommodation.getName(),
@@ -61,7 +67,10 @@ public class AccommodationMapper {
                 accommodation.getRoomCount(),
                 accommodation.getBedCount(),
                 accommodation.getDescription(),
-                accommodation.getAmenity()
+                accommodation.getAmenity(),
+                accommodation.getPictures().stream()
+                        .map(picture -> new PictureDto(picture.getUrl()))
+                        .toList()
         );
     }
 }
