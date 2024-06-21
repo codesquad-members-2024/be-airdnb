@@ -2,6 +2,7 @@ package codesquad.team05.domain.reservation;
 
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.user.User;
+import codesquad.team05.util.AccommodationMapper;
 import codesquad.team05.web.reservation.dto.request.ReservationUpdate;
 import codesquad.team05.web.reservation.dto.response.ReservationResponse;
 import jakarta.persistence.*;
@@ -22,14 +23,6 @@ public class Reservation {
 
     @Version()
     private long version;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id", nullable = false)
-    Accommodation accommodation;
     @Column(nullable = false)
     private LocalDateTime registeredAt;
     @Column(nullable = false)
@@ -41,10 +34,18 @@ public class Reservation {
     @Column(nullable = false)
     private LocalDate checkOut;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_id", nullable = false)
+    private Accommodation accommodation;
+
     public ReservationResponse toEntity() {
         ReservationResponse reservationResponse = new ReservationResponse();
         reservationResponse.setUser(user.toEntity());
-        reservationResponse.setAccommodationId(accommodation.toEntity());
+        reservationResponse.setAccommodationId(AccommodationMapper.toResponse(accommodation));
         reservationResponse.setRegisteredAt(registeredAt);
         reservationResponse.setAmount(amount);
         reservationResponse.setPersonCount(personCount);
