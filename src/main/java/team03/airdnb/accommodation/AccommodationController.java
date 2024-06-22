@@ -40,9 +40,16 @@ public class AccommodationController {
                 .build();
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<AccommodationListDto>> showAccommodationList() {
         List<AccommodationListDto> accommodationListDtos = accommodationService.showAccommodationList();
+
+        return ResponseEntity.ok(accommodationListDtos);
+    }
+
+    @GetMapping("/list/{hostId}")
+    public ResponseEntity<List<AccommodationListDto>> showAccommodationListByHostId(@PathVariable Long hostId) {
+        List<AccommodationListDto> accommodationListDtos = accommodationService.showAccommodationListByHostId(hostId);
 
         return ResponseEntity.ok(accommodationListDtos);
     }

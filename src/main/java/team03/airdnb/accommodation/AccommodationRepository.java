@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
+import team03.airdnb.user.User;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, AccommodationRepositoryCustom {
 
@@ -16,4 +17,6 @@ public interface AccommodationRepository extends JpaRepository<Accommodation, Lo
     int updateAverageGrade(@Param("id") Long id, @Param("averageGrade") double averageGrade);
 
     List<Accommodation> findAccommodationsByFilters(AccommodationFilterDto filterDto);
+
+    List<Accommodation> findByHost(User host);
 }
