@@ -1,6 +1,6 @@
 package codesquad.team05.domain.servicecharge;
 
-import codesquad.team05.domain.accomodation.Accommodation;
+import codesquad.team05.domain.accommodation.Accommodation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

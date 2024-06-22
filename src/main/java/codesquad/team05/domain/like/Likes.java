@@ -1,6 +1,6 @@
 package codesquad.team05.domain.like;
 
-import codesquad.team05.domain.accomodation.Accommodation;
+import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.user.User;
 import jakarta.persistence.*;
 

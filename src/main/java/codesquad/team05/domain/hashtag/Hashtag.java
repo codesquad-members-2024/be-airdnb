@@ -1,10 +1,10 @@
-package codesquad.team05.domain.hastag;
+package codesquad.team05.domain.hashtag;
 
 import codesquad.team05.domain.accommodation.Accommodation;
 import jakarta.persistence.*;
 
 @Entity
-public class Hastag {
+public class Hashtag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

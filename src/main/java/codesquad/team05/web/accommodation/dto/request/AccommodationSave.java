@@ -1,14 +1,14 @@
 package codesquad.team05.web.accommodation.dto.request;
 
-import codesquad.team05.domain.accomodation.AccommodationType;
+import codesquad.team05.domain.accommodation.AccommodationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
-@Data
+@Getter
+@RequiredArgsConstructor
 public class AccommodationSave {
 
     @NotEmpty
@@ -28,9 +28,5 @@ public class AccommodationSave {
     private final int bedCount;
     private final String description;
     private final String amenity;
-    @NotBlank
-    private final Long hostId;
-    private final List<String> hashtags;
     private final AccommodationType accommodationType;
-
 }

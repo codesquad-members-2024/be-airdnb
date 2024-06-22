@@ -1,4 +1,4 @@
-package codesquad.team05.domain.accomodation;
+package codesquad.team05.domain.accommodation;
 
 import codesquad.team05.domain.servicecharge.ServiceCharge;
 import codesquad.team05.domain.servicecharge.ServiceChargeRepository;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static codesquad.team05.domain.accomodation.AccommodationType.HOTEL;
+import static codesquad.team05.domain.accommodation.AccommodationType.HOTEL;
 import static codesquad.team05.domain.servicecharge.ServiceType.CLEANING;
 
 @Transactional

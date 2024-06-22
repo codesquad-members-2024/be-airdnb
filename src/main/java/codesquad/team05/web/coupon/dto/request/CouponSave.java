@@ -1,6 +1,6 @@
 package codesquad.team05.web.coupon.dto.request;
 
-import codesquad.team05.domain.accomodation.AccommodationType;
+import codesquad.team05.domain.accommodation.AccommodationType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;

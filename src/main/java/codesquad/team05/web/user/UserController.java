@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{loginId}")
-    public User userDetails(@PathVariable String loginId) {
+    public User userDetails(@PathVariable Long loginId) {
         return userRepository.findById(loginId).get(); // Optional 처리 예정
     }
 }

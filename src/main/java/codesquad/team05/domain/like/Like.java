@@ -1,15 +1,20 @@
-package codesquad.team05.domain.hastag;
+package codesquad.team05.domain.like;
 
 import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.user.User;
 import jakarta.persistence.*;
 
 @Entity
-public class Hastag {
+@Table(name = "likes")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", nullable = false)

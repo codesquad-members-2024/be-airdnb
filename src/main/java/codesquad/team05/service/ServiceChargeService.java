@@ -1,7 +1,7 @@
 package codesquad.team05.service;
 
-import codesquad.team05.domain.accomodation.Accommodation;
-import codesquad.team05.domain.accomodation.AccommodationRepository;
+import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.accommodation.AccommodationRepository;
 import codesquad.team05.domain.servicecharge.ServiceCharge;
 import codesquad.team05.domain.servicecharge.ServiceChargeRepository;
 import codesquad.team05.web.accommodation.dto.request.ServiceChargeDto;

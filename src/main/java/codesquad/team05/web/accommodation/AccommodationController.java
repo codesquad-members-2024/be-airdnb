@@ -1,15 +1,14 @@
 package codesquad.team05.web.accommodation;
 
-import codesquad.team05.domain.accomodation.Accommodation;
 import codesquad.team05.service.AccommodationService;
 import codesquad.team05.service.CouponService;
 import codesquad.team05.service.DiscountPolicyService;
+import codesquad.team05.util.AccommodationMapper;
 import codesquad.team05.web.accommodation.dto.request.AccommodationSave;
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
 import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
 import codesquad.team05.web.accommodation.dto.request.DiscountForm;
 import codesquad.team05.web.coupon.dto.request.CouponSave;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -34,52 +34,50 @@ public class AccommodationController {
     private final ObjectMapper objectMapper;
 
     @GetMapping({"/{id}"})
-    @ResponseStatus
-    public ResponseEntity<AccommodationResponse> get(@PathVariable("id") Long id) {
-        Accommodation accommodation = accommodationService.getAccommodation(id);
-        AccommodationResponse result = accommodation.toEntity();
-
-        return ResponseEntity.ok(result);
+    public ResponseEntity<AccommodationResponse> accommodationDetails(@PathVariable Long id) {
+        return ResponseEntity
+                .ok(accommodationService.getAccommodationById(id));
     }
 
     @PostMapping
-    public void register(@RequestParam("files") List<MultipartFile> files, @RequestParam("form") String form) throws JsonProcessingException {
-
-        AccommodationSave accommodationSave = objectMapper.readValue(form, AccommodationSave.class);
-
-
-        List<String> url = files.stream().map(this::uploadFile).toList();
-        accommodationService.register(accommodationSave, url);
-
+    public ResponseEntity<Long> register(
+            @RequestPart(required = false) List<MultipartFile> files,
+            @RequestPart AccommodationSave accommodationSave,
+            UriComponentsBuilder uriComponentsBuilder
+    ) {
+        Long accommodationId = accommodationService.register(AccommodationMapper.toSaveService(accommodationSave, files));
+        URI location = uriComponentsBuilder.path("/accommodations/{id}")
+                .buildAndExpand(accommodationId)
+                .toUri();
+        return ResponseEntity
+                .created(location)
+                .body(accommodationId);
     }
 
-    @PostMapping("/{id}")
-    public void update(@PathVariable("id") Long id, @RequestParam("files") List<MultipartFile> files, @RequestParam("form") String form) throws JsonProcessingException {
-        AccommodationUpdate accommodationUpdate = objectMapper.readValue(form, AccommodationUpdate.class);
-        List<String> url = files.stream().map(this::uploadFile).toList();
-        accommodationService.updateAccommodation(id, accommodationUpdate, url);
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable Long id,
+            @RequestPart List<MultipartFile> files,
+            @RequestPart AccommodationUpdate accommodationUpdate
+    ) {
+        accommodationService.updateAccommodation(id, AccommodationMapper.toUpdateService(accommodationUpdate, files));
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         accommodationService.delete(id);
-    }
-
-
-    private String uploadFile(MultipartFile file) {
-
-        try {
-            return accommodationService.uploadFile(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 
     @PutMapping("/{id}/discount")
     public void setDiscount(@PathVariable("id") Long id, @RequestBody DiscountForm form) {
         discountPolicyService.setDiscountPolicy(id, form);
     }
-
 
     @PutMapping("/updateDiscount")
     public void checkAndUpdateDiscounts() {

@@ -1,4 +1,4 @@
-package codesquad.team05.domain.accomodation;
+package codesquad.team05.domain.accommodation;
 
 public enum AccommodationType {
 

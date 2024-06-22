@@ -1,8 +1,8 @@
 package codesquad.team05.service;
 
-import codesquad.team05.domain.accomodation.Accommodation;
-import codesquad.team05.domain.accomodation.AccommodationRepository;
-import codesquad.team05.domain.accomodation.AccommodationType;
+import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.accommodation.AccommodationRepository;
+import codesquad.team05.domain.accommodation.AccommodationType;
 import codesquad.team05.domain.coupon.UserCoupon;
 import codesquad.team05.domain.coupon.UserCouponRepository;
 import codesquad.team05.domain.discount.DiscountPolicy;

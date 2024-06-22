@@ -1,4 +1,4 @@
-package codesquad.team05.domain.accomodation;
+package codesquad.team05.domain.accommodation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

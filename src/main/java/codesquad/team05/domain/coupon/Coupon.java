@@ -1,6 +1,6 @@
 package codesquad.team05.domain.coupon;
 
-import codesquad.team05.domain.accomodation.AccommodationType;
+import codesquad.team05.domain.accommodation.AccommodationType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

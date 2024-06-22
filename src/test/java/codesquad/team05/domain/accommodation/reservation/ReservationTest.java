@@ -1,7 +1,7 @@
-package codesquad.team05.domain.accomodation.reservation;
+package codesquad.team05.domain.accommodation.reservation;
 
-import codesquad.team05.domain.accomodation.Accommodation;
-import codesquad.team05.domain.accomodation.AccommodationRepository;
+import codesquad.team05.domain.accommodation.Accommodation;
+import codesquad.team05.domain.accommodation.AccommodationRepository;
 import codesquad.team05.domain.reservation.Reservation;
 import codesquad.team05.domain.reservation.ReservationRepository;
 import codesquad.team05.domain.review.ReviewQueryRepository;
@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static codesquad.team05.domain.accomodation.AccommodationType.HOTEL;
+import static codesquad.team05.domain.accommodation.AccommodationType.HOTEL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTrue;
