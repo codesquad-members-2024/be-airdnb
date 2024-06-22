@@ -16,6 +16,7 @@ public class ReservationServiceDto {
     private int personCount;
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private Long couponsToUse;
 
     public Reservation toEntityForSave(int amount) {
         Reservation reservation = new Reservation();

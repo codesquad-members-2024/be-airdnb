@@ -3,12 +3,12 @@ package codesquad.team05.web.reservation.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 public class ReservationSave {
 
     @NotBlank
@@ -24,6 +24,11 @@ public class ReservationSave {
     @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate checkOut;
+    private Long couponsToUse;
+
+    public ReservationSave(int personCount) {
+        this.personCount = personCount;
+    }
 
     public ReservationServiceDto toServiceDto() {
         ReservationServiceDto reservationServiceDto = new ReservationServiceDto();
@@ -31,7 +36,8 @@ public class ReservationSave {
         reservationServiceDto.setCheckIn(this.checkIn);
         reservationServiceDto.setCheckOut(this.checkOut);
         reservationServiceDto.setRegisteredAt(LocalDateTime.now());
-        return reservationServiceDto;
+        reservationServiceDto.setCouponsToUse(couponsToUse);
 
+        return reservationServiceDto;
     }
 }

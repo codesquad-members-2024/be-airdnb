@@ -1,11 +1,12 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.hashtag.Hashtag;
+import codesquad.team05.domain.hastag.Hastag;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.reservation.Reservation;
 import codesquad.team05.domain.review.Review;
+import codesquad.team05.domain.servicecharge.ServiceCharge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,24 +39,32 @@ public class Accommodation {
     private String description;
     @Column(nullable = false)
     private String amenity;
+    private boolean isOnSale;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Host host;
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
-    List<Reservation> reservation = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccommodationType accommodationType;
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
-    List<Review> reviews = new ArrayList<>();
+    private List<Reservation> reservation = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<Picture> pictures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    private List<Hastag> hashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Like> likes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Picture> pictures = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Hashtag> hashtags = new ArrayList<>();
+    private List<ServiceCharge> serviceCharge = new ArrayList<>();
 
     public Accommodation(
             String name,
@@ -65,7 +74,8 @@ public class Accommodation {
             int roomCount,
             int bedCount,
             String description,
-            String amenity
+            String amenity,
+            AccommodationType accommodationType
     ) {
         this.name = name;
         this.price = price;
@@ -75,6 +85,7 @@ public class Accommodation {
         this.bedCount = bedCount;
         this.description = description;
         this.amenity = amenity;
+        this.accommodationType = accommodationType;
     }
 
     public void update(
@@ -85,7 +96,8 @@ public class Accommodation {
             int roomCount,
             int bedCount,
             String description,
-            String amenity
+            String amenity,
+            AccommodationType accommodationType
     ) {
         this.name = name;
         this.price = price;
@@ -95,5 +107,14 @@ public class Accommodation {
         this.bedCount = bedCount;
         this.description = description;
         this.amenity = amenity;
+        this.accommodationType = accommodationType;
+    }
+
+    public void startDiscount() {
+        this.isOnSale = true;
+    }
+
+    public void addServiceCharge(ServiceCharge serviceCharge) {
+        this.serviceCharge.add(serviceCharge);
     }
 }

@@ -1,5 +1,6 @@
 package codesquad.team05.web.accommodation.dto.request;
 
+import codesquad.team05.domain.accommodation.AccommodationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -27,4 +28,5 @@ public class AccommodationSave {
     private final int bedCount;
     private final String description;
     private final String amenity;
+    private final AccommodationType accommodationType;
 }
