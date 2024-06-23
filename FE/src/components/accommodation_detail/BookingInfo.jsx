@@ -1,30 +1,46 @@
 import React, { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import axios from "axios";
 import "../../styles/BookingInfo.css";
+import { fetchPricing, handleBooking } from "/src/api/BookingAPI.js";
 
 const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
   const [pricingData, setPricingData] = useState(null);
   const [showPricing, setShowPricing] = useState(false);
 
-  const fetchPricing = async () => {
+  const fetchPricingData = async () => {
     try {
-      const response = await axios.get("https://squadbnb.site/api/booking", {
-        params: {
-          accommodationId,
-          checkIn,
-          checkOut,
-          headCount,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setPricingData(response.data);
+      const data = await fetchPricing(
+        accommodationId,
+        checkIn,
+        checkOut,
+        headCount
+      );
+      setPricingData(data);
       setShowPricing(true);
     } catch (error) {
       console.error("Error fetching pricing:", error);
+    }
+  };
+
+  const handleBookingClick = async () => {
+    try {
+      const data = await handleBooking(
+        accommodationId,
+        checkIn,
+        checkOut,
+        headCount
+      );
+      alert(`예약 성공!
+      숙소 이름: ${data.accName}
+      예약 번호: ${data.bookingId}
+      체크인: ${data.checkIn}
+      체크아웃: ${data.checkOut}
+      인원: ${data.headCount}명`);
+
+      window.location.href = "https://squadbnb.site";
+    } catch (error) {
+      console.error("Error booking accommodation:", error);
+      alert("Failed to book the accommodation.");
     }
   };
 
@@ -41,49 +57,9 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
     return totalPrice / nights;
   };
 
-  const handleBooking = async () => {
-    const bookingData = {
-      accommodationId,
-      checkIn,
-      checkOut,
-      headCount,
-    };
-
-    try {
-      const response = await axios.post(
-        "https://squadbnb.site/api/booking",
-        bookingData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status !== 201) {
-        throw new Error("Network response was not created");
-      }
-
-      const data = response.data;
-      // Handle success - you can add any success handling logic here
-      alert(`예약 성공!
-      숙소 이름: ${data.accName}
-      예약 번호: ${data.bookingId}
-      체크인: ${data.checkIn}
-      체크아웃: ${data.checkOut}
-      인원: ${data.headCount}명`);
-
-      window.location.href = "https://squadbnb.site";
-    } catch (error) {
-      console.error("Error booking accommodation:", error);
-      alert("Failed to book the accommodation.");
-    }
-  };
-
   return (
     <div className="booking-info">
-      <button onClick={fetchPricing}>Check Pricing</button>
+      <button onClick={fetchPricingData}>Check Pricing</button>
 
       <CSSTransition
         in={showPricing}
@@ -120,7 +96,7 @@ const BookingInfo = ({ accommodationId, checkIn, checkOut, headCount }) => {
               <div className="average-price">
                 1박당 평균 요금 : ₩{calculateAveragePricePerNight()}
               </div>
-              <button className="book-now" onClick={handleBooking}>
+              <button className="book-now" onClick={handleBookingClick}>
                 예약하기
               </button>
             </div>

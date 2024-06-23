@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import styles from '/src/styles/BookingListPage.module.css';
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchBookings } from "../api/BookingAPI";
+import styles from "/src/styles/BookingListPage.module.css";
 
 const BookingListPage = () => {
   const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token"); // 토큰을 로컬 스토리지에서 가져옴
 
   useEffect(() => {
-    const fetchBookings = async () => {
+    const getBookings = async () => {
       try {
-        const response = await axios.get('https://squadbnb.site/api/booking/my-bookings', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        });
-        setBookings(response.data);
+        const data = await fetchBookings(token);
+        setBookings(data);
       } catch (error) {
-        console.error('Error fetching bookings:', error);
+        console.error("Error fetching bookings:", error);
       }
     };
 
-    fetchBookings();
+    getBookings();
   }, [token, navigate]);
 
   return (

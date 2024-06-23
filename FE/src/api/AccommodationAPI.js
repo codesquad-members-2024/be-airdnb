@@ -1,5 +1,4 @@
-// src/api/accommodationAPI.js
-import axiosInstance from "./axiosInstance"; // axiosInstance 임포트
+import { baseInstance } from "./axiosInstance"; // axiosInstance 임포트
 
 export const fetchFilteredAccommodations = async (
   latitude,
@@ -7,7 +6,7 @@ export const fetchFilteredAccommodations = async (
   filters
 ) => {
   try {
-    const response = await axiosInstance.get("/products/available", {
+    const response = await baseInstance.get("/products/available", {
       params: {
         checkInDate: filters.checkIn,
         checkOutDate: filters.checkOut,
