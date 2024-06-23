@@ -32,21 +32,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 )
                 .fetchCount();
 
-
         return count == 0;
     }
 }
 
-//    @Override
-//    public List<Reservation> findConflictingReservations(Long accommodationId, LocalDate checkInDate, LocalDate checkOutDate) {
-//        QReservation reservation = QReservation.reservation;
-//
-//        return queryFactory.selectFrom(reservation)
-//                .where(
-//                        reservation.accommodation.id.eq(accommodationId)
-//                                .and(reservation.checkInDate.lt(checkOutDate)
-//                                        .and(reservation.checkOutDate.gt(checkInDate)))
-//                )
-//                .fetch();
-//    }
 

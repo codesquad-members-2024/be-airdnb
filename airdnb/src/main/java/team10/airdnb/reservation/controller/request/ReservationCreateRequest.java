@@ -10,7 +10,6 @@ import team10.airdnb.member.entity.Member;
 import team10.airdnb.accommodation.entity.Accommodation;
 
 public record ReservationCreateRequest(
-        String memberId,
         Long accommodationId,
         LocalDate checkInDate,
         LocalDate checkOutDate,
@@ -28,16 +27,17 @@ public record ReservationCreateRequest(
                 .build();
     }
 
-    private BigDecimal calculateFee(AccommodationFee fee){
+    private BigDecimal calculateFee(AccommodationFee fee) {
         BigDecimal numberOfDays = BigDecimal.valueOf(ChronoUnit.DAYS.between(checkInDate, checkOutDate));
-
         BigDecimal dayRate = fee.getDayRate();
-
         BigDecimal cleaningFee = fee.getCleaningFee();
 
         BigDecimal totalDayRate = dayRate.multiply(numberOfDays);
-
         BigDecimal totalPrice = totalDayRate.add(cleaningFee);
+
+        BigDecimal serviceFee = totalPrice.multiply(BigDecimal.valueOf(0.03));
+
+        totalPrice = totalPrice.add(serviceFee);
 
         return totalPrice;
     }

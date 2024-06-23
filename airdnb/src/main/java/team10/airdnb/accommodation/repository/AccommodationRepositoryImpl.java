@@ -64,7 +64,7 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
                 .leftJoin(reservation).on(reservation.accommodation.eq(accommodation))
                 .where(builder);
 
-        long total = query.fetchCount(); // 전체 개수 조회
+        long total = query.fetch().size(); // 전체 개수 조회
 
         List<Accommodation> accommodations = query
                 .offset(pageable.getOffset())
