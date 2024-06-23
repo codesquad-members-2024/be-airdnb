@@ -52,6 +52,7 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
                             .and(reservation.checkOutDate.notBetween(checkInDate, checkOutDate))
                             .or(reservation.checkInDate.goe(checkOutDate))
                             .or(reservation.checkOutDate.loe(checkInDate))
+                            .or(reservation.accommodation.id.isNull())  // Reservation table에 없는 경우도 예약이 가능하므로 추가
             );
         }
 
