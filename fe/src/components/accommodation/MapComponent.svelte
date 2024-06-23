@@ -17,15 +17,17 @@
     markerContent.innerHTML = `<div class="${isSelected ? 'bg-red-400 text-white' : 'bg-white'} font-bold px-2 rounded-md select-none shadow-lg">₩${text}</div>`;
 
     markerContent.addEventListener('click', () => {
+      console.log(`Marker clicked: ${id}`);
       dispatch('markerClick', { id });
       selectedMarkerId = id;
-      addMarkers(); // Re-render markers to update the clicked state
+      addMarkers(); 
     });
 
     const marker = new kakao.maps.CustomOverlay({
       position: position,
       content: markerContent,
-      yAnchor: 1.5
+      yAnchor: 1.5,
+      zIndex: isSelected ? 10 : 0
     });
 
     markers.push(marker);
@@ -62,6 +64,17 @@
       addMarkers();
     }
   });
+
+  export function focusMarker(itemId) {
+    console.log(`Focusing marker: ${itemId}`);
+    selectedMarkerId = itemId;
+    const item = items.find(i => i.accommodationId === itemId);
+    if (item) {
+      const position = new kakao.maps.LatLng(item.coordinate.latitude, item.coordinate.longitude);
+      map.panTo(position);
+      addMarkers(); 
+    }
+  }
 </script>
 
 <div class="h-full" bind:this={mapContainer}></div>

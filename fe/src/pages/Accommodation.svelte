@@ -16,6 +16,7 @@
   let hasMore = true;
 
   let listComponentRef;
+  let mapComponentRef;
 
   const loadMoreItems = async () => {
     if (isLoading || !hasMore) return;
@@ -75,8 +76,17 @@
 
   const handleMarkerClick = (event) => {
     const itemId = event.detail.id;
+    console.log(`Marker clicked for item: ${itemId}`);
     if (listComponentRef && listComponentRef.focusItem) {
       listComponentRef.focusItem(itemId);
+    }
+  };
+
+  const handleViewOnMap = (event) => {
+    const itemId = event.detail.id;
+    console.log(`View on map for item: ${itemId}`);
+    if (mapComponentRef && mapComponentRef.focusMarker) {
+      mapComponentRef.focusMarker(itemId);
     }
   };
 </script>
@@ -91,7 +101,7 @@
 />
 
 <div class="flex h-screen pt-24">
-  <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll}>
+  <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll} on:viewOnMap={handleViewOnMap}>
     <ListComponent {items} {checkIn} {checkOut} {totalGuests} bind:this={listComponentRef} />
     {#if isLoading}
       <p>Loading...</p>
@@ -99,7 +109,7 @@
   </div>
   <div class="w-1/2">
     {#if currentLocation}
-      <MapComponent {currentLocation} {items} on:markerClick={handleMarkerClick} />
+      <MapComponent {currentLocation} {items} on:markerClick={handleMarkerClick} bind:this={mapComponentRef} />
     {/if}
   </div>
 </div>
