@@ -1,8 +1,12 @@
 package team10.airdnb.accommodation.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
 import team10.airdnb.accommodation.entity.Accommodation;
@@ -21,12 +25,12 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Accommodation> findAvailableAccommodations(SearchAccommodationRequest request) {
+    public Page<Accommodation> findAvailableAccommodations(SearchAccommodationRequest request, Pageable pageable) {
         QAccommodation accommodation = QAccommodation.accommodation;
         QAccommodationFee accommodationFee = accommodation.accommodationFee;
         QReservation reservation = QReservation.reservation;
 
-        //동적으로 where절 생성
+        // 동적으로 where절 생성
         BooleanBuilder builder = new BooleanBuilder();
 
         Long capacity = request.capacity();
@@ -56,9 +60,17 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
             );
         }
 
-        return queryFactory.selectFrom(accommodation)
+        JPAQuery<Accommodation> query = queryFactory.selectFrom(accommodation)
                 .leftJoin(reservation).on(reservation.accommodation.eq(accommodation))
-                .where(builder)
+                .where(builder);
+
+        long total = query.fetchCount(); // 전체 개수 조회
+
+        List<Accommodation> accommodations = query
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        return new PageImpl<>(accommodations, pageable, total);
     }
 }

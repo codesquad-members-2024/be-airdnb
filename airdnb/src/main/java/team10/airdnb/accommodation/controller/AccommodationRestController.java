@@ -3,6 +3,9 @@ package team10.airdnb.accommodation.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,6 @@ import team10.airdnb.accommodation.service.AccommodationService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -55,16 +57,19 @@ public class AccommodationRestController {
     }
 
     @GetMapping("/accommodation/search")
-    public ResponseEntity<List<SearchAccommodationDto>> searchAccommodations(
+    public ResponseEntity<Page<SearchAccommodationDto>> searchAccommodations(
             @RequestParam(name = "capacity", required = false) Long capacity,
             @RequestParam(name = "min_dayrate", required = false) BigDecimal minDayRate,
             @RequestParam(name = "max_dayrate", required = false) BigDecimal maxDayRate,
             @RequestParam(name = "checkin_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
-            @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate
+            @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+            @RequestParam int page
     ) {
+        int size = 20; // 페이지 크기 설정
+        Pageable pageable = PageRequest.of(page, size);
         SearchAccommodationRequest request = new SearchAccommodationRequest(capacity, minDayRate, maxDayRate, checkInDate, checkOutDate);
-        
-        List<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(request);
+
+        Page<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(pageable, request);
 
         return ResponseEntity.ok(accommodations);
     }
