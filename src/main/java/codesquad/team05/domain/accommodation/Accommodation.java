@@ -1,22 +1,22 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.accommodation.like.Like;
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.review.Review;
-import codesquad.team05.domain.hashtag.Hashtag;
+import codesquad.team05.domain.hastag.Hastag;
+import codesquad.team05.domain.host.Host;
+import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
-import codesquad.team05.web.dto.request.accommodation.AccommodationUpdate;
-import codesquad.team05.web.dto.response.accommodation.AccommodationResponse;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.review.Review;
+import codesquad.team05.domain.servicecharge.ServiceCharge;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Accommodation {
 
@@ -39,24 +39,44 @@ public class Accommodation {
     private String description;
     @Column(nullable = false)
     private String amenity;
-    private Long hostId;
+    private boolean isOnSale;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Host host;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccommodationType accommodationType;
+
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    private List<Reservation> reservation = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    List<Reservation> reservation = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    List<Review> reviews = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    List<Like> likes = new ArrayList<>();
+    private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    List<Picture> pictures = new ArrayList<>();
+    private List<Picture> pictures = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    List<Hashtag> hashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    private List<Hastag> hashtags = new ArrayList<>();
 
-    public Accommodation(String name, int price, String address, int maxCapacity, int roomCount, int bedCount, String description, String amenity, Long hostId) {
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<ServiceCharge> serviceCharge = new ArrayList<>();
+
+    public Accommodation(
+            String name,
+            int price,
+            String address,
+            int maxCapacity,
+            int roomCount,
+            int bedCount,
+            String description,
+            String amenity,
+            AccommodationType accommodationType
+    ) {
         this.name = name;
         this.price = price;
         this.address = address;
@@ -65,33 +85,36 @@ public class Accommodation {
         this.bedCount = bedCount;
         this.description = description;
         this.amenity = amenity;
-        this.hostId = hostId;
+        this.accommodationType = accommodationType;
     }
 
-    public void update(AccommodationUpdate newAccommodation) {
-        this.name = newAccommodation.getName();
-        this.price = newAccommodation.getPrice();
-        this.address = newAccommodation.getAddress();
-        this.maxCapacity = newAccommodation.getMaxCapacity();
-        this.roomCount = newAccommodation.getRoomCount();
-        this.bedCount = newAccommodation.getBedCount();
-        this.description = newAccommodation.getDescription();
-        this.amenity = newAccommodation.getAmenity();
+    public void update(
+            String name,
+            int price,
+            String address,
+            int maxCapacity,
+            int roomCount,
+            int bedCount,
+            String description,
+            String amenity,
+            AccommodationType accommodationType
+    ) {
+        this.name = name;
+        this.price = price;
+        this.address = address;
+        this.maxCapacity = maxCapacity;
+        this.roomCount = roomCount;
+        this.bedCount = bedCount;
+        this.description = description;
+        this.amenity = amenity;
+        this.accommodationType = accommodationType;
     }
 
-    public AccommodationResponse toEntity() {
-        AccommodationResponse accommodationResponse = new AccommodationResponse();
-        accommodationResponse.setId(id);
-        accommodationResponse.setName(name);
-        accommodationResponse.setPrice(price);
-        accommodationResponse.setAddress(address);
-        accommodationResponse.setMaxCapacity(maxCapacity);
-        accommodationResponse.setRoomCount(roomCount);
-        accommodationResponse.setBedCount(bedCount);
-        accommodationResponse.setDescription(description);
-        accommodationResponse.setAmenity(amenity);
-        accommodationResponse.setPictures(pictures.stream().map(Picture::toEntity).toList());
+    public void startDiscount() {
+        this.isOnSale = true;
+    }
 
-        return accommodationResponse;
+    public void addServiceCharge(ServiceCharge serviceCharge) {
+        this.serviceCharge.add(serviceCharge);
     }
 }

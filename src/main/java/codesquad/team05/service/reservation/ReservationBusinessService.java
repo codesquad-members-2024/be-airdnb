@@ -2,14 +2,14 @@ package codesquad.team05.service.reservation;
 
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.accommodation.AccommodationRepository;
-import codesquad.team05.domain.accommodation.reservation.Reservation;
-import codesquad.team05.domain.accommodation.reservation.ReservationRepository;
-import codesquad.team05.domain.exception.DateAlreadyBookedException;
-import codesquad.team05.domain.exception.PersonCountExceededException;
+import codesquad.team05.domain.reservation.Reservation;
+import codesquad.team05.domain.reservation.ReservationRepository;
 import codesquad.team05.domain.user.User;
 import codesquad.team05.domain.user.UserRepository;
-import codesquad.team05.web.dto.request.reservation.ReservationServiceDto;
-import codesquad.team05.web.dto.request.reservation.ReservationUpdate;
+import codesquad.team05.exception.DateAlreadyBookedException;
+import codesquad.team05.exception.PersonCountExceededException;
+import codesquad.team05.web.reservation.dto.request.ReservationServiceDto;
+import codesquad.team05.web.reservation.dto.request.ReservationUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +24,8 @@ public class ReservationBusinessService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
 
-    public Long reservation(Long userId, Long accommodationId, ReservationServiceDto serviceDto) {
+    public Long reserveAccommodation(Long userId, Long accommodationId, ReservationServiceDto serviceDto) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId).orElseThrow();
-
 
         int amount = calculateAmount(serviceDto.getCheckIn(), serviceDto.getCheckOut(), accommodation.getPrice());
 
@@ -44,15 +43,10 @@ public class ReservationBusinessService {
     public void update(Long reservationId, ReservationUpdate reservationUpdate) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow();
         reservation.update(reservationUpdate);
-
     }
 
-
     private int calculateAmount(LocalDate checkIn, LocalDate checkOut, int price) {
-
-
         int days = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
-
         return days * price;
     }
 
@@ -69,22 +63,16 @@ public class ReservationBusinessService {
 
 
     private boolean isAvailable(LocalDate checkIn, LocalDate checkOut, Accommodation accommodation) {
-
-
         List<Reservation> list = reservationRepository.findReservationByAccommodationId(accommodation.getId());
 
         //모든 예약이 시간이 겹치는지 아닌지 확인
-
         return list.stream().allMatch((i) -> {
             LocalDate reservationCheckIn = i.getCheckIn();
             LocalDate reservationCheckOut = i.getCheckOut();
 
             //새로운 예약의 체크인, 체크아웃이 예약의 체크아웃 이후거나
             //기존 예약의 체크인 이전이면 겹치지 않는 것으로 판단
-
             return checkOut.isBefore(reservationCheckIn) || checkIn.isAfter(reservationCheckOut);
-
         });
-
     }
 }

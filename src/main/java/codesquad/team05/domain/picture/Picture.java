@@ -1,38 +1,28 @@
 package codesquad.team05.domain.picture;
 
 import codesquad.team05.domain.accommodation.Accommodation;
-import codesquad.team05.web.dto.response.accommodation.PictureDto;
 import jakarta.persistence.*;
-
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Picture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 
-    public Picture(String url) {
+    public Picture(String url, Accommodation accommodation) {
         this.url = url;
-    }
-
-    public Picture() {
-
-    }
-
-    public PictureDto toEntity() {
-        PictureDto pictureDto = new PictureDto();
-        pictureDto.setUrl(url);
-        return pictureDto;
+        this.accommodation = accommodation;
+        accommodation.getPictures().add(this);
     }
 }

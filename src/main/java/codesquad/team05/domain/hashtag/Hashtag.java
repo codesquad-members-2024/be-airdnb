@@ -1,11 +1,7 @@
 package codesquad.team05.domain.hashtag;
 
-import codesquad.team05.domain.accommodation.accommodation_hashtag.AccommodationHashtag;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import codesquad.team05.domain.accommodation.Accommodation;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Hashtag {
@@ -15,7 +11,7 @@ public class Hashtag {
     private Long id;
     private String content;
 
-
-    @OneToMany(mappedBy = "hashtag", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<AccommodationHashtag> AccommodationHashtags = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_id", nullable = false)
+    private Accommodation accommodation;
 }
