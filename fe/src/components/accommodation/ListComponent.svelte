@@ -11,6 +11,7 @@
   function openPopup(item) {
     selectedItem = item;
     isPopupOpen = true;
+    handleViewOnMap(new Event('click'), item.accommodationId); // 아이템을 클릭했을 때 포커스 스타일 적용 및 마커 이벤트 발생
   }
 
   function closePopup() {
@@ -49,7 +50,7 @@
   {#each items as item}
     <button
       id={`item-${item.accommodationId}`}
-      class="relative flex border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg transform transition-transform duration-200 hover:-translate-y-1 text-left {item.accommodationId === focusedItemId ? 'focused-item' : ''}"
+      class={`relative flex border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg transform transition-transform duration-200 hover:-translate-y-1 text-left ${item.accommodationId === focusedItemId ? 'focused-item' : ''}`}
       on:click={() => openPopup(item)}
       on:keydown={(event) => handleKeyDown(event, item)}
     >
