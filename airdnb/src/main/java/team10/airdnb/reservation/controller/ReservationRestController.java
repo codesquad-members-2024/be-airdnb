@@ -61,6 +61,7 @@ public class ReservationRestController {
 
         ReservationSummaryResponse response = reservationService.createReservation(request, authorizationHeader);
 
+
         log.info("예약 생성 완료 : # {} : 숙소 이름 : {}, 예약자 이름 : {}",
                 response.reservationId(),
                 response.accommodationInformation().accommodationName(),
