@@ -1,12 +1,11 @@
-// components/Map.jsx
 import React, { useEffect } from "react";
 
 const Map = ({
   currentPosition,
-  accommodations,
   mapLevel,
   setMapLevel,
   setCurrentPosition,
+  onMapLoad,
 }) => {
   useEffect(() => {
     if (currentPosition.latitude && currentPosition.longitude) {
@@ -29,33 +28,6 @@ const Map = ({
           };
           const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-          accommodations.forEach((acc) => {
-            const markerPosition = new window.kakao.maps.LatLng(
-              acc.accommodation.location.point[1], // latitude
-              acc.accommodation.location.point[0] // longitude
-            );
-            const marker = new window.kakao.maps.Marker({
-              position: markerPosition,
-              title: acc.accommodation.name,
-            });
-            marker.setMap(map);
-
-            const overlayContent = document.createElement("div");
-            overlayContent.className = "customoverlay";
-            overlayContent.innerHTML = `
-              <h4>${acc.accommodation.name}</h4>
-              <p>${acc.price.toLocaleString()}원</p>
-            `;
-
-            const customOverlay = new window.kakao.maps.CustomOverlay({
-              position: markerPosition,
-              content: overlayContent,
-              yAnchor: 1,
-            });
-
-            customOverlay.setMap(map);
-          });
-
           window.kakao.maps.event.addListener(map, "dragend", () => {
             const latlng = map.getCenter();
             const latitude = latlng.getLat();
@@ -67,8 +39,11 @@ const Map = ({
             const level = map.getLevel();
             setMapLevel(level); // 현재 지도 레벨을 상태에 저장
           });
+
+          onMapLoad(map);
         });
       };
+
       script.onerror = () => {
         console.error("Failed to load Kakao Maps script");
       };
@@ -77,13 +52,7 @@ const Map = ({
         document.head.removeChild(script);
       };
     }
-  }, [
-    currentPosition,
-    accommodations,
-    mapLevel,
-    setMapLevel,
-    setCurrentPosition,
-  ]);
+  }, [currentPosition, mapLevel, setMapLevel, setCurrentPosition, onMapLoad]);
 
   return <div id="map" style={{ width: "100%", height: "100%" }}></div>;
 };
