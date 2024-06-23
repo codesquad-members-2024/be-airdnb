@@ -28,7 +28,7 @@
 
     if (currentLocation) {
       const { lat, lng } = currentLocation;
-      const response = await fetch(`http://localhost:8080/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}&lat=${lat}&lng=${lng}&radius=10`);
+      const response = await fetch(`api/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}&lat=${lat}&lng=${lng}&radius=10`);
       const data = await response.json();
 
       if (data.content.length === 0) {
