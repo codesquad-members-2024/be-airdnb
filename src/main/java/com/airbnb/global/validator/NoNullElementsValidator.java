@@ -10,7 +10,7 @@ public class NoNullElementsValidator implements ConstraintValidator<NoNullElemen
     @Override
     public boolean isValid(Collection<?> collection, ConstraintValidatorContext context) {
         if (collection == null) {
-            return true;  // @NotNull이 이미 적용되어 있으므로 여기서 처리하지 않음
+            return true;  // 아예 빈 값은 허용함. 아니라면 @NotNull 설정
         }
 
         for (Object element : collection) {

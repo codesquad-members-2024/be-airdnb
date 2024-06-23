@@ -8,17 +8,15 @@ import com.airbnb.domain.member.entity.bankAccount.BankType;
 import com.airbnb.global.auth.oauth2.user.OAuth2UserInfo;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE member SET deleted_at = NOW() WHERE member_id = ?")
-@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE member SET deleted = true WHERE member_id = ?")
+@SQLRestriction("deleted IS NULL")
 public class Member extends BaseTime {
 
     @Id
@@ -47,7 +45,7 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     private BankType accountBank;
     private String accountNumber;
-    private LocalDateTime deletedAt;
+    private Boolean deleted;
 
     @Builder
     private Member(String email, LoginType loginType, Role role, String name, String imgUrl, String refreshToken, String encodedPassword, String bankName, String accountNumber) {
@@ -79,5 +77,9 @@ public class Member extends BaseTime {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isKey(String memberKey) {
+        return this.email.equals(memberKey);
     }
 }

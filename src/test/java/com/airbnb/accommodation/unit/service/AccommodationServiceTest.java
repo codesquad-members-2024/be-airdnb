@@ -1,12 +1,15 @@
 package com.airbnb.accommodation.unit.service;
 
-import com.airbnb.domain.common.FacilityType;
+import com.airbnb.domain.accommodation.dto.response.AccommodationPageResponse;
+import com.airbnb.domain.accommodationFacility.entity.AccommodationFacility;
+import com.airbnb.domain.accommodationFacility.repository.AccommodationFacilityRepository;
+import com.airbnb.domain.common.Address;
+import com.airbnb.domain.common.Coordinate;
 import com.airbnb.domain.accommodation.dto.request.AccommodationCreateRequest;
-import com.airbnb.domain.accommodation.dto.request.AccommodationInfoRequest;
 import com.airbnb.domain.accommodation.dto.response.AccommodationResponse;
 import com.airbnb.domain.accommodation.entity.Accommodation;
-import com.airbnb.domain.accommodation.entity.AccommodationType;
-import com.airbnb.domain.accommodation.entity.BuildingType;
+import com.airbnb.domain.common.AccommodationType;
+import com.airbnb.domain.common.BuildingType;
 import com.airbnb.domain.accommodation.repository.AccommodationRepository;
 import com.airbnb.domain.accommodation.service.AccommodationService;
 import com.airbnb.domain.facility.entity.Facility;
@@ -23,10 +26,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -48,6 +50,9 @@ class AccommodationServiceTest {
     @Mock
     FacilityRepository facilityRepository;
 
+    @Mock
+    AccommodationFacilityRepository accommodationFacilityRepository;
+
     FixtureMonkey sut;
 
     @BeforeEach
@@ -62,26 +67,70 @@ class AccommodationServiceTest {
     @Test
     void givenMemberIdAndAccommodationCreateRequest_whenCreateAccommodation_thenSaveAndReturnAccommodationResponse() {
         // given
+        Facility facility = mock(Facility.class);
         AccommodationCreateRequest request = sut.giveMeBuilder(AccommodationCreateRequest.class)
                 .set("accommodationType", AccommodationType.APARTMENT.name())
                 .set("buildingType", BuildingType.ROOM.name())
-                .set("info", Set.of(new AccommodationInfoRequest("코딩 가능", FacilityType.ACTIVITY_LEISURE.name())))
+                .set("facilities", Set.of(facility.getId()))
                 .sample();
         Member member = mock(Member.class);
         Accommodation accommodation = request.toEntity(member);
-
-        Set<Facility> facilities = new HashSet<>(request.getFacilities().stream()
-                .map(f -> sut.giveMeBuilder(Facility.class).set("type", FacilityType.ACTIVITY_LEISURE).set("name", f).sample())
-                .toList());
+        AccommodationFacility accommodationFacility = AccommodationFacility.builder()
+                .accommodation(accommodation)
+                .facility(facility)
+                .build();
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(accommodationRepository.save(any(Accommodation.class))).willReturn(accommodation);
-        given(facilityRepository.findByNameIn(anySet())).willReturn(Set.copyOf(facilities));
+        given(facilityRepository.findAllById(any())).willReturn(List.of(facility));
+        given(accommodationFacilityRepository.saveAll(any())).willReturn(List.of(accommodationFacility));
 
         // when
         AccommodationResponse accommodationResponse = accommodationService.create(member.getId(), request);
 
         // then
         assertThat(accommodationResponse).isNotNull();
+    }
+
+    @DisplayName("숙소 목록 조회 요청이 들어오면 숙소를 50개 조회해 숙소 페이지를 응답한다.")
+    @Test
+    void givenAccommodationGetListRequest_whenGetAccommodationList_thenReturnAccommodationPageResponse() {
+        // given
+        int page = 1;
+        int size = 50;
+        String sort = "createdAt.DESC";
+
+        Coordinate coordinate = mock(Coordinate.class);
+
+        Accommodation accommodation = Accommodation.builder()
+                .host(mock(Member.class))
+                .name("Sample Accommodation")
+                .address(mock(Address.class))
+                .latitude(coordinate.getLatitude())
+                .longitude(coordinate.getLongitude())
+                .bedroom(2)
+                .bed(2)
+                .bath(1)
+                .maxGuests(4)
+                .description("Sample description")
+                .accommodationType(AccommodationType.HOTEL)
+                .buildingType(BuildingType.ALL)
+                .accommodationFacilities(new HashSet<>())
+                .costPerNight(100000)
+                .initialDiscountApplied(true)
+                .weeklyDiscountApplied(false)
+                .monthlyDiscountApplied(true)
+                .build();
+
+        Page<Accommodation> accommodationPage = new PageImpl<>(Collections.nCopies(size, accommodation));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort));
+
+        given(accommodationRepository.findAll(pageable)).willReturn(accommodationPage);
+
+        // when
+        AccommodationPageResponse response = accommodationService.getPage(pageable);
+
+        // then
+        assertThat(response.getContent()).hasSize(size);
     }
 }
