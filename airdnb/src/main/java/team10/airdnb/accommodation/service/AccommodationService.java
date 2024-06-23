@@ -3,6 +3,7 @@ package team10.airdnb.accommodation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
@@ -83,7 +84,8 @@ public class AccommodationService {
         return null;
     }
 
-    public Page<SearchAccommodationDto> getFilteredAccommodations(Pageable pageable, SearchAccommodationRequest request) {
+    public Page<SearchAccommodationDto> getFilteredAccommodations(int pageNo, SearchAccommodationRequest request) {
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
         Page<Accommodation> accommodations = accommodationRepository.findAvailableAccommodations(request, pageable);
         return accommodations.map(SearchAccommodationDto::from);
     }

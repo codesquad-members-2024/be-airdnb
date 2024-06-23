@@ -65,11 +65,9 @@ public class AccommodationRestController {
             @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
             @RequestParam int page
     ) {
-        int size = 20; // 페이지 크기 설정
-        Pageable pageable = PageRequest.of(page, size);
         SearchAccommodationRequest request = new SearchAccommodationRequest(capacity, minDayRate, maxDayRate, checkInDate, checkOutDate);
 
-        Page<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(pageable, request);
+        Page<SearchAccommodationDto> accommodations = accommodationService.getFilteredAccommodations(page, request);
 
         return ResponseEntity.ok(accommodations);
     }
