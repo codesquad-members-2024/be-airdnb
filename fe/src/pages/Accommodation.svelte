@@ -9,6 +9,7 @@
   let selectedMinPrice = 100000;
   let selectedMaxPrice = 1000000;
   let totalGuests = 0;
+  let length = 0;
   let currentLocation = null;
   let items = [];
   let page = 0;
@@ -48,6 +49,7 @@
     selectedMinPrice = Number(urlParams.get('price_min')) || 100000;
     selectedMaxPrice = Number(urlParams.get('price_max')) || 1000000;
     totalGuests = Number(urlParams.get('capacity')) || 0;
+    length = Number(urlParams.get('length')) || 0;
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -98,11 +100,12 @@
   bind:selectedMinPrice={selectedMinPrice} 
   bind:selectedMaxPrice={selectedMaxPrice} 
   bind:totalGuests={totalGuests} 
+  bind:length = {length}
 />
 
 <div class="flex h-screen pt-28">
   <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll} on:viewOnMap={handleViewOnMap}>
-    <ListComponent {items} {checkIn} {checkOut} {totalGuests} {selectedMinPrice} {selectedMaxPrice} bind:this={listComponentRef} />
+    <ListComponent {items} {checkIn} {checkOut} {totalGuests} {selectedMinPrice} {selectedMaxPrice} {length} bind:this={listComponentRef} />
     {#if isLoading}
       <p>Loading...</p>
     {/if}

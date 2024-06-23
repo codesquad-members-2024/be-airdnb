@@ -5,9 +5,15 @@
   export let checkIn = '';
   export let checkOut = '';
   export let totalGuests = 0;
+  export let length = 0;
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
+
+  // 사용자 JWT 토큰 가져오기 (예시로 로컬 스토리지에서 가져오는 함수)
+  function getAuthToken() {
+    return localStorage.getItem('jwt'); // 로컬 스토리지에서 JWT 토큰을 가져옴
+  }
 
   // 팝업을 닫는 함수
   function closePopup() {
@@ -18,6 +24,45 @@
   function handleOverlayClick(event) {
     if (event.target === event.currentTarget) {
       closePopup();
+    }
+  }
+
+  // 예약하기 버튼 클릭 시 처리 함수
+  async function handleReservation() {
+    const accommodationId = selectedItem.accommodationId;
+    const capacity = totalGuests;
+    const checkInDate = checkIn; // checkIn을 LocalDate로 가정
+    const checkOutDate = checkOut; // checkOut을 LocalDate로 가정
+
+    // JWT 토큰 가져오기
+    const authToken = getAuthToken();
+
+    // HTTP 요청 설정
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}` // JWT 토큰을 Authorization 헤더에 추가
+      },
+      body: JSON.stringify({
+        accommodationId,
+        checkInDate,
+        checkOutDate,
+        capacity
+      })
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/reservation', requestOptions);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Reservation Success:', data);
+      // 예약 성공 시 추가적인 처리 가능
+    } catch (error) {
+      console.error('Error making reservation:', error);
+      // 예약 실패 시 처리
     }
   }
 
@@ -62,16 +107,16 @@
           <p id="guests" class="text-lg">{totalGuests || "N/A"}명</p>
         </div>
       </div>
-      <button class="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 mb-4">예약하기</button>
+      <button class="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 mb-4" on:click={handleReservation}>예약하기</button>
       <div class="text-gray-600">
         <!-- 비용 정보 표시 -->
-        <p class="mb-2">₩{selectedItem.fee ? selectedItem.fee.dayRate.toLocaleString() : "0"} x {totalGuests}박 = ₩{selectedItem.fee ? (selectedItem.fee.dayRate * totalGuests).toLocaleString() : "0"}</p>
+        <p class="mb-2">₩{selectedItem.fee ? selectedItem.fee.dayRate.toLocaleString() : "0"} x {length}박 = ₩{selectedItem.fee ? (selectedItem.fee.dayRate * length).toLocaleString() : "0"}</p>
         <p class="mb-2">청소비: ₩{selectedItem.fee ? selectedItem.fee.cleaningFee.toLocaleString() : "0"}</p>
         <p class="mb-2">서비스 수수료: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * totalGuests + selectedItem.fee.cleaningFee) * 0.03).toLocaleString() : "0"}</p>
       </div>
       <div class="mt-4 text-lg font-semibold">
         <!-- 총 합계 계산 -->
-        <p>총 합계: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * totalGuests) + selectedItem.fee.cleaningFee + ((selectedItem.fee.dayRate * totalGuests + selectedItem.fee.cleaningFee) * 0.03)).toLocaleString() : "0"}</p>
+        <p>총 합계: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * length) + selectedItem.fee.cleaningFee + ((selectedItem.fee.dayRate * length + selectedItem.fee.cleaningFee) * 0.03)).toLocaleString() : "0"}</p>
       </div>
     </div>
   </div>

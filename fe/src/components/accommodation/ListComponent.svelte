@@ -4,7 +4,7 @@
   export let checkIn = '';
   export let checkOut = '';
   export let totalGuests = 0;
-
+  export let length = 0;
 
   let selectedItem = null;
   let isPopupOpen = false;
@@ -93,6 +93,7 @@
   {checkIn}
   {checkOut}
   {totalGuests}
+  {length}
   on:close={closePopup}
 />
 
