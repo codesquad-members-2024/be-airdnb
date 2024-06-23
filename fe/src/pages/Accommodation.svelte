@@ -10,11 +10,12 @@
   let selectedMaxPrice = 1000000;
   let totalGuests = 0;
   let currentLocation = null;
-
   let items = [];
   let page = 0;
   let isLoading = false;
   let hasMore = true;
+
+  let listComponentRef;
 
   const loadMoreItems = async () => {
     if (isLoading || !hasMore) return;
@@ -23,14 +24,17 @@
     const checkInDate = checkIn || new Date().toISOString().split('T')[0];
     const checkOutDate = checkOut || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-    const response = await fetch(`http://localhost:8080/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}`);
-    const data = await response.json();
+    if (currentLocation) {
+      const { lat, lng } = currentLocation;
+      const response = await fetch(`http://localhost:8080/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}&lat=${lat}&lng=${lng}&radius=10`);
+      const data = await response.json();
 
-    if (data.content.length === 0) {
-      hasMore = false;
-    } else {
-      items = [...items, ...data.content];
-      page += 1;
+      if (data.content.length === 0) {
+        hasMore = false;
+      } else {
+        items = [...items, ...data.content];
+        page += 1;
+      }
     }
 
     isLoading = false;
@@ -50,21 +54,29 @@
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+        loadMoreItems(); // 위치 정보를 가져온 후에 데이터를 로드
       }, (error) => {
         console.error('Error occurred while retrieving location: ', error);
         currentLocation = { lat: 37.5665, lng: 126.9780 };
+        loadMoreItems(); // 위치 정보를 가져올 수 없을 때 데이터를 로드
       });
     } else {
       currentLocation = { lat: 37.5665, lng: 126.9780 };
+      await loadMoreItems(); // 위치 정보가 사용 불가능할 때 데이터를 로드
     }
-
-    await loadMoreItems();
   });
 
   const handleScroll = async (event) => {
     const { scrollTop, scrollHeight, clientHeight } = event.target;
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       await loadMoreItems();
+    }
+  };
+
+  const handleMarkerClick = (event) => {
+    const itemId = event.detail.id;
+    if (listComponentRef && listComponentRef.focusItem) {
+      listComponentRef.focusItem(itemId);
     }
   };
 </script>
@@ -78,16 +90,16 @@
   bind:totalGuests={totalGuests} 
 />
 
-<div class="flex h-screen pt-24"> <!-- 상단 패딩 추가 -->
+<div class="flex h-screen pt-24">
   <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll}>
-    <ListComponent {items} {checkIn} {checkOut} {totalGuests} />
+    <ListComponent {items} {checkIn} {checkOut} {totalGuests} bind:this={listComponentRef} />
     {#if isLoading}
       <p>Loading...</p>
     {/if}
   </div>
   <div class="w-1/2">
     {#if currentLocation}
-      <MapComponent {currentLocation} />
+      <MapComponent {currentLocation} {items} on:markerClick={handleMarkerClick} />
     {/if}
   </div>
 </div>
