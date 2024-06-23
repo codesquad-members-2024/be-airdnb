@@ -77,7 +77,7 @@
   };
 </script>
 
-<div class="fixed top-24 left-1/2 transform -translate-x-1/2 w-full max-w-4xl">
+<div class="fixed top-28 left-1/2 transform -translate-x-1/2 w-full max-w-4xl">
   <div class="bg-white shadow-md rounded-full flex items-center w-full">
     <button type="button" class="flex-grow px-6 py-4 border-r text-left" on:click={toggleDatePicker}>
       <div class="text-xs font-semibold text-gray-600">체크인</div>

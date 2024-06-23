@@ -100,9 +100,9 @@
   bind:totalGuests={totalGuests} 
 />
 
-<div class="flex h-screen pt-24">
+<div class="flex h-screen pt-28">
   <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll} on:viewOnMap={handleViewOnMap}>
-    <ListComponent {items} {checkIn} {checkOut} {totalGuests} bind:this={listComponentRef} />
+    <ListComponent {items} {checkIn} {checkOut} {totalGuests} {selectedMinPrice} {selectedMaxPrice} bind:this={listComponentRef} />
     {#if isLoading}
       <p>Loading...</p>
     {/if}

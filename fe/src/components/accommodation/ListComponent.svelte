@@ -4,6 +4,8 @@
   export let checkIn = '';
   export let checkOut = '';
   export let totalGuests = 0;
+
+
   let selectedItem = null;
   let isPopupOpen = false;
   let focusedItemId = null;
@@ -37,7 +39,7 @@
   const handleViewOnMap = (event, itemId) => {
     event.stopPropagation();
     console.log(`Dispatching viewOnMap for item: ${itemId}`);
-    focusedItemId = itemId; // Set the focused item ID
+    focusedItemId = itemId; 
     focusItem(itemId); // Call focusItem to add the focused-item class and scroll into view
     const itemElement = document.getElementById(`item-${itemId}`);
     if (itemElement) {
@@ -47,6 +49,10 @@
 </script>
 
 <div class="flex flex-col gap-4">
+  <p class="text-sm text-gray-600">
+    {items.length}개 이상의 숙소 ∙ {checkIn} - {checkOut} ∙ 게스트 {totalGuests}명
+  </p>
+  <h1 class="text-3xl font-bold pb-3">지도에서 선택한 지역의 숙소</h1>
   {#each items as item}
     <button
       id={`item-${item.accommodationId}`}

@@ -32,7 +32,7 @@
   });
 </script>
 
-<header bind:this={header} class="fixed top-0 left-0 w-full bg-transparent text-white z-50 whitespace-nowrap transition-all duration-300 ease-in-out">
+<header bind:this={header} class="fixed top-0 left-0 w-full bg-transparent text-white z-50 whitespace-nowrap transition-all duration-300 ease-in-out shadow-lg">
   <div class="container mx-auto flex justify-between items-center py-4 px-6">
     
     <!-- 왼쪽 로고 -->
