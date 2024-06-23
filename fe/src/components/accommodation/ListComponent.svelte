@@ -30,7 +30,6 @@
     focusedItemId = itemId;
     const itemElement = document.getElementById(`item-${itemId}`);
     if (itemElement) {
-      console.log(`Focusing item: ${itemId}`);
       itemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       itemElement.classList.add('focused-item');
     }
@@ -38,7 +37,6 @@
 
   const handleViewOnMap = (event, itemId) => {
     event.stopPropagation();
-    console.log(`Dispatching viewOnMap for item: ${itemId}`);
     focusedItemId = itemId; 
     focusItem(itemId); // Call focusItem to add the focused-item class and scroll into view
     const itemElement = document.getElementById(`item-${itemId}`);

@@ -1,5 +1,4 @@
 <script>
-  // 필요한 속성들을 import
   export let isPopupOpen = false;
   export let selectedItem = {};
   export let checkIn = '';
@@ -10,39 +9,33 @@
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  // 사용자 JWT 토큰 가져오기 (예시로 로컬 스토리지에서 가져오는 함수)
   function getAuthToken() {
-    return localStorage.getItem('jwt'); // 로컬 스토리지에서 JWT 토큰을 가져옴
+    return localStorage.getItem('jwt');
   }
 
-  // 팝업을 닫는 함수
   function closePopup() {
     dispatch('close');
   }
 
-  // 오버레이 클릭 시 팝업을 닫는 함수
   function handleOverlayClick(event) {
     if (event.target === event.currentTarget) {
       closePopup();
     }
   }
 
-  // 예약하기 버튼 클릭 시 처리 함수
   async function handleReservation() {
     const accommodationId = selectedItem.accommodationId;
     const capacity = totalGuests;
-    const checkInDate = checkIn; // checkIn을 LocalDate로 가정
-    const checkOutDate = checkOut; // checkOut을 LocalDate로 가정
+    const checkInDate = checkIn;
+    const checkOutDate = checkOut;
 
-    // JWT 토큰 가져오기
     const authToken = getAuthToken();
 
-    // HTTP 요청 설정
     const requestOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}` // JWT 토큰을 Authorization 헤더에 추가
+        'Authorization': `Bearer ${authToken}`
       },
       body: JSON.stringify({
         accommodationId,
@@ -53,36 +46,33 @@
     };
 
     try {
-      const response = await fetch('http://localhost:8080/reservation', requestOptions);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      const response = await fetch('api/reservation', requestOptions);
+      if (response.ok) {
+        const data = await response.json();
+        alert("예약이 완료되었습니다." + " 예약자: " + data.memberInformation.memberName + " 숙소 이름: " + data.accommodationInformation.accommodationName);
+        closePopup(); // 예약이 완료되면 팝업 창을 닫음
       }
-      const data = await response.json();
-      console.log('Reservation Success:', data);
-      // 예약 성공 시 추가적인 처리 가능
+      else {
+        const errorData = await response.json();
+        alert(errorData.errorMessage);
+      }
     } catch (error) {
       console.error('Error making reservation:', error);
-      // 예약 실패 시 처리
-    }
-  }
-
-  // 키다운 이벤트 처리 함수
-  function handleKeyDown(event) {
-    if (event.key === 'Escape') {
-      closePopup();
     }
   }
 </script>
 
 {#if isPopupOpen}
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <div
     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     role="dialog"
     aria-modal="true"
     tabindex="-1"
     on:click={handleOverlayClick}
-    on:keydown={handleKeyDown}
   >
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full" role="document" on:click|stopPropagation>
       <div class="flex justify-between items-center mb-4">
         <div>
@@ -109,15 +99,16 @@
       </div>
       <button class="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 mb-4" on:click={handleReservation}>예약하기</button>
       <div class="text-gray-600">
-        <!-- 비용 정보 표시 -->
         <p class="mb-2">₩{selectedItem.fee ? selectedItem.fee.dayRate.toLocaleString() : "0"} x {length}박 = ₩{selectedItem.fee ? (selectedItem.fee.dayRate * length).toLocaleString() : "0"}</p>
         <p class="mb-2">청소비: ₩{selectedItem.fee ? selectedItem.fee.cleaningFee.toLocaleString() : "0"}</p>
-        <p class="mb-2">서비스 수수료: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * totalGuests + selectedItem.fee.cleaningFee) * 0.03).toLocaleString() : "0"}</p>
+        <p class="mb-2">서비스 수수료: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * length + selectedItem.fee.cleaningFee) * 0.03).toLocaleString() : "0"}</p>
       </div>
       <div class="mt-4 text-lg font-semibold">
-        <!-- 총 합계 계산 -->
         <p>총 합계: ₩{selectedItem.fee ? ((selectedItem.fee.dayRate * length) + selectedItem.fee.cleaningFee + ((selectedItem.fee.dayRate * length + selectedItem.fee.cleaningFee) * 0.03)).toLocaleString() : "0"}</p>
       </div>
+      <button class="absolute top-2 right-2 p-2" on:click={closePopup} aria-label="Close popup">
+        &times;
+      </button>
     </div>
   </div>
 {/if}

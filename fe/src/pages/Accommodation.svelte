@@ -78,7 +78,6 @@
 
   const handleMarkerClick = (event) => {
     const itemId = event.detail.id;
-    console.log(`Marker clicked for item: ${itemId}`);
     if (listComponentRef && listComponentRef.focusItem) {
       listComponentRef.focusItem(itemId);
     }
@@ -86,7 +85,6 @@
 
   const handleViewOnMap = (event) => {
     const itemId = event.detail.id;
-    console.log(`View on map for item: ${itemId}`);
     if (mapComponentRef && mapComponentRef.focusMarker) {
       mapComponentRef.focusMarker(itemId);
     }

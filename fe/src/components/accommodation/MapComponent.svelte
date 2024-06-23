@@ -17,7 +17,6 @@
     markerContent.innerHTML = `<div class="${isSelected ? 'bg-red-400 text-white' : 'bg-white'} font-bold px-2 rounded-md select-none shadow-lg">₩${text}</div>`;
 
     markerContent.addEventListener('click', () => {
-      console.log(`Marker clicked: ${id}`);
       dispatch('markerClick', { id });
       selectedMarkerId = id;
       addMarkers(); 
@@ -66,7 +65,6 @@
   });
 
   export function focusMarker(itemId) {
-    console.log(`Focusing marker: ${itemId}`);
     selectedMarkerId = itemId;
     const item = items.find(i => i.accommodationId === itemId);
     if (item) {
