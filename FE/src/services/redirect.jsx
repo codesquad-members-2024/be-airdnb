@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { handleOAuth } from "./auth";
+import { handleOAuth } from "/src/api/auth.js";
 
 const RedirectPage = (provider) => {
   const location = useLocation();

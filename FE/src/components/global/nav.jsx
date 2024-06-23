@@ -6,7 +6,7 @@ import menuIcon from "/images/menu.png"; // 메뉴 아이콘 이미지 경로
 import placeholderIcon from "/images/placeholder.jpg"; // 프로필 아이콘 이미지 경로
 
 import LoginModal from "/src/components/login/loginModal.jsx";
-import { logout } from "../../services/auth";
+import { logout } from "/src/api/auth.js";
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -57,7 +57,7 @@ const Nav = () => {
   };
 
   const goToBookings = () => {
-    navigate('/my-bookings');
+    navigate("/my-bookings");
   };
 
   return (

@@ -1,4 +1,3 @@
-// components/AccommodationItem.jsx
 import React from "react";
 
 const AccommodationItem = ({ acc, handleItemClick }) => {
