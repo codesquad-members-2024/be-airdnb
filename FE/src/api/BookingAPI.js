@@ -1,6 +1,6 @@
 import { authInstance } from "./axiosInstance";
 
-export const fetchBookings = async (token) => {
+export const fetchBookings = async () => {
   try {
     const response = await authInstance.get("/booking/my-bookings", {});
     return response.data;

@@ -11,7 +11,7 @@ import { logout } from "/src/api/auth.js";
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activeItem, setActiveItem] = useState("");
+  const [activeItem, setActiveItem] = useState("숙소");
   const [showModal, setShowModal] = useState(false);
   const [userName, setUserName] = useState("");
   const [profileImage, setProfileImage] = useState(placeholderIcon);
