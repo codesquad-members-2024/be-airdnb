@@ -16,6 +16,7 @@ import team07.airbnb.repository.ProductRepository;
 import team07.airbnb.service.accommodation.AccommodationService;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -186,4 +187,16 @@ public class ProductService {
         int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
         accommodation.addProduct(date, price);
     }
+
+    public void createRangeProduct(Long accommodationId, LocalDate startDate, LocalDate endDate, Integer requestPrice) {
+        AccommodationEntity accommodation = accommodationService.findById(accommodationId);
+
+        Period between = Period.between(startDate, endDate);
+        for (int i = 0; i <= between.getDays(); i++) {
+            LocalDate nowDate = startDate.plusDays(i);
+            int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
+            accommodation.addProduct(nowDate, price);
+        }
+    }
+
 }

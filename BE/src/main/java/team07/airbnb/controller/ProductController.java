@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
+import team07.airbnb.data.product.dto.request.ProductRangeCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.product.ProductService;
@@ -47,6 +48,15 @@ public class ProductController {
     public void createProduct(@RequestBody ProductCreateRequest request) {
         productService.createProduct(request.accommodationId(), request.date(), request.price());
     }
+
+    @Tag(name = "Host")
+    @Operation(summary = "상품 생성")
+    @PostMapping("/range")
+    @ResponseStatus(CREATED)
+    public void createProductRange(@RequestBody ProductRangeCreateRequest request) {
+        productService.createRangeProduct(request.accommodationId(), request.startDate(), request.endDate(), request.price());
+    }
+
 
     @Tag(name = "Host")
     @Operation(summary = "상품 닫기")
