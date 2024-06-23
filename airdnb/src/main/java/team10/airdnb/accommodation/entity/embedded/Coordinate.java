@@ -1,5 +1,6 @@
 package team10.airdnb.accommodation.entity.embedded;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -7,18 +8,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Embeddable
-public class AccommodationFee {
+public class Coordinate {
 
-    @Column(name = "day_rate", nullable = false)
-    private BigDecimal dayRate;
+    @Column(name = "latitude", nullable = false)
+    private Double latitude; // 위도
 
-    @Column(name = "cleaning_fee", nullable = false)
-    private BigDecimal cleaningFee;
+    @Column(name = "longitude", nullable = false)
+    private Double longitude; //경도
+
 }

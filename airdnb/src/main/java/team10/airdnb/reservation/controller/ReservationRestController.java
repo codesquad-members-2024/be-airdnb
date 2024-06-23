@@ -32,14 +32,14 @@ public class ReservationRestController {
      * -> 1, 2에 대해서는 Spring Security를 통한 role로 지정할 수 있지 않을까...?
      * */
 
-    @GetMapping("/api/reservations")
+    @GetMapping("/reservations")
     public ResponseEntity<?> getAllReservations() {
         log.info("예약 정보 전체 로드");
 
         return ResponseEntity.ok(reservationService.getReservations());
     }
 
-    @GetMapping("/api/reservation/{reservationId}")
+    @GetMapping("/reservation/{reservationId}")
     public ResponseEntity<ReservationInformationResponse> getReservation(@PathVariable long reservationId) {
         ReservationInformationResponse response = reservationService.getReservation(reservationId);
 
@@ -52,7 +52,7 @@ public class ReservationRestController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/reservation")
+    @PostMapping("/reservation")
     public ResponseEntity<ReservationSummaryResponse> createReservation(@RequestBody @Valid ReservationCreateRequest request) {
         ReservationSummaryResponse response = reservationService.createReservation(request);
 
@@ -71,9 +71,8 @@ public class ReservationRestController {
      * 2) 체크인 날짜 수정  - checkIn/Out Date 속성
      * */
 
-
-    @DeleteMapping("/api/reservation/{reservationId}")
-    public ResponseEntity<ReservationSummaryResponse> deleteReservation(@PathVariable long reservationId) {
+    @DeleteMapping("/reservation/{reservationId}")
+    public ResponseEntity<ReservationSummaryResponse> deleteReservation(@PathVariable Long reservationId) {
         ReservationSummaryResponse response = reservationService.deleteReservation(reservationId);
 
         log.info("예약 삭제 완료 : # {} : 숙소 이름 : {}, 예약자 이름 : {}",

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import team10.airdnb.error.ErrorCode;
 import team10.airdnb.jwt.constant.GrantType;
 import team10.airdnb.jwt.dto.JwtTokenDto;
+import team10.airdnb.member.entity.Member;
 import team10.airdnb.oauth.exception.AuthenticationException;
 import team10.airdnb.jwt.constant.TokenType;
 import io.jsonwebtoken.Claims;
@@ -23,12 +24,12 @@ public class TokenManager {
     private final String refreshTokenExpirationTime;
     private final String tokenSecret;
 
-    public JwtTokenDto createJwtTokenDto(String id) {
+    public JwtTokenDto createJwtTokenDto(Member member) {
         Date accessTokenExpireTime = createAccessTokenExpireTime();
         Date refreshTokenExpireTime = createRefreshTokenExpireTime();
 
-        String accessToken = createAccessToken(id, accessTokenExpireTime);
-        String refreshToken = createRefreshToken(id, refreshTokenExpireTime);
+        String accessToken = createAccessToken(member, accessTokenExpireTime);
+        String refreshToken = createRefreshToken(member, refreshTokenExpireTime);
         return JwtTokenDto.builder()
                 .grantType(GrantType.BEARER.getType())
                 .accessToken(accessToken)
@@ -46,24 +47,27 @@ public class TokenManager {
         return new Date(System.currentTimeMillis() + Long.parseLong(refreshTokenExpirationTime));
     }
 
-    public String createAccessToken(String id, Date expirationTime) {
+    public String createAccessToken(Member member, Date expirationTime) {
         String accessToken = Jwts.builder()
                 .setSubject(TokenType.ACCESS.name())    // 토큰 제목
                 .setIssuedAt(new Date())                // 토큰 발급 시간
                 .setExpiration(expirationTime)          // 토큰 만료 시간
-                .claim("memberId", id)      // 회원 아이디
+                .claim("memberId", member.getId())      // 회원 아이디
+                .claim("memberProfile", member.getProfile())
+                .claim("memberName", member.getMemberName())
                 .signWith(SignatureAlgorithm.HS512, tokenSecret.getBytes(StandardCharsets.UTF_8))
                 .setHeaderParam("typ", "JWT")
                 .compact();
         return accessToken;
     }
 
-    public String createRefreshToken(String id, Date expirationTime) {
+    public String createRefreshToken(Member member, Date expirationTime) {
         String refreshToken = Jwts.builder()
                 .setSubject(TokenType.REFRESH.name())   // 토큰 제목
                 .setIssuedAt(new Date())                // 토큰 발급 시간
                 .setExpiration(expirationTime)          // 토큰 만료 시간
-                .claim("memberId", id)      // 회원 아이디
+                .claim("memberId", member.getId())      // 회원 아이디
+                .claim("memberProfile", member.getProfile())
                 .signWith(SignatureAlgorithm.HS512, tokenSecret.getBytes(StandardCharsets.UTF_8))
                 .setHeaderParam("typ", "JWT")
                 .compact();

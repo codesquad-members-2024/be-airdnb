@@ -4,24 +4,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team10.airdnb.accommodation.controller.request.AccommodationCreateRequest;
-import team10.airdnb.accommodation.controller.request.AccommodationUpdateRequest;
+import team10.airdnb.accommodation.controller.request.SearchAccommodationRequest;
+import team10.airdnb.accommodation.controller.response.AccommodationCreateResponse;
+import team10.airdnb.accommodation.dto.SearchAccommodationDto;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
-import team10.airdnb.accommodation_amenity.entity.AccommodationAmenity;
-import team10.airdnb.accommodation_amenity.repository.AccommodationAmenityRepository;
+import team10.airdnb.accommodation_amenity.dto.AccommodationAmenityDto;
+import team10.airdnb.accommodation_amenity.service.AccommodationAmenityService;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_room_type.exception.AccommodationRoomTypeNotFoundException;
 import team10.airdnb.accommodation_room_type.repository.AccommodationRoomTypeRepository;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
 import team10.airdnb.accommodation_type.exception.AccommodationTypeNotFoundException;
 import team10.airdnb.accommodation_type.repository.AccommodationTypeRepository;
-import team10.airdnb.amenity.entity.Amenity;
-import team10.airdnb.amenity.repository.AmenityRepository;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,8 +30,8 @@ public class AccommodationService {
     private final AccommodationTypeRepository accommodationTypeRepository;
     private final AccommodationRoomTypeRepository accommodationRoomTypeRepository;
     private final AccommodationRepository accommodationRepository;
-    private final AccommodationAmenityRepository accommodationAmenityRepository;
-    private final AmenityRepository amenityRepository;
+
+    private final AccommodationAmenityService accommodationAmenityService;
 
     public List<Accommodation> getAccommodations() {
         return accommodationRepository.findAll();
@@ -43,7 +41,7 @@ public class AccommodationService {
         return getAccommodationById(accommodationId);
     }
 
-    public Accommodation createAccommodation(AccommodationCreateRequest request) {
+    public AccommodationCreateResponse createAccommodation(AccommodationCreateRequest request) {
         AccommodationType accommodationType = getAccommodationTypeById(request.accommodationType());
 
         AccommodationRoomType accommodationRoomType = getAccommodationRoomTypeById(request.accommodationRoomType());
@@ -54,65 +52,10 @@ public class AccommodationService {
 
         log.info("저장된 숙소 정보 : {}", accommodation);
 
-        List<Amenity> amenities = amenityRepository.findAllById(request.amenityIds() != null ? request.amenityIds() : Collections.emptyList());
+        AccommodationAmenityDto accommodationAmenityDto = accommodationAmenityService.saveAccommodationAmenity(savedAccommodation, request.amenityIds());
 
-        Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
-                .map(amenity -> AccommodationAmenity.builder()
-                        .accommodation(accommodation)
-                        .amenity(amenity)
-                        .build())
-                .collect(Collectors.toSet());
-
-        accommodationAmenityRepository.saveAll(accommodationAmenities);
-
-        return savedAccommodation;
+        return AccommodationCreateResponse.from(accommodation, accommodationAmenityDto);
     }
-
-//    public Accommodation updateAccommodation(Long accommodationId, AccommodationUpdateRequest request) {
-//        Accommodation accommodation = getAccommodationById(accommodationId);
-//
-//        Accommodation.AccommodationBuilder builder = Accommodation.builder();
-//
-//        builder.id(accommodation.getId());
-//        request.memberId().ifPresent(builder::memberId);
-//        request.name().ifPresent(builder::name);
-//        request.maxCapacity().ifPresent(builder::maxCapacity);
-//
-//        request.accommodationType().ifPresent(accommodationTypeId -> {
-//            builder.accommodationType(
-//                    getAccommodationTypeById(accommodationTypeId)
-//            );
-//        });
-//
-//        request.accommodationRoomType().ifPresent(accommodationRoomTypeId -> {
-//            builder.accommodationRoomType(
-//                    getAccommodationRoomTypeById(accommodationRoomTypeId)
-//            );
-//        });
-//
-//        request.bedroomCount().ifPresent(builder::bedroomCount);
-//        request.bathroomCount().ifPresent(builder::bathroomCount);
-//        request.bedCount().ifPresent(builder::bedCount);
-//        request.perPrice().ifPresent(builder::perPrice);
-//
-//        Accommodation updatedAccommodation = builder.build();
-//
-//        // Update amenities if amenityIds is provided
-//        request.amenityIds().ifPresent(amenityIds -> {
-//            List<Amenity> amenities = amenityRepository.findAllById(amenityIds);
-//
-//            Set<AccommodationAmenity> accommodationAmenities = amenities.stream()
-//                    .map(amenity -> AccommodationAmenity.builder()
-//                            .accommodation(accommodation)
-//                            .amenity(amenity)
-//                            .build())
-//                    .collect(Collectors.toSet());
-//
-//            accommodationAmenityRepository.saveAll(accommodationAmenities);
-//        });
-//
-//        return accommodationRepository.save(updatedAccommodation);
-//    }
 
     private Accommodation getAccommodationById(Long accommodationId) {
         return accommodationRepository.findById(accommodationId)
@@ -134,6 +77,11 @@ public class AccommodationService {
                     .orElseThrow(AccommodationRoomTypeNotFoundException::new);
         }
         return null;
+    }
+
+    public List<SearchAccommodationDto> getFilteredAccommodations(SearchAccommodationRequest request) {
+        List<Accommodation> accommodations = accommodationRepository.findAvailableAccommodations(request);
+        return accommodations.stream().map(SearchAccommodationDto::from).collect(Collectors.toList());
     }
 
 

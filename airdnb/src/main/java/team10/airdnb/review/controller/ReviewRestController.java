@@ -23,14 +23,14 @@ public class ReviewRestController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/api/reviews")
+    @GetMapping("/reviews")
     public ResponseEntity<?> getAllReviews() {
         log.info("전체 리뷰 목록 조회");
 
         return ResponseEntity.ok(reviewService.getReviews());
     }
 
-    @PostMapping("/api/review")
+    @PostMapping("/review")
     public ResponseEntity<?> createReview(@RequestBody @Valid ReviewCreateRequest request) {
 
         ReviewSummaryResponse response = reviewService.createReview(request);
@@ -45,7 +45,7 @@ public class ReviewRestController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/api/review/{reviewId}")
+    @PatchMapping("/review/{reviewId}")
     public ResponseEntity<?> updateReview(@RequestBody ReviewUpdateRequest request,
                                           @PathVariable long reviewId) {
         ReviewSummaryResponse response = reviewService.updateReview(reviewId, request);
@@ -60,7 +60,7 @@ public class ReviewRestController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/api/review/{reviewId}")
+    @DeleteMapping("/review/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable long reviewId) {
         ReviewSummaryResponse response = reviewService.deleteReview(reviewId);
 

@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
+import team10.airdnb.accommodation.entity.embedded.Address;
+import team10.airdnb.accommodation.entity.embedded.Coordinate;
 import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 import team10.airdnb.accommodation_room_type.entity.AccommodationRoomType;
 import team10.airdnb.accommodation_type.entity.AccommodationType;
@@ -32,7 +34,7 @@ public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "member_id", nullable = false)
     private String memberId;
@@ -41,7 +43,7 @@ public class Accommodation {
     private String name;
 
     @Column(name = "max_capacity", nullable = false)
-    private long maxCapacity;
+    private Long maxCapacity;
 
     @ManyToOne
     @JoinColumn(name = "accommodation_type", nullable = true)
@@ -62,5 +64,11 @@ public class Accommodation {
 
     @Embedded
     private AccommodationFee accommodationFee;
+
+    @Embedded
+    private Address address;
+
+    @Embedded
+    private Coordinate coordinate;
 
 }
