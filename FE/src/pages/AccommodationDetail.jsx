@@ -7,6 +7,7 @@ import HostInfo from "../components/accommodation_detail/HostInfo";
 import BookingInfo from "../components/accommodation_detail/BookingInfo";
 import Map from "../components/list/Map";
 import "../styles/AccommodationDetail.css";
+import styles from "../styles/Detail.module.css";
 
 const AccommodationDetail = () => {
   const { state } = useLocation();
@@ -79,7 +80,7 @@ const AccommodationDetail = () => {
         checkOut={checkOut}
         headCount={headCount}
       />
-      <div className="map-container">
+      <div className={styles.mapContainer}>
         <Map
           currentPosition={currentPosition}
           mapLevel={mapLevel}
