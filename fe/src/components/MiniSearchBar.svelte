@@ -1,5 +1,5 @@
 <script>
-  import { format, differenceInDays } from 'date-fns'; // differenceInDays 추가
+  import { format, addDays, differenceInDays } from 'date-fns'; // addDays 추가
   import DatePickerComponent from './DatePickerComponent.svelte';
   import RatePopup from './RatePopup.svelte';
   import GuestPopup from './GuestPopup.svelte';
@@ -56,9 +56,19 @@
   };
 
   const handleSearch = () => {
-    const checkInDate = checkIn ? format(new Date(checkIn), 'yyyy-MM-dd') : '';
-    const checkOutDate = checkOut ? format(new Date(checkOut), 'yyyy-MM-dd') : '';
-    const length = checkIn && checkOut ? differenceInDays(new Date(checkOut), new Date(checkIn)) : 0;
+    // 현재 날짜와 1주일 후의 날짜 계산
+    const now = new Date();
+    const defaultCheckInDate = format(now, 'yyyy-MM-dd');
+    const defaultCheckOutDate = format(addDays(now, 7), 'yyyy-MM-dd');
+
+    // 입력된 값이 없을 때 기본 날짜로 설정
+    const checkInDate = checkIn ? format(new Date(checkIn), 'yyyy-MM-dd') : defaultCheckInDate;
+    const checkOutDate = checkOut ? format(new Date(checkOut), 'yyyy-MM-dd') : defaultCheckOutDate;
+
+    // 체류 기간 계산
+    const length = differenceInDays(new Date(checkOutDate), new Date(checkInDate));
+
+    // URL 생성
     const url = `/accommodations?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
     window.location.href = url;
   };

@@ -1,5 +1,5 @@
 <script>
-  import { format, differenceInDays } from 'date-fns';
+  import { format, addDays, differenceInDays } from 'date-fns';
   import DatePickerComponent from './DatePickerComponent.svelte';
   import RatePopup from './RatePopup.svelte';
   import GuestPopup from './GuestPopup.svelte';
@@ -33,12 +33,12 @@
   const formatDate = (dateString) => (dateString && format(new Date(dateString), dateFormat)) || '';
   const formatUrlDate = (dateString) => (dateString && format(new Date(dateString), 'yyyy-MM-dd')) || '';
 
-
-  $: urlFormmattedCheckIn = formatUrlDate(checkIn);
-  $: urlFormmattedCheckOut = formatUrlDate(checkOut);
+  $: urlFormattedCheckIn = formatUrlDate(checkIn);
+  $: urlFormattedCheckOut = formatUrlDate(checkOut);
   $: formattedCheckIn = formatDate(checkIn);
   $: formattedCheckOut = formatDate(checkOut);
-  
+
+  $: formattedDates = checkIn && checkOut ? `${formattedCheckIn} - ${formattedCheckOut}` : '날짜 입력';
 
   const handleDateSelected = (e) => {
     const { startDate, endDate } = e.detail;
@@ -56,12 +56,22 @@
   const handleGuestsSelected = (total) => {
     totalGuests = total;
     toggleGuestPopup();
-  }; 
+  };
 
   const handleSearch = () => {
-    const checkInDate = urlFormmattedCheckIn;
-    const checkOutDate = urlFormmattedCheckOut;
-    const length = differenceInDays(new Date(checkOut), new Date(checkIn));
+    // 현재 날짜와 1주일 후의 날짜 계산
+    const now = new Date();
+    const defaultCheckInDate = format(now, 'yyyy-MM-dd');
+    const defaultCheckOutDate = format(addDays(now, 7), 'yyyy-MM-dd');
+
+    // 입력된 값이 없을 때 기본 날짜로 설정
+    const checkInDate = urlFormattedCheckIn || defaultCheckInDate;
+    const checkOutDate = urlFormattedCheckOut || defaultCheckOutDate;
+
+    // 체류 기간 계산
+    const length = differenceInDays(new Date(checkOutDate), new Date(checkInDate));
+
+    // URL 생성
     const url = `/accommodations?checkin=${checkInDate}&checkout=${checkOutDate}&length=${length}&capacity=${totalGuests}&price_min=${selectedMinPrice}&price_max=${selectedMaxPrice}`;
     window.location.href = url;
   };

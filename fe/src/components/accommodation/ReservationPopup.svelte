@@ -1,6 +1,9 @@
 <script>
     export let isPopupOpen = false;
     export let selectedItem = {};
+    export let checkIn = '';
+    export let checkOut = '';
+    export let totalGuests = 0;
   
     import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
@@ -28,16 +31,16 @@
           <div class="grid grid-cols-2 gap-0 border-b p-4">
             <div class="border-r pr-4">
               <label for="checkin" class="block text-gray-700 font-bold">체크인</label>
-              <p id="checkin" class="text-lg">{selectedItem.checkin || "N/A"}</p>
+              <p id="checkin" class="text-lg">{checkIn || "N/A"}</p>
             </div>
             <div class="pl-4">
               <label for="checkout" class="block text-gray-700 font-bold">체크아웃</label>
-              <p id="checkout" class="text-lg">{selectedItem.checkout || "N/A"}</p>
+              <p id="checkout" class="text-lg">{checkOut || "N/A"}</p>
             </div>
           </div>
           <div class="p-4">
             <label for="guests" class="block text-gray-700 font-bold">인원</label>
-            <p id="guests" class="text-lg">{selectedItem.guests || "N/A"}명</p>
+            <p id="guests" class="text-lg">{totalGuests || "N/A"}명</p>
           </div>
         </div>
         <button class="w-full bg-black text-white px-4 py-2 rounded hover:bg-gray-800 mb-4">예약하기</button>

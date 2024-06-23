@@ -80,7 +80,7 @@
 
 <div class="flex h-screen pt-24"> <!-- 상단 패딩 추가 -->
   <div class="w-1/2 overflow-y-auto p-4" on:scroll={handleScroll}>
-    <ListComponent {items} />
+    <ListComponent {items} {checkIn} {checkOut} {totalGuests} />
     {#if isLoading}
       <p>Loading...</p>
     {/if}

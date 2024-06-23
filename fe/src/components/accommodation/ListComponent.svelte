@@ -1,6 +1,9 @@
 <script>
   import ReservationPopup from './ReservationPopup.svelte';
   export let items = [];
+  export let checkIn = '';
+  export let checkOut = '';
+  export let totalGuests = 0;
   let selectedItem = null;
   let isPopupOpen = false;
 
@@ -52,8 +55,11 @@
   {/each}
 </div>
 
-<ReservationPopup {isPopupOpen} {selectedItem} on:close={closePopup} />
-
-<style>
-  /* Add any additional styling here */
-</style>
+<ReservationPopup
+  {isPopupOpen}
+  {selectedItem}
+  {checkIn}
+  {checkOut}
+  {totalGuests}
+  on:close={closePopup}
+/>
