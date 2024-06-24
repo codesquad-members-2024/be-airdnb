@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   export let show = false;
   export let onClose;
 
@@ -10,10 +10,8 @@
   const dispatch = createEventDispatcher();
 
   const handleLoginOrSignup = async () => {
-    const endpoint = isLoginMode ? '/api/login' : '/api/register';
+    const endpoint = isLoginMode ? 'api/login' : '/api/register';
     const body = JSON.stringify({ email, password, name: !isLoginMode ? name : undefined });
-
-    console.log(isLoginMode);
 
     try {
       const response = await fetch(`${endpoint}`, {
@@ -26,11 +24,14 @@
 
       if (response.ok) {
         const data = await response.json();
-        const token = data.accessToken;
-        localStorage.setItem('jwt', token);
+        const accessToken = data.accessToken;
+        const refreshToken = data.refreshToken;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken); 
+
+        const token = localStorage.getItem('accessToken');
 
         try {
-          // Extract payload part of JWT
           const base64Url = token.split('.')[1];
           const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
           const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -63,8 +64,11 @@
   };
 
   const handleSocialLogin = (provider) => {
-    // 소셜 로그인 처리 로직
-    console.log(`${provider} ${isLoginMode ? '로그인' : '회원가입'}`);
+    if (provider === '깃허브') {
+      window.location.href = 'api/oauth2/authorization/github';
+    } else {
+      console.log(`${provider} ${isLoginMode ? '로그인' : '회원가입'}`);
+    }
   };
 
   const toggleMode = () => {
@@ -77,6 +81,37 @@
     name = '';
     onClose();
   };
+
+  // GitHub 인증 후 리디렉션된 URL에서 쿼리 파라미터 읽어오기
+  onMount(() => {
+    const query = new URLSearchParams(window.location.search);
+    const accessToken = query.get('accessToken');
+    const refreshToken = query.get('refreshToken');
+
+    if (accessToken && refreshToken) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
+      const base64Url = accessToken.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+
+      const decodedToken = JSON.parse(jsonPayload);
+
+      const user = {
+        userEmail: decodedToken.memberId,
+        username: decodedToken.memberName,
+        profileImage: decodedToken.memberProfile
+      };
+
+      dispatch('login', user);
+      handleClose();
+
+      window.location.href = '/';
+    }
+  });
 </script>
 
 {#if show}

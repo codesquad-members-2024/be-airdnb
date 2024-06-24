@@ -30,7 +30,9 @@
     user.userEmail = null;
     user.username = null;
     user.profileImage = "/assets/profile.png"; // 기본 프로필 이미지로 되돌리기
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    
   }
 
   const toggleLoginModal = () => {
@@ -44,7 +46,7 @@
   }
 
   onMount(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('accessToken');
     if (token) {
       try {
         // Extract payload part of JWT
