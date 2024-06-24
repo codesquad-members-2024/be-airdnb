@@ -10,7 +10,7 @@
   const dispatch = createEventDispatcher();
 
   function getAuthToken() {
-    return localStorage.getItem('jwt');
+    return localStorage.getItem('accessToken');
   }
 
   function closePopup() {
