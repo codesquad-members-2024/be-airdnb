@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team10.airdnb.accommodation.entity.Accommodation;
+import team10.airdnb.accommodation.entity.embedded.AccommodationFee;
 import team10.airdnb.member.entity.Member;
 
 import java.math.BigDecimal;
@@ -54,13 +55,13 @@ public class Reservation {
     private BigDecimal totalPrice;
 
     // 숙박 총 비용을 계산
-    public static BigDecimal calculateTotalPrice(Accommodation accommodation, LocalDate checkInDate, LocalDate checkOutDate) {
+    public static BigDecimal calculateTotalPrice(AccommodationFee accommodationfee, LocalDate checkInDate, LocalDate checkOutDate) {
         // 두 날짜 사이의 일 수를 계산
         BigDecimal numberOfDays = BigDecimal.valueOf(ChronoUnit.DAYS.between(checkInDate, checkOutDate));
 
-        BigDecimal dayRate = accommodation.getAccommodationFee().getDayRate();
+        BigDecimal dayRate = accommodationfee.getDayRate();
 
-        BigDecimal cleaningFee = accommodation.getAccommodationFee().getCleaningFee();
+        BigDecimal cleaningFee = accommodationfee.getCleaningFee();
 
         // 요금 계산
         BigDecimal totalDayRate = dayRate.multiply(numberOfDays);
