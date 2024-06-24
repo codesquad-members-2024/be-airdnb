@@ -110,7 +110,7 @@ const Nav = () => {
                 <div className={styles.navMenuItem} onClick={goToBookings}>
                   내 예약
                 </div>
-                <div className={styles.navMenuItem}>예약 취소</div>
+                <div className={styles.navMenuItem}>내 숙소</div>
                 <div className={styles.navMenuItem}>위시리스트</div>
                 <div className={styles.navMenuItem} onClick={handleLogout}>
                   로그아웃

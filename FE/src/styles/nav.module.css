@@ -105,7 +105,7 @@
 
   width: 200px;
   min-height: 46px;
-  max-height: 140px;
+  max-height: 180px;
   text-align: center;
   transform: translateX(-40%); /* 버튼의 오른쪽에 맞춤 */
 }
