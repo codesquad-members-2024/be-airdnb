@@ -74,6 +74,7 @@ public class AccommodationMapper {
                 accommodation.getBedCount(),
                 accommodation.getDescription(),
                 accommodation.getAmenity(),
+                accommodation.getAccommodationType(),
                 accommodation.getPictures().stream()
                         .map(picture -> new PictureDto(picture.getUrl()))
                         .toList()
