@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final TokenManager tokenManager;
     private final MemberRepository memberRepository;
-    private static final String URI = "http://localhost:5173/";
+    private static final String URI = "https://airdnb.site/";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
