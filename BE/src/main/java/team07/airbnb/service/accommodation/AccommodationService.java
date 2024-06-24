@@ -51,15 +51,15 @@ public class AccommodationService {
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id, RoomInformation roomInformation, UserEntity user) {
-        AccommodationEntity accommodation = authorize(id, user.getId());
+    public AccommodationEntity updateAccommodation(Long id, RoomInformation roomInformation, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
         accommodation.updateRoomInfo(roomInformation);
         return accommodationRepository.save(accommodation);
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id,String name, String description, UserEntity user) {
-        AccommodationEntity accommodation = authorize(id, user.getId());
+    public AccommodationEntity updateAccommodation(Long id,String name, String description, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
         accommodation.updateDescription(name, description);
         return accommodationRepository.save(accommodation);
     }
@@ -69,16 +69,16 @@ public class AccommodationService {
                                                    AccommodationType type,
                                                    AccommodationLocation address,
                                                    int basePricePerDay,
-                                                   UserEntity user)
+                                                   Long userId)
     {
-        AccommodationEntity accommodation = authorize(id, user.getId());
+        AccommodationEntity accommodation = authorize(id, userId);
         accommodation.updateBaseInfo(type, address, basePricePerDay);
         return accommodationRepository.save(accommodation);
     }
 
     @Transactional
-    public AccommodationEntity updateAccommodation(Long id, List<String> pictures, UserEntity user) {
-        AccommodationEntity accommodation = authorize(id, user.getId());
+    public AccommodationEntity updateAccommodation(Long id, List<String> pictures, Long userId) {
+        AccommodationEntity accommodation = authorize(id, userId);
         accommodation.updatePictures(
                 pictures.stream().map(url -> new Pictures(accommodation, url)).toList()
         );

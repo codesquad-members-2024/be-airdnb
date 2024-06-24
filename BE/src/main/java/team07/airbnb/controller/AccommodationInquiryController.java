@@ -44,9 +44,9 @@ public class AccommodationInquiryController {
     public List<AccommodationListResponse> findNeighbor(
             @RequestParam double longitude,
             @RequestParam double latitude,
-            @RequestParam double distance) {
+            @RequestParam("distance") double distanceInKilo) {
 
-        return previewOf(accommodationService.findNearbyAccommodations(longitude, latitude, distance));
+        return previewOf(accommodationService.findNearbyAccommodations(longitude, latitude, distanceInKilo));
     }
 
     @Tag(name = "Host")
