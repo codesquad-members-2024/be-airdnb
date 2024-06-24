@@ -4,7 +4,6 @@ import codesquad.team05.domain.coupon.UserCoupon;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.reservation.Reservation;
-import codesquad.team05.domain.review.Review;
 import codesquad.team05.web.user.dto.response.UserResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -33,9 +32,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     List<Reservation> reservation = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Like> likes = new ArrayList<>();

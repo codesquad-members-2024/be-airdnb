@@ -132,10 +132,6 @@ class ReservationTest {
     public void test2() {
         User user = new User("alexa", "jeon22", "1234", "집주소", LocalDate.now());
         userRepository.save(user);
-        Review reviews = new Review();
-        reviews.setComment("숙소가 좋아요");
-        reviews.setRating(3);
-
         Accommodation accommodation = new Accommodation(
                 "숙소",
                 1000,
@@ -147,10 +143,10 @@ class ReservationTest {
                 "없음",
                 HOTEL
         );
+        Review review = new Review(3, "숙소가 좋아요", user, accommodation);
+        reviewRepository.save(review);
+        
         accommodationRepository.save(accommodation);
-        reviews.setAccommodation(accommodation);
-        reviews.setUser(user);
-        reviewRepository.save(reviews);
     }
 
     @Test

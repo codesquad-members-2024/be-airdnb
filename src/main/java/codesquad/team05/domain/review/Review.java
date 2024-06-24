@@ -3,10 +3,13 @@ package codesquad.team05.domain.review;
 import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.user.User;
 import jakarta.persistence.*;
-import lombok.Setter;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Setter
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 
     @Id
@@ -23,11 +26,23 @@ public class Review {
     @JoinColumn(name = "accommodation_id")
     Accommodation accommodation;
 
-    public void setUser(User user) {
+    public Review(
+            int rating,
+            String comment,
+            User user,
+            Accommodation accommodation
+    ) {
+        this.rating = rating;
+        this.comment = comment;
         this.user = user;
+        this.accommodation = accommodation;
     }
 
-    public void setAccommodation(Accommodation accommodation) {
-        this.accommodation = accommodation;
+    public void update(
+            int rating,
+            String comment
+    ) {
+        this.rating = rating;
+        this.comment = comment;
     }
 }
