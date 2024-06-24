@@ -20,7 +20,7 @@ public class Hashtag {
 
     public Hashtag(String content, Accommodation accommodation) {
         this.content = content;
-        if (accommodation != null) {
+        if (this.accommodation != null) {
             accommodation.getHashtags().remove(this);
         }
         this.accommodation = accommodation;
