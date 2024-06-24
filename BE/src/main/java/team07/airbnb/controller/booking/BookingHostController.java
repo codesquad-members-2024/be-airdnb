@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
+import team07.airbnb.data.booking.dto.response.BookingConfirmedResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
 import team07.airbnb.data.booking.enums.CheckAuthType;
-import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.booking.BookingAuthService;
 import team07.airbnb.service.booking.BookingInquiryService;
@@ -40,11 +40,10 @@ public class BookingHostController {
     @PostMapping("/confirm/{bookingId}")
     @Authenticated(HOST)
     @ResponseStatus(OK)
-    public Long confirmBooking(@PathVariable Long bookingId,
-                               @Parameter(hidden = true) UserEntity user) {
+    public BookingConfirmedResponse confirmBooking(@PathVariable Long bookingId,
+                                                   @Parameter(hidden = true) UserEntity user) {
         bookingAuthService.currentUserIsSameWith(bookingId, user, CheckAuthType.HOST);
 
-        //컨펌한 예약의 아이디 리턴
         return bookingManageService.confirmBooking(bookingId, user);
     }
 
