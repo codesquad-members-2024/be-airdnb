@@ -27,4 +27,8 @@ public record BookingDetailResponse(
                 booking.getPayment()
         );
     }
+
+    public Integer price(){
+        return payment.getTotalPrice();
+    }
 }

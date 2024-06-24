@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.booking.dto.response.BookingConfirmedResponse;
 import team07.airbnb.data.booking.dto.response.BookingDetailResponse;
+import team07.airbnb.data.booking.dto.response.BookingOverviewResponse;
 import team07.airbnb.data.booking.enums.CheckAuthType;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.booking.BookingAuthService;
 import team07.airbnb.service.booking.BookingInquiryService;
 import team07.airbnb.service.booking.BookingManageService;
 import team07.airbnb.service.user.UserService;
-
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 import static team07.airbnb.data.user.enums.Role.HOST;
@@ -64,9 +63,9 @@ public class BookingHostController {
     @Authenticated(HOST)
     @GetMapping("/management")
     @ResponseStatus(OK)
-    public List<BookingDetailResponse> getBookingInfosOfHosting(
+    public BookingOverviewResponse getBookingInfosOfHosting(
             @Parameter(hidden = true) UserEntity host) {
-        return bookingInquiryService.getBookingInfoListByHost(host);
+        return BookingOverviewResponse.of(bookingInquiryService.getBookingInfoListByHost(host));
     }
 
 
