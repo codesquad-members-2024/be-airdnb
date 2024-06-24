@@ -1,7 +1,7 @@
 package codesquad.team05.web.reservation;
 
+import codesquad.team05.service.ReservationService;
 import codesquad.team05.service.reservation.ReservationBusinessService;
-import codesquad.team05.service.reservation.ReservationService;
 import codesquad.team05.web.reservation.dto.request.ReservationSave;
 import codesquad.team05.web.reservation.dto.response.ReservationResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +41,6 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<ReservationResponse> reservationDetails(@PathVariable Long id) {
         return ResponseEntity
-                .ok(reservationService.findOneById(id));
+                .ok(reservationService.getReservation(id));
     }
 }
