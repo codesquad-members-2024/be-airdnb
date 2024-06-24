@@ -1,6 +1,6 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.hastag.Hastag;
+import codesquad.team05.domain.hashtag.Hashtag;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
@@ -62,7 +62,7 @@ public class Accommodation {
     private List<Picture> pictures = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
-    private List<Hastag> hashtags = new ArrayList<>();
+    private List<Hashtag> hashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ServiceCharge> serviceCharge = new ArrayList<>();
