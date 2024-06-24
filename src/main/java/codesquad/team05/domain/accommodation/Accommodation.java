@@ -5,7 +5,6 @@ import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.reservation.Reservation;
-import codesquad.team05.domain.review.Review;
 import codesquad.team05.domain.servicecharge.ServiceCharge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,9 +50,6 @@ public class Accommodation {
 
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
     private List<Reservation> reservation = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Like> likes = new ArrayList<>();
