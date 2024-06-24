@@ -1,20 +1,11 @@
 package team07.airbnb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team07.airbnb.data.user.dto.response.TokenUserInfo;
 import team07.airbnb.data.user.enums.Role;
 
 import java.util.ArrayList;
@@ -79,13 +70,11 @@ public class UserEntity extends BaseEntity {
         this.role = Role.USER;
     }
 
-    public static UserEntity ofToken(TokenUserInfo tokenUserInfo) {
-        return UserEntity.builder()
-                .id(tokenUserInfo.id())
-                .name(tokenUserInfo.name())
-                .picture(tokenUserInfo.profileImg())
-                .role(tokenUserInfo.role())
-                .build();
+    public UserEntity(Long id, String name, String picture, Role role) {
+        this.id = id;
+        this.name = name;
+        this.picture = picture;
+        this.role = role;
     }
 
     @Override
