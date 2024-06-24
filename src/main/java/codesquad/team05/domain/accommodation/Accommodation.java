@@ -61,7 +61,7 @@ public class Accommodation {
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Picture> pictures = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Hashtag> hashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
