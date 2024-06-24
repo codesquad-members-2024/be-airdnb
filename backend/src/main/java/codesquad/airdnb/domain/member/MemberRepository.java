@@ -9,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    boolean existsMemberByLoginId(String loginId);
+    boolean existsMemberByAccountName(String accountName);
 
-    Member findMemberByLoginId(String loginId);
+    Member findMemberByAccountName(String accountName);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Member AS m SET m.refreshToken = :refreshToken WHERE m.loginId = :loginId")
-    void updateRefreshToken(String loginId, String refreshToken);
+    @Query("UPDATE Member AS m SET m.refreshToken = :refreshToken WHERE m.accountName = :accountName")
+    void updateRefreshToken(String accountName, String refreshToken);
 }

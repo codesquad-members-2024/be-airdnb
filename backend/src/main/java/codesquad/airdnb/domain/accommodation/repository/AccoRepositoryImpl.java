@@ -96,14 +96,4 @@ public class AccoRepositoryImpl implements AccoRepositoryCustom {
 
         return accoContentResponse;
     }
-
-    @Override
-    public List<Long> findIdsByCoordAndHumanCount(Point point, Integer maxGuestCount, Integer maxInfantCount) {
-        return entityManager.createNativeQuery("""
-            SELECT ID FROM ACCOMMODATION \
-            WHERE ST_Distance_Sphere(COORDINATE, :point) <= 100000000 \
-            AND MAX_GUEST_COUNT >= :maxGuestCount \
-            AND MAX_INFANT_COUNT >= :maxInfantCount""")
-                .getResultList();
-    }
 }
