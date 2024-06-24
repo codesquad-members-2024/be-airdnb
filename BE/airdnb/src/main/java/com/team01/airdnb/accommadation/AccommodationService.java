@@ -8,6 +8,7 @@ import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import com.team01.airdnb.amenity.AmenityService;
 import com.team01.airdnb.comment.CommentService;
 import com.team01.airdnb.image.ImageService;
+import com.team01.airdnb.user.Role;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
 import java.util.List;
@@ -46,6 +47,10 @@ public class AccommodationService {
   public void register(AccommodationRegisterRequest accommodationRegisterRequest) {
     User user = userService.FindUserById(accommodationRegisterRequest.userId());
     Accommodation accommodation = accommodationRegisterRequest.toAccommodationEntity(user);
+    if(user.getRole() == Role.USER) {
+      user.setRole(Role.HOST);  //숙소를 등록할때 유저의 역할을 유저에서 호스트로 변경 합니다.
+      userService.save(user);
+    }
     accommodationRepository.save(accommodation);
   }
 
@@ -113,5 +118,10 @@ public class AccommodationService {
         accommodationFilterRequest.childrenCount(),
         accommodationFilterRequest.infantsCount(),
         accommodationFilterRequest.location());
+  }
+
+  @Transactional(readOnly = true)
+  public List<Long> getAccommodationIdsByHostId(Long hostId) {
+    return accommodationRepository.findAllAccommodationIdsByHostId(hostId);
   }
 }
