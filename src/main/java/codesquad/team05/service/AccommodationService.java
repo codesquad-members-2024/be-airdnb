@@ -66,7 +66,7 @@ public class AccommodationService {
                 updateServiceRequest.getBedCount(),
                 updateServiceRequest.getDescription(),
                 updateServiceRequest.getAmenity(),
-                null
+                updateServiceRequest.getAccommodationType()
         );
         List<String> pictureUrls = updateServiceRequest.getFiles().stream()
                 .map(url -> uploadFileToS3(url, accommodationId))

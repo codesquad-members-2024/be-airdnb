@@ -42,6 +42,7 @@ public class Accommodation {
     private boolean isOnSale;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host_id")
     private Host host;
 
     @Enumerated(EnumType.STRING)

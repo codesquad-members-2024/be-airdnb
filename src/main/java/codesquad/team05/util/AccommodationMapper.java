@@ -22,7 +22,8 @@ public class AccommodationMapper {
                 saveRequest.getRoomCount(),
                 saveRequest.getBedCount(),
                 saveRequest.getDescription(),
-                saveRequest.getAmenity()
+                saveRequest.getAmenity(),
+                saveRequest.getAccommodationType()
         );
         files.forEach(
                 file -> accommodationSaveServiceRequest.getFiles().add(file)
@@ -31,7 +32,7 @@ public class AccommodationMapper {
     }
 
     public static AccommodationUpdateServiceRequest toUpdateService(AccommodationUpdate updateRequest, List<MultipartFile> files) {
-        return new AccommodationUpdateServiceRequest(
+        AccommodationUpdateServiceRequest accommodationUpdateServiceRequest = new AccommodationUpdateServiceRequest(
                 updateRequest.getName(),
                 updateRequest.getPrice(),
                 updateRequest.getAddress(),
@@ -40,8 +41,12 @@ public class AccommodationMapper {
                 updateRequest.getBedCount(),
                 updateRequest.getDescription(),
                 updateRequest.getAmenity(),
-                files
+                updateRequest.getAccommodationType()
         );
+        files.forEach(
+                file -> accommodationUpdateServiceRequest.getFiles().add(file)
+        );
+        return accommodationUpdateServiceRequest;
     }
 
     public static Accommodation toEntity(AccommodationSaveServiceRequest serviceRequest) {
@@ -53,7 +58,8 @@ public class AccommodationMapper {
                 serviceRequest.getRoomCount(),
                 serviceRequest.getBedCount(),
                 serviceRequest.getDescription(),
-                serviceRequest.getAmenity()
+                serviceRequest.getAmenity(),
+                serviceRequest.getAccommodationType()
         );
     }
 
@@ -68,6 +74,7 @@ public class AccommodationMapper {
                 accommodation.getBedCount(),
                 accommodation.getDescription(),
                 accommodation.getAmenity(),
+                accommodation.getAccommodationType(),
                 accommodation.getPictures().stream()
                         .map(picture -> new PictureDto(picture.getUrl()))
                         .toList()

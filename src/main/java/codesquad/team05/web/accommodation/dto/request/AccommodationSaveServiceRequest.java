@@ -1,5 +1,6 @@
 package codesquad.team05.web.accommodation.dto.request;
 
+import codesquad.team05.domain.accommodation.AccommodationType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +21,5 @@ public class AccommodationSaveServiceRequest {
     private final String description;
     private final String amenity;
     private final List<MultipartFile> files = new ArrayList<>();
+    private final AccommodationType accommodationType;
 }
