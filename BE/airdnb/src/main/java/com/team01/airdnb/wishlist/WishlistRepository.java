@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
 
-  @Query("SELECT w FROM Wishlist w WHERE w.user.id = :userId")
+  @Query("SELECT w FROM Wishlist w WHERE w.user.id = :userId ")
   List<WishlistListResponse> findWishlistByUserId(@Param("userId") String userId);
 
 }

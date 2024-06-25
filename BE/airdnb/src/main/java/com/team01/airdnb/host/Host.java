@@ -22,7 +22,7 @@ import lombok.Setter;
 @Table(name = "hosts")
 public class Host {
   @Id
-  private String  id;
+  private Long  id;
 
   @NotBlank(message = "계좌번호를 입력하세요")
   @Size(min = 10, max = 14, message = "계좌번호 10~14자 사이를 입력해주세요")
