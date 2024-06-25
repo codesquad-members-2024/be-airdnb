@@ -11,6 +11,4 @@ public interface AccoRepositoryCustom {
     AccoContentResponse getAccoContentOf(Long accoId);
 
     List<Accommodation> findAllByHostId(Long hostId);
-
-    List<Long> findIdsByCoordAndHumanCount(Point point, Integer maxGuestCount, Integer maxInfantCount);
 }

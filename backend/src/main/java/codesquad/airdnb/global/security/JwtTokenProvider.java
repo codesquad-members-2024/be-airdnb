@@ -85,6 +85,17 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String getClaimFromToken(String token, String keyString) {
+        Claims claims = Jwts.parser()
+                .verifyWith(jwtSecretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.get(keyString, String.class);
+    }
+
+
     public Claims validateToken(String token) throws SignatureException {
         if (token == null) {
             throw new IllegalStateException();
