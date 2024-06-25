@@ -35,8 +35,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, attributes);
 
-        System.out.println(oAuth2UserInfo.email() + ", " + oAuth2UserInfo.name() + " ," + oAuth2UserInfo.profile());
-
         getOrSave(oAuth2UserInfo);
 
         return new DefaultOAuth2User(null, attributes, userNameAttributeName);  // ROLE 미설정

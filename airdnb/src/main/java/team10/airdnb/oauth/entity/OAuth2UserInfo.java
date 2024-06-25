@@ -33,13 +33,14 @@ public record OAuth2UserInfo(
     }
 
     private static OAuth2UserInfo ofKakao(Map<String, Object> attributes) {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_acount");
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = (Map<String, Object>) account.get("profile");
 
         return OAuth2UserInfo.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) account.get("email"))
                 .profile((String) profile.get("profile_image_url"))
+                .memberType(MemberType.KAKAO)
                 .build();
     }
 
