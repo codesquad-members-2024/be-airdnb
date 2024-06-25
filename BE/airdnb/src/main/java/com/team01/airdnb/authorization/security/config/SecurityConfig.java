@@ -36,7 +36,7 @@ public class SecurityConfig {
 
         corsConfiguration.setAllowedOriginPatterns(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -79,7 +79,8 @@ public class SecurityConfig {
         // 역할 기반 URL 접근 제어 설정
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") // /admin/** URL은 ADMIN 역할만 접근 가능
+                //.requestMatchers("/api/host/**").hasAnyRole("HOST","ADMIN")
+                //.requestMatchers("/api/admin/**").hasRole("ADMIN") // /admin/** URL은 ADMIN 역할만 접근 가능
                 .anyRequest().permitAll();                    // 그 외 모든 요청은 모두 허용
         });
 

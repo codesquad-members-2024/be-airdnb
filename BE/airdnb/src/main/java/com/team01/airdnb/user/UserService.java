@@ -2,6 +2,9 @@ package com.team01.airdnb.user;
 
 import com.team01.airdnb.comment.CommentRepository;
 import com.team01.airdnb.user.dto.UserHostResponse;
+import com.team01.airdnb.user.dto.UserShowResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +38,30 @@ public class UserService {
 
   public Optional<User> findByEmail(String email){
     return userRepository.findByEmail(email);
+  }
+  public Optional<User> findBySocialId(String socialId){return userRepository.findBySocialId(socialId);}
+  public User save(User user){return userRepository.save(user);}
+
+  public List<UserShowResponse> findAllForAdmin(){
+    List<User> users = userRepository.findAll();
+    List<UserShowResponse> userShowResponses = new ArrayList<>();
+
+    for(User user : users){
+      userShowResponses.add(UserShowResponse.builder()
+          .id(user.getId())
+          .username(user.getUsername())
+          .email(user.getEmail())
+          .profile(user.getProfile())
+          .role(user.getRole())
+          .socialType(user.getSocialType())
+          .socialId(user.getSocialId())
+          .build());
+    }
+    return userShowResponses;
+  }
+
+  public void delete(Long userId){
+    User user = FindUserById(userId);
+    userRepository.delete(user);
   }
 }
