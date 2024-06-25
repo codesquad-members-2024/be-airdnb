@@ -56,6 +56,7 @@
         const data = await response.json();
         alert("예약이 완료되었습니다." + " 예약자: " + data.memberInformation.memberName + " 숙소 이름: " + data.accommodationInformation.accommodationName);
         closePopup(); // 예약이 완료되면 팝업 창을 닫음
+        window.location.href ="/trips";
       }
       else {
         const errorData = await response.json();
