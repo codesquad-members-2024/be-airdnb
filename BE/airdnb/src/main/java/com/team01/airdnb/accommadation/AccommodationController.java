@@ -34,8 +34,8 @@ public class AccommodationController {
   }
 
   //숙소 상세보기
-  @GetMapping("/{id}")
-  public AccommodationDetailResponse showAccommodation(@PathVariable Long id) {
+  @GetMapping("/{accommodationId}")
+  public AccommodationDetailResponse showAccommodation(@PathVariable("accommodationId") Long id) {
     return accommodationService.show(id);
   }
 

@@ -21,15 +21,15 @@ public class AccommodationHostController {
   }
 
   //숙소 수정
-  @PutMapping("/{id}")
-  public void updateAccommodation(@PathVariable Long id,
+  @PutMapping("/{accommodationId}")
+  public void updateAccommodation(@PathVariable("accommodationId") Long id,
       @RequestBody AccommodationUpdateRequest accommodationUpdateRequest) {
     accommodationService.update(id, accommodationUpdateRequest);
   }
 
   //숙소 삭제
-  @DeleteMapping("/{id}")
-  public void deleteAccommodation(@PathVariable Long id) {
+  @DeleteMapping("/{accommodationId}")
+  public void deleteAccommodation(@PathVariable("accommodationId") Long id) {
     accommodationService.delete(id);
   }
 }
