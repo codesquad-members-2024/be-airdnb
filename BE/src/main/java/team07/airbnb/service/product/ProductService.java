@@ -191,8 +191,7 @@ public class ProductService {
         Period between = Period.between(startDate, endDate);
         for (int i = 0; i <= between.getDays(); i++) {
             LocalDate nowDate = startDate.plusDays(i);
-            int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
-            accommodation.addProduct(nowDate, price);
+            accommodation.addProduct(nowDate, requestPrice);
         }
     }
 
