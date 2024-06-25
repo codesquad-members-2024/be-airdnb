@@ -66,9 +66,6 @@ public class ProductService {
         Stream<List<ProductEntity>> accommodations = nearbyAccommodations.stream()
                 .map(AccommodationEntity::getOpenProducts);
 
-
-
-
         if (filter.checkInDate() != null && filter.checkOutDate() != null) accommodations =
                 accommodations.
                         filter(openProducts -> isAvailableInDateRange(
@@ -86,7 +83,7 @@ public class ProductService {
     private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
         if (checkInDate != null && checkOutDate != null) {
             openProducts = openProducts.stream()
-                    .filter(product -> !product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
+                    .filter(product -> product.isDateInRange(checkInDate, checkInDate))
                     .toList();
         }
         return (int) openProducts.stream()
