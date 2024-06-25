@@ -65,7 +65,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                         accommodation.address.district.as("district"),
                         accommodation.address.neighborhood.as("neighborhood"),
                         accommodation.address.streetName.as("streetName"),
-                        accommodation.address.detailedAddress.as("detailedAddress")
+                        accommodation.address.detailedAddress.as("detailedAddress"),
+                        accommodation.memberId
                 ))
                 .from(reservation)
                 .join(reservation.accommodation, accommodation)

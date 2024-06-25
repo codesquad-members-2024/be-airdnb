@@ -51,5 +51,5 @@ public class Reservation {
     private BigDecimal totalPrice;
 
     @Column(name = "deleted")
-    private Boolean deleted;
+    private boolean deleted;
 }

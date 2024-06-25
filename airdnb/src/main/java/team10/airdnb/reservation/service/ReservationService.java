@@ -77,7 +77,7 @@ public class ReservationService {
         return ReservationSummaryResponse.from(reservation);
     }
 
-    private String getToken(String authorizationHeader){
+    private String getToken(String authorizationHeader) {
         return authorizationHeader.split(" ")[1];
     }
 
@@ -108,7 +108,13 @@ public class ReservationService {
                 .orElseThrow(AccommodationIdNotFoundException::new);
     }
 
-    public List<ReservationAccommodationDto> getReservationAccommodationDTOsByMemberId(String memberId) {
+    public List<ReservationAccommodationDto> getReservationAccommodationDTOsByMemberId(String authorizationHeader) {
+        String token = getToken(authorizationHeader);
+
+        tokenManager.validateToken(token);
+
+        String memberId = (String) tokenManager.getTokenClaims(token).get(("memberId"));
+
         return reservationRepository.findReservationAccommodationDTOsByMemberId(memberId);
     }
 
