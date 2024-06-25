@@ -1,17 +1,18 @@
 package com.airbnb.domain.booking.entity;
 
-import static com.airbnb.domain.booking.entity.BookingStatus.*;
-import static com.airbnb.domain.payment.entity.PaymentStatus.*;
-import static com.airbnb.domain.payment.entity.PaymentStatus.COMPLETED;
-
 import com.airbnb.domain.accommodation.entity.Accommodation;
 import com.airbnb.domain.common.BaseTime;
+import com.airbnb.domain.common.BookingStatus;
 import com.airbnb.domain.member.entity.Member;
 import com.airbnb.domain.payment.entity.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+
+import static com.airbnb.domain.common.BookingStatus.*;
+import static com.airbnb.domain.common.PaymentStatus.COMPLETED;
+import static com.airbnb.domain.common.PaymentStatus.WITHDRAWN;
 
 @Entity
 @Getter
@@ -84,11 +85,11 @@ public class Booking extends BaseTime {
         this.payment.changeStatus(WITHDRAWN);
     }
 
-    public boolean isGuest(String guestKey) {
-        return this.guest.isKey(guestKey);
+    public boolean isGuest(Long guestId) {
+        return this.guest.hasEqualMemberId(guestId);
     }
 
-    public boolean isHost(String hostEmail) {
-        return this.accommodation.isHost(hostEmail);
+    public boolean isHost(Long hostId) {
+        return this.accommodation.isHost(hostId);
     }
 }

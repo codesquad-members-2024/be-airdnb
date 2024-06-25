@@ -2,7 +2,7 @@ package com.airbnb.domain.booking.dto.request;
 
 import com.airbnb.domain.accommodation.entity.Accommodation;
 import com.airbnb.domain.booking.entity.Booking;
-import com.airbnb.domain.booking.entity.BookingStatus;
+import com.airbnb.domain.common.BookingStatus;
 import com.airbnb.domain.member.entity.Member;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -24,8 +24,9 @@ public class BookingCreateRequest {
     @NotNull
     private LocalDate checkOut;
 
+    @NotNull
     @Min(1)
-    private int adults;
+    private Integer adults;
     private int children;
 
     @Max(5)
@@ -45,5 +46,17 @@ public class BookingCreateRequest {
             .infants(infants)
             .status(BookingStatus.REQUESTED)
             .build();
+    }
+
+    public boolean isUnderMaxGuests(int maxGuests) {
+        return maxGuests >= adults + children;
+    }
+
+    public boolean isCheckInAfterToday() {
+        return checkIn.isAfter(LocalDate.now());
+    }
+
+    public boolean isCheckOutAfterCheckIn() {
+        return checkOut.isAfter(checkIn);
     }
 }
