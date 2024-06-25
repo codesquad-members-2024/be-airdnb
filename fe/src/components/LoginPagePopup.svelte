@@ -66,6 +66,8 @@
   const handleSocialLogin = (provider) => {
     if (provider === '깃허브') {
       window.location.href = 'api/oauth2/authorization/github';
+    } else if (provider === '카카오') {
+      window.location.href = 'api/oauth2/authorization/kakao';
     } else {
       console.log(`${provider} ${isLoginMode ? '로그인' : '회원가입'}`);
     }
