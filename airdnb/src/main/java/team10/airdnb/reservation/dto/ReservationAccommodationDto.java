@@ -19,7 +19,7 @@ public record ReservationAccommodationDto(
         String neighborhood,
         String streetName,
         String detailedAddress,
-        String memberName
+        String memberId
 ) {
 
 }
