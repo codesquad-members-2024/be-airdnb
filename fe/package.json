@@ -26,6 +26,7 @@
     "@threlte/core": "^7.3.0",
     "date-fns": "^3.6.0",
     "date-picker-svelte": "^2.13.0",
+    "svelte-routing": "^2.13.0",
     "three": "^0.165.0",
     "tinro": "^0.6.12"
   }

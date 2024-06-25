@@ -32,7 +32,6 @@
     user.profileImage = "/assets/profile.png"; // 기본 프로필 이미지로 되돌리기
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    
   }
 
   const toggleLoginModal = () => {
@@ -87,8 +86,8 @@
         {:else}
           <!-- User is logged in -->
           <div class="px-4 py-2 text-sm text-black font-bold">안녕하세요, {user.username}님</div>
-          <button on:click={closePopup} class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">예약 취소</button>
-          <button on:click={closePopup} class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">위시리스트</button>
+          <button on:click={() => { closePopup(); window.location.href = '/trips'; }} class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">여행</button>
+          <button on:click={closePopup} class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">채팅</button>
           <button on:click={() => { closePopup(); logout(); }} class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">로그아웃</button>
         {/if}
       </div>
