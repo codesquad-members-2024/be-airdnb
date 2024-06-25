@@ -6,8 +6,6 @@ import team10.airdnb.accommodation.entity.embedded.Address;
 import team10.airdnb.accommodation.entity.embedded.Coordinate;
 import team10.airdnb.accommodation.entity.embedded.RoomInfo;
 
-import java.math.BigDecimal;
-
 public record SearchAccommodationDto(
         long accommodationId,
         String accommodationName,
@@ -16,7 +14,7 @@ public record SearchAccommodationDto(
         RoomInfo roomInfo,
         Address address,
         Coordinate coordinate,
-        Long maxCapacity
+        Integer maxCapacity
 ) {
     public static SearchAccommodationDto from(Accommodation accommodation) {
         return new SearchAccommodationDto(

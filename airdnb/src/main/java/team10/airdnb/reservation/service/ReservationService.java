@@ -15,6 +15,7 @@ import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.reservation.controller.request.ReservationCreateRequest;
 import team10.airdnb.reservation.controller.response.ReservationSummaryResponse;
 import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
+import team10.airdnb.reservation.dto.ReservationAccommodationDto;
 import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
 import team10.airdnb.reservation.exception.ReservationUnavailableException;
@@ -107,5 +108,8 @@ public class ReservationService {
                 .orElseThrow(AccommodationIdNotFoundException::new);
     }
 
+    public List<ReservationAccommodationDto> getReservationAccommodationDTOsByMemberId(String memberId) {
+        return reservationRepository.findReservationAccommodationDTOsByMemberId(memberId);
+    }
 
 }

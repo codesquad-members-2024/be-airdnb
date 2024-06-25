@@ -1,13 +1,7 @@
 package team10.airdnb.reservation.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +11,6 @@ import team10.airdnb.member.entity.Member;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "reservation")
@@ -30,11 +23,11 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 
@@ -53,20 +46,4 @@ public class Reservation {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    // 숙박 총 비용을 계산
-    public static BigDecimal calculateTotalPrice(Accommodation accommodation, LocalDate checkInDate, LocalDate checkOutDate) {
-        // 두 날짜 사이의 일 수를 계산
-        BigDecimal numberOfDays = BigDecimal.valueOf(ChronoUnit.DAYS.between(checkInDate, checkOutDate));
-
-        BigDecimal dayRate = accommodation.getAccommodationFee().getDayRate();
-
-        BigDecimal cleaningFee = accommodation.getAccommodationFee().getCleaningFee();
-
-        // 요금 계산
-        BigDecimal totalDayRate = dayRate.multiply(numberOfDays);
-
-        BigDecimal totalPrice = totalDayRate.add(cleaningFee);
-
-        return totalPrice;
-    }
 }
