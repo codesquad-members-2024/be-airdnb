@@ -6,6 +6,11 @@
   export let totalGuests = 0;
   export let length = 0;
 
+  let API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  if (API_BASE_URL.endsWith('/')) {
+    API_BASE_URL = API_BASE_URL.slice(0, -1);
+  }
+
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -46,7 +51,7 @@
     };
 
     try {
-      const response = await fetch('api/reservation', requestOptions);
+      const response = await fetch(`${API_BASE_URL}/reservation`, requestOptions);
       if (response.ok) {
         const data = await response.json();
         alert("예약이 완료되었습니다." + " 예약자: " + data.memberInformation.memberName + " 숙소 이름: " + data.accommodationInformation.accommodationName);

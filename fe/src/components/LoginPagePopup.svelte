@@ -9,9 +9,19 @@
   let isLoginMode = true;
   const dispatch = createEventDispatcher();
 
+  let API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  if (API_BASE_URL.endsWith('/')) {
+    API_BASE_URL = API_BASE_URL.slice(0, -1);
+  }
+
   const handleLoginOrSignup = async () => {
-    const endpoint = isLoginMode ? 'api/login' : '/api/register';
-    const body = JSON.stringify({ email, password, name: !isLoginMode ? name : undefined });
+    const endpoint = isLoginMode ? `${API_BASE_URL}/login` : `${API_BASE_URL}/register`;
+
+    const body = JSON.stringify({
+      email,
+      password,
+      ...(isLoginMode ? {} : { name })
+    });
 
     try {
       const response = await fetch(`${endpoint}`, {
@@ -64,13 +74,8 @@
   };
 
   const handleSocialLogin = (provider) => {
-    if (provider === '깃허브') {
-      window.location.href = 'api/oauth2/authorization/github';
-    } else if (provider === '카카오') {
-      window.location.href = 'api/oauth2/authorization/kakao';
-    } else {
-      console.log(`${provider} ${isLoginMode ? '로그인' : '회원가입'}`);
-    }
+    const endpoint = `${API_BASE_URL}/oauth2/authorization/${provider === '깃허브' ? 'github' : 'kakao'}`;
+    window.location.href = endpoint;
   };
 
   const toggleMode = () => {
