@@ -61,7 +61,8 @@ class AccommodationTest {
                 3,
                 "집 좋음",
                 "없음",
-                HOTEL
+                HOTEL,
+                new ArrayList<>()
         );
         Long id = accommodationService.register(AccommodationMapper.toSaveService(accommodationSave, new ArrayList<>()));
         AccommodationResponse accommodationResponse = accommodationService.getAccommodationById(id);
@@ -92,7 +93,8 @@ class AccommodationTest {
                 3,
                 "집 좋음",
                 "없음",
-                HOTEL
+                HOTEL,
+                new ArrayList<>()
         );
 
         Long id = accommodationService.register(AccommodationMapper.toSaveService(accommodationSave, new ArrayList<>()));
@@ -121,7 +123,8 @@ class AccommodationTest {
                 3,
                 "집 좋음",
                 "없음",
-                HOTEL
+                HOTEL,
+                new ArrayList<>()
         );
 
         Long id = accommodationService.register(AccommodationMapper.toSaveService(accommodationSave, new ArrayList<>()));
