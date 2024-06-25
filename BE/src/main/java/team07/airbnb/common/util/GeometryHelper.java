@@ -15,4 +15,8 @@ public class GeometryHelper {
 
         return center;
     }
+
+    public static double toKilometer(double distance) {
+        return distance * 1000;
+    }
 }
