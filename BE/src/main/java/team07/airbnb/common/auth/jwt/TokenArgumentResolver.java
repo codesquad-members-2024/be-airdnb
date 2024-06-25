@@ -25,7 +25,7 @@ public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
 
-            return UserEntity.ofToken((TokenUserInfo) authentication.getPrincipal());
+            return ((TokenUserInfo) authentication.getPrincipal()).toUserEntity();
         }
         return null;
     }

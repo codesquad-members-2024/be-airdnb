@@ -16,6 +16,7 @@ import team07.airbnb.repository.ProductRepository;
 import team07.airbnb.service.accommodation.AccommodationService;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class ProductService {
         List<AccommodationEntity> nearbyAccommodations = accommodationService.findNearbyAccommodations(
                 filter.longitude(),
                 filter.latitude(),
-                filter.distance() * 1000);
+                filter.distance());
 
         Stream<List<ProductEntity>> filteredStream = getFilteredStream(filter, nearbyAccommodations);
 
@@ -43,6 +44,8 @@ public class ProductService {
                                 getAveragePriceForDateRange(openProducts, filter.checkInDate(), filter.checkOutDate())
                         )
                 ).toList();
+
+        System.out.println(accommodations);
 
         if (filter.minPrice() != null){
             accommodations = accommodations.stream()
@@ -83,13 +86,13 @@ public class ProductService {
     private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
         if (checkInDate != null && checkOutDate != null) {
             openProducts = openProducts.stream()
-                    .filter(product -> product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
+                    .filter(product -> !product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
                     .toList();
         }
         return (int) openProducts.stream()
                 .mapToInt(ProductEntity::getPrice)
                 .average()
-                .getAsDouble();
+                .orElseGet(()->0);
     }
 
 
@@ -184,4 +187,16 @@ public class ProductService {
         int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
         accommodation.addProduct(date, price);
     }
+
+    public void createRangeProduct(Long accommodationId, LocalDate startDate, LocalDate endDate, Integer requestPrice) {
+        AccommodationEntity accommodation = accommodationService.findById(accommodationId);
+
+        Period between = Period.between(startDate, endDate);
+        for (int i = 0; i <= between.getDays(); i++) {
+            LocalDate nowDate = startDate.plusDays(i);
+            int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
+            accommodation.addProduct(nowDate, price);
+        }
+    }
+
 }

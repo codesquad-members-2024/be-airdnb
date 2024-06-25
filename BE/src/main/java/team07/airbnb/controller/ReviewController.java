@@ -1,6 +1,7 @@
 package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,9 @@ public class ReviewController {
     @Authenticated(USER)
     @PostMapping("/{bookingId}")
     @ResponseStatus(OK)
-    public void postReview(@PathVariable Long bookingId, @RequestBody ReviewPostRequest request, UserEntity user) {
+    public void postReview(@PathVariable Long bookingId,
+                           @RequestBody ReviewPostRequest request,
+                           @Parameter(hidden = true)UserEntity user) {
         reviewService.postReview(user.getId(), bookingId, request);
     }
 
@@ -59,7 +62,9 @@ public class ReviewController {
     @Authenticated(HOST)
     @PostMapping("/{reviewId}/reply")
     @ResponseStatus(OK)
-    public void replyToReview(@PathVariable Long reviewId, @RequestBody String content, UserEntity user) {
+    public void replyToReview(@PathVariable Long reviewId,
+                              @RequestBody String content,
+                              @Parameter(hidden = true) UserEntity user) {
         reviewService.addReplyTo(reviewId, content, user);
     }
 
@@ -70,7 +75,7 @@ public class ReviewController {
     @ResponseStatus(OK)
     public void updateReview(@PathVariable Long reviewId,
                              @RequestBody @NotBlank String content,
-                             TokenUserInfo user) {
-        reviewService.updateReviewContent(reviewId, content, user.id());
+                             @Parameter(hidden = true) UserEntity user) {
+        reviewService.updateReviewContent(reviewId, content, user.getId());
     }
 }

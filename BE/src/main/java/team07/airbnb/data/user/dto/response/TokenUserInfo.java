@@ -12,4 +12,13 @@ public record TokenUserInfo(Long id, String name, String profileImg, Role role) 
     public String stringRole() {
         return this.role.getKey();
     }
+
+    public UserEntity toUserEntity() {
+        return new UserEntity(
+                this.id,
+                this.name,
+                this.profileImg,
+                this.role
+        );
+    }
 }

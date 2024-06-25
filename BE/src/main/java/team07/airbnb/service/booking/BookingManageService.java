@@ -3,22 +3,18 @@ package team07.airbnb.service.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team07.airbnb.data.booking.dto.PriceInfo;
+import team07.airbnb.data.booking.dto.response.BookingConfirmedResponse;
 import team07.airbnb.data.booking.dto.request.CreateBookingRequest;
 import team07.airbnb.data.booking.dto.response.BookingCreateResponse;
-import team07.airbnb.data.booking.dto.transfer.BookingInfoForPriceInfo;
 import team07.airbnb.entity.BookingEntity;
 import team07.airbnb.entity.PaymentEntity;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.exception.auth.UnAuthorizedException;
 import team07.airbnb.exception.bad_request.IllegalBookingStatusException;
-import team07.airbnb.exception.bad_request.InvalidBookingRequestException;
 import team07.airbnb.repository.BookingRepository;
 import team07.airbnb.service.accommodation.AccommodationService;
 import team07.airbnb.service.payment.PaymentService;
 import team07.airbnb.service.product.ProductService;
-
-import java.time.LocalDate;
 
 import static team07.airbnb.data.booking.enums.BookingStatus.CONFIRM;
 import static team07.airbnb.data.booking.enums.BookingStatus.REQUESTED;
@@ -83,7 +79,7 @@ public class BookingManageService {
     }
 
 
-    public Long confirmBooking(Long bookingId, UserEntity requestedHost) {
+    public BookingConfirmedResponse confirmBooking(Long bookingId, UserEntity requestedHost) {
         BookingEntity booking = bookingInquiryService.findByBookingId(bookingId);
 
         if (!booking.getHost().equals(requestedHost)) {
@@ -94,10 +90,8 @@ public class BookingManageService {
             throw new IllegalBookingStatusException(booking.getStatus());
         }
 
-
         booking.confirmBooking();
-
-        return bookingRepository.save(booking).getId();
+        return BookingConfirmedResponse.of(bookingRepository.save(booking));
     }
 
     public Integer cancelBooking(Long bookingId, UserEntity booker) {

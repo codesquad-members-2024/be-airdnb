@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import team07.airbnb.data.accommodation.dto.request.AccommodationCreateRequest;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
@@ -23,7 +24,7 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Profile("test")
+@ActiveProfiles("test")
 public class FavoriteTest {
 
     @Autowired

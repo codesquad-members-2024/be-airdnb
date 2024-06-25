@@ -1,6 +1,7 @@
 package team07.airbnb.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import team07.airbnb.common.auth.aop.Authenticated;
 import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.product.dto.request.ProductCreateRequest;
+import team07.airbnb.data.product.dto.request.ProductRangeCreateRequest;
 import team07.airbnb.data.product.dto.response.ProductListResponse;
 import team07.airbnb.entity.UserEntity;
 import team07.airbnb.service.product.ProductService;
@@ -48,11 +50,21 @@ public class ProductController {
     }
 
     @Tag(name = "Host")
+    @Operation(summary = "상품 생성")
+    @PostMapping("/range")
+    @ResponseStatus(CREATED)
+    public void createProductRange(@RequestBody ProductRangeCreateRequest request) {
+        productService.createRangeProduct(request.accommodationId(), request.startDate(), request.endDate(), request.price());
+    }
+
+
+    @Tag(name = "Host")
     @Operation(summary = "상품 닫기")
     @PostMapping("/close/{productId}")
     @ResponseStatus(OK)
     @Authenticated(HOST)
-    public void closeProduct(@PathVariable @NotNull Long productId, UserEntity hostInfo) {
+    public void closeProduct(@PathVariable @NotNull Long productId,
+                             @Parameter(hidden = true) UserEntity hostInfo) {
 
         productService.closeProduct(productId, hostInfo.getId());
     }
@@ -62,7 +74,7 @@ public class ProductController {
     @Authenticated(HOST)
     public void updatePrice(@PathVariable @NotNull Long productId,
                             @RequestParam @NotNull @Size Integer price,
-                            UserEntity hostInfo) {
+                            @Parameter(hidden = true) UserEntity hostInfo) {
 
         productService.updatePrice(productId, price, hostInfo.getId());
     }

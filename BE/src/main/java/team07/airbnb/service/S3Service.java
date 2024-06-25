@@ -60,7 +60,7 @@ public class S3Service {
     }
 
     private String createFileId() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().substring(0,6);
     }
 
     private String createPath(String prefix, String fileName) {
