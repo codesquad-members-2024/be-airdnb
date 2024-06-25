@@ -52,6 +52,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .select(Projections.constructor(
                         ReservationAccommodationDto.class,
                         reservation.id.as("reservationId"),
+                        reservation.isConfirmed,
+                        reservation.deleted,
                         reservation.checkInDate,
                         reservation.checkOutDate,
                         reservation.capacity,

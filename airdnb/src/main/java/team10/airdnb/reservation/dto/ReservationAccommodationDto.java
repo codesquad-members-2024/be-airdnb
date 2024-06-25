@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 public record ReservationAccommodationDto(
         Long reservationId,
+        Boolean deleted,
+        Boolean isConfirmed,
         LocalDate checkInDate,
         LocalDate checkOutDate,
         Integer capacity,

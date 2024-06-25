@@ -8,6 +8,7 @@ CREATE TABLE reservation
     capacity         BIGINT,
     is_confirmed     BOOLEAN,
     total_price      BIGINT,
+    deleted          BOOLEAN DEFAULT FALSE,
     CONSTRAINT fk_reservation_member FOREIGN KEY (member_id) REFERENCES member (id),
     CONSTRAINT fk_reservation_accommodation FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
 );
