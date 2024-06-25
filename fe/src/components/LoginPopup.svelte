@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { writable } from "svelte/store";
   import LoginPagePopup from './LoginPagePopup.svelte';
 
   let isOpen = false;
@@ -57,9 +58,16 @@
 
         const decodedToken = JSON.parse(jsonPayload);
 
-        login(decodedToken.memberId, decodedToken.memberName, decodedToken.memberProfile);
+        // Check if the token is expired
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (decodedToken.exp < currentTime) {
+          logout();
+        } else {
+          login(decodedToken.memberId, decodedToken.memberName, decodedToken.memberProfile);
+        }
       } catch (error) {
         console.error('Error decoding token on mount:', error);
+        logout(); // 로그아웃 처리
       }
     }
   });
