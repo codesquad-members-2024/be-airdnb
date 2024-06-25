@@ -43,13 +43,13 @@ public class Accommodation {
     private String name;
 
     @Column(name = "max_capacity", nullable = false)
-    private Long maxCapacity;
+    private Integer maxCapacity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_type", nullable = true)
     private AccommodationType accommodationType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_room_type", nullable = true)
     private AccommodationRoomType accommodationRoomType;
 

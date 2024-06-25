@@ -27,7 +27,7 @@ public record AccommodationCreateRequest(
         String name,
 
         @Min(1) @Max(16)
-        Long maxCapacity,
+        Integer maxCapacity,
 
         Long accommodationType,
 
