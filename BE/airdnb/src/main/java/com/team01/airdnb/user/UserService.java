@@ -42,7 +42,7 @@ public class UserService {
   public Optional<User> findBySocialId(String socialId){return userRepository.findBySocialId(socialId);}
   public User save(User user){return userRepository.save(user);}
 
-  public List<UserShowResponse> findAll(){
+  public List<UserShowResponse> findAllForAdmin(){
     List<User> users = userRepository.findAll();
     List<UserShowResponse> userShowResponses = new ArrayList<>();
 
@@ -58,5 +58,10 @@ public class UserService {
           .build());
     }
     return userShowResponses;
+  }
+
+  public void delete(Long userId){
+    User user = FindUserById(userId);
+    userRepository.delete(user);
   }
 }

@@ -75,6 +75,10 @@ public class ReservationService {
 
     reservation.update(reservationRequest);
   }
+  public void delete(Long reservationId) {
+    Reservation reservation = findById(reservationId);
+    reservationRepository.delete(reservation);
+  }
 
   @Transactional(readOnly = true)
   public ReservationShowResponse showReservation(Long reservationId) {
@@ -99,7 +103,7 @@ public class ReservationService {
   }
 
   @Transactional(readOnly = true)
-  public List<ReservationShowResponse> findAll (){
+  public List<ReservationShowResponse> findAllForAdmin (){
     List<Reservation> reservations = reservationRepository.findAll();
     List<ReservationShowResponse> reservationShowResponses = new ArrayList<>();
 

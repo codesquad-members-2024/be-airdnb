@@ -5,6 +5,7 @@ import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationHostResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
+import com.team01.airdnb.accommadation.dto.AccommodationShowResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import com.team01.airdnb.amenity.AmenityService;
 import com.team01.airdnb.comment.CommentService;
@@ -131,5 +132,30 @@ public class AccommodationService {
       accommodationHostResponses.add(new AccommodationHostResponse(accommodation.getId(),accommodation.getTitle()));
     }
     return accommodationHostResponses;
+  }
+
+  public List<AccommodationShowResponse> findAllForAdmin() {
+    List<Accommodation> accommodations = accommodationRepository.findAll();
+    List<AccommodationShowResponse> accommodationShowResponses = new ArrayList<>();
+
+    for (Accommodation accommodation:accommodations){
+      accommodationShowResponses.add(AccommodationShowResponse.builder()
+          .id(accommodation.getId())
+          .title(accommodation.getTitle())
+          .content(accommodation.getContent())
+          .price(accommodation.getPrice())
+          .discountRate(accommodation.getDiscountRate())
+          .address(accommodation.getAddress())
+          .latitude(accommodation.getLatitude())
+          .longitude(accommodation.getLongitude())
+          .commentsNum(accommodation.getCommentsNum())
+          .user(accommodation.getUser())
+          .comments(accommodation.getComments())
+          .images(accommodation.getImages())
+          .reservations(accommodation.getReservations())
+          .amenity(accommodation.getAmenity())
+          .build());
+    }
+    return accommodationShowResponses;
   }
 }
