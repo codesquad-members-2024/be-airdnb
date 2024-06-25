@@ -2,6 +2,7 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
+import com.team01.airdnb.accommadation.dto.AccommodationHostResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
@@ -11,6 +12,7 @@ import com.team01.airdnb.image.ImageService;
 import com.team01.airdnb.user.Role;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
@@ -121,7 +123,13 @@ public class AccommodationService {
   }
 
   @Transactional(readOnly = true)
-  public List<Long> getAccommodationIdsByHostId(Long hostId) {
-    return accommodationRepository.findAllAccommodationIdsByHostId(hostId);
+  public List<AccommodationHostResponse> getAccommodationByUserId(Long userId) {
+    List<Accommodation> accommodations = accommodationRepository.findAllByUserId(userId);
+    List<AccommodationHostResponse> accommodationHostResponses = new ArrayList<>();
+
+    for (Accommodation accommodation:accommodations){
+      accommodationHostResponses.add(new AccommodationHostResponse(accommodation.getId(),accommodation.getTitle()));
+    }
+    return accommodationHostResponses;
   }
 }
