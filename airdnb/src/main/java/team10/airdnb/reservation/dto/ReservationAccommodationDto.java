@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 public record ReservationAccommodationDto(
         Long reservationId,
+        Boolean isConfirmed,
+        Boolean deleted,
         LocalDate checkInDate,
         LocalDate checkOutDate,
         Integer capacity,
@@ -16,7 +18,8 @@ public record ReservationAccommodationDto(
         String district,
         String neighborhood,
         String streetName,
-        String detailedAddress
+        String detailedAddress,
+        String memberName
 ) {
 
 }

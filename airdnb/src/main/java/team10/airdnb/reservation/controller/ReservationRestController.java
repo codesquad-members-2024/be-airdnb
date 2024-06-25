@@ -84,9 +84,10 @@ public class ReservationRestController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/reservation/member/{memberId}")
-    public ResponseEntity<List<ReservationAccommodationDto>> getReservationAccommodationDTOsByMemberId(@PathVariable String memberId) {
-        List<ReservationAccommodationDto> reservations = reservationService.getReservationAccommodationDTOsByMemberId(memberId);
+    @GetMapping("/reservation/member")
+    public ResponseEntity<List<ReservationAccommodationDto>> getReservationAccommodationDTOsByMemberId(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+
+        List<ReservationAccommodationDto> reservations = reservationService.getReservationAccommodationDTOsByMemberId(authorizationHeader);
         return ResponseEntity.ok(reservations);
     }
 

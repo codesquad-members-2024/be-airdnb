@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.member.entity.Member;
 
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE reservation SET deleted = true, is_confirmed = true WHERE id = ?")
+
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +50,6 @@ public class Reservation {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @Column(name = "deleted")
+    private boolean deleted;
 }
