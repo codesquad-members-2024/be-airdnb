@@ -15,6 +15,8 @@
   let page = 0;
   let isLoading = false;
   let hasMore = true;
+  let currentZoomLevel = 8; // 초기 줌 레벨
+  
 
   let listComponentRef;
   let mapComponentRef;
@@ -24,6 +26,21 @@
     API_BASE_URL = API_BASE_URL.slice(0, -1);
   }
 
+  const calculateRadius = (zoomLevel) => {
+    // 줌 레벨에 따라 반경을 계산하는 로직을 추가하세요
+    // 예시: 줌 레벨 8일 때 10km, 줌 레벨 9일 때 5km 등
+    const radiusByZoom = {
+      5: 1,
+      6: 3,
+      7: 5,
+      8: 10,
+      9: 20,
+      10: 40,
+      11: 80,
+      // 추가 줌 레벨 및 반경 값을 여기에 추가
+    };
+    return radiusByZoom[zoomLevel] || 10; // 기본값은 10km
+  };
 
   const loadMoreItems = async () => {
     if (isLoading || !hasMore) return;
@@ -31,10 +48,11 @@
 
     const checkInDate = checkIn || new Date().toISOString().split('T')[0];
     const checkOutDate = checkOut || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const radius = calculateRadius(currentZoomLevel);
 
     if (currentLocation) {
       const { lat, lng } = currentLocation;
-      const response = await fetch(`${API_BASE_URL}/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}&lat=${lat}&lng=${lng}&radius=10`);
+      const response = await fetch(`${API_BASE_URL}/accommodation/search?capacity=${totalGuests}&min_dayrate=${selectedMinPrice}&max_dayrate=${selectedMaxPrice}&checkin_date=${checkInDate}&checkout_date=${checkOutDate}&page=${page}&lat=${lat}&lng=${lng}&radius=${radius}`);
       const data = await response.json();
 
       if (data.content.length === 0) {
@@ -95,6 +113,19 @@
       mapComponentRef.focusMarker(itemId);
     }
   };
+
+  const handleMapDragEnd = (event) => {
+    currentLocation = {
+      lat: event.detail.lat,
+      lng: event.detail.lng
+    };
+    currentZoomLevel = event.detail.zoom;
+    page = 0;
+    items = [];
+    hasMore = true;
+    loadMoreItems();
+  };
+
 </script>
 
 <Header 
@@ -114,9 +145,9 @@
       <p>Loading...</p>
     {/if}
   </div>
-  <div class="w-1/2">
+  <div class="w-1/2 relative">
     {#if currentLocation}
-      <MapComponent {currentLocation} {items} on:markerClick={handleMarkerClick} bind:this={mapComponentRef} />
+      <MapComponent {currentLocation} {items} on:markerClick={handleMarkerClick} on:mapDragEnd={handleMapDragEnd} bind:this={mapComponentRef} />
     {/if}
   </div>
 </div>
