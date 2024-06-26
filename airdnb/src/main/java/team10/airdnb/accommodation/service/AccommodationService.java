@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AccommodationService {
 
-    private static final int PAGE_SIZE = 20;
+    private static final int PAGE_SIZE = 30;
 
     private final AccommodationTypeRepository accommodationTypeRepository;
     private final AccommodationRoomTypeRepository accommodationRoomTypeRepository;
