@@ -69,9 +69,6 @@
         throw new Error(errorData.errorMessage);
       }
 
-      const data = await paymentVerificationResponse.json();
-      alert("예약이 완료되었습니다." + " 예약자: " + data.memberInformation.memberName + " 숙소 이름: " + data.accommodationInformation.accommodationName);
-
       // 결제와 예약 확정이 완료되면 예약 상태 업데이트
       reservations.update(current =>
         current.map(reservation =>
@@ -80,6 +77,8 @@
             : reservation
         )
       );
+
+      alert("예약이 확정되었습니다.");
 
     } catch (error) {
       console.error('Error making reservation:', error);
