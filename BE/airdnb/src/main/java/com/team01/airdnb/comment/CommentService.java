@@ -2,12 +2,14 @@ package com.team01.airdnb.comment;
 
 import com.team01.airdnb.accommadation.Accommodation;
 import com.team01.airdnb.accommadation.AccommodationRepository;
+import com.team01.airdnb.accommadation.AccommodationService;
 import com.team01.airdnb.comment.dto.CommentRegisterRequest;
 import com.team01.airdnb.comment.dto.CommentShowResponse;
 import com.team01.airdnb.comment.dto.CommentUpdateRequest;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserRepository;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,12 +39,14 @@ public class CommentService {
    */
   public CommentShowResponse register(CommentRegisterRequest commentRegisterRequest) {
     User commentWriter = userRepository.findById(commentRegisterRequest.user()).orElseThrow();
-    Accommodation accommodation = accommodationRepository.findById(
-        commentRegisterRequest.accommodation()).orElseThrow();
+    Accommodation accommodation = accommodationRepository.findById(commentRegisterRequest.accommodation())
+        .orElseThrow(() -> new NoSuchElementException("해당하는 숙소가 존재하지 않습니다."));
+    accommodationRepository.incrementCommentsNum(commentRegisterRequest.accommodation());
 
     Comment newComment = commentRegisterRequest.toEntity(commentWriter, accommodation);
     log.debug("{} 코멘트가 등록되었습니다.", newComment.getId());
     commentRepository.save(newComment);
+
     return new CommentShowResponse(newComment.getId(), newComment.getScore(), newComment.getContent(),
         newComment.getCreatedAt(), newComment.getUser());
   }
@@ -64,7 +68,9 @@ public class CommentService {
    * @param id 숙소 id
    */
   public void delete(Long id) {
-    Comment target = commentRepository.findById(id).orElseThrow();
+    Comment target = commentRepository.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("해당하는 댓글이 존재하지 않습니다."));
+    accommodationRepository.decrementCommentsNum(target.getAccommodation().getId());
     commentRepository.delete(target);
   }
 
@@ -98,6 +104,6 @@ public class CommentService {
    * @param id
    */
   private void findExistAccommodation(Long id) {
-    accommodationRepository.findById(id).orElseThrow();
+    accommodationRepository.findById(id);
   }
 }
