@@ -1,0 +1,41 @@
+name: CI/CD Front Pipeline
+
+on:
+  push:
+    branches:
+      - Frontend
+
+concurrency:
+  group: squadbnb-prod-front
+
+jobs:
+  front-build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        
+    - name: Add .env
+      run: |
+        cd ${{ github.workspace }}/FE
+        echo "${{ secrets.FRONT_ENV }}" | base64 --decode > ./.env.production
+
+    - name: Build React App
+      run: | 
+        cd ${{ github.workspace }}/FE
+        npm install
+        npm run build
+    - name: Deploy to Prod Server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST_PROD }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "FE/dist/*"
+        target: "/home/ubuntu/deploy/nginx-vol/"

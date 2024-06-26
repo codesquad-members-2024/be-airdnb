@@ -1,0 +1,73 @@
+/* Container styling */
+.search-bar-container {
+  position: fixed;
+  top: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 64rem;
+}
+
+/* Search Bar styling */
+.search-bar {
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 10; /* Ensure search bar is above the date picker */
+}
+
+.search-bar-button {
+  flex-grow: 1;
+  padding: 1rem 1.5rem;
+  border-right: 1px solid #e5e7eb;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.value {
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.search-icon-container {
+  padding: 1rem;
+}
+
+.search-icon-button {
+  background-color: #ef4444;
+  color: white;
+  border-radius: 9999px;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.search-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.search-bar-button:last-of-type {
+  border-right: none;
+}
+
+.search-bar-button:hover .value {
+  color: #6b7280;
+}

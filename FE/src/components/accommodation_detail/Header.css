@@ -1,0 +1,22 @@
+.header {
+    margin-top: 6rem; /* Adjust this value to create enough space */
+    padding: 1rem;
+    background-color: white; /* Optional: add background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add shadow for better visibility */
+    border-radius: 0.5rem; /* Optional: add border radius */
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  .header div {
+    margin-top: 0.5rem;
+  }
+  
+  .header span {
+    font-size: 1rem;
+    color: #333;
+  }
