@@ -47,8 +47,6 @@ public class ProductService {
                         )
                 ).toList();
 
-        log.info(accommodations.toString());
-
         if (filter.minPrice() != null){
             accommodations = accommodations.stream()
                     .filter(accommodation -> accommodation.price() >= filter.minPrice())
@@ -60,8 +58,6 @@ public class ProductService {
                     .filter(accommodation -> accommodation.price() <= filter.maxPrice())
                     .toList();
         }
-
-        log.info("리턴 직전  = " + accommodations.toString());
 
        return accommodations;
     }
@@ -87,9 +83,10 @@ public class ProductService {
     private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
         if (checkInDate != null && checkOutDate != null) {
             openProducts = openProducts.stream()
-                    .filter(product -> product.isDateInRange(checkInDate, checkInDate))
+                    .filter(product -> product.isDateInRange(checkInDate, checkOutDate))
                     .toList();
         }
+
         return (int) openProducts.stream()
                 .mapToInt(ProductEntity::getPrice)
                 .average()

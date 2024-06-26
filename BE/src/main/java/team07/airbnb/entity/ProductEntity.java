@@ -97,7 +97,7 @@ public class ProductEntity extends BaseEntity {
     }
 
     public boolean isDateInRange(LocalDate start, LocalDate end) {
-        return this.date.isAfter(start) && this.date.isBefore(end.plusDays(1L));
+        return !this.date.isBefore(start) && this.date.isBefore(end.plusDays(1L));
     }
 
     private void checkBookingEquality(BookingEntity booking) {
