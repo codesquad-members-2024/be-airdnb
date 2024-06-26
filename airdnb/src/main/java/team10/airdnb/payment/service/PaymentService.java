@@ -23,7 +23,7 @@ public class PaymentService {
 
     private final ReservationRepository reservationRepository;
 
-    public Reservation completePayment(PaymentRequest paymentRequest) {
+    public void completePayment(PaymentRequest paymentRequest) {
 
         String paymentId = paymentRequest.paymentId();
         Long reservationId = paymentRequest.reservationId();
@@ -66,7 +66,5 @@ public class PaymentService {
             // 결제 금액이 불일치하여 위/변조 시도가 의심됩니다.
             throw new RuntimeException("Payment amount mismatch");
         }
-
-        return reservation;
     }
 }

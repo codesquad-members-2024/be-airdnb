@@ -17,8 +17,8 @@ public class PaymentController {
 
     @PostMapping("/payment/complete")
     public ResponseEntity<?> completePayment(@RequestBody PaymentRequest paymentRequest) {
-        Reservation reservation = paymentService.completePayment(paymentRequest);
+        paymentService.completePayment(paymentRequest);
 
-        return ResponseEntity.ok(reservation);
+        return ResponseEntity.ok().build();
     }
 }
