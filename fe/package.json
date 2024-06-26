@@ -22,6 +22,7 @@
     "vite": "^5.3.1"
   },
   "dependencies": {
+    "@portone/browser-sdk": "^0.0.7",
     "@svelte-plugins/datepicker": "^1.0.9",
     "@threlte/core": "^7.3.0",
     "date-fns": "^3.6.0",

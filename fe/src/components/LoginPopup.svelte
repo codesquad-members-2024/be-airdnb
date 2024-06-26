@@ -33,6 +33,7 @@
     user.profileImage = "/assets/profile.png"; // 기본 프로필 이미지로 되돌리기
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    window.location.href = '/';
   }
 
   const toggleLoginModal = () => {
