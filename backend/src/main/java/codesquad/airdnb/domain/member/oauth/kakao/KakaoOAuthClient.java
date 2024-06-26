@@ -25,12 +25,12 @@ public class KakaoOAuthClient implements OAuthClient {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> request = generateHttpRequest(params);
 
-        KakaoToken kaKaoToken = restTemplate.exchange(KakaoConstants.TOKEN_URL, HttpMethod.POST, request, KakaoToken.class).getBody();
+        KakaoToken kakaoToken = restTemplate.exchange(KakaoConstants.TOKEN_URL, HttpMethod.POST, request, KakaoToken.class).getBody();
 
-        Objects.requireNonNull(kaKaoToken);
+        Objects.requireNonNull(kakaoToken);
         return OAuthToken.builder().
-                accessToken(kaKaoToken.accessToken())
-                .refreshToken(kaKaoToken.refreshToken())
+                accessToken(kakaoToken.accessToken())
+                .refreshToken(kakaoToken.refreshToken())
                 .build();
     }
 
@@ -40,8 +40,7 @@ public class KakaoOAuthClient implements OAuthClient {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        String requestToken = "Bearer " + accessToken;
-        httpHeaders.set("Authorization", requestToken);
+        httpHeaders.setBearerAuth(accessToken);
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         // kakao_account.profile 하위에 nickname, profileImageUrl가 존재한다.
@@ -62,8 +61,8 @@ public class KakaoOAuthClient implements OAuthClient {
     public ResponseEntity<String> requestExpireOAuthTokens(String oauthAccessToken) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/x-www-form-urlencoded");
-        headers.set("Authorization", "Bearer " + oauthAccessToken);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBearerAuth(oauthAccessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         return restTemplate.exchange(KakaoConstants.LOGOUT_URL, HttpMethod.POST, entity, String.class);

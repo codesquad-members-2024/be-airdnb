@@ -1,7 +1,6 @@
 package codesquad.airdnb.global.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,10 +19,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    public static final long MINUTE = 1000 * 60;
-    public static final long HOUR = 60 * MINUTE;
-    public static final long DAY = 24 * HOUR;
-    public static final long MONTH = 30 * DAY;
+    private static final long MINUTE = Duration.ofMinutes(1).toMillis();
+    private static final long DAY = Duration.ofDays(1).toMillis();
+    private static final long MONTH = Duration.ofDays(30).toMillis();
 
     public static final long ACCESS_TOKEN_EXP_TIME = 30 * MINUTE;
     public static final long REFRESH_TOKEN_EXP_TIME = 3 * MONTH;
@@ -41,7 +40,7 @@ public class JwtTokenProvider {
     }
 
     public String getToken(String authorizationHeaderValue) {
-        if (authorizationHeaderValue == null || !authorizationHeaderValue.startsWith(TOKEN_HEADER_PREFIX)) {
+        if (!authorizationHeaderValue.startsWith(TOKEN_HEADER_PREFIX)) {
             return null;
         }
         return authorizationHeaderValue.substring(TOKEN_HEADER_PREFIX.length());

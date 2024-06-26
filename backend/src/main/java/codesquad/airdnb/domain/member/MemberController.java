@@ -30,7 +30,7 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse authResponse = memberService.register(request, LoginType.DEFAULT);
+        AuthResponse authResponse = memberService.register(request, LoginType.BASIC);
         HttpHeaders headers = createAuthResponseHeader(authResponse.accessToken());
 
         return ResponseEntity

@@ -32,7 +32,7 @@ public class Member {
     private String password;
 
     @NotBlank
-    @Length(min = 1, max = 50)
+    @Length(min = 1, max = 200)
     @Column(name = "NICKNAME")
     private String nickname;
 
@@ -48,7 +48,7 @@ public class Member {
     }
 
     public void expireRefreshToken() {
-        this.refreshToken = null;
+        this.refreshToken = "";
     }
 
     public boolean isPasswordInvalid(String passwordInput) {
