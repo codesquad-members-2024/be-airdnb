@@ -52,4 +52,8 @@ public class Reservation {
 
     @Column(name = "deleted")
     private boolean deleted;
+
+    public void updateConfirmStatus(boolean status) {
+        this.isConfirmed = status;
+    }
 }
