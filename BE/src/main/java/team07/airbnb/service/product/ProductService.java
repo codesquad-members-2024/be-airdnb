@@ -2,6 +2,7 @@ package team07.airbnb.service.product;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
     private final AccommodationService accommodationService;
@@ -45,7 +47,7 @@ public class ProductService {
                         )
                 ).toList();
 
-        System.out.println(accommodations);
+        log.info(accommodations.toString());
 
         if (filter.minPrice() != null){
             accommodations = accommodations.stream()
@@ -58,6 +60,8 @@ public class ProductService {
                     .filter(accommodation -> accommodation.price() <= filter.maxPrice())
                     .toList();
         }
+
+        log.info("리턴 직전  = " + accommodations.toString());
 
        return accommodations;
     }
