@@ -1,6 +1,6 @@
 <script>
     import {get} from "svelte/store"
-    import { auth } from "../store/auth";
+    import {auth} from "../store/Auth.js";
 
     export let isProfileBtnClicked;
 

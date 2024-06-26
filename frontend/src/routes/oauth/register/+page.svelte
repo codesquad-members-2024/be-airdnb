@@ -1,5 +1,5 @@
 <script>
-    import {auth} from "../../../store/auth.js";
+    import { auth } from "../../../store/Auth";
     import {goto} from "$app/navigation";
 
     let userData = {
@@ -26,7 +26,7 @@
         validateInput();
 
         if (loginIdValid && nicknameValid && loginPasswordValid && confirmPasswordValid) {
-            auth.signUp(userData);
+            auth.register(userData);
             goto("/accommodations");
         }
     }

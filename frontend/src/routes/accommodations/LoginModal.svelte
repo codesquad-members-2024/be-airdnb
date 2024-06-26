@@ -1,10 +1,10 @@
 <script>
-    import {auth} from "../../store/auth.js";
+    import {auth} from "../../store/Auth.js";
     import {goto} from "$app/navigation";
 
     $: userData = {
-        loginId: '',
-        loginPassword: '',
+        accountName: '',
+        password: '',
     }
     let error = '';
 
@@ -15,10 +15,10 @@
     }
 
     const handleLogin = async (userData) => {
-        if(userData.loginId.length > 50
-            || userData.loginId.length < 4
-            || userData.loginPassword.length > 30
-            || userData.loginPassword.length < 4){
+        if(userData.accountName.length > 50
+            || userData.accountName.length < 4
+            || userData.password.length > 30
+            || userData.password.length < 4){
             alert("잘못된 아이디 비밀번호 형식입니다");
             return;
         }
@@ -42,11 +42,11 @@
         <form on:submit|preventDefault class="flex flex-col items-center">
             <label class="flex flex-col items-start mb-4 w-full">
                 아이디
-                <input type="text" bind:value={userData.loginId} class="w-full p-2 mt-2 border border-gray-300 rounded" />
+                <input type="text" bind:value={userData.accountName} class="w-full p-2 mt-2 border border-gray-300 rounded" />
             </label>
             <label class="flex flex-col items-start mb-4 w-full">
                 비밀번호
-                <input type="password" bind:value={userData.loginPassword} class="w-full p-2 mt-2 border border-gray-300 rounded" />
+                <input type="password" bind:value={userData.password} class="w-full p-2 mt-2 border border-gray-300 rounded" />
             </label>
             <button type="button"
                     class="w-full p-3 mt-2 bg-blue-500 text-white rounded"
@@ -57,7 +57,7 @@
             카카오 로그인
         </button>
         <hr class="border-b-airbnb-text-bold my-4"/>
-        <button class="w-full p-3 mt-4 border border-gray-500 text-center text-gray-700 rounded flex justify-center items-center" on:click={() => {goto('/oauth/signup')}}>
+        <button class="w-full p-3 mt-4 border border-gray-500 text-center text-gray-700 rounded flex justify-center items-center" on:click={() => {goto('/oauth/register')}}>
             회원가입
         </button>
     </div>

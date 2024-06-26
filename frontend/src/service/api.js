@@ -1,5 +1,5 @@
 import axios from "axios"
-import {auth} from "../store/auth.js";
+import {auth} from "../store/Auth.js";
 
 const send = async ({method='', path='', data={}, accessToken=''} = {}) => {
     const commonUrl = 'http://localhost:8080/api'
@@ -39,24 +39,24 @@ const send = async ({method='', path='', data={}, accessToken=''} = {}) => {
     }
 }
 
-const getApi = ({path='', access_token=''} = {}) => {
-    return send({method: 'GET', path: path, access_token: access_token})
+const getApi = ({path='', accessToken=''} = {}) => {
+    return send({method: 'GET', path: path, accessToken: accessToken})
 }
 
-const putApi = ({path='', data={}, access_token=''} = {}) => {
-    return send({method: 'PUT', path: path, data: data, access_token: access_token})
+const putApi = ({path='', data={}, accessToken=''} = {}) => {
+    return send({method: 'PUT', path: path, data: data, accessToken: accessToken})
 }
 
-const patchApi = ({path='', data={}, access_token=''} = {}) => {
-    return send({method: 'PATCH', path: path, data: data, access_token: access_token})
+const patchApi = ({path='', data={}, accessToken=''} = {}) => {
+    return send({method: 'PATCH', path: path, data: data, accessToken: accessToken})
 }
 
-const postApi = ({path='', data={}, access_token=''} = {}) => {
-    return send({method: 'POST', path: path, data: data, access_token: access_token})
+const postApi = ({path='', data={}, accessToken=''} = {}) => {
+    return send({method: 'POST', path: path, data: data, accessToken: accessToken})
 }
 
-const delApi = ({path='', data={}, access_token=''} = {}) => {
-    return send({method:'DELETE', path: path, data: data, access_token: access_token})
+const delApi = ({path='', data={}, accessToken=''} = {}) => {
+    return send({method:'DELETE', path: path, data: data, accessToken: accessToken})
 }
 
 export {
