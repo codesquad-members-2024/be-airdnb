@@ -18,6 +18,15 @@
     return localStorage.getItem('accessToken');
   }
 
+  function isTokenExpired(token) {
+    const payloadBase64 = token.split('.')[1];
+    const decodedJson = atob(payloadBase64);
+    const decoded = JSON.parse(decodedJson);
+    const exp = decoded.exp;
+    const expired = Date.now() >= exp * 1000;
+    return expired;
+  }
+
   function closePopup() {
     dispatch('close');
   }
@@ -35,6 +44,11 @@
     const checkOutDate = checkOut;
 
     const authToken = getAuthToken();
+    if (authToken == null || isTokenExpired(authToken)) {
+      alert('로그인 후, 이용해 주세요.');
+      closePopup();
+      return;
+    }
 
     const requestOptions = {
       method: 'POST',
