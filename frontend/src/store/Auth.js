@@ -4,7 +4,7 @@ import {goto} from "$app/navigation";
 
 function setAuth() {
     const initValue = {
-        loginId: '',
+        accountName: '',
         loginType: '',
         nickname: '',
         accessToken: ''
@@ -26,7 +26,7 @@ function setAuth() {
             )
         );
         const updateData = {
-            loginId: payload.sub,
+            accountName: payload.sub,
             loginType: payload.loginType,
             nickname: authResponse.nickname,
             accessToken: authResponse.accessToken
@@ -51,11 +51,11 @@ function setAuth() {
 
     const resetUserInfo = () => set({...initValue});
 
-    const signUp = async (data) => {
+    const register = async (data) => {
         const options = {
-            path: "/auth/signup",
+            path: "/auth/register",
             data: {
-                loginId: data.loginId,
+                accountName: data.accountName,
                 loginPassword: data.loginPassword,
                 nickname: data.nickname,
             }
@@ -71,7 +71,7 @@ function setAuth() {
         const options = {
             path: "/auth/login",
             data: {
-                loginId: data.loginId,
+                accountName: data.accountName,
                 loginPassword: data.loginPassword,
                 nickname: data.nickname
             }
@@ -99,12 +99,13 @@ function setAuth() {
         await postApi({ path:'/auth/logout' });
         isRefreshed.set(false);
         isLoggedIn.set(false);
+        auth.accessToken = '';
         await goto("/accommodations");
     }
 
     return {
         subscribe,
-        signUp,
+        register,
         login,
         logout,
         oauthLogin,

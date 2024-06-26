@@ -8,4 +8,6 @@
 <div class="flex-grow">
     <slot/>
 </div>
-<HostingFooter />
+<div class="flex justify-center">
+    <HostingFooter />
+</div>
