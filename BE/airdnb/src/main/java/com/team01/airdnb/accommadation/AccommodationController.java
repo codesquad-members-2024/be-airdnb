@@ -6,8 +6,9 @@ import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -62,8 +63,9 @@ public class AccommodationController {
   }
 
   @GetMapping("accommodations/filter")
-  public List<AccommodationSearchResponse> getAccommodationFilter(
-      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest) {
-    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest);
+  public Page<AccommodationSearchResponse> getAccommodationFilter(
+      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest,
+      Pageable pageable) {
+    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest, pageable);
   }
 }
