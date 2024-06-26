@@ -2,6 +2,7 @@ package com.team01.airdnb.accommadation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
@@ -31,7 +32,7 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
   public List<AccommodationSearchResponse> filterAccommodation(LocalDate checkin,
       LocalDate checkout,
       Long minPrice, Long maxPrice, Integer adultCount, Integer childrenCount,
-      Integer infantsCount, String location) {
+      Integer infantsCount, String location, Double latitude, Double longitude) {
     return jpaQueryFactory
         .select(new QAccommodationSearchResponse(
             accommodation.id,
@@ -62,7 +63,8 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
             checkAdult(adultCount),
             checkChildren(childrenCount),
             checkInfants(infantsCount),
-            address(location))
+            address(location),
+            checkRadius(latitude, longitude))
         .fetch();
   }
 
@@ -111,5 +113,20 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
 
   private BooleanExpression checkInfants(Integer infantsCount) {
     return infantsCount != null ? accommodation.maxInfants.goe(infantsCount) : null;
+  }
+
+  private BooleanExpression checkRadius(Double latitude, Double longitude) {
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+
+    final double radius = 6371;
+    final double maxDistance = 1;
+
+    NumberExpression<Double> distance = Expressions.numberTemplate(Double.class,
+        "{0} * acos(cos(radians({1})) * cos(radians({2})) * cos(radians({3}) - radians({4})) + sin(radians({1})) * sin(radians({2})))",
+        radius, latitude, accommodation.latitude, accommodation.longitude, longitude);
+
+    return distance.loe(maxDistance);
   }
 }

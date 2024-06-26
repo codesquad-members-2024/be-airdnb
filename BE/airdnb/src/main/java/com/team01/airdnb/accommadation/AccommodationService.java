@@ -112,6 +112,8 @@ public class AccommodationService {
         accommodationFilterRequest.adultCount(),
         accommodationFilterRequest.childrenCount(),
         accommodationFilterRequest.infantsCount(),
-        accommodationFilterRequest.location());
+        accommodationFilterRequest.location(),
+        accommodationFilterRequest.latitude(),
+        accommodationFilterRequest.longitude());
   }
 }
