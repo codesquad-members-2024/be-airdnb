@@ -2,6 +2,8 @@ package team10.airdnb.payment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,7 +20,9 @@ import team10.airdnb.reservation.repository.ReservationRepository;
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
-    private static final String PORTONE_API_SECRET = "WHmSQChVzPz8jCLgMRPUVYwqkPc3e10IrlI97b5JlywoUowU1adN5aXoTw0q5YvFMUb6kdoaYDQEL7A6";
+
+    @Value("${portone.api.secret}")
+    private String PORTONE_API_SECRET;
     private static boolean CONFIRMED = true;
 
     private final ReservationRepository reservationRepository;
