@@ -56,7 +56,7 @@ function setAuth() {
             path: "/auth/register",
             data: {
                 accountName: data.accountName,
-                loginPassword: data.loginPassword,
+                password: data.loginPassword,
                 nickname: data.nickname,
             }
         }
@@ -72,7 +72,7 @@ function setAuth() {
             path: "/auth/login",
             data: {
                 accountName: data.accountName,
-                loginPassword: data.loginPassword,
+                password: data.loginPassword,
                 nickname: data.nickname
             }
         }

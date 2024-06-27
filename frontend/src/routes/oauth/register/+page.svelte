@@ -3,19 +3,19 @@
     import {goto} from "$app/navigation";
 
     let userData = {
-        loginId: '',
+        accountName: '',
         nickname: '',
         loginPassword: '',
     }
 
     let confirmPassword = '';
-    let loginIdValid = true;
+    let accountNameValid = true;
     let nicknameValid = true;
     let loginPasswordValid = true;
     let confirmPasswordValid = true;
 
     function validateInput() {
-    loginIdValid = userData.loginId.length >= 4 && userData.loginId.length <= 50;
+    accountNameValid = userData.accountName.length >= 4 && userData.accountName.length <= 50;
     nicknameValid = userData.nickname.length >= 4 && userData.nickname.length <= 50;
     loginPasswordValid = userData.loginPassword.length >= 4 && userData.loginPassword.length <= 30;
     confirmPasswordValid = confirmPassword === userData.loginPassword;
@@ -25,7 +25,7 @@
         event.preventDefault();
         validateInput();
 
-        if (loginIdValid && nicknameValid && loginPasswordValid && confirmPasswordValid) {
+        if (accountNameValid && nicknameValid && loginPasswordValid && confirmPasswordValid) {
             auth.register(userData);
             goto("/accommodations");
         }
@@ -45,8 +45,8 @@
             <div class="space-y-2 h-[50px]">
                 <input type="text"
                        placeholder="ID"
-                       class="border border-gray-300 rounded px-3 py-2 h-2/3 w-full {loginIdValid ? '' : 'error-border'}"
-                       bind:value={userData.loginId}/>
+                       class="border border-gray-300 rounded px-3 py-2 h-2/3 w-full {accountNameValid ? '' : 'error-border'}"
+                       bind:value={userData.accountName}/>
                 <p class="text-xs text-gray-600 mt-2">
                     최소 4자에서 최대 50자까지 입력 가능합니다
                 </p>
