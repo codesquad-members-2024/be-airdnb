@@ -1,6 +1,6 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.hashtag.Hashtag;
+import codesquad.team05.domain.accommodation.accommodationhashtag.AccommodationHashtag;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
@@ -48,17 +48,17 @@ public class Accommodation {
     @Column(nullable = false)
     private AccommodationType accommodationType;
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "accommodation")
     private List<Reservation> reservation = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
     private List<Picture> pictures = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Hashtag> hashtags = new ArrayList<>();
+    private List<AccommodationHashtag> accommodationHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ServiceCharge> serviceCharge = new ArrayList<>();
@@ -113,5 +113,9 @@ public class Accommodation {
 
     public void addServiceCharge(ServiceCharge serviceCharge) {
         this.serviceCharge.add(serviceCharge);
+    }
+
+    public void addAccommodationHashtag(AccommodationHashtag accommodationHashtag) {
+        accommodationHashtags.add(accommodationHashtag);
     }
 }
