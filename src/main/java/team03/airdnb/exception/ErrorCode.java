@@ -14,7 +14,8 @@ public enum ErrorCode {
     ACCOMMODATION_NOT_FOUND(HttpStatus.NOT_FOUND, "Accommodation not found"),
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "Review not found"),
     AMENITY_NOT_FOUND(HttpStatus.NOT_FOUND, "Amenity not found"),
-    DUPLICATE_RESERVATION(HttpStatus.CONFLICT, "Reservation is not available for the given dates.");
+    DUPLICATE_RESERVATION(HttpStatus.CONFLICT, "Reservation is not available for the given dates"),
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "Address not found");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -1,24 +1,18 @@
 package team03.airdnb.accommodation;
 
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
 import team03.airdnb.accommodation.dto.request.AccommodationSaveDto;
 import team03.airdnb.accommodation.dto.request.AccommodationUpdateDto;
 import team03.airdnb.accommodation.dto.response.AccommodationListDto;
 import team03.airdnb.accommodation.dto.response.AccommodationShowDto;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/accommodations")
 @RestController
@@ -27,10 +21,9 @@ public class AccommodationController {
 
     private final AccommodationService accommodationService;
 
-    @PostMapping
-    public ResponseEntity<Void> createAccommodation(@RequestBody AccommodationSaveDto saveDto,
-                                                    UriComponentsBuilder uriComponentsBuilder) {
-        Long accommodationId = accommodationService.createAccommodation(saveDto);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Void> createAccommodation(@RequestPart("file") MultipartFile file, @RequestPart("saveDto") AccommodationSaveDto saveDto, UriComponentsBuilder uriComponentsBuilder) {
+        Long accommodationId = accommodationService.createAccommodation(saveDto, file);
         URI location = uriComponentsBuilder.path("/accommodations/{id}")
                 .buildAndExpand(accommodationId)
                 .toUri();
@@ -78,10 +71,8 @@ public class AccommodationController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<AccommodationListDto>> filterAccommodations(
-            @ModelAttribute AccommodationFilterDto filterDto) {
-        List<AccommodationListDto> accommodationsByFilters = accommodationService.findAccommodationsByFilters(
-                filterDto);
+    public ResponseEntity<List<AccommodationListDto>> filterAccommodations(@ModelAttribute AccommodationFilterDto filterDto) {
+        List<AccommodationListDto> accommodationsByFilters = accommodationService.findAccommodationsByFilters(filterDto);
 
         return ResponseEntity.ok(accommodationsByFilters);
     }

@@ -4,44 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import team03.airdnb.exception.duplicate.DuplicateException;
+import team03.airdnb.exception.notFound.NotFoundException;
 
 @Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
-    @ExceptionHandler(DuplicateNameException.class)
-    public ResponseEntity<String> handleDuplicateNameException(DuplicateNameException ex) {
-        log.error("[DuplicateNameException] {}", ex.getMessage());
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<String> handleDuplicateException(DuplicateException ex) {
+        log.error("[DuplicateException] {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
     }
 
-    @ExceptionHandler(AccommodationNotFoundException.class)
-    public ResponseEntity<String> handleAccommodationNotFoundException(AccommodationNotFoundException ex) {
-        log.error("[AccommodationNotFoundException] {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        log.error("[UserNotFoundException] {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
-    }
-
-    @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<String> handleReviewNotFoundException(ReviewNotFoundException ex) {
-        log.error("[ReviewNotFoundException] {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
-    }
-
-    @ExceptionHandler(AmenityNotFoundException.class)
-    public ResponseEntity<String> handleAmenityNotFoundException(AmenityNotFoundException ex) {
-        log.error("[AmenityNotFoundException] {}", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
-    }
-
-    @ExceptionHandler(DuplicateReservationException.class)
-    public ResponseEntity<String> handleDuplicateReservationException(DuplicateReservationException ex) {
-        log.error("[DuplicateReservationException] {}", ex.getMessage());
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+        log.error("[NotFoundException] {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
     }
 }

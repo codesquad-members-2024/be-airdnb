@@ -1,4 +1,4 @@
-package team03.airdnb.accommodation;
+package team03.airdnb.accommodation.queryDSL;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -6,6 +6,8 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import team03.airdnb.accommodation.Accommodation;
+import team03.airdnb.accommodation.QAccommodation;
 import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
 import team03.airdnb.reservation.QReservation;
 

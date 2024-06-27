@@ -1,16 +1,20 @@
 package team03.airdnb.accommodation.dto.request;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.Address;
+import team03.airdnb.kakaoMap.dto.CoordinatesDto;
 import team03.airdnb.user.User;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AccommodationSaveDto {
+
+    private static final String SPACE = " ";
 
     private String name;
     private String profileImg;
@@ -20,24 +24,26 @@ public class AccommodationSaveDto {
     private int bedCount;
     private int bedroomCount;
     private int bathroomCount;
-    private double longitude; // 경도
-    private double latitude; // 위도
     private Long hostId;
     private List<Long> amenityIds;
 
-    public Accommodation toEntity(User host){
+    public Accommodation toEntity(User host, String profileImg, CoordinatesDto coordinatesDto){
         return Accommodation.builder()
                 .name(this.name)
-                .profileImg(this.profileImg)
+                .profileImg(profileImg)
                 .address(this.address)
                 .price(this.price)
                 .maxHeadCount(this.maxHeadCount)
                 .bedCount(this.bedCount)
                 .bedroomCount(this.bedroomCount)
                 .bathroomCount(this.bathroomCount)
-                .longitude(this.longitude)
-                .latitude(this.latitude)
+                .longitude(coordinatesDto.getLongitude())
+                .latitude(coordinatesDto.getLatitude())
                 .host(host)
                 .build();
+    }
+
+    public String getFullAddress(){
+        return address.getFirstAddress() + SPACE + address.getSecondAddress() + SPACE + address.getThirdAddress();
     }
 }

@@ -20,7 +20,7 @@ public class UserSaveDto {
                 .build();
     }
 
-    public UserSaveDto withEncodedPassword(String encodedPassword) {
-        return new UserSaveDto(this.name, encodedPassword, this.profileImg);
+    public UserSaveDto withProvidedPassword(String password) {
+        return new UserSaveDto(this.name, password, this.profileImg);
     }
 }

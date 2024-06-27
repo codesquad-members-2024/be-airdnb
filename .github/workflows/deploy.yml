@@ -46,6 +46,24 @@ jobs:
           echo "${{ secrets.AUTHENTICATION_CONFIG }}" > ./authentication-config.yml
         shell: bash
 
+      - name: Make kakao-config.yml
+        run: |
+          cd ${{ github.workspace }}/src/main/resources
+          echo "${{ secrets.KAKAO_CONFIG }}" > ./kakao-config.yml
+        shell: bash
+
+      - name: Make multipart-config.yml
+        run: |
+          cd ${{ github.workspace }}/src/main/resources
+          echo "${{ secrets.MULTIPART_CONFIG }}" > ./multipart-config.yml
+        shell: bash
+
+      - name: Make application-private.yml
+        run: |
+          cd ${{ github.workspace }}/src/main/resources
+          echo "${{ secrets.PRIVATE_CONFIG }}" > ./application-private.yml
+        shell: bash
+
       - name: Build with Gradle
         run: |
           chmod +x ${{ github.workspace }}/gradlew

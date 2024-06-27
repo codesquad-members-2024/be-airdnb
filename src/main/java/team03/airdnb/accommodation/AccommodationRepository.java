@@ -1,13 +1,15 @@
 package team03.airdnb.accommodation;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team03.airdnb.accommodation.dto.request.AccommodationFilterDto;
+import team03.airdnb.accommodation.queryDSL.AccommodationRepositoryCustom;
 import team03.airdnb.user.User;
+
+import java.util.List;
 
 public interface AccommodationRepository extends JpaRepository<Accommodation, Long>, AccommodationRepositoryCustom {
 

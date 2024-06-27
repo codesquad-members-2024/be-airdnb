@@ -34,7 +34,7 @@ public class SecurityConfigurer {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/authenticate", "/oauth2/**", "/login/**", "/users", "/accommodations/filter").permitAll()
+                        .requestMatchers("/authenticate", "/oauth2/**", "/login/**", "/users", "/accommodations/filter", "/accommodations/{accommodationId}").permitAll()
                         .anyRequest().authenticated()
                 )
 
