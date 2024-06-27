@@ -1,5 +1,6 @@
 package codesquad.airdnb.domain.accommodation.repository;
 
+import codesquad.airdnb.domain.accommodation.dto.additionals.FilteredAcco;
 import codesquad.airdnb.domain.accommodation.dto.response.FilteredAccosResponse;
 
 import java.time.LocalDate;
@@ -10,5 +11,5 @@ public interface AccoProductRepositoryCustom {
 
     void createNextProductForAllAcco();
 
-    List<FilteredAccosResponse> getAccoListFilteredBy(List<Long> accoId, LocalDate checkInDate, LocalDate checkOutDate);
+    List<FilteredAcco> getAccoListFilteredBy(List<Long> accoId, LocalDate checkInDate, LocalDate checkOutDate, Integer lowestPrice, Integer highestPrice);
 }

@@ -16,4 +16,6 @@ public interface AccoRepository extends JpaRepository<Accommodation, Long>, Acco
             AND MAX_GUEST_COUNT >= :maxGuestCount \
             AND MAX_INFANT_COUNT >= :maxInfantCount""", nativeQuery = true)
     List<Long> findIdsByCoordAndHumanCount(Point point, Integer maxGuestCount, Integer maxInfantCount);
+
+    List<Accommodation> findAllByHostAccountName(String accountName);
 }

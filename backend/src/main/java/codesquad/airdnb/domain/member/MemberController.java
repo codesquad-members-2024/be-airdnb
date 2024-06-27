@@ -51,9 +51,8 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String token) {
-        String accessToken = token.replace("Bearer ", "");
-        memberService.logout(accessToken);
+    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        memberService.logout(authHeader);
         HttpHeaders headers = createAccessTokenExpiredHeader();
 
         return ResponseEntity

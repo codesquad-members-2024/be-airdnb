@@ -49,7 +49,8 @@ public class MemberService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        Member member = memberRepository.findMemberByAccountName(request.accountName());
+        Member member = memberRepository.findMemberByAccountName(request.accountName())
+                .orElseThrow(() -> new NoSuchElementException("해당 회원이 존재하지 않습니다."));
         if(member.isPasswordInvalid(request.password())){
             throw new IllegalArgumentException();
         }
@@ -63,10 +64,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void logout(String token) {
-        Claims claims = jwtTokenProvider.validateToken(token);
-        String accountName = claims.getSubject();
-        Member member = memberRepository.findMemberByAccountName(accountName);
+    public void logout(String authHeader) {
+        String accountName = jwtTokenProvider.getSubjectFromAuthHeader(authHeader);
+        Member member = memberRepository.findMemberByAccountName(accountName)
+                .orElseThrow(() -> new NoSuchElementException("해당 회원이 존재하지 않습니다."));
 
         if (member.getLoginType().equals(LoginType.OAUTH)) {
             // 멤버의 OauthType을 매개로 OAuth
@@ -91,7 +92,8 @@ public class MemberService {
     public Auth refresh(String token) {
         Claims claims = jwtTokenProvider.validateToken(token);
         String accountName = claims.getSubject();
-        Member member = memberRepository.findMemberByAccountName(accountName);
+        Member member = memberRepository.findMemberByAccountName(accountName)
+                .orElseThrow(() -> new NoSuchElementException("해당 회원이 존재하지 않습니다."));
 
         // refresh token 검증
         // TODO: 예외처리 로직 개선
@@ -121,15 +123,14 @@ public class MemberService {
         OAuthLoginParams oAuthLoginParams = new KaKaoLoginParam(authCode);
         OAuthUserInfoWithToken oAuthUserInfoWithToken = requestOAuthInfoService.requestWithToken(oAuthLoginParams);
 
-        Member member = memberRepository.findMemberByAccountName(oAuthUserInfoWithToken.getEmail());
-        if(member == null) {
-            RegisterRequest registerRequest = new RegisterRequest(oAuthUserInfoWithToken.getEmail(),
-                    RandomStringUtil.generateRandomPassword(),
-                    oAuthUserInfoWithToken.getNickname());
-            AuthResponse authResponse = register(registerRequest, LoginType.OAUTH);
-            member = memberRepository.findById(authResponse.memberId())
-                    .orElseThrow(() -> new NoSuchElementException("해당하는 Id를 갖는 회원이 없습니다."));
-        }
+        Member member = memberRepository.findMemberByAccountName(oAuthUserInfoWithToken.getEmail())
+                .orElseGet(() -> {
+                    // 회원 등록
+                    RegisterRequest registerRequest = new RegisterRequest(oAuthUserInfoWithToken.getEmail(), RandomStringUtil.generateRandomPassword(), oAuthUserInfoWithToken.getNickname());
+                    AuthResponse authResponse = register(registerRequest, LoginType.OAUTH);
+                    return memberRepository.findById(authResponse.memberId())
+                            .orElseThrow(() -> new NoSuchElementException("회원가입에 실패했습니다."));
+                });
 
         // JWT 저장
         String accessToken = jwtTokenProvider.createAccessToken(member.getAccountName());

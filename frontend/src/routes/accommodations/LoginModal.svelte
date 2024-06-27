@@ -28,7 +28,7 @@
     };
 
     const handleKakaoLogin = () => {
-        window.location.href = 'http://localhost:8080/api/auth/login/oauth/kakao';
+        window.location.href = 'http://3.35.215.131/api/auth/login/oauth/kakao';
     };
 </script>
 

@@ -2,7 +2,7 @@ import axios from "axios"
 import {auth} from "../store/Auth.js";
 
 const send = async ({method='', path='', data={}, accessToken=''} = {}) => {
-    const commonUrl = 'http://localhost:8080/api'
+    const commonUrl = 'http://3.35.215.131:80/api'
     const url = commonUrl + path
     let accessTokenValue;
     const unsubscribe = auth.subscribe(value => {

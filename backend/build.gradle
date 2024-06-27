@@ -21,7 +21,7 @@ repositories {
 	mavenCentral()
 }
 
-apply from: './gradle/querydsl.gradle'
+apply from: './gradle/dependencies/querydsl.gradle'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'

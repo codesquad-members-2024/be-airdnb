@@ -111,6 +111,12 @@ public class JwtTokenProvider {
         }
     }
 
+    public String getSubjectFromAuthHeader(String authHeader) {
+        String token = getToken(authHeader);
+        Claims claims = validateToken(token);
+        return claims.getSubject();
+    }
+
     private Long calculateRefreshTokenExpiredDays(Claims claims) {
         long expTime = claims.getExpiration().getTime() * 1000;
         return (expTime - System.currentTimeMillis()) / DAY;
