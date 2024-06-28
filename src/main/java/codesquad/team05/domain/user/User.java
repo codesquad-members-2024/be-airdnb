@@ -4,7 +4,6 @@ import codesquad.team05.domain.coupon.UserCoupon;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.reservation.Reservation;
-import codesquad.team05.domain.review.Review;
 import codesquad.team05.web.user.dto.response.UserResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,16 +30,13 @@ public class User {
     private LocalDate birthdate;
     private String authority;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "user")
     List<Reservation> reservation = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    List<Review> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     List<Like> likes = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Host host;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

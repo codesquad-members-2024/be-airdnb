@@ -1,9 +1,16 @@
 package codesquad.team05.domain.hashtag;
 
-import codesquad.team05.domain.accommodation.Accommodation;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hashtag {
 
     @Id
@@ -11,7 +18,7 @@ public class Hashtag {
     private Long id;
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id", nullable = false)
-    private Accommodation accommodation;
+    public Hashtag(String content) {
+        this.content = content;
+    }
 }

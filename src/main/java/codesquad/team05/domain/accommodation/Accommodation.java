@@ -1,11 +1,10 @@
 package codesquad.team05.domain.accommodation;
 
-import codesquad.team05.domain.hastag.Hastag;
+import codesquad.team05.domain.accommodation.accommodationhashtag.AccommodationHashtag;
 import codesquad.team05.domain.host.Host;
 import codesquad.team05.domain.like.Like;
 import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.reservation.Reservation;
-import codesquad.team05.domain.review.Review;
 import codesquad.team05.domain.servicecharge.ServiceCharge;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -49,20 +48,17 @@ public class Accommodation {
     @Column(nullable = false)
     private AccommodationType accommodationType;
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "accommodation")
     private List<Reservation> reservation = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    private List<Review> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.REMOVE)
     private List<Picture> pictures = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.PERSIST)
-    private List<Hastag> hashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AccommodationHashtag> accommodationHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "accommodation", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ServiceCharge> serviceCharge = new ArrayList<>();
@@ -117,5 +113,9 @@ public class Accommodation {
 
     public void addServiceCharge(ServiceCharge serviceCharge) {
         this.serviceCharge.add(serviceCharge);
+    }
+
+    public void addAccommodationHashtag(AccommodationHashtag accommodationHashtag) {
+        accommodationHashtags.add(accommodationHashtag);
     }
 }
