@@ -21,7 +21,7 @@ public class AccommodationHashtag {
     private Accommodation accommodation;
 
     @MapsId("hashtagId")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id", nullable = false)
     private Hashtag hashtag;
 
