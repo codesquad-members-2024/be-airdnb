@@ -85,6 +85,10 @@ public class AccommodationService {
                 updateServiceRequest.getAmenity(),
                 updateServiceRequest.getAccommodationType()
         );
+
+        List<Hashtag> hashtags = saveHashtags(updateServiceRequest.getHashtagContents());
+        setAccommodationHashtag(hashtags, accommodation);
+
         List<String> pictureUrls = updateServiceRequest.getFiles().stream()
                 .map(url -> uploadFileToS3(url, accommodationId))
                 .toList();
