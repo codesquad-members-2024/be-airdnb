@@ -50,7 +50,7 @@ public class ProductController {
     }
 
     @Tag(name = "Host")
-    @Operation(summary = "상품 생성")
+    @Operation(summary = "기간 중 다중 상품 생성")
     @PostMapping("/range")
     @ResponseStatus(CREATED)
     public void createProductRange(@RequestBody ProductRangeCreateRequest request) {

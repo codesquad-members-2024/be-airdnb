@@ -86,8 +86,9 @@ public class AccommodationEntity extends BaseEntity {
         pictures.add(new Pictures(this, url));
     }
 
-    public void addProduct(LocalDate date, int price) {
-        products.add(ProductEntity.ofOpen(this, date, price));
+    public void addProduct(LocalDate date, Integer price) {
+        if(price != null) products.add(ProductEntity.ofOpen(this, date, price));
+        else addProduct(date);
     }
 
     public void addProduct(LocalDate date) {

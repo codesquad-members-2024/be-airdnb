@@ -2,6 +2,7 @@ package team07.airbnb.service.product;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import team07.airbnb.data.accommodation.dto.request.AccommodationFilterDTO;
 import team07.airbnb.data.accommodation.dto.response.AccommodationListResponse;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
     private final AccommodationService accommodationService;
@@ -45,8 +47,6 @@ public class ProductService {
                         )
                 ).toList();
 
-        System.out.println(accommodations);
-
         if (filter.minPrice() != null){
             accommodations = accommodations.stream()
                     .filter(accommodation -> accommodation.price() >= filter.minPrice())
@@ -66,9 +66,6 @@ public class ProductService {
         Stream<List<ProductEntity>> accommodations = nearbyAccommodations.stream()
                 .map(AccommodationEntity::getOpenProducts);
 
-
-
-
         if (filter.checkInDate() != null && filter.checkOutDate() != null) accommodations =
                 accommodations.
                         filter(openProducts -> isAvailableInDateRange(
@@ -86,9 +83,10 @@ public class ProductService {
     private int getAveragePriceForDateRange(List<ProductEntity> openProducts, LocalDate checkInDate, LocalDate checkOutDate) {
         if (checkInDate != null && checkOutDate != null) {
             openProducts = openProducts.stream()
-                    .filter(product -> !product.getDate().isBefore(checkInDate) && !product.getDate().isAfter(checkOutDate))
+                    .filter(product -> product.isDateInRange(checkInDate, checkOutDate))
                     .toList();
         }
+
         return (int) openProducts.stream()
                 .mapToInt(ProductEntity::getPrice)
                 .average()
@@ -194,8 +192,7 @@ public class ProductService {
         Period between = Period.between(startDate, endDate);
         for (int i = 0; i <= between.getDays(); i++) {
             LocalDate nowDate = startDate.plusDays(i);
-            int price = requestPrice == null ? accommodation.getBasePricePerDay() : requestPrice;
-            accommodation.addProduct(nowDate, price);
+            accommodation.addProduct(nowDate, requestPrice);
         }
     }
 
