@@ -42,7 +42,8 @@ public class AccommodationMapper {
                 updateRequest.getBedCount(),
                 updateRequest.getDescription(),
                 updateRequest.getAmenity(),
-                updateRequest.getAccommodationType()
+                updateRequest.getAccommodationType(),
+                updateRequest.getHashtagContents()
         );
         files.forEach(
                 file -> accommodationUpdateServiceRequest.getFiles().add(file)

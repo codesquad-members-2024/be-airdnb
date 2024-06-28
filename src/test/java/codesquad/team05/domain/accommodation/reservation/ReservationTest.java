@@ -145,7 +145,7 @@ class ReservationTest {
         );
         Review review = new Review(3, "숙소가 좋아요", user, accommodation);
         reviewRepository.save(review);
-        
+
         accommodationRepository.save(accommodation);
     }
 
@@ -161,6 +161,7 @@ class ReservationTest {
                         1,
                         "원룸",
                         "없음",
+                        HOTEL,
                         null
                 ), new ArrayList<>()));
 
