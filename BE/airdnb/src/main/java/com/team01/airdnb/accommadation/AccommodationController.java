@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accommodations")
 public class AccommodationController {
 
   AccommodationService accommodationService;
@@ -31,21 +30,15 @@ public class AccommodationController {
   }
 
   //숙소 생성
-  @PostMapping("/accommodations")
+  @PostMapping
   public void registerAccommodation(
       @RequestBody AccommodationRegisterRequest accommodationRegisterRequest) {
     accommodationService.register(accommodationRegisterRequest);
   }
 
-  //숙소 검색
-  @PostMapping("/accommodations/search")
-  public void searchAccommodations() {
-
-  }
-
   //숙소 상세보기
-  @GetMapping("/accommodations/{id}")
-  public AccommodationDetailResponse showAccommodation(@PathVariable Long id) {
+  @GetMapping("/{accommodationId}")
+  public AccommodationDetailResponse showAccommodation(@PathVariable("accommodationId") Long id) {
     return accommodationService.show(id);
   }
 

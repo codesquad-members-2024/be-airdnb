@@ -2,12 +2,15 @@ package com.team01.airdnb.accommadation;
 
 import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
+import com.team01.airdnb.accommadation.dto.AccommodationHostResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
+import com.team01.airdnb.accommadation.dto.AccommodationShowResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import com.team01.airdnb.amenity.AmenityService;
 import com.team01.airdnb.comment.CommentService;
 import com.team01.airdnb.image.ImageService;
+import com.team01.airdnb.user.Role;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
 import java.util.NoSuchElementException;
@@ -47,6 +50,10 @@ public class AccommodationService {
   public void register(AccommodationRegisterRequest accommodationRegisterRequest) {
     User user = userService.FindUserById(accommodationRegisterRequest.userId());
     Accommodation accommodation = accommodationRegisterRequest.toAccommodationEntity(user);
+    if(user.getRole() == Role.USER) {
+      user.setRole(Role.HOST);  //숙소를 등록할때 유저의 역할을 유저에서 호스트로 변경 합니다.
+      userService.save(user);
+    }
     accommodationRepository.save(accommodation);
   }
 
@@ -117,5 +124,41 @@ public class AccommodationService {
         accommodationFilterRequest.latitude(),
         accommodationFilterRequest.longitude(),
         pageable);
+  }
+
+  @Transactional(readOnly = true)
+  public List<AccommodationHostResponse> getAccommodationByUserId(Long userId) {
+    List<Accommodation> accommodations = accommodationRepository.findAllByUserId(userId);
+    List<AccommodationHostResponse> accommodationHostResponses = new ArrayList<>();
+
+    for (Accommodation accommodation:accommodations){
+      accommodationHostResponses.add(new AccommodationHostResponse(accommodation.getId(),accommodation.getTitle()));
+    }
+    return accommodationHostResponses;
+  }
+
+  public List<AccommodationShowResponse> findAllForAdmin() {
+    List<Accommodation> accommodations = accommodationRepository.findAll();
+    List<AccommodationShowResponse> accommodationShowResponses = new ArrayList<>();
+
+    for (Accommodation accommodation:accommodations){
+      accommodationShowResponses.add(AccommodationShowResponse.builder()
+          .id(accommodation.getId())
+          .title(accommodation.getTitle())
+          .content(accommodation.getContent())
+          .price(accommodation.getPrice())
+          .discountRate(accommodation.getDiscountRate())
+          .address(accommodation.getAddress())
+          .latitude(accommodation.getLatitude())
+          .longitude(accommodation.getLongitude())
+          .commentsNum(accommodation.getCommentsNum())
+          .user(accommodation.getUser())
+          .comments(accommodation.getComments())
+          .images(accommodation.getImages())
+          .reservations(accommodation.getReservations())
+          .amenity(accommodation.getAmenity())
+          .build());
+    }
+    return accommodationShowResponses;
   }
 }

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
-  List<Reservation> findAllByAccommodationId(Long reservationId);
+  @Query("SELECT r FROM Reservation r WHERE r.accommodation.id = :accommodationId AND r.accommodation.user.id = :hostId")
+  List<Reservation> findAllByAccommodationIdAndHostId(@Param("accommodationId") Long accommodationId, @Param("hostId") Long hostId);
 
   @Query("SELECT count(a) FROM Accommodation a LEFT JOIN Reservation r ON a.id = r.accommodation.id "
       + "where a.id = :id AND (r.startDate between :startDate and :endDate "

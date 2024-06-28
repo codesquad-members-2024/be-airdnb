@@ -5,7 +5,7 @@ import com.team01.airdnb.authorization.oauth2.user.GoogleUserInfo;
 import com.team01.airdnb.user.Role;
 import com.team01.airdnb.user.SocialType;
 import com.team01.airdnb.user.User;
-import com.team01.airdnb.user.UserRepository;
+import com.team01.airdnb.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -52,7 +52,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String profile = googleUserInfo.getPicture();
 
         // 소셜 ID 로 사용자를 조회, 없으면 socialId 와 이름으로 사용자 생성
-        Optional<User> bySocialId = userRepository.findBySocialId(socialId);
+        Optional<User> bySocialId = userService.findBySocialId(socialId);
         User user = bySocialId.orElseGet(() -> saveSocialMember(socialId, name, email, profile, SocialType.GOOGLE));
 
         return new PrincipalDetail(user, Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue())),
@@ -63,6 +63,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     public User saveSocialMember(String socialId, String name, String email, String profile, SocialType socialType) {
         log.info("--------------------------- saveSocialMember ---------------------------");
         User newMember = User.builder().socialId(socialId).username(name).role(Role.USER).email(email).profile(profile).socialType(socialType).build();
-        return userRepository.save(newMember);
+        return userService.save(newMember);
     }
 }

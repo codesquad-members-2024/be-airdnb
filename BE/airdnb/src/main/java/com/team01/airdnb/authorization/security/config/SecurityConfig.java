@@ -4,7 +4,6 @@ import com.team01.airdnb.authorization.jwt.filter.JwtVerifyFilter;
 import com.team01.airdnb.authorization.oauth2.service.OAuth2UserService;
 import com.team01.airdnb.authorization.security.handler.CommonLoginFailHandler;
 import com.team01.airdnb.authorization.security.handler.CommonLoginSuccessHandler;
-import com.team01.airdnb.authorization.security.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final OAuth2UserService oAuth2UserService;
-    private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -36,7 +34,7 @@ public class SecurityConfig {
 
         corsConfiguration.setAllowedOriginPatterns(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -79,6 +77,7 @@ public class SecurityConfig {
         // 역할 기반 URL 접근 제어 설정
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry
+                .requestMatchers("/api/host/**").hasAnyRole("HOST","ADMIN")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN") // /admin/** URL은 ADMIN 역할만 접근 가능
                 .anyRequest().permitAll();                    // 그 외 모든 요청은 모두 허용
         });
@@ -86,8 +85,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtVerifyFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.oauth2Login(httpSecurityOAuth2LoginConfigurer ->
-            httpSecurityOAuth2LoginConfigurer.loginPage("/oauth2/login")
-                .defaultSuccessUrl("/loginSuccess")
+            httpSecurityOAuth2LoginConfigurer
                 .successHandler(commonLoginSuccessHandler())
                 .userInfoEndpoint(userInfoEndpointConfig ->
                     userInfoEndpointConfig.userService(oAuth2UserService)));
