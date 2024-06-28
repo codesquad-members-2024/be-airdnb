@@ -15,6 +15,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A-006", "해당 refresh token은 만료됐습니다."),
     NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-007", "해당 토큰은 ACCESS TOKEN이 아닙니다."),
     FORBIDDEN_ADMIN(HttpStatus.FORBIDDEN, "A-008", "관리자 Role이 아닙니다."),
+    ILLEGAL_REGISTRATION_ID(HttpStatus.BAD_REQUEST, "A-009", "허용된 Oauth 인증자가 아닙니다."),
 
     // 이메일
     AUTH_CODE_NOT_EXISTS(HttpStatus.NOT_FOUND, "E-001", "인증 번호가 존재하지 않습니다."),

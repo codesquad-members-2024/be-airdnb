@@ -8,12 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import team10.airdnb.accommodation.entity.Accommodation;
 import team10.airdnb.accommodation.exception.AccommodationIdNotFoundException;
 import team10.airdnb.accommodation.repository.AccommodationRepository;
+import team10.airdnb.jwt.service.TokenManager;
 import team10.airdnb.member.entity.Member;
 import team10.airdnb.member.exception.MemberIdNotFoundException;
 import team10.airdnb.member.repository.MemberRepository;
 import team10.airdnb.reservation.controller.request.ReservationCreateRequest;
 import team10.airdnb.reservation.controller.response.ReservationSummaryResponse;
 import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
+import team10.airdnb.reservation.dto.ReservationAccommodationDto;
 import team10.airdnb.reservation.entity.Reservation;
 import team10.airdnb.reservation.exception.ReservationIdNotFoundException;
 import team10.airdnb.reservation.exception.ReservationUnavailableException;
@@ -31,6 +33,8 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     private final AccommodationRepository accommodationRepository;
 
+    private final TokenManager tokenManager;
+
     public List<ReservationSummaryResponse> getReservations() {
         return reservationRepository.findAll().stream()
                 .map(ReservationSummaryResponse::from)
@@ -44,10 +48,16 @@ public class ReservationService {
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ReservationSummaryResponse createReservation(ReservationCreateRequest request) {
+    public ReservationSummaryResponse createReservation(ReservationCreateRequest request, String authorizationHeader) {
         validateReservationAvailable(request); // 중복 체크
 
-        Member member = getMemberById(request.memberId());
+        String token = getToken(authorizationHeader);
+
+        tokenManager.validateToken(token);
+
+        String memberId = (String) tokenManager.getTokenClaims(token).get(("memberId"));
+
+        Member member = getMemberById(memberId);
 
         Accommodation accommodation = getAccommodationById(request.accommodationId());
 
@@ -65,6 +75,10 @@ public class ReservationService {
         reservationRepository.delete(reservation);
 
         return ReservationSummaryResponse.from(reservation);
+    }
+
+    private String getToken(String authorizationHeader) {
+        return authorizationHeader.split(" ")[1];
     }
 
     private void validateReservationAvailable(ReservationCreateRequest request) {
@@ -94,5 +108,14 @@ public class ReservationService {
                 .orElseThrow(AccommodationIdNotFoundException::new);
     }
 
+    public List<ReservationAccommodationDto> getReservationAccommodationDTOsByMemberId(String authorizationHeader) {
+        String token = getToken(authorizationHeader);
+
+        tokenManager.validateToken(token);
+
+        String memberId = (String) tokenManager.getTokenClaims(token).get(("memberId"));
+
+        return reservationRepository.findReservationAccommodationDTOsByMemberId(memberId);
+    }
 
 }

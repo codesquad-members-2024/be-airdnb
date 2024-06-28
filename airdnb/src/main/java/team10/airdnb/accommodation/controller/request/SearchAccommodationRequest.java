@@ -11,5 +11,10 @@ public record SearchAccommodationRequest(
         @RequestParam(name = "min_dayrate", required = false) BigDecimal minDayRate,
         @RequestParam(name = "max_dayrate", required = false) BigDecimal maxDayRate,
         @RequestParam(name = "checkin_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkInDate,
-        @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate
-) {}
+        @RequestParam(name = "checkout_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOutDate,
+        @RequestParam(name = "lat", required = false) Double latitude,
+        @RequestParam(name = "lng", required = false) Double longitude,
+        @RequestParam(name = "radius", required = false) Double radius
+
+) {
+}

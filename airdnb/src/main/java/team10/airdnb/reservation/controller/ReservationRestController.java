@@ -3,17 +3,19 @@ package team10.airdnb.reservation.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import team10.airdnb.reservation.controller.request.ReservationCreateRequest;
 import team10.airdnb.reservation.controller.response.ReservationSummaryResponse;
 import team10.airdnb.reservation.controller.response.ReservationInformationResponse;
+import team10.airdnb.reservation.dto.ReservationAccommodationDto;
 import team10.airdnb.reservation.service.ReservationService;
 
 import java.util.List;
@@ -53,8 +55,12 @@ public class ReservationRestController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ReservationSummaryResponse> createReservation(@RequestBody @Valid ReservationCreateRequest request) {
-        ReservationSummaryResponse response = reservationService.createReservation(request);
+    public ResponseEntity<ReservationSummaryResponse> createReservation(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody @Valid ReservationCreateRequest request) {
+
+        ReservationSummaryResponse response = reservationService.createReservation(request, authorizationHeader);
+
 
         log.info("예약 생성 완료 : # {} : 숙소 이름 : {}, 예약자 이름 : {}",
                 response.reservationId(),
@@ -64,12 +70,6 @@ public class ReservationRestController {
 
         return ResponseEntity.ok(response);
     }
-
-    /* TODO
-     * UPDATE 할 항목들
-     * 1) 예약 확정 여부 수정 - isConfirmed 속성
-     * 2) 체크인 날짜 수정  - checkIn/Out Date 속성
-     * */
 
     @DeleteMapping("/reservation/{reservationId}")
     public ResponseEntity<ReservationSummaryResponse> deleteReservation(@PathVariable Long reservationId) {
@@ -82,6 +82,13 @@ public class ReservationRestController {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/reservation/member")
+    public ResponseEntity<List<ReservationAccommodationDto>> getReservationAccommodationDTOsByMemberId(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+
+        List<ReservationAccommodationDto> reservations = reservationService.getReservationAccommodationDTOsByMemberId(authorizationHeader);
+        return ResponseEntity.ok(reservations);
     }
 
 }

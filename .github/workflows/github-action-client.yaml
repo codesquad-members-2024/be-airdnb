@@ -1,0 +1,41 @@
+name: CI/CD Front Pipeline
+
+on:
+  push:
+    branches:
+      - fe-svelte
+
+jobs:
+  Front-Build-Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        
+    - name: Add .env
+      run: |
+        cd ./fe
+        touch .env
+        echo "${{ secrets.FRONT_ENV }}" > .env
+
+    - name: Build Svelte App
+      run: | 
+        cd ./fe
+        mkdir -p src/routes  
+        npm install --legacy-peer-deps
+        npm run build
+        
+    - name: Deploy to Prod Server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "fe/dist/client/*"
+        target: "/home/ubuntu/nginx-vol/"

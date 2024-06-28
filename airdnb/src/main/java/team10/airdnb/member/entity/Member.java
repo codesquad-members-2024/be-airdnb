@@ -19,8 +19,10 @@ public class Member {
     @Id
     @Column(name = "id")
     private String id;
+
     @Column(name = "password")
     private String password;
+
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
