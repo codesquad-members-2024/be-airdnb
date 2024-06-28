@@ -142,7 +142,9 @@ class AccommodationTest {
                 3,
                 "집 좋음",
                 "변경함",
-                HOTEL
+                new ArrayList<>(),
+                HOTEL,
+                new ArrayList<>()
         );
 
         accommodationService.updateAccommodation(id, accommodationUpdateServiceRequest);

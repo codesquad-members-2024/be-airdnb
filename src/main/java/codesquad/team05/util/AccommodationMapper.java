@@ -14,7 +14,7 @@ import java.util.List;
 public class AccommodationMapper {
 
     public static AccommodationSaveServiceRequest toSaveService(AccommodationSave saveRequest, List<MultipartFile> files) {
-        AccommodationSaveServiceRequest accommodationSaveServiceRequest = new AccommodationSaveServiceRequest(
+        return new AccommodationSaveServiceRequest(
                 saveRequest.getName(),
                 saveRequest.getPrice(),
                 saveRequest.getAddress(),
@@ -23,17 +23,14 @@ public class AccommodationMapper {
                 saveRequest.getBedCount(),
                 saveRequest.getDescription(),
                 saveRequest.getAmenity(),
+                files,
                 saveRequest.getAccommodationType(),
                 saveRequest.getHashtagContents()
         );
-        files.forEach(
-                file -> accommodationSaveServiceRequest.getFiles().add(file)
-        );
-        return accommodationSaveServiceRequest;
     }
 
     public static AccommodationUpdateServiceRequest toUpdateService(AccommodationUpdate updateRequest, List<MultipartFile> files) {
-        AccommodationUpdateServiceRequest accommodationUpdateServiceRequest = new AccommodationUpdateServiceRequest(
+        return new AccommodationUpdateServiceRequest(
                 updateRequest.getName(),
                 updateRequest.getPrice(),
                 updateRequest.getAddress(),
@@ -42,13 +39,10 @@ public class AccommodationMapper {
                 updateRequest.getBedCount(),
                 updateRequest.getDescription(),
                 updateRequest.getAmenity(),
+                files,
                 updateRequest.getAccommodationType(),
                 updateRequest.getHashtagContents()
         );
-        files.forEach(
-                file -> accommodationUpdateServiceRequest.getFiles().add(file)
-        );
-        return accommodationUpdateServiceRequest;
     }
 
     public static Accommodation toEntity(AccommodationSaveServiceRequest serviceRequest) {
