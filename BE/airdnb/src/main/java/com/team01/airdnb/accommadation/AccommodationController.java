@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,19 +44,19 @@ public class AccommodationController {
   }
 
   //숙소 수정
-  @PutMapping("/accommodations/{id}")
+  @PutMapping("/{id}")
   public void updateAccommodation(@PathVariable Long id,
       @RequestBody AccommodationUpdateRequest accommodationUpdateRequest) {
     accommodationService.update(id, accommodationUpdateRequest);
   }
 
   //숙소 삭제
-  @DeleteMapping("accommodations/{id}")
+  @DeleteMapping("/{id}")
   public void deleteAccommodation(@PathVariable Long id) {
     accommodationService.delete(id);
   }
 
-  @GetMapping("accommodations/filter")
+  @GetMapping("/filter")
   public Page<AccommodationSearchResponse> getAccommodationFilter(
       @ModelAttribute AccommodationFilterRequest accommodationFilterRequest,
       Pageable pageable) {
