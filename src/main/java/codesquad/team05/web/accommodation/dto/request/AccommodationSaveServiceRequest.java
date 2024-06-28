@@ -2,14 +2,12 @@ package codesquad.team05.web.accommodation.dto.request;
 
 import codesquad.team05.domain.accommodation.AccommodationType;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
-@RequiredArgsConstructor
 public class AccommodationSaveServiceRequest {
 
     private final String name;
@@ -20,7 +18,32 @@ public class AccommodationSaveServiceRequest {
     private final int bedCount;
     private final String description;
     private final String amenity;
-    private final List<MultipartFile> files = new ArrayList<>();
+    private final List<MultipartFile> files;
     private final AccommodationType accommodationType;
     private final List<String> hashtagContents;
+
+    public AccommodationSaveServiceRequest(
+            String name,
+            int price,
+            String address,
+            int maxCapacity,
+            int roomCount,
+            int bedCount,
+            String description,
+            String amenity,
+            List<MultipartFile> files,
+            AccommodationType accommodationType,
+            List<String> hashtagContents) {
+        this.name = name;
+        this.price = price;
+        this.address = address;
+        this.maxCapacity = maxCapacity;
+        this.roomCount = roomCount;
+        this.bedCount = bedCount;
+        this.description = description;
+        this.amenity = amenity;
+        this.files = Optional.ofNullable(files).orElse(List.of());
+        this.accommodationType = accommodationType;
+        this.hashtagContents = hashtagContents;
+    }
 }
