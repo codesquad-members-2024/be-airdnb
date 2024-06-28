@@ -1,7 +1,7 @@
 🏡 숙소 예약 서비스 `airdnb`  🛌 
 ===
 
-<img width="907" alt="image" src="https://gist.github.com/assets/97939207/4ae6e955-a6c4-48bc-92e4-09975b4d82d1">
+![image](https://github.com/codesquad-masters2024-team10/be-airdnb/assets/97939207/1169a2c3-fe54-4e7a-87ab-f2fc8d0761c7)
 
 # 🔗 배포 링크
 ### [https://airdnb.site](https://airdnb.site)
@@ -72,7 +72,7 @@
 # ⚙️설계
 ## ERD
 ### [DB Diagram](https://dbdiagram.io/d/air_dnb-665d6e6db65d9338795523de)
-<img width="1102" alt="ERD" src="https://gist.github.com/assets/97939207/741dba93-d297-4cd1-a2a0-2ad81d6bdbb9">
+<img width="1102" alt="erd" src="https://github.com/codesquad-masters2024-team10/be-airdnb/assets/97939207/9f712d3f-f231-4941-8a8d-e7cbc82bc97a">
 
 ## Mock Data 출처
 ### [문화 빅데이터 플랫폼 - '야놀자 공공 데이터'](https://www.bigdata-culture.kr/bigdata/user/data_market/agency/detail.do?id=yanolja_org)
