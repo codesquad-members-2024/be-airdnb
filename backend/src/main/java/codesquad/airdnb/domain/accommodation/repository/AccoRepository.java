@@ -13,9 +13,9 @@ public interface AccoRepository extends JpaRepository<Accommodation, Long>, Acco
     @Query(value = """
             SELECT ID FROM ACCOMMODATION \
             WHERE ST_Distance_Sphere(COORDINATE, :point) <= 100000000 \
-            AND MAX_GUEST_COUNT >= :maxGuestCount \
-            AND MAX_INFANT_COUNT >= :maxInfantCount""", nativeQuery = true)
-    List<Long> findIdsByCoordAndHumanCount(Point point, Integer maxGuestCount, Integer maxInfantCount);
+            AND MAX_GUEST_COUNT >= :maxGuestCount""", nativeQuery = true)
+//            AND MAX_INFANT_COUNT >= :maxInfantCount)
+    List<Long> findIdsByCoordAndHumanCount(Point point, Integer maxGuestCount);
 
     List<Accommodation> findAllByHostAccountName(String accountName);
 }

@@ -4,7 +4,7 @@ import {getApi, postApi} from "../service/api.js";
 
 const setAccoProductList = () => {
     let initValue = {
-        loginId: get(auth).loginId,
+        accountName: get(auth).accountName,
         accoProductList: [],
     }
 
@@ -54,7 +54,7 @@ const setAccoProductList = () => {
 
 const setReservation = () => {
     let initValue = {
-        loginId: get(auth).loginId,
+        accountName: get(auth).accountName,
         title: '',
         accoId: '',
         checkIn: '',

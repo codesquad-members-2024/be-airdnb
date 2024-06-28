@@ -88,7 +88,7 @@ public class AccoService {
                                                        Integer lowestPrice, Integer highestPrice) {
         GeometryHelper geometryHelper = new GeometryHelper();
         Point point = geometryHelper.createPoint(longitude, latitude);
-        List<Long> ids = accoRepository.findIdsByCoordAndHumanCount(point, guestCount, infantCount);
+        List<Long> ids = accoRepository.findIdsByCoordAndHumanCount(point, guestCount);
 
         List<FilteredAcco> accoListFilteredBy = accoProductRepository.getAccoListFilteredBy(ids, checkInDate, checkOutDate, lowestPrice, highestPrice);
 

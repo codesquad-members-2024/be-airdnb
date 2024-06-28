@@ -53,14 +53,13 @@ const setFilters = () => {
         let queryParams = [];
 
         subscribe(values => {
-            const { guestCount, infantCount, checkInDate, checkOutDate, latitude, longitude } = values;
+            const { guestCount, checkInDate, checkOutDate, latitude, longitude } = values;
 
             const guestCountParam = `guestCount=${guestCount}`;
-            const infantCountParam = (infantCount === 0) ? `infantCount=1` : `infantCount=${infantCount}`;
             const checkInCheckOutParam = `checkInDate=${checkInDate}&checkOutDate=${checkOutDate}`;
             const coordinateParam = `latitude=${latitude}&longitude=${longitude}`;
 
-            queryParams = [guestCountParam, infantCountParam, checkInCheckOutParam, coordinateParam].filter(Boolean);
+            queryParams = [guestCountParam, checkInCheckOutParam, coordinateParam].filter(Boolean);
         })();
 
         return "?" + queryParams.join('&');

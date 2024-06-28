@@ -5,27 +5,27 @@
     let userData = {
         accountName: '',
         nickname: '',
-        loginPassword: '',
+        password: '',
     }
 
     let confirmPassword = '';
     let accountNameValid = true;
     let nicknameValid = true;
-    let loginPasswordValid = true;
+    let passwordValid = true;
     let confirmPasswordValid = true;
 
     function validateInput() {
     accountNameValid = userData.accountName.length >= 4 && userData.accountName.length <= 50;
     nicknameValid = userData.nickname.length >= 4 && userData.nickname.length <= 50;
-    loginPasswordValid = userData.loginPassword.length >= 4 && userData.loginPassword.length <= 30;
-    confirmPasswordValid = confirmPassword === userData.loginPassword;
+    passwordValid = userData.password.length >= 4 && userData.password.length <= 30;
+    confirmPasswordValid = confirmPassword === userData.password;
     }
 
     function handleSubmit(event) {
         event.preventDefault();
         validateInput();
 
-        if (accountNameValid && nicknameValid && loginPasswordValid && confirmPasswordValid) {
+        if (accountNameValid && nicknameValid && passwordValid && confirmPasswordValid) {
             auth.register(userData);
             goto("/accommodations");
         }
@@ -63,8 +63,8 @@
             <div class="space-y-2 h-[50px]">
                 <input type="password"
                        placeholder="Password"
-                       class="border border-gray-300 rounded px-3 py-2 h-2/3 w-full {loginPasswordValid ? '' : 'error-border'}"
-                       bind:value={userData.loginPassword}/>
+                       class="border border-gray-300 rounded px-3 py-2 h-2/3 w-full {passwordValid ? '' : 'error-border'}"
+                       bind:value={userData.password}/>
                 <p class="text-xs text-gray-600 mt-1">
                     최소 4자에서 최대 30자까지 입력 가능합니다
                 </p>

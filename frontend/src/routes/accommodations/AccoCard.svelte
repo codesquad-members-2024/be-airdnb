@@ -10,6 +10,8 @@
     export let bedroomCount;
     export let bathroomCount;
     export let totalPrice;
+    export let amenities;
+    export let imageUrls;
 
     let stayLength = differenceInDays(parseISO($filter.checkOutDate), parseISO($filter.checkInDate));
     let pricePerNight = Math.floor(totalPrice / stayLength);
@@ -40,9 +42,9 @@
                     <p> 욕실 {bathroomCount}개</p>
                 </div>
                 <div class="flex gap-2">
-                    <!--{#each amenities as amenity}-->
-                    <!--    <p>{amenity}</p>-->
-                    <!--{/each}-->
+                    {#each amenities as amenity}
+                        <p>{amenity}</p>
+                    {/each}
                 </div>
             </div>
         </div>

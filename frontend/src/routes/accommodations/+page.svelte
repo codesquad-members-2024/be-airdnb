@@ -27,23 +27,12 @@
     //     title: "숙소 제목",
     //     maxGuestCount: 3,
     //     bedroomCount:1 ,
-    //     bedCount:1,
     //     bathroomCount:1,
+    //     coordinate:1,
     //     amenities: ["주방", "무선 인터넷", "에어컨", "헤어드라이어"],
+    //     imageUrls: ["~~", "~~~"],
     //     totalPrice: 1729707,
-    // },
-    //     {
-    //         accoId: 2,
-    //         placeCategory: "서울 온천",
-    //         title: "온천 가고 싶다",
-    //         maxGuestCount: 10,
-    //         bedroomCount: 10,
-    //         bedCount: 100,
-    //         bathroomCount:100,
-    //         amenities: ["주방", "무선 인터넷", "에어컨", "헤어드라이어"],
-    //         totalPrice: 100000000000,
-    //     }
-    // ]
+    // }
 
     $: isReservationModalOpened = false;
     const handleReservationModalClicked = () => {
@@ -108,6 +97,8 @@
                     bedroomCount={acco.bedroomCount}
                     bathroomCount={acco.bathroomCount}
                     totalPrice={acco.totalPrice}
+                    amenities={acco.amenities}
+                    imageUrls={acco.imageUrls}
                     on:accoSelected={handleAccoSelected}
                 />
             {/each}
