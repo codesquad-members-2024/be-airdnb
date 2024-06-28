@@ -5,8 +5,11 @@ import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
-import java.util.List;
+import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,10 +42,23 @@ public class AccommodationController {
     return accommodationService.show(id);
   }
 
-  //숙소 필터
-  @GetMapping("/filter")
-  public List<AccommodationSearchResponse> getFilteredAccommodations(
-      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest) {
-    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest);
+  //숙소 수정
+  @PutMapping("/accommodations/{id}")
+  public void updateAccommodation(@PathVariable Long id,
+      @RequestBody AccommodationUpdateRequest accommodationUpdateRequest) {
+    accommodationService.update(id, accommodationUpdateRequest);
+  }
+
+  //숙소 삭제
+  @DeleteMapping("accommodations/{id}")
+  public void deleteAccommodation(@PathVariable Long id) {
+    accommodationService.delete(id);
+  }
+
+  @GetMapping("accommodations/filter")
+  public Page<AccommodationSearchResponse> getAccommodationFilter(
+      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest,
+      Pageable pageable) {
+    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest, pageable);
   }
 }

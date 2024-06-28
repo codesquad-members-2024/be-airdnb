@@ -13,11 +13,11 @@ import com.team01.airdnb.image.ImageService;
 import com.team01.airdnb.user.Role;
 import com.team01.airdnb.user.User;
 import com.team01.airdnb.user.UserService;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,8 +110,8 @@ public class AccommodationService {
    * 숙소 검색을 위해 필터를 적용하여 조건에 맞는 결과를 가져옵니다.
    */
   @Transactional(readOnly = true)
-  public List<AccommodationSearchResponse> searchFilteredAccommodations(
-      AccommodationFilterRequest accommodationFilterRequest) {
+  public Page<AccommodationSearchResponse> searchFilteredAccommodations(
+      AccommodationFilterRequest accommodationFilterRequest, Pageable pageable) {
     return accommodationRepository.filterAccommodation(
         accommodationFilterRequest.checkin(),
         accommodationFilterRequest.checkout(),
@@ -120,7 +120,10 @@ public class AccommodationService {
         accommodationFilterRequest.adultCount(),
         accommodationFilterRequest.childrenCount(),
         accommodationFilterRequest.infantsCount(),
-        accommodationFilterRequest.location());
+        accommodationFilterRequest.location(),
+        accommodationFilterRequest.latitude(),
+        accommodationFilterRequest.longitude(),
+        pageable);
   }
 
   @Transactional(readOnly = true)

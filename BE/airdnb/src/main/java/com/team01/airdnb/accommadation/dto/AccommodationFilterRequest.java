@@ -10,7 +10,9 @@ public record AccommodationFilterRequest(
     Integer adultCount,
     Integer childrenCount,
     Integer infantsCount,
-    String location
+    String location,
+    Double latitude,
+    Double longitude
 ) {
 
 }
