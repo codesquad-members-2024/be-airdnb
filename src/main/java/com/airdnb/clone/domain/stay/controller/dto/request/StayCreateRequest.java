@@ -7,6 +7,7 @@ import com.airdnb.clone.domain.stay.entity.Stay.StayBuilder;
 import com.airdnb.clone.domain.stay.entity.Stay.Type;
 import com.airdnb.clone.domain.stay.entity.StayFee;
 import com.airdnb.clone.domain.stay.entity.StayImage;
+import com.airdnb.clone.util.PointUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @RequiredArgsConstructor
@@ -25,8 +27,11 @@ public class StayCreateRequest {
     @NotBlank
     private final String alias;
 
-    @NotBlank
-    private final String location;
+    @NotNull
+    private final double latitude;
+
+    @NotNull
+    private final double longitude;
 
     @NotNull
     private final LocalTime checkInTime;
@@ -54,7 +59,7 @@ public class StayCreateRequest {
     public StayBuilder toStayBuilder() {
         return Stay.builder()
                 .alias(alias)
-                .location(location)
+                .point(PointUtil.createPoint(latitude, longitude))
                 .checkInTime(checkInTime)
                 .checkOutTime(checkOutTime)
                 .description(description)

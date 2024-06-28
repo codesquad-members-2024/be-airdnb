@@ -23,6 +23,7 @@ import com.airdnb.clone.domain.stay.controller.dto.response.edit.RoomInfoRespons
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.StatusEditResponse;
 import com.airdnb.clone.domain.stay.controller.dto.response.edit.TypeEditResponse;
 import com.airdnb.clone.domain.stay.service.StayService;
+import com.airdnb.clone.util.PointUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -98,7 +99,7 @@ public class StayController {
     @PatchMapping("/{id}/location")
     public LocationEditResponse editLocation(@PathVariable("id") Long id,
                                              @Valid @RequestBody LocationEditRequest request) {
-        return stayService.editLocation(id, request.getLocation());
+        return stayService.editLocation(id, PointUtil.createPoint(request.getLatitude(), request.getLongtitude()));
     }
 
     @PatchMapping("/{id}/room")

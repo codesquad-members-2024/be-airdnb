@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,10 +21,10 @@ import lombok.NoArgsConstructor;
 public class StayFee {
 
     @Column(name = "PER_NIGHT")
-    private Integer perNight;
+    private Long perNight;
 
     @Column(name = "CLEANING_FEE")
-    private Integer cleaningFee;
+    private Long cleaningFee;
 
     public Long calculateTotalRate(LocalDateTime checkIn, LocalDateTime checkOut) {
         validate(checkIn, checkOut);

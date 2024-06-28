@@ -1,6 +1,7 @@
 package com.airdnb.clone.domain.oauth2;
 
 import com.airdnb.clone.domain.member.entity.Member;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,9 +18,10 @@ public class AirdnbOAuth2Attribute {
     private final String email;
     private final String picture;
 
-    protected static AirdnbOAuth2Attribute of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-        if ("naver".equals(registrationId)) {
-            return ofNaver(registrationId, "id", attributes);
+    protected static AirdnbOAuth2Attribute of(String registrationId, String userNameAttributeName,
+                                              Map<String, Object> attributes) {
+        if ("kakao".equals(registrationId)) {
+            return ofKakao(registrationId, "id", attributes);
         }
 
         if ("github".equals(registrationId)) {
@@ -29,7 +31,8 @@ public class AirdnbOAuth2Attribute {
         return ofGoogle(registrationId, userNameAttributeName, attributes);
     }
 
-    private static AirdnbOAuth2Attribute ofGoogle(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+    private static AirdnbOAuth2Attribute ofGoogle(String registrationId, String userNameAttributeName,
+                                                  Map<String, Object> attributes) {
         return AirdnbOAuth2Attribute.builder()
                 .registrationId(registrationId)
                 .name((String) attributes.get("name"))
@@ -40,7 +43,8 @@ public class AirdnbOAuth2Attribute {
                 .build();
     }
 
-    private static AirdnbOAuth2Attribute ofGithub(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+    private static AirdnbOAuth2Attribute ofGithub(String registrationId, String userNameAttributeName,
+                                                  Map<String, Object> attributes) {
         return AirdnbOAuth2Attribute.builder()
                 .registrationId(registrationId)
                 .name((String) attributes.get("name"))
@@ -51,16 +55,20 @@ public class AirdnbOAuth2Attribute {
                 .build();
     }
 
-    // TODO: naver 연동 추가 예정
-    private static AirdnbOAuth2Attribute ofNaver(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+    private static AirdnbOAuth2Attribute ofKakao(String registrationId, String userNameAttributeName,
+                                                 Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("properties");
+
+        Map<String, Object> responseAttributes = new HashMap<>();
+        responseAttributes.putAll(attributes);
+        responseAttributes.putAll(response);
 
         return AirdnbOAuth2Attribute.builder()
                 .registrationId(registrationId)
-                .name((String) response.get("name"))
-                .email((String) response.get("email"))
+                .name((String) response.get("nickname"))
+                .email((String) response.get("account_email"))
                 .picture((String) response.get("profile_image"))
-                .attributes(response)
+                .attributes(responseAttributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }

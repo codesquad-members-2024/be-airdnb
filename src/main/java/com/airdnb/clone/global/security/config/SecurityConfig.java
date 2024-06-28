@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     private final AirdnbOAuth2SuccessHandler successHandler;
     private final JwtTokenService jwtTokenService;
 
+    @Value("#{environment['allowOrigin']}")
+    private String allowOrigin;
+
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -37,7 +41,7 @@ public class SecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration corsConfig = new CorsConfiguration();
-                        corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                        corsConfig.setAllowedOrigins(Collections.singletonList(allowOrigin));
                         corsConfig.setAllowedMethods(Collections.singletonList("*"));
                         corsConfig.setAllowedHeaders(Collections.singletonList("*"));
                         corsConfig.setAllowCredentials(true);
@@ -53,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/stays").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2Configurer -> oauth2Configurer
-                        .loginPage("http://localhost:5173/login")
+                        .loginPage(allowOrigin + "/login")
                         .successHandler(successHandler)
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(userService))
                 );

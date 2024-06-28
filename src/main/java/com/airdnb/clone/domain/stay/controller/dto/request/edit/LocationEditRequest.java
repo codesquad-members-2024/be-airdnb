@@ -1,6 +1,7 @@
 package com.airdnb.clone.domain.stay.controller.dto.request.edit;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LocationEditRequest {
 
-    @NotBlank
-    private final String location;
+    @NotNull
+    private final double latitude;
+
+    @NotNull
+    private final double longtitude;
 }

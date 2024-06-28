@@ -28,6 +28,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,15 +43,15 @@ public class Stay extends BaseTimeEntity {
     @Column(name = "STAY_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "HOST_ID", foreignKey = @ForeignKey(name = "FK_MEMBER_STAY_ID"))
     private Member host;
 
+    @Column(name = "POINT", columnDefinition = "POINT SRID 4326")
+    private Point point;
+
     @Column(name = "ALIAS")
     private String alias;
-
-    @Column(name = "LOCATION")
-    private String location;
 
     @Column(name = "CHECK_IN_TIME")
     private LocalTime checkInTime;
@@ -111,12 +112,6 @@ public class Stay extends BaseTimeEntity {
         return this;
     }
 
-    public Stay changeLocation(String location) {
-        this.location = location;
-
-        return this;
-    }
-
     public Stay changeCheckInOutTime(LocalTime checkInTime, LocalTime checkOutTime) {
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
@@ -132,6 +127,13 @@ public class Stay extends BaseTimeEntity {
 
     public Stay changeFee(StayFee fee) {
         this.fee = fee;
+
+        return this;
+    }
+
+
+    public Stay changePoint(Point point) {
+        this.point = point;
 
         return this;
     }

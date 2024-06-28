@@ -30,6 +30,7 @@ import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,12 +97,12 @@ public class StayService {
     }
 
     @Transactional
-    public LocationEditResponse editLocation(Long stayId, String location) {
+    public LocationEditResponse editLocation(Long stayId, Point point) {
         Stay stay = stayRepository.findById(stayId)
                 .orElseThrow()
-                .changeLocation(location);
+                .changePoint(point);
 
-        return LocationEditResponse.of(stay.getLocation());
+        return LocationEditResponse.of(stay.getPoint());
     }
 
     @Transactional

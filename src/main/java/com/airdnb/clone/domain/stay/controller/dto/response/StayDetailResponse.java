@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,7 +21,8 @@ public final class StayDetailResponse {
 
     private final Long id;
     private final String alias;
-    private final String location;
+    private final double latitude;
+    private final double longtitude;
     private final LocalTime checkInTime;
     private final LocalTime checkOutTime;
     private final String description;
@@ -35,7 +37,8 @@ public final class StayDetailResponse {
         return new StayDetailResponse(
                 stay.getId(),
                 stay.getAlias(),
-                stay.getLocation(),
+                stay.getPoint().getY(),
+                stay.getPoint().getX(),
                 stay.getCheckInTime(),
                 stay.getCheckOutTime(),
                 stay.getDescription(),
