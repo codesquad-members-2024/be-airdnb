@@ -1,5 +1,6 @@
 package codesquad.airdnb.domain.accommodation.service;
 
+import codesquad.airdnb.domain.accommodation.dto.additionals.FilteredAcco;
 import codesquad.airdnb.domain.accommodation.dto.request.AccoReservationRequest;
 import codesquad.airdnb.domain.accommodation.dto.response.FilteredAccosResponse;
 import codesquad.airdnb.domain.accommodation.entity.*;
@@ -10,6 +11,8 @@ import codesquad.airdnb.domain.accommodation.dto.response.AccoContentResponse;
 import codesquad.airdnb.domain.accommodation.dto.response.AccoListResponse;
 import codesquad.airdnb.domain.member.Member;
 import codesquad.airdnb.domain.member.MemberRepository;
+import codesquad.airdnb.global.security.JwtTokenProvider;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,8 +30,6 @@ import java.util.NoSuchElementException;
 public class AccoService {
 
     private final AccoRepository accoRepository;
-
-    private final AccoImageRepository accoImageRepository;
 
     private final AmenityRepository amenityRepository;
 
@@ -38,6 +40,8 @@ public class AccoService {
     private final ReservationRepository reservationRepository;
 
     private final ReservationProductRepository reservationProductRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public AccoContentResponse create(@Valid AccoCreateRequest request) {
@@ -62,8 +66,10 @@ public class AccoService {
         return accoRepository.getAccoContentOf(accoId);
     }
 
-    public AccoListResponse getList(Long hostId) {
-        List<Accommodation> accommodations = accoRepository.findAllByHostId(hostId);
+    @Transactional
+    public AccoListResponse getList(String authHeader) {
+        String accountName = jwtTokenProvider.getSubjectFromAuthHeader(authHeader);
+        List<Accommodation> accommodations = accoRepository.findAllByHostAccountName(accountName);
 
         return AccoListResponse.of(accommodations);
     }
@@ -75,14 +81,26 @@ public class AccoService {
         accoProductRepository.createYearlyProduct(accoId, accommodation.getBasePricePerNight());
     }
 
+    @Transactional
     public List<FilteredAccosResponse> getFilteredList(Integer guestCount, Integer infantCount,
                                                        LocalDate checkInDate, LocalDate checkOutDate,
-                                                       Double longitude, Double latitude) {
+                                                       Double longitude, Double latitude,
+                                                       Integer lowestPrice, Integer highestPrice) {
         GeometryHelper geometryHelper = new GeometryHelper();
         Point point = geometryHelper.createPoint(longitude, latitude);
-        List<Long> ids = accoRepository.findIdsByCoordAndHumanCount(point, guestCount, infantCount);
+        List<Long> ids = accoRepository.findIdsByCoordAndHumanCount(point, guestCount);
 
-        return accoProductRepository.getAccoListFilteredBy(ids, checkInDate, checkOutDate);
+        List<FilteredAcco> accoListFilteredBy = accoProductRepository.getAccoListFilteredBy(ids, checkInDate, checkOutDate, lowestPrice, highestPrice);
+
+        List<FilteredAccosResponse> result = new ArrayList<>();
+
+        for (FilteredAcco filteredAcco : accoListFilteredBy) {
+            Accommodation accommodation = accoRepository.findById(filteredAcco.accoId())
+                    .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 숙소가 없습니다."));
+            result.add(new FilteredAccosResponse(filteredAcco, accommodation.getAmenityNames(), accommodation.getImageUrls()));
+        }
+
+        return result;
     }
 
     // ****************** Scheduled ******************
@@ -94,13 +112,21 @@ public class AccoService {
     // **************** Scheduled_END ****************
 
     @Transactional
-    public void reservation(AccoReservationRequest request, Long memberId) {
-        AccoProducts accoProducts = new AccoProducts(accoProductRepository.findAllById(request.products()));
+    public void reservation(AccoReservationRequest request, String authHeader) {
+        // 회원확인
+        String accountName = jwtTokenProvider.getSubjectFromAuthHeader(authHeader);
+
+        Member member = memberRepository.findMemberByAccountName(accountName)
+                .orElseThrow(() -> new NoSuchElementException("해당 회원이 존재하지 않습니다."));
+
+        // 예약 가능여부 확인
+        AccoProducts accoProducts =
+                new AccoProducts(accoProductRepository.findByAccommodation_IdAndReserveDateBetweenAndIsReservedFalse(
+                        request.accoId(), request.startDate(), request.endDate().minusDays(1)));
         accoProducts.validate(request);
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException("해당 ID를 갖는 멤버가 존재하지 않습니다."));
 
+        // 예약 처리
         Reservation reservation = request.toReservation(member, accoProducts.getTotalRoomCharge());
         reservationRepository.save(reservation);
 

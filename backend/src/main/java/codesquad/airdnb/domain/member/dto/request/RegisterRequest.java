@@ -11,22 +11,13 @@ public record RegisterRequest(
         String accountName,
 
         @NotBlank
-        @Size(min = 4, max = 30)
+        @Size(min = 4, max = 20)
         String password,
 
         @NotBlank
-        @Size(min = 1, max = 50)
+        @Size(min = 1, max = 200)
         String nickname
 ) {
-
-    public Member toEntity() {
-        return Member.builder()
-                .accountName(accountName)
-                .password(password)
-                .nickname(nickname)
-                .loginType(LoginType.DEFAULT)
-                .build();
-    }
 
     public Member toEntity(LoginType loginType) {
         return Member.builder()

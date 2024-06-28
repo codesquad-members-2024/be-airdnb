@@ -109,13 +109,12 @@ class HostAccoControllerTest {
     @Test
     void 호스트_아이디로_해당_호스트가_등록한_숙소_리스트를_요청하면_200_상태코드를_반환한다() throws Exception {
         // given
-        Long hostId = 1L;
-        String requestParam = "?hostId=";
-        String url = urlPrefix + "/accommodations" + requestParam + hostId;
+        String hostAccountName = "test";
+        String url = urlPrefix + "/accommodations";
 
         SimpleAccommodationResponse exSimpleAccommodation = new SimpleAccommodationResponse(1L, "test", "test.com");
         AccoListResponse response = new AccoListResponse(List.of(exSimpleAccommodation));
-        given(accoService.getList(hostId)).willReturn(response);
+        given(accoService.getList(hostAccountName)).willReturn(response);
 
         // when
         ResultActions result = mockMvc.perform(get(url));

@@ -43,7 +43,7 @@ public class OAuth {
     }
 
     public void expireAllToken() {
-        this.accessToken = null;
-        this.refreshToken = null;
+        this.accessToken = "";
+        this.refreshToken = "";
     }
 }

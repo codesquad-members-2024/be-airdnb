@@ -30,7 +30,7 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        AuthResponse authResponse = memberService.register(request, LoginType.DEFAULT);
+        AuthResponse authResponse = memberService.register(request, LoginType.BASIC);
         HttpHeaders headers = createAuthResponseHeader(authResponse.accessToken());
 
         return ResponseEntity
@@ -51,9 +51,8 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String token) {
-        String accessToken = token.replace("Bearer ", "");
-        memberService.logout(accessToken);
+    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        memberService.logout(authHeader);
         HttpHeaders headers = createAccessTokenExpiredHeader();
 
         return ResponseEntity

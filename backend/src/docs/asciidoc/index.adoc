@@ -1,0 +1,23 @@
+= API Documentation
+
+== Authentication API
+
+=== Register
+
+include::{snippets}/register/http-request.adoc[]
+include::{snippets}/register/request-fields.adoc[]
+include::{snippets}/register/http-response.adoc[]
+include::{snippets}/register/response-fields.adoc[]
+
+=== Login
+
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+include::{snippets}/login/http-response.adoc[]
+include::{snippets}/login/response-fields.adoc[]
+
+=== Logout
+
+include::{snippets}/logout/request-headers.adoc[]
+include::{snippets}/logout/http-request.adoc[]
+include::{snippets}/logout/http-response.adoc[]

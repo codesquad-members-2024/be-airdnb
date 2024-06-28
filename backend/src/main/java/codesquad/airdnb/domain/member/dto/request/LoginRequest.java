@@ -9,7 +9,7 @@ public record LoginRequest(
         String accountName,
 
         @NotBlank
-        @Size(min = 4, max = 50)
+        @Size(min = 4, max = 20)
         String password
 ) {
 }

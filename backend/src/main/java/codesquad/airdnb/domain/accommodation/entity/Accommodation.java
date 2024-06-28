@@ -71,6 +71,19 @@ public class Accommodation {
     public void addImages(List<AccoImage> images) {
         this.images = images;
     }
+
+    public List<String> getImageUrls() {
+        return images.stream()
+                .map(AccoImage::getUrl)
+                .toList();
+    }
+
+    public List<String> getAmenityNames() {
+        return amenities.stream()
+                .map(AccoAmen::getAmenity)
+                .map(Amenity::getName)
+                .toList();
+    }
 }
 
 

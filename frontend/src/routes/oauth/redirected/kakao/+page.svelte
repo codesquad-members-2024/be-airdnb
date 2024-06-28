@@ -1,6 +1,6 @@
 <script>
     import {onMount} from "svelte";
-    import {auth} from "../../../../store/auth.js";
+    import {auth} from "../../../../store/Auth.js";
 
     onMount(() => {
         const searchParams = new URLSearchParams(window.location.search);
