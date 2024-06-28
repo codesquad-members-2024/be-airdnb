@@ -22,4 +22,5 @@ public class AccommodationUpdateServiceRequest {
     private final String amenity;
     private final List<MultipartFile> files = new ArrayList<>();
     private final AccommodationType accommodationType;
+    private final List<String> hashtagContents;
 }
