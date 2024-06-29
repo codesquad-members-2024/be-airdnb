@@ -10,6 +10,8 @@ import codesquad.team05.domain.hashtag.HashtagRepository;
 import codesquad.team05.domain.picture.Picture;
 import codesquad.team05.domain.picture.PictureRepository;
 import codesquad.team05.util.AccommodationMapper;
+import codesquad.team05.util.FilterConstants;
+import codesquad.team05.util.FilterManger;
 import codesquad.team05.web.accommodation.dto.request.AccommodationSaveServiceRequest;
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdateServiceRequest;
 import codesquad.team05.web.accommodation.dto.response.AccommodationResponse;
@@ -35,6 +37,8 @@ public class AccommodationService {
     private final PictureRepository pictureRepository;
     private final HashtagRepository hashtagRepository;
     private final AccommodationHashtagRepository accommodationHashtagRepository;
+    private final FilterManger filterManger;
+
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -159,5 +163,30 @@ public class AccommodationService {
 
     public void delete(Long id) {
         accommodationRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Accommodation> getAllAccommodation(){
+
+        filterManger.enableFilter(FilterConstants.ACCOMMODATION_FILTER
+                , FilterConstants.FILTER_PARAM
+                , false);
+
+        List<Accommodation> accommodations = accommodationRepository.findAll();
+
+        filterManger.disableFilter(FilterConstants.ACCOMMODATION_FILTER);
+        return accommodations;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Accommodation> getAllDeletedAccommodation(Long hostId){
+
+        filterManger.enableFilter(FilterConstants.ACCOMMODATION_FILTER
+                , FilterConstants.FILTER_PARAM
+                ,true);
+        List<Accommodation> byHostId = accommodationRepository.findByHostId(hostId);
+        filterManger.disableFilter(FilterConstants.ACCOMMODATION_FILTER);
+
+        return byHostId;
     }
 }
