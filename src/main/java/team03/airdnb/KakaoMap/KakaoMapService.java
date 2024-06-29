@@ -1,4 +1,4 @@
-package team03.airdnb.kakaoMap;
+package team03.airdnb.KakaoMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +9,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import team03.airdnb.kakaoMap.dto.CoordinatesDto;
-import team03.airdnb.kakaoMap.dto.request.AddressDto;
+import org.springframework.web.util.UriComponentsBuilder;
+import team03.airdnb.KakaoMap.dto.CoordinatesDto;
+import team03.airdnb.KakaoMap.dto.request.AddressDto;
 
 @Service
 @RequiredArgsConstructor
 public class KakaoMapService {
+
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String QUERY = "query";
+    private static final String KAKAO_AUTHORIZATION_START = "KakaoAK ";
 
     @Value("${kakao.api.key}")
     private String apiKey;
@@ -27,9 +32,12 @@ public class KakaoMapService {
 
     public boolean isAddressValid(String address) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + apiKey);
+        headers.set(AUTHORIZATION, KAKAO_AUTHORIZATION_START + apiKey);
 
-        String url = apiUrl + "?query=" + address;
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .queryParam(QUERY, address)
+                .build()
+                .toUriString();
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
@@ -45,9 +53,12 @@ public class KakaoMapService {
 
     public CoordinatesDto getCoordinates(String address) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + apiKey);
+        headers.set(AUTHORIZATION, KAKAO_AUTHORIZATION_START + apiKey);
 
-        String url = apiUrl + "?query=" + address;
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .queryParam(QUERY, address)
+                .build()
+                .toUriString();
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);

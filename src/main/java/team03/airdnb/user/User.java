@@ -30,7 +30,10 @@ public class User extends BaseEntity {
 
     private String password;
     private String profileImg;
-    private String type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType type;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<>();
@@ -43,4 +46,8 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "host", cascade = CascadeType.ALL)
     private List<Accommodation> accommodations = new ArrayList<>();
+
+    public void changeTypeToHost() {
+        this.type = UserType.HOST;
+    }
 }

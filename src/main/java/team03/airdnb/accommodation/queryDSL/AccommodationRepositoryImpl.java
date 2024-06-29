@@ -4,7 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.QAccommodation;
@@ -15,14 +15,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class AccommodationRepositoryImpl implements AccommodationRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    @Autowired
-    public AccommodationRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
-    }
 
     @Override
     public List<Accommodation> findAccommodationsByFilters(AccommodationFilterDto filterDto) {
@@ -72,6 +68,19 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
         }
 
         // 주어진 조건에 따라 숙박 목록 조회
+        return queryFactory.selectFrom(QAccommodation.accommodation)
+                .where(builder)
+                .fetch();
+    }
+
+    @Override
+    public List<Accommodation> findAccommodationsByFirstAddress(String firstAddress) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (firstAddress != null && !firstAddress.isEmpty()) {
+            builder.and(QAccommodation.accommodation.address.firstAddress.eq(firstAddress));
+        }
+
         return queryFactory.selectFrom(QAccommodation.accommodation)
                 .where(builder)
                 .fetch();

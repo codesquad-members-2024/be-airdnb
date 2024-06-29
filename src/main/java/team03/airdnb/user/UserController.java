@@ -36,6 +36,9 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserShowDto> showLoginUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if(userDetails == null){
+            return ResponseEntity.noContent().build();
+        }
         UserShowDto userShowDto = userService.showLoginUser(userDetails.getUsername());
         return ResponseEntity.ok(userShowDto);
     }

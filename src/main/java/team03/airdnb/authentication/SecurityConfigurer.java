@@ -34,12 +34,18 @@ public class SecurityConfigurer {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/authenticate", "/oauth2/**", "/login/**", "/users", "/accommodations/filter", "/accommodations/{accommodationId}").permitAll()
+                        .requestMatchers(
+                                "/authenticate",
+                                "/oauth2/**",
+                                "/login/**",
+                                "/users",
+                                "/accommodations/filter",
+                                "/accommodations/{accommodationId}",
+                                "/accommodations/filter/region/{region}").permitAll()
                         .anyRequest().authenticated()
                 )
 
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/login/oauth")
                         )

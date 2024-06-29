@@ -34,4 +34,8 @@ public class ReservationService {
     public void deleteReservation(Long reservationId) {
         reservationRepository.deleteById(reservationId);
     }
+
+    public boolean hasUserReservation(Long userId, Long accommodationId) {
+        return reservationRepository.existsByUserAndAccommodation(userId, accommodationId);
+    }
 }

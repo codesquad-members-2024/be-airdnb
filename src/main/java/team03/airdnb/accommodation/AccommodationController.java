@@ -76,4 +76,11 @@ public class AccommodationController {
 
         return ResponseEntity.ok(accommodationsByFilters);
     }
+
+    @GetMapping("/filter/region/{region}")
+    public ResponseEntity<List<AccommodationListDto>> filterAccommodations(@PathVariable String region) {
+        List<AccommodationListDto> accommodationsByFilters = accommodationService.findAccommodationsByRegion(region);
+
+        return ResponseEntity.ok(accommodationsByFilters);
+    }
 }

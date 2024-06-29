@@ -8,4 +8,6 @@ import java.util.List;
 public interface AccommodationRepositoryCustom {
 
     List<Accommodation> findAccommodationsByFilters(AccommodationFilterDto filterDto);
+
+    List<Accommodation> findAccommodationsByFirstAddress(String firstAddress);
 }

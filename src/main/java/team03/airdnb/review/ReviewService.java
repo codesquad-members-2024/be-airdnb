@@ -6,9 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import team03.airdnb.accommodation.Accommodation;
 import team03.airdnb.accommodation.AccommodationRepository;
 import team03.airdnb.accommodation.AccommodationService;
+import team03.airdnb.exception.ReviewNotAllowedException;
 import team03.airdnb.exception.notFound.AccommodationNotFoundException;
 import team03.airdnb.exception.notFound.ReviewNotFoundException;
 import team03.airdnb.exception.notFound.UserNotFoundException;
+import team03.airdnb.reservation.ReservationService;
 import team03.airdnb.review.dto.request.ReviewSaveDto;
 import team03.airdnb.review.dto.request.ReviewUpdateDto;
 import team03.airdnb.user.User;
@@ -23,8 +25,13 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
     private final AccommodationService accommodationService;
+    private final ReservationService reservationService;
 
     public Long createReview(ReviewSaveDto reviewSaveDto) {
+        if(!reservationService.hasUserReservation(reviewSaveDto.getUserId(), reviewSaveDto.getAccommodationId())){
+            throw new ReviewNotAllowedException();
+        }
+
         // accommodation averageGrade 업데이트
         accommodationService.updateAverageGradeOnReviewAdd(reviewSaveDto.getAccommodationId(), reviewSaveDto.getGrade());
 

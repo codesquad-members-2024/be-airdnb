@@ -22,4 +22,16 @@ public class ExceptionControllerAdvice {
         log.error("[NotFoundException] {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
     }
+
+    @ExceptionHandler(ReviewNotAllowedException.class)
+    public ResponseEntity<String> handleReviewNotAllowedException(ReviewNotAllowedException ex) {
+        log.error("[ReviewNotAllowedException] {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
+    }
+
+    @ExceptionHandler(FileUploadFailedException.class)
+    public ResponseEntity<String> handleFileUploadFailedException(FileUploadFailedException ex) {
+        log.error("[FileUploadFailedException] {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), ex.getHttpStatus());
+    }
 }
