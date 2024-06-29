@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": { "type": "keyword" },
+    "name": { "type": "text", "analyzer": "korean" },
+    "price": { "type": "integer" },
+    "address": { "type": "text", "analyzer": "korean" },
+    "description": { "type": "text", "analyzer": "korean" },
+    "amenity": { "type": "keyword" },
+    "accommodationType": { "type": "keyword" }
+  }
+}
