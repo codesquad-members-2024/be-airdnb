@@ -2,11 +2,15 @@ package com.airbnb.domain.payment.entity;
 
 import com.airbnb.domain.booking.entity.Booking;
 import com.airbnb.domain.common.BaseTime;
-import com.airbnb.domain.payment.dto.AmountResult;
+import com.airbnb.domain.common.Card;
+import com.airbnb.domain.common.PaymentStatus;
+import com.airbnb.domain.common.AmountResult;
 import com.airbnb.domain.policy.entity.DiscountPolicy;
 import com.airbnb.domain.policy.entity.FeePolicy;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -84,11 +88,15 @@ public class Payment extends BaseTime {
         this.status = status;
     }
 
-    public boolean isRecipient(String RecipientKey) {
-        return this.booking.isHost(RecipientKey);
+    public boolean isRecipient(Long hostId) {
+        return this.booking.isHost(hostId);
     }
 
-    public boolean isPayer(String payerKey) {
-        return this.booking.isGuest(payerKey);
+    public boolean isPayer(Long guestId) {
+        return this.booking.isGuest(guestId);
+    }
+
+    public int getRecipientRevenue() {
+        return totalAmount - hostFeeAmount - discountAmount;
     }
 }

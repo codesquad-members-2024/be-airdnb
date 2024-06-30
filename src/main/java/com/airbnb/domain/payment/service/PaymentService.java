@@ -2,13 +2,15 @@ package com.airbnb.domain.payment.service;
 
 import com.airbnb.domain.payment.dto.response.PaymentListResponse;
 import com.airbnb.domain.payment.dto.response.PaymentResponse;
+import com.airbnb.domain.payment.dto.response.RevenueResponse;
 import com.airbnb.domain.payment.entity.Payment;
-import com.airbnb.domain.payment.entity.PaymentStatus;
+import com.airbnb.domain.common.PaymentStatus;
 import com.airbnb.domain.payment.repository.PaymentRepository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,38 +21,56 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    public PaymentListResponse getAllByPayerKeyAndStatus(String payerKey, PaymentStatus status) {
-        List<Payment> payments = paymentRepository.findByBookingGuestEmailAndStatus(payerKey, status);
+    public PaymentListResponse getAllByGuestIdAndStatus(Long guestId, String status) {
+        List<Payment> payments;
+
+        if(status == null || status.isEmpty()) {
+            payments = paymentRepository.findByBookingGuestId(guestId);
+        } else {
+            payments = paymentRepository.findByBookingGuestIdAndStatus(guestId, PaymentStatus.from(status));
+        }
 
         return PaymentListResponse.from(payments);
     }
 
-    public PaymentListResponse getAllByRecipientKeyAndStatus(String recipientKey, PaymentStatus status) {
-        List<Payment> payments = paymentRepository.findByBookingAccommodationHostEmailAndStatus(recipientKey, status);
+    public PaymentListResponse getAllByHostIdAndStatus(Long hostId, String status) {
+        List<Payment> payments;
+
+        if(status == null || status.isEmpty()) {
+            payments = paymentRepository.findByBookingAccommodationHostId(hostId);
+        } else {
+            payments = paymentRepository.findByBookingAccommodationHostIdAndStatus(hostId, PaymentStatus.from(status));
+        }
 
         return PaymentListResponse.from(payments);
     }
 
-    public PaymentResponse getById(Long paymentId) {
-        Payment targetPayment = paymentRepository.findById(paymentId).orElseThrow();
+    public RevenueResponse getRevenue(Long hostId, LocalDate startDate, LocalDate endDate, Long accommodationId) {
+        if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("시작일은 종료일 이전이어야 합니다.");
+        }
 
-        if (!validatePayerAuth(targetPayment) && !validateRecipientAuth(targetPayment)) {
+        List<Payment> payments = paymentRepository.findAllByCondition(hostId, startDate, endDate, accommodationId);
+
+        BigDecimal totalRevenue = payments.stream()
+                .map(payment -> new BigDecimal(payment.getRecipientRevenue()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalHostFeeAmount = payments.stream()
+                .map(payment -> new BigDecimal(payment.getHostFeeAmount()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return RevenueResponse.of(totalRevenue, totalHostFeeAmount, payments);
+    }
+
+    public PaymentResponse getById(Long guestId, Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId).orElseThrow();
+
+        if (!payment.isPayer(guestId)) {
             throw new IllegalArgumentException("조회 권한이 없습니다.");
         }
 
-        return PaymentResponse.from(targetPayment);
+        return PaymentResponse.of(payment);
     }
 
-    private boolean validateRecipientAuth(Payment payment) {
-        return payment.isRecipient(getLoggedInMemberKey());
-    }
-
-    private boolean validatePayerAuth(Payment payment) {
-        return payment.isPayer(getLoggedInMemberKey());
-    }
-
-    private String getLoggedInMemberKey() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
-    }
 }

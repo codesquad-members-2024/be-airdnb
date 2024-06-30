@@ -1,8 +1,8 @@
 package com.airbnb.domain.payment.dto.response;
 
-import com.airbnb.domain.payment.entity.Card;
+import com.airbnb.domain.common.Card;
 import com.airbnb.domain.payment.entity.Payment;
-import com.airbnb.domain.payment.entity.PaymentStatus;
+import com.airbnb.domain.common.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class PaymentResponse {
     private int discountAmount;
     private int finalAmount;
 
-    public static PaymentResponse from(Payment payment) {
+    public static PaymentResponse of(Payment payment) {
         return PaymentResponse.builder()
             .id(payment.getId())
             .status(payment.getStatus())
