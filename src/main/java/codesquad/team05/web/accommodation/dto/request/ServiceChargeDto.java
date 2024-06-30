@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class ServiceChargeDto {
 
-
     @NotNull
     private final ServiceType serviceType;
     @NotEmpty

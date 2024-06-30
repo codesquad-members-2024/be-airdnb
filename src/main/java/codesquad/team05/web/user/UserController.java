@@ -1,25 +1,32 @@
 package codesquad.team05.web.user;
 
-import codesquad.team05.domain.user.User;
-import codesquad.team05.domain.user.UserRepository;
+import codesquad.team05.service.UserService;
+import codesquad.team05.web.user.dto.request.JoinRequest;
+import codesquad.team05.web.user.dto.request.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
-    // Service 주입으로 변경 예정
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    // Dto 사용으로 수정 예정
-    @PostMapping("/users")
-    public void join(@RequestBody User user) {
-        userRepository.save(user);
+    @PostMapping
+    public void join(@RequestBody JoinRequest joinRequest) {
+        userService.save(joinRequest.toServiceDto());
     }
 
-    @GetMapping("/users/{loginId}")
-    public User userDetails(@PathVariable Long loginId) {
-        return userRepository.findById(loginId).get(); // Optional 처리 예정
+    @PostMapping("/login")
+    public void login(@RequestBody LoginRequest loginRequest) {
+        userService.login(loginRequest);
     }
+
+    @GetMapping("/login/google")
+    public String loginSuccess() {
+        return "Hello! from the Google";
+    }
+
+
 }

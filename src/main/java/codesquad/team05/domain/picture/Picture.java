@@ -22,6 +22,9 @@ public class Picture {
 
     public Picture(String url, Accommodation accommodation) {
         this.url = url;
+        if (this.accommodation != null) {
+            accommodation.getPictures().remove(this);
+        }
         this.accommodation = accommodation;
         accommodation.getPictures().add(this);
     }

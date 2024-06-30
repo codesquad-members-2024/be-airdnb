@@ -4,16 +4,16 @@ import codesquad.team05.domain.accommodation.Accommodation;
 import codesquad.team05.domain.accommodation.AccommodationRepository;
 import codesquad.team05.domain.reservation.Reservation;
 import codesquad.team05.domain.reservation.ReservationRepository;
-import codesquad.team05.domain.review.ReviewQueryRepository;
-import codesquad.team05.domain.review.Reviews;
+import codesquad.team05.domain.review.Review;
+import codesquad.team05.domain.review.ReviewRepository;
 import codesquad.team05.domain.user.User;
 import codesquad.team05.domain.user.UserRepository;
 import codesquad.team05.exception.DateAlreadyBookedException;
 import codesquad.team05.exception.PersonCountExceededException;
 import codesquad.team05.service.AccommodationService;
-import codesquad.team05.service.DiscountPolicyService;
 import codesquad.team05.service.ReservationService;
 import codesquad.team05.service.ServiceChargeService;
+import codesquad.team05.util.AccommodationMapper;
 import codesquad.team05.web.accommodation.dto.request.AccommodationUpdate;
 import codesquad.team05.web.reservation.dto.request.ReservationServiceDto;
 import codesquad.team05.web.reservation.dto.request.ReservationUpdate;
@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,34 +48,24 @@ class ReservationTest {
     private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
     private final ReservationRepository reservationRepository;
-    private final ReviewQueryRepository reviewQueryRepository;
+    private final ReviewRepository reviewRepository;
     private final AccommodationService accommodationService;
     private final ReservationService reservationService;
-    private final ServiceChargeService serviceChargeService;
-    @Autowired
-    private DiscountPolicyService discountPolicyService;
-
 
     @Autowired
-    public ReservationTest(UserRepository userRepository, AccommodationRepository accommodationRepository, ReservationRepository reservationRepository, ReviewQueryRepository reviewQueryRepository, AccommodationService accommodationService, ReservationService reservationService, ServiceChargeService serviceChargeService) {
+    public ReservationTest(UserRepository userRepository, AccommodationRepository accommodationRepository, ReservationRepository reservationRepository, ReviewRepository reviewRepository, AccommodationService accommodationService, ReservationService reservationService, ServiceChargeService serviceChargeService) {
         this.userRepository = userRepository;
         this.accommodationRepository = accommodationRepository;
         this.reservationRepository = reservationRepository;
-        this.reviewQueryRepository = reviewQueryRepository;
+        this.reviewRepository = reviewRepository;
         this.accommodationService = accommodationService;
         this.reservationService = reservationService;
-        this.serviceChargeService = serviceChargeService;
     }
-
-    //숙박 시설 등록
-
 
     @DisplayName("숙박 시설을 예약한다.")
     @Test
     public void test() {
-
         User user1 = new User("fnelclsrn", "정연호", "123", "thtk", LocalDate.now());
-
         User user2 = new User("fnelclsrn1", "정연호", "123", "thtk", LocalDate.now());
 
         userRepository.save(user1);
@@ -82,15 +73,23 @@ class ReservationTest {
 
         user1.enrollHost();
 
-
         ReservationServiceDto reservationServiceDto = new ReservationServiceDto();
         reservationServiceDto.setCheckIn(LocalDate.now());
         reservationServiceDto.setCheckOut(LocalDate.now().plusDays(2));
         reservationServiceDto.setPersonCount(3);
         reservationServiceDto.setRegisteredAt(LocalDateTime.now());
 
-
-        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 3, 1, 1, "원룸", "없음", 1L, HOTEL);
+        Accommodation accommodation = new Accommodation(
+                "숙소2",
+                1000,
+                "소사",
+                3,
+                1,
+                1,
+                "원룸",
+                "없음",
+                HOTEL
+        );
         Accommodation saved = accommodationRepository.save(accommodation);
 
         Long reservationId = reservationService.createReservation(2L, saved.getId(), reservationServiceDto);
@@ -102,66 +101,90 @@ class ReservationTest {
         a.assertThat(reservation.getAmount()).isEqualTo(amount);
         a.assertThat(reservation.getPersonCount()).isEqualTo(3);
         a.assertThat(reservation.getUser().getId()).isEqualTo(1L);
-
     }
 
 
     //숙박 시설 할인 정책 검사
-
     @DisplayName("호스트가 숙소에 대한 할인 정책을 설정한다.")
     @Test
     public void test23() {
-
         User user1 = new User("fnelclsrn", "정연호", "123", "thtk", LocalDate.now());
         userRepository.save(user1);
         user1.enrollHost();
 
-        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 3, 1, 1, "원룸", "없음", 1L, HOTEL);
+        Accommodation accommodation = new Accommodation(
+                "숙소2",
+                1000,
+                "소사",
+                3,
+                1,
+                1,
+                "원룸",
+                "없음",
+                HOTEL
+        );
         Accommodation saved = accommodationRepository.save(accommodation);
-
     }
 
     //숙박 시설 서비스 요금 검사
-
     //숙박 시설에 대한 제대로 된 비용 검사
-
-
     @Test
     public void test2() {
         User user = new User("alexa", "jeon22", "1234", "집주소", LocalDate.now());
         userRepository.save(user);
-        Reviews reviews = new Reviews();
-        reviews.setComment("숙소가 좋아요");
-        reviews.setRating(3);
+        Accommodation accommodation = new Accommodation(
+                "숙소",
+                1000,
+                "소사",
+                1,
+                1,
+                1,
+                "원룸",
+                "없음",
+                HOTEL
+        );
+        Review review = new Review(3, "숙소가 좋아요", user, accommodation);
+        reviewRepository.save(review);
 
-        Accommodation accommodation = new Accommodation("숙소", 1000, "소사", 1, 1, 1, "원룸", "없음", 1L, HOTEL);
         accommodationRepository.save(accommodation);
-        reviews.setAccommodation(accommodation);
-        reviews.setUser(user);
-        reviewQueryRepository.save(reviews);
     }
 
     @Test
     public void test3() {
+        accommodationService.updateAccommodation(1L, AccommodationMapper.toUpdateService(
+                new AccommodationUpdate(
+                        "숙소변경",
+                        10000,
+                        "소사",
+                        1,
+                        1,
+                        1,
+                        "원룸",
+                        "없음",
+                        HOTEL,
+                        null
+                ), new ArrayList<>()));
 
-        accommodationService.getAccommodation(1L);
-
-        accommodationService.updateAccommodation(1L, new AccommodationUpdate("숙소변경", 10000, "소사", 1, 1, 1, "원룸", "없음", null), null);
-        Accommodation accommodation = accommodationService.getAccommodation(1L);
-
-        assertThat(accommodation.getName()).isEqualTo("숙소변경");
-
-
+        assertThat(accommodationService.getAccommodationById(1L).getName()).isEqualTo("숙소변경");
     }
 
     @Test
-    @Transactional
     @Commit
     public void setUpData() {
         User user = new User("alexaa", "jeon22", "1234", "집주소", LocalDate.now());
         userRepository.save(user);
 
-        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 1, 1, 1, "원룸", "없음", 1L, HOTEL);
+        Accommodation accommodation = new Accommodation(
+                "숙소2",
+                1000,
+                "소사",
+                1,
+                1,
+                1,
+                "원룸",
+                "없음",
+                HOTEL
+        );
         accommodationRepository.save(accommodation);
 
         Reservation reservation = new Reservation();
@@ -214,7 +237,7 @@ class ReservationTest {
         reservationServiceDto.setRegisteredAt(LocalDateTime.now());
 
 
-        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 1, 1, 1, "원룸", "없음", 1L, HOTEL);
+        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 1, 1, 1, "원룸", "없음", HOTEL);
         Accommodation saved = accommodationRepository.save(accommodation);
 
         reservationService.createReservation(1L, saved.getId(), reservationServiceDto);
@@ -234,14 +257,11 @@ class ReservationTest {
         reservationServiceDto.setPersonCount(3);
         reservationServiceDto.setRegisteredAt(LocalDateTime.now());
 
-        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 1, 1, 1, "원룸", "없음", 1L, HOTEL);
+        Accommodation accommodation = new Accommodation("숙소2", 1000, "소사", 1, 1, 1, "원룸", "없음", HOTEL);
         Accommodation saved = accommodationRepository.save(accommodation);
 
 
         assertThatThrownBy(() -> reservationService.createReservation(1L, 1L, reservationServiceDto))
                 .isInstanceOf(PersonCountExceededException.class);
-
     }
-
-
 }

@@ -1,5 +1,6 @@
 package codesquad.team05.web.accommodation.dto.response;
 
+import codesquad.team05.domain.accommodation.AccommodationType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,10 +21,10 @@ public class AccommodationResponse {
     private final int bedCount;
     private final String description;
     private final String amenity;
+    private final AccommodationType accommodationType;
     private final List<PictureDto> pictures;
     private boolean isOnSale;
     private Double discountRate;
     @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate endDate;
-
 }

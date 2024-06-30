@@ -14,7 +14,7 @@ import java.util.List;
 public class AccommodationMapper {
 
     public static AccommodationSaveServiceRequest toSaveService(AccommodationSave saveRequest, List<MultipartFile> files) {
-        AccommodationSaveServiceRequest accommodationSaveServiceRequest = new AccommodationSaveServiceRequest(
+        return new AccommodationSaveServiceRequest(
                 saveRequest.getName(),
                 saveRequest.getPrice(),
                 saveRequest.getAddress(),
@@ -22,12 +22,11 @@ public class AccommodationMapper {
                 saveRequest.getRoomCount(),
                 saveRequest.getBedCount(),
                 saveRequest.getDescription(),
-                saveRequest.getAmenity()
+                saveRequest.getAmenity(),
+                files,
+                saveRequest.getAccommodationType(),
+                saveRequest.getHashtagContents()
         );
-        files.forEach(
-                file -> accommodationSaveServiceRequest.getFiles().add(file)
-        );
-        return accommodationSaveServiceRequest;
     }
 
     public static AccommodationUpdateServiceRequest toUpdateService(AccommodationUpdate updateRequest, List<MultipartFile> files) {
@@ -40,7 +39,9 @@ public class AccommodationMapper {
                 updateRequest.getBedCount(),
                 updateRequest.getDescription(),
                 updateRequest.getAmenity(),
-                files
+                files,
+                updateRequest.getAccommodationType(),
+                updateRequest.getHashtagContents()
         );
     }
 
@@ -53,7 +54,8 @@ public class AccommodationMapper {
                 serviceRequest.getRoomCount(),
                 serviceRequest.getBedCount(),
                 serviceRequest.getDescription(),
-                serviceRequest.getAmenity()
+                serviceRequest.getAmenity(),
+                serviceRequest.getAccommodationType()
         );
     }
 
@@ -68,6 +70,7 @@ public class AccommodationMapper {
                 accommodation.getBedCount(),
                 accommodation.getDescription(),
                 accommodation.getAmenity(),
+                accommodation.getAccommodationType(),
                 accommodation.getPictures().stream()
                         .map(picture -> new PictureDto(picture.getUrl()))
                         .toList()
