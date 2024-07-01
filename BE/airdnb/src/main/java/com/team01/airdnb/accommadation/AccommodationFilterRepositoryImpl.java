@@ -2,6 +2,8 @@ package com.team01.airdnb.accommadation;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
@@ -10,6 +12,9 @@ import com.team01.airdnb.image.QImage;
 import com.team01.airdnb.reservation.QReservation;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,11 +33,11 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
     image = QImage.image;
   }
 
-  public List<AccommodationSearchResponse> filterAccommodation(LocalDate checkin,
+  public Page<AccommodationSearchResponse> filterAccommodation(LocalDate checkin,
       LocalDate checkout,
       Long minPrice, Long maxPrice, Integer adultCount, Integer childrenCount,
-      Integer infantsCount, String location) {
-    return jpaQueryFactory
+      Integer infantsCount, String location, Double latitude, Double longitude, Pageable pageable) {
+    List<AccommodationSearchResponse> result = jpaQueryFactory
         .select(new QAccommodationSearchResponse(
             accommodation.id,
             accommodation.title,
@@ -62,8 +67,30 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
             checkAdult(adultCount),
             checkChildren(childrenCount),
             checkInfants(infantsCount),
-            address(location))
+            address(location),
+            checkRadius(latitude, longitude))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch();
+
+    Long totalCount = jpaQueryFactory
+        .select(Wildcard.count)
+        .from(accommodation)
+        .leftJoin(reservation).on(accommodation.id.eq(reservation.accommodation.id))
+        .where(
+            notReservation()
+                .or(startDateGt(checkin, checkout))
+                .or(endDateLt(checkin, checkout)),
+            betweenPrice(minPrice, maxPrice),
+            checkAdult(adultCount),
+            checkChildren(childrenCount),
+            checkInfants(infantsCount),
+            address(location),
+            checkRadius(latitude, longitude)
+        )
+        .fetchOne();
+
+    return new PageImpl<>(result, pageable, totalCount != null ? totalCount : 0L);
   }
 
   private BooleanExpression address(String location) {
@@ -111,5 +138,20 @@ public class AccommodationFilterRepositoryImpl implements AccommodationFilterRep
 
   private BooleanExpression checkInfants(Integer infantsCount) {
     return infantsCount != null ? accommodation.maxInfants.goe(infantsCount) : null;
+  }
+
+  private BooleanExpression checkRadius(Double latitude, Double longitude) {
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+
+    final double radius = 6371;
+    final double maxDistance = 1;
+
+    NumberExpression<Double> distance = Expressions.numberTemplate(Double.class,
+        "{0} * acos(cos(radians({1})) * cos(radians({2})) * cos(radians({3}) - radians({4})) + sin(radians({1})) * sin(radians({2})))",
+        radius, latitude, accommodation.latitude, accommodation.longitude, longitude);
+
+    return distance.loe(maxDistance);
   }
 }

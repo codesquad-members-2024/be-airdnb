@@ -5,12 +5,16 @@ import com.team01.airdnb.accommadation.dto.AccommodationDetailResponse;
 import com.team01.airdnb.accommadation.dto.AccommodationFilterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationRegisterRequest;
 import com.team01.airdnb.accommadation.dto.AccommodationSearchResponse;
-import java.util.List;
+import com.team01.airdnb.accommadation.dto.AccommodationUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,10 +43,23 @@ public class AccommodationController {
     return accommodationService.show(id);
   }
 
-  //숙소 필터
+  //숙소 수정
+  @PutMapping("/{id}")
+  public void updateAccommodation(@PathVariable Long id,
+      @RequestBody AccommodationUpdateRequest accommodationUpdateRequest) {
+    accommodationService.update(id, accommodationUpdateRequest);
+  }
+
+  //숙소 삭제
+  @DeleteMapping("/{id}")
+  public void deleteAccommodation(@PathVariable Long id) {
+    accommodationService.delete(id);
+  }
+
   @GetMapping("/filter")
-  public List<AccommodationSearchResponse> getFilteredAccommodations(
-      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest) {
-    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest);
+  public Page<AccommodationSearchResponse> getAccommodationFilter(
+      @ModelAttribute AccommodationFilterRequest accommodationFilterRequest,
+      Pageable pageable) {
+    return accommodationService.searchFilteredAccommodations(accommodationFilterRequest, pageable);
   }
 }

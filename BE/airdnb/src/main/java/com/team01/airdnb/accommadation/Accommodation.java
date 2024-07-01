@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -48,6 +49,7 @@ public class Accommodation {
   private Double latitude;
   private Double longitude;
   @Builder.Default
+  @Setter
   private Integer commentsNum = 0;
   @NotNull(message = "등록하기 위해서는 어른 한명이 필요합니다")
   @Min(value = 1, message = "등록하기 위해서는 어른 한명이 필요합니다")

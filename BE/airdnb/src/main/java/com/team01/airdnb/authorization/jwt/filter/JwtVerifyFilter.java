@@ -1,6 +1,5 @@
 package com.team01.airdnb.authorization.jwt.filter;
 
-import com.nimbusds.jose.shaded.gson.Gson;
 import com.team01.airdnb.authorization.jwt.exception.CustomExpiredJwtException;
 import com.team01.airdnb.authorization.jwt.exception.CustomJwtException;
 import com.team01.airdnb.authorization.jwt.utils.JwtConstants;
@@ -16,8 +15,6 @@ import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
 
 @Slf4j
 public class JwtVerifyFilter extends OncePerRequestFilter {
@@ -32,7 +29,6 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
         }
     }
 
-    // 필터를 거치지 않을 URL 을 설정하고, true 를 return 하면 현재 필터를 건너뛰고 다음 필터로 이동
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String requestURI = request.getRequestURI();
@@ -46,7 +42,7 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(JwtConstants.JWT_HEADER);
 
         try {
-            checkAuthorizationHeader(authHeader);   // header 가 올바른 형식인지 체크
+            checkAuthorizationHeader(authHeader);
             String token = JwtUtils.getTokenFromHeader(authHeader);
             Authentication authentication = JwtUtils.getAuthentication(token);
 
@@ -54,20 +50,16 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            filterChain.doFilter(request, response);    // 다음 필터로 이동
+            filterChain.doFilter(request, response);
+        } catch (CustomExpiredJwtException e) {
+            log.error("Token Expired: {}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+        } catch (CustomJwtException e) {
+            log.error("JWT Error: {}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
         } catch (Exception e) {
-            Gson gson = new Gson();
-            String json = "";
-            if (e instanceof CustomExpiredJwtException) {
-                json = gson.toJson(Map.of("Token_Expired", e.getMessage()));
-            } else {
-                json = gson.toJson(Map.of("error", e.getMessage()));
-            }
-
-            response.setContentType("application/json; charset=UTF-8");
-            PrintWriter printWriter = response.getWriter();
-            printWriter.println(json);
-            printWriter.close();
+            log.error("Unexpected error in JwtVerifyFilter: {}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An unexpected error occurred");
         }
     }
 }
